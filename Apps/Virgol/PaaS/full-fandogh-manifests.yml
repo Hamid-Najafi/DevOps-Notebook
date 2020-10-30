@@ -7,6 +7,7 @@ kind: ExternalService
 name: virgol
 spec:
   image: goldenstarc/virgol:latest
+  image_pull_policy: Always
   domains:
      - name: virgol.legace.ir
   port: 80
@@ -66,6 +67,16 @@ spec:
       value: cn=admin,dc=legace,dc=ir
     - name: VIRGOL_LDAP_PASSWORD
       value: nWzQK5nULRAP6r6j
+    - name: VIRGOL_NTP_SERVER_URL
+      value: ir.pool.ntp.org
+    - name : REACT_APP_RAHE_DOOR
+      value : false
+    - name : REACT_APP_FAVICON_NAME
+      value : favicon_virgool
+    - name : REACT_APP_MOODLE_URL
+      value : https://moodle.legace.ir/login/index.php
+    - name : REACT_APP_VERSION
+      value : 1.5.4
 
 ---
 

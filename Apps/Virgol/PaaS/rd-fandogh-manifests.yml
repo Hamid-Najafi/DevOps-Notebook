@@ -2,7 +2,7 @@ kind: ExternalService
 name: virgol-rd
 spec:
   # image: goldenstarc/virgol:latest
-  image: goldenstarc/virgol:1.4.9.4
+  image: goldenstarc/virgol:latest
   image_pull_policy: Always
   domains:
      - name: rd.legace.ir
@@ -74,4 +74,4 @@ spec:
     - name : REACT_APP_MOODLE_URL
       value : https://moodle.legace.ir/login/index.php
     - name : REACT_APP_VERSION
-      value : (نسخه 1.4.9.4 (آزمایشی
+      value : 1.5.4

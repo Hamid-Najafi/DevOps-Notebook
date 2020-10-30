@@ -2,10 +2,11 @@ kind: ExternalService
 name: virgol
 spec:
   # image: goldenstarc/virgol:latest
-  image: goldenstarc/virgol:1.5.1.Pr
+  image: goldenstarc/virgol:latest
   image_pull_policy: Always
   domains:
-     - name: virgol.legace.ir
+    - name: virgol.legace.ir
+    - name: arabic.legace.ir
     #  - name: online.hadaf-gostar.ir
   port: 80
   volume_mounts:
@@ -75,4 +76,4 @@ spec:
     - name : REACT_APP_MOODLE_URL
       value : https://moodle.legace.ir/login/index.php
     - name : REACT_APP_VERSION
-      value : 1.5.1.Pr
+      value : 1.5.4
