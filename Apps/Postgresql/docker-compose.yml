@@ -1,0 +1,47 @@
+version: "3.5"
+services:
+  postgres:
+    image: postgres
+    hostname: postgres.legace.ir
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=PostgreSQLpass.24
+    volumes:
+      - postgresDb:/var/lib/postgresql/data
+    networks:
+      - db
+      # - web
+# Add New Server -> Connection -> Hostname/Address = postgres, Username = postgres, Password = PostgreSQLpass.24
+  pgadmin4:
+    image: dpage/pgadmin4
+    hostname: pgadmin.legace.ir 
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@legace.ir
+      - PGADMIN_DEFAULT_PASSWORD=pgAdminpass.24
+    restart: always
+    ports:
+      - "8081:80"
+    depends_on:
+      - postgres
+      # - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.legace.ir`)"
+      - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
+      - "traefik.http.routers.pgadmin.entrypoints=secure"
+      - "traefik.http.routers.pgadmin.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=web"
+    networks:
+      - db
+      - web
+networks:
+  db:
+    internal: true
+  web:
+    external: true
+volumes:
+  postgresDb:

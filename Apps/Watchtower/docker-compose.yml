@@ -1,0 +1,10 @@
+version: "3.5"
+services:
+  watchtower:
+    image: v2tec/watchtower
+    # command: --interval 900 --label-enable --cleanup
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+    restart: unless-stopped

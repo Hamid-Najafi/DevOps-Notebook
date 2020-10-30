@@ -1,0 +1,54 @@
+kind: ManagedService
+name: mysql
+spec:
+  service_name: mysql
+  version: 5.7
+  parameters:
+    - name: phpmyadmin_enabled
+      value: true
+    - name: mysql_root_password
+      value: 5WxdJsSkFeqTnWNG
+    - name: mysql_user
+  resources:
+      memory: 400Mi
+
+# ---
+
+# kind: InternalService
+# name: mysql
+# spec:
+#   image: mysql/mysql-server:5.7
+#   port_mapping:
+#     - port: 3306
+#       target_port: 3306
+#   resources:
+#       memory: 300Mi
+#   volume_mounts:
+#     - mount_path: /var/lib/mysql
+#       sub_path: mysql
+#   env:
+#     - name: MYSQL_ROOT_PASSWORD
+#       value: Sjgcre4yjLkCQnqw
+#     - name: MYSQL_USER
+#       value: moodle
+#     - name: MYSQL_DATABASE
+#       value: moodle
+#     - name: MYSQL_PASSWORD
+#       value: 5WxdJsSkFeqTnWNG
+
+# ---
+
+# kind: ExternalService
+# name: phpmyadmin
+# spec:
+#   image: docker.io/bitnami/phpmyadmin:5-debian-10
+#   # domains:
+#   #    - name: hello-world.my-company.com
+#   port: 8080
+#   resources:
+#       memory: 100Mi
+#   env:
+#     # - name: PMA_ABSOLUTE_URI
+#     #   value: https://phpmyadmin.legace.ir/
+#     - name: PMA_HOST
+#       value: mysql

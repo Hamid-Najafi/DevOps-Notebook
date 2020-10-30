@@ -1,0 +1,4 @@
+Date,Principal ID,Principal Type,Event,Detail
+20201014T124529.712,eee@g.com,U,error,"SyncException: Found more than one of the same ID: ""eee@g.com"". Check LDAP settings to ensure retrieved IDs are unique."
+20201014T124529.713,info@legace.ir,U,error,"SyncException: Found more than one of the same ID: ""info@legace.ir"". Check LDAP settings to ensure retrieved IDs are unique."
+20201014T124529.930,admin@legace.ir,U,make-external,

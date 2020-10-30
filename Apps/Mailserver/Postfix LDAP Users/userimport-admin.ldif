@@ -1,0 +1,23 @@
+# ldapadd -W -D "cn=admin,dc=legace,dc=ir" -f userimport-admin.ldif -h ldap.legace.ir
+
+# Addminstrator
+dn: uniqueIdentifier=admin,ou=people,dc=legace,dc=ir
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: PostfixBookMailAccount
+objectClass: extensibleObject
+cn: Adminstrator
+givenName: Admin
+sn: Strator
+mail: admin@legace.ir
+mailAlias: admin@mail.legace.ir
+mailEnabled: TRUE
+mailGidNumber: 5000
+mailHomeDirectory: /srv/vmail/admin@legace.ir
+mailQuota: 10240
+mailStorageDirectory: maildir:/srv/vmail/admin@legace.ir/Maildir
+mailUidNumber: 5000
+uniqueIdentifier: admin
+userPassword: {SSHA}urgTctJ4NiUBqM824rT7i/fD4VzpSBAh
+# Pass = Mailpass.24  , slappasswd

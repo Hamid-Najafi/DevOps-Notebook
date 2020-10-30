@@ -1,0 +1,78 @@
+kind: ExternalService
+name: virgol-arabic
+spec:
+  # image: goldenstarc/virgol:latest
+  image: goldenstarc/virgol:1.5.1.Ar
+  image_pull_policy: Always
+  domains:
+     - name: arabic.legace.ir
+    #  - name: online.hadaf-gostar.ir
+  port: 80
+  volume_mounts:
+    - mount_path: /app/BulkData
+      sub_path: virgol/main
+      # volume_name: virgol
+  # volume_browser_enabled: true
+  resources:
+      memory: 300Mi
+  env:
+    - name: ASPNETCORE_URLS
+      value: http://+
+    - name: ASPNETCORE_ENVIRONMENT
+      value: Production
+    - name: VIRGOL_SERVER_ROOT_URL
+      value: https://arabic.legace.ir
+      # value: https://lms.legace.ir
+    - name: VIRGOL_DATABASE_TYPE
+      value: postgres
+    - name: VIRGOL_DATABASE_HOST
+      value: db.legace.ir
+    - name: VIRGOL_DATABASE_NAME
+      value: LMS
+    - name: VIRGOL_DATABASE_USER
+      value: postgres
+    - name: VIRGOL_DATABASE_PASSWORD
+      value: PostgreSQLpass.24
+    - name: VIRGOL_MODDLE_COURSE_URL
+      value: https://moodle.legace.ir/course/view.php?id=
+    - name: VIRGOL_MOODLE_BASE_URL
+      value: https://moodle.legace.ir/webservice/rest/server.php?moodlewsrestformat=json
+    - name: VIRGOL_MOODLE_TOKEN
+      value: 616ed6bc394212692b03ea59b7f94670
+    - name: VIRGOL_FARAZAPI_URL
+      value: http://rest.ippanel.com
+    - name: VIRGOL_FARAZAPI_SENDER_NUMBER
+      value: +98500010707
+    - name: VIRGOL_FARAZAPI_USERNAME
+      value: goldenstarc
+    - name: VIRGOL_FARAZAPI_PASSWORD
+      value: hektug-fakbAm-0vypje
+    - name: VIRGOL_FARAZAPI_API_KEY
+      value: qcP4IQp3PPRV3ppvkG9ScHJcwvUPL3iOJrV9n7QiqDA=
+    - name: VIRGOL_BBB_LOAD_BALANCER_MODE
+      value: separate
+    - name: VIRGOL_SCALELITE_BASE_URL
+      value: https://b1.legace.ir/bigbluebutton/api/
+    - name: VIRGOL_SCALELITE_SECRET
+      value: 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
+    - name: VIRGOL_JWT_SECRET
+      value: Saleh Secret Key
+    - name: VIRGOL_LDAP_SERVER
+      value: ldap.legace.ir
+    - name: VIRGOL_LDAP_PORT
+      value: 390
+      # value: 389
+    - name: VIRGOL_LDAP_USER_ADMIN
+      value: cn=admin,dc=legace,dc=ir
+    - name: VIRGOL_LDAP_PASSWORD
+      value: OpenLDAPpass.24
+    - name: VIRGOL_NTP_SERVER_URL
+      value: ir.pool.ntp.org
+    - name : REACT_APP_RAHE_DOOR
+      value : false
+    - name : REACT_APP_FAVICON_NAME
+      value : favicon_virgool
+    - name : REACT_APP_MOODLE_URL
+      value : https://moodle.legace.ir/login/index.php
+    - name : REACT_APP_VERSION
+      value : 1.5.1.Ar

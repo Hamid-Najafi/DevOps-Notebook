@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  minio:
+    image: minio/minio:latest
+    restart: always
+    hostname: minio.legace.ir
+    volumes:
+      - /mnt/data:/data
+    # ports:
+    #   - "9000:9000"
+    environment:
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: MinIOpass.24
+      MINIO_PROMETHEUS_AUTH_TYPE: public
+    command: server /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.minio.rule=Host(`minio.legace.ir`)"
+      - "traefik.http.services.minio.loadbalancer.server.port=9000"
+      - "traefik.http.routers.minio.entrypoints=secure"
+      - "traefik.http.routers.minio.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=web"
+    networks:
+      - web
+networks:
+  web:
+    external: true

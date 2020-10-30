@@ -1,0 +1,48 @@
+#Traefik.yml
+# All Traefik docker-compose.yml command comes here:
+  # command:
+  #   - "--log.level=DEBUG"
+# Will be:
+  # log:
+  #   level:
+  #     DEBUG
+
+#Add this somewhere in file
+api:
+  dashboard: true
+
+#Define HTTP and HTTPS entrypoints
+entryPoints:
+  insecure:
+    address: ":80"
+  secure:
+    address: ":443"
+  metrics:
+    address: ":9094"
+
+#Dynamic configuration will come from docker labels
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    network: "traefik-network"
+    exposedByDefault: false
+
+#Enable acme with http file challenge
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: admin@legace.ir
+      storage: /letsencrypt/acme.json
+      httpChallenge:
+        # used during the challenge
+        entryPoint: insecure
+
+metrics:
+  prometheus:
+    addEntryPointsLabels: true
+    addServicesLabels: true
+    manualrouting: true
+
+# experimental:
+#   pilot:
+#     token: "c8255784-7c2e-4e64-9f8e-b100e90f55a9"

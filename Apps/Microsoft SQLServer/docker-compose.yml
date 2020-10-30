@@ -1,0 +1,26 @@
+# IMPORTANT
+# http://www.centinosystems.com/blog/sql/updating-sql-server-2017-containers-to-2019-non-root-containers-with-data-volumes/
+
+version: "3.5"
+services:
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server
+    hostname: mssql.legace.ir
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=SQLServerpass.24
+    # expose:
+    #   - "389:389"
+    #   - "636:636"
+    volumes:
+      - mssqldb:/var/opt/mssql
+    networks:
+      - database_network
+
+networks:
+  database_network:
+
+volumes:
+  mssqldb:

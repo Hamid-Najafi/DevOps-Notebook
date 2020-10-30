@@ -1,0 +1,21 @@
+
+# Gitlab
+dn: uniqueIdentifier=gitlab,ou=people,dc=legace,dc=ir
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: PostfixBookMailAccount
+objectClass: extensibleObject
+cn: Gitlab
+givenName: Gitlab
+sn: Account
+mail: gitlab@legace.ir
+mailEnabled: TRUE
+mailGidNumber: 5000
+mailHomeDirectory: /srv/vmail/gitlab@legace.ir
+mailQuota: 10240
+mailStorageDirectory: maildir:/srv/vmail/gitlab@legace.ir/Maildir
+mailUidNumber: 5000
+uniqueIdentifier: Gitlab
+userPassword: {SSHA}urgTctJ4NiUBqM824rT7i/fD4VzpSBAh
+# Pass = Mailpass.24, slappasswd

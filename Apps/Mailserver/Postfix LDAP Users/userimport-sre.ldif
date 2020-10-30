@@ -1,0 +1,20 @@
+# SRE
+dn: uniqueIdentifier=sre,ou=people,dc=legace,dc=ir
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: PostfixBookMailAccount
+objectClass: extensibleObject
+cn: sre
+givenName: Site Reliability Engineer
+sn: Account
+mail: sre@legace.ir
+mailEnabled: TRUE
+mailGidNumber: 5000
+mailHomeDirectory: /srv/vmail/sre@legace.ir
+mailQuota: 10240
+mailStorageDirectory: maildir:/srv/vmail/sre@legace.ir/Maildir
+mailUidNumber: 5000
+uniqueIdentifier: sre
+userPassword: {SSHA}urgTctJ4NiUBqM824rT7i/fD4VzpSBAh
+# Pass = Mailpass.24, slappasswd

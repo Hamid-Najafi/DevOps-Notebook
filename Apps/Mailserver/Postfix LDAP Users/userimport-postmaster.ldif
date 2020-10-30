@@ -1,0 +1,22 @@
+# ldapadd -W -D "cn=admin,dc=legace,dc=ir" -f userimport-postmaster.ldif -h ldap.legace.ir
+
+# Postmaster
+dn: uniqueIdentifier=postmaster,ou=people,dc=legace,dc=ir
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: PostfixBookMailAccount
+objectClass: extensibleObject
+cn: Postmaster
+givenName: Post
+sn: Master
+mail: postmaster@legace.ir
+mailEnabled: TRUE
+mailGidNumber: 5000
+mailHomeDirectory: /srv/vmail/postmaster@legace.ir
+mailQuota: 10240
+mailStorageDirectory: maildir:/srv/vmail/postmaster@legace.ir/Maildir
+mailUidNumber: 5000
+uniqueIdentifier: postmaster
+userPassword: {SSHA}urgTctJ4NiUBqM824rT7i/fD4VzpSBAh
+# Pass = Mailpass.24, slappasswd

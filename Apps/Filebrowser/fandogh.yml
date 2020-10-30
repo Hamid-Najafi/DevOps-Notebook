@@ -1,0 +1,22 @@
+# Dedicated Volume
+# Username, Password: admin/admin
+kind: ManagedService
+name: test-file-browser
+spec:
+  service_name: filebrowser
+  version: latest
+  parameters:
+    - name: volume_name
+      value: VOLUME_NAME
+  resources:
+      memory: 512Mi
+
+---
+# Shared Volume
+kind: ManagedService
+name: test-file-browser
+spec:
+  service_name: filebrowser
+  version: latest
+  resources:
+      memory: 512Mi

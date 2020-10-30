@@ -1,0 +1,5 @@
+dn: ou=people,dc=legace,dc=ir
+changetype: add
+objectClass: organizationalUnit
+objectClass: top
+ou: people

@@ -1,0 +1,57 @@
+version: "3.5"
+services:
+
+  openldap:
+    image: goldenstarc/extended-openldap
+    hostname: ldap.legace.ir
+    restart: always
+    ports:
+    - "389:389"
+    - "636:636"
+    # These are hard-coded inside docker image 
+    # environment:
+    # - LDAP_ORGANISATION=Legace Inc.
+    # - LDAP_DOMAIN=legace.ir
+    # - LDAP_ADMIN_PASSWORD=OpenLDAPpass.24
+    # - LDAP_CONFIG_PASSWORD=c0nfig
+    # - LDAP_BASE_DN: "cn=admin,dc=legace,dc=ir"
+    volumes:
+      - openldapDb:/var/lib/ldap
+      - openldapConf:/etc/ldap/slapd.d
+    networks:
+      - ldap
+# Username: cn=admin,dc=legace,dc=ir
+# Password: OpenLDAPpass.24
+  phpldapadmin:
+    image: osixia/phpldapadmin
+    hostname: phpldapadmin.legace.ir 
+    environment:
+      - PHPLDAPADMIN_LDAP_HOSTS=openldap
+      - PHPLDAPADMIN_HTTPS=false
+      - PHPLDAPADMIN_LDAP_CLIENT_TLS=false
+    restart: always
+    ports:
+      - "8083:8080"
+    depends_on:
+      - openldap
+      # - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.phpldapadmin.rule=Host(`phpldapadmin.legace.ir`)"
+      - "traefik.http.services.phpldapadmin.loadbalancer.server.port=80"
+      - "traefik.http.routers.phpldapadmin.entrypoints=secure"
+      - "traefik.http.routers.phpldapadmin.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=web"
+    networks:
+      - web
+      - ldap
+
+networks:
+  db:
+    internal: true
+  web:
+    external: true
+
+volumes:
+  openldapDb:
+  openldapConf:

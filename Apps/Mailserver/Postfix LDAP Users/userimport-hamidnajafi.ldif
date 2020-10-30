@@ -1,0 +1,21 @@
+
+# Hamid Najafi
+dn: uniqueIdentifier=hamid.najafi,ou=people,dc=legace,dc=ir
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: PostfixBookMailAccount
+objectClass: extensibleObject
+cn: Hamid Najafi
+givenName: Hamid
+sn: Najafi
+mail: hamid.najafi@legace.ir
+mailEnabled: TRUE
+mailGidNumber: 5000
+mailHomeDirectory: /srv/vmail/hamid.najafi@legace.ir
+mailQuota: 10240
+mailStorageDirectory: maildir:/srv/vmail/hamid.najafi@legace.ir/Maildir
+mailUidNumber: 5000
+uniqueIdentifier: hamid.najafi
+userPassword: {SSHA}urgTctJ4NiUBqM824rT7i/fD4VzpSBAh
+# Pass = Mailpass.24, slappasswd

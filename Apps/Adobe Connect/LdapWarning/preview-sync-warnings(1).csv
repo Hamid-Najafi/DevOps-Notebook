@@ -1,0 +1,4 @@
+Date,Principal ID,Principal Type,Event,Detail
+20201014T131018.587,,U,error,"SyncException: Found empty User ID in source. DN = ,ou=people,dc=legace,dc=ir"
+20201014T131018.593,saleh_prg,U,error,"SyncException: Found more than one of the same ID: ""saleh_prg"". Check LDAP settings to ensure retrieved IDs are unique."
+20201014T131018.599,info,U,error,"SyncException: Found more than one of the same ID: ""info"". Check LDAP settings to ensure retrieved IDs are unique."

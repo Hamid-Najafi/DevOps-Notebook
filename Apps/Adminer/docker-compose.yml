@@ -1,0 +1,29 @@
+version: "3.5"
+services:
+  adminer:
+    image: adminer
+    environment:
+      - ADMINER_DESIGN='mvt'
+      # - ADMINER_PLUGINS='tables-filter tinymce'
+      # - ADMINER_PLUGINS='login-servers'
+    restart: always
+    ports:
+      - "8080:8080"
+    # depends_on:
+    #   - postgres
+    #   - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.adminer.rule=Host(`adminer.legace.ir`)"
+      - "traefik.http.services.adminer.loadbalancer.server.port=8080"
+      - "traefik.http.routers.adminer.entrypoints=secure"
+      - "traefik.http.routers.adminer.tls.certresolver=letsencrypt"
+    networks:
+      - default
+      - database_network
+networks:
+  database_network:
+    internal: true
+  default:
+    external:
+      name: gateway

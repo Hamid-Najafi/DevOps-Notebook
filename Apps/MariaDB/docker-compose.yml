@@ -1,0 +1,50 @@
+version: "3.5"
+services:
+  mariadb:
+    image: mariadb
+    hostname: mariadb.legace.ir 
+    # container_name: mariadb
+    restart: always
+    volumes:
+      - mariaDb:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mySQLpass.24
+      # MYSQL_DATABASE: database
+      # MYSQL_USER: user
+      # MYSQL_PASSWORD: pass
+    networks:
+      - db
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    hostname: phpmyadmin.legace.ir
+    # container_name: phpmyadmin
+    environment:
+      - PMA_ABSOLUTE_URI=https://phpmyadmin.legace.ir/
+      - PMA_HOST=mysql5.7
+      # - PMA_ARBITRARY=1
+    restart: always
+    # ports:
+    #   - "8082:8080"
+    depends_on:
+      - mysql5.7
+      # - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.legace.ir`)"
+      - "traefik.http.services.phpmyadmin.loadbalancer.server.port=8080"
+      - "traefik.http.routers.phpmyadmin.entrypoints=secure"
+      - "traefik.http.routers.phpmyadmin.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=web"
+    networks:
+      - db
+      - web
+networks:
+  db:
+    internal: true
+  web:
+    external: true
+volumes:
+  mariaDb:
+
+# ConnectionString
+# Server=legace.ir;Database=nopCommerce;Uid=root;Pwd=mySQLpass.24;
