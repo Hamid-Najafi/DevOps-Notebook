@@ -1,12 +1,12 @@
 # -------==========-------
 # Fanddogh
 # -------==========-------
-cd ~/devops-notebook/Apps/Virgol/PaaS/
+cd ~/DevOps-Notebook/Apps/Virgol/PaaS/
 cd /Users/hamid/Development/Software/DevOps-Notebook/Apps/Virgol/PaaS
 fandogh login --username goldenstarc --password myzsyn-fucjys-0motjI
+fandogh namespace active --name goldenstarc
 fandogh service apply -f virgol-fandogh-manifests.yml
 fandogh service apply -f rd-fandogh-manifests.yml
-fandogh service apply -f arabic-virgol-fandogh-manifests.yml
 
 # -------==========-------
 # CI/CD

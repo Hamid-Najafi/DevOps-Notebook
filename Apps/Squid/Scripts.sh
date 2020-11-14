@@ -39,6 +39,9 @@ sudo nano ~/.bash_profile
 alias proxyon="source /etc/environment"
 alias proxyoff="export http_proxy='';export https_proxy='';export ftp_proxy=''"
 source ~/.bash_profile /etc/environment
+source /etc/environment
+sudo nano /etc/environment
+
 # Check these
 # echo -e "alias proxyon="source /etc/environment"\nalias proxyoff="export http_proxy='';export https_proxy='';export ftp_proxy=''"" | sudo tee -a ~/.profile
 # #Proxy Alias

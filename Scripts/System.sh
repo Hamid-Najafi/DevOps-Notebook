@@ -1,4 +1,16 @@
 # -------==========-------
+# Apt Repository
+# -------==========-------
+http://rpm.um.ac.ir
+
+sudo nano /etc/apt/sources.list
+# Ubuntu 16.04 (Xenial Xerus) 
+deb http://repos.um.ac.ir/ubuntu/ xenial main restricted universe multiverse 
+deb http://repos.um.ac.ir/ubuntu/ xenial-updates main restricted universe multiverse 
+deb http://repos.um.ac.ir/ubuntu/ xenial-security main restricted universe multiverse
+
+sudo apt-get update
+# -------==========-------
 # System Benchmark
 # -------==========-------
 wget -qO- bench.sh | bash
@@ -24,7 +36,7 @@ sudo ncdu
 # -------==========-------
 # Get port procces id
 # -------==========-------
-sudo lsof -i -P -n | grep 9090
+sudo lsof -i -P -n | grep 80
 sudo lsof -p 15014
 # -------==========-------
 # Set TimeZone
