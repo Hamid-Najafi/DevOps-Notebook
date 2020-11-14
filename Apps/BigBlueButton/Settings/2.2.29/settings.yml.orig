@@ -6,13 +6,13 @@ public:
     autoJoin: true
     listenOnlyMode: true
     forceListenOnly: false
-    skipCheck: true
-    clientTitle: سامانه کلاس مجازی ویرگول
-    appName:  کلاس مجازی - نسخه مرورگر
+    skipCheck: false
+    clientTitle: BigBlueButton
+    appName: BigBlueButton HTML5 Client
     bbbServerVersion: 2.2
-    copyright: "©2020 Virgol Inc.\n Powerd by BigBlueButton"
+    copyright: "©2020 BigBlueButton Inc."
     html5ClientBuild: 1081
-    helpLink: https://lms.legace.ir
+    helpLink: https://bigbluebutton.org/html5/
     lockOnJoin: true
     cdn: ""
     basename: "/html5client"
@@ -21,7 +21,7 @@ public:
     # in some cases we want only custom logoutUrl to be used when provided on meeting create. Default value: true
     allowDefaultLogoutUrl: true
     allowUserLookup: false
-    enableNetworkInformation: true
+    enableNetworkInformation: false
     enableLimitOfViewersInWebcam: false
     enableMultipleCameras: false
     enableTalkingIndicator: true
@@ -30,8 +30,8 @@ public:
     ipv4FallbackDomain: ""
     allowLogout: true
     allowFullscreen: true
-    remainingTimeThreshold: 60
-    remainingTimeAlertThreshold: 10
+    remainingTimeThreshold: 30
+    remainingTimeAlertThreshold: 1
     # Warning: increasing the limit of breakout rooms per meeting
     # can generate excessive overhead to the server. We recommend
     # this value to be kept under 12.
@@ -39,12 +39,12 @@ public:
     defaultSettings:
       application:
         animations: true
-        chatAudioAlerts: true
-        chatPushAlerts: true
-        userJoinAudioAlerts: true
-        userJoinPushAlerts: true
-        fallbackLocale: fa_IR
-        overrideLocale: fa_IR
+        chatAudioAlerts: false
+        chatPushAlerts: false
+        userJoinAudioAlerts: false
+        userJoinPushAlerts: false
+        fallbackLocale: en
+        overrideLocale: null
       audio:
         inputDeviceId: undefined
         outputDeviceId: undefined
@@ -90,10 +90,10 @@ public:
   externalVideoPlayer:
     enabled: true
   networkMonitoring:
-    enableNetworkMonitoring: true
+    enableNetworkMonitoring: false
     packetLostThreshold: 10
   kurento:
-    wsUrl: wss://ib1.legace.ir/bbb-webrtc-sfu
+    wsUrl: wss://b1.legace.ir/bbb-webrtc-sfu
     # Valid for video-provider. Time (ms) before its WS connection times out
     # and tries to reconnect.
     wsConnectionTimeout: 4000
@@ -232,7 +232,7 @@ public:
     enabled: true
     max_custom: 5
   captions:
-    enabled: false
+    enabled: true
     enableDictation: false
     backgroundColor: "#000000"
     fontColor: "#FFFFFF"
@@ -260,16 +260,16 @@ public:
     system_messages_keys:
       chat_clear: PUBLIC_CHAT_CLEAR
     typingIndicator:
-      enabled: false
+      enabled: true
   note:
     enabled: true
-    url: https://ib1.legace.ir/pad
+    url: https://b1.legace.ir/pad
     config:
-      showLineNumbers: true
+      showLineNumbers: false
       showChat: false
       noColors: true
       showControls: true
-      rtl: true
+      rtl: false
   layout:
     autoSwapLayout: false
     hidePresentation: false
@@ -431,7 +431,7 @@ private:
     pencilChunkLength: 100
     loadSlidesFromHttpAlways: false
   etherpad:
-    apikey: 7ts5JEDlryuQPff8T7VmsIN7Xgx5DA4uLQ2ygN2t75VtAaUy4rd74wmmYpj21j
+    apikey: i0Za8njZLCDt5MvgO8CGzUUi6wej3evS1WumqjiWys4O4mOLjzrk3uJha3PSard
     version: 1.2.13
     host: 127.0.0.1
     port: 9001

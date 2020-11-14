@@ -20,6 +20,17 @@ sudo nano /etc/hosts
 # Ubuntu Automatic Update
 sudo nano /etc/update-manager/release-upgrades
 
+# DNS
+sudo apt install resolvconf
+sudo nano /etc/resolvconf/resolv.conf.d/head
+# Shecan
+nameserver 185.51.200.2
+nameserver 178.22.122.100
+# Begzar
+#nameserver 185.55.226.2
+#nameserver 185.55.225.25
+sudo service resolvconf restart
+
 sudo reboot
 # -------==========-------
 # install
@@ -33,9 +44,9 @@ wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v b
 # Virgol
 git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
 sudo cp /var/www/bigbluebutton-default/favicon.ico{,.backup}
-sudo cp ~/devops-notebook/Apps/BigBlueButton/Theme/favicon.ico /var/www/bigbluebutton-default/favicon.ico
-sudo cp ~/devops-notebook/Apps/BigBlueButton/Theme/Slides/virgol-min.pdf /var/www/bigbluebutton-default/
-sudo cp ~/devops-notebook/Apps/BigBlueButton/Theme/Slides/Whiteboard-Virgol.pdf /var/www/bigbluebutton-default/
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/favicon.ico /var/www/bigbluebutton-default/favicon.ico
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Slides/virgol-min.pdf /var/www/bigbluebutton-default/
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Slides/Whiteboard-Virgol.pdf /var/www/bigbluebutton-default/
 
 # -------==========-------
 #*    BBB - Configs     *#
@@ -43,10 +54,11 @@ sudo cp ~/devops-notebook/Apps/BigBlueButton/Theme/Slides/Whiteboard-Virgol.pdf 
 sudo mv /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conferenceBackup
 sudo cp /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties{,.backup}
 sudo cp /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml{,.backup}
-sudo cp ~/devops-notebook/Apps/BigBlueButton/Settings/2.2.25/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-sudo cp ~/devops-notebook/Apps/BigBlueButton/Settings/2.2.25/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
+# This is for Version 2.2.29, if BBB is updated, first update setting files
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
-sudo bbb-conf --setip fb3.legace.ir
+sudo bbb-conf --setip b1.legace.ir
 
 # Locales #
 # List
@@ -82,17 +94,17 @@ sudo nano /var/lib/tomcat8/webapps/demo/bbb_api_conf.jsp
 # 3. Setup Greenligh (if needed)
 # -------==========-------
 sudo rm /etc/bigbluebutton/nginx/greenlight-redirect.nginx
-cd ~/greenlight
-bbb-conf --secret
-sudo nano .env
-BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
-sudo docker run --rm --env-file .env bigbluebutton/greenlight:v2 bundle exec rake conf:check
-sudo docker-compose up -d
+# If wanna change secret keys
+# cd ~/greenlight
+# bbb-conf --secret
+# sudo nano .env
+# BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
+# sudo docker run --rm --env-file .env bigbluebutton/greenlight:v2 bundle exec rake conf:check
+# sudo docker-compose up -d
 sudo docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@legace.ir","BBBpass.24","admin"]
 # -------==========-------
 # 3. Downloadable Recording
 # -------==========-------
-cd ~/dev
 git clone https://github.com/vova-zush/bbb-download.git
 cd bbb-download
 chmod u+x install.sh 
@@ -105,18 +117,18 @@ https://b1.legace.ir/download/presentation/{InternalmeetingID}/{InternalmeetingI
 # 3. Setup Monitoring
 # -------==========-------
 # BBB Exporter
-cd ~/devops-notebook/Apps/BigBlueButton/Monitoring/bbb-exporter/
+cd ~/DevOps-Notebook/Apps/BigBlueButton/Monitoring/bbb-exporter/
 # If needed edit secret file
 # bbb-conf --secret
 sudo nano secrets.env
-API_BASE_URL=https://ib1.legace.ir/bigbluebutton/api/
+API_BASE_URL=https://b1.legace.ir/bigbluebutton/api/
 API_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 # Fix IP Address
 sudo docker-compose up -d
 sudo apt-get install -y apache2-utils
 # Username:metrics , Password: monitor@bbb
 sudo htpasswd -c /etc/nginx/.htpasswd metrics
-# Add bbb exporter to Nginx
+# Add bbb exporter to Nginx (in the last line just before '}' )
 sudo nano /etc/nginx/sites-available/bigbluebutton 
   location /metrics/ {
       auth_basic "BigBlueButton Exporter";
@@ -129,17 +141,17 @@ sudo nano /etc/nginx/sites-available/bigbluebutton
   }
 
 # Node Exporter
-cd ~/devops-notebook/Apps/Monitoring/Slave/
+cd ~/DevOps-Notebook/Apps/Monitoring/Slave/
 sudo docker-compose up -d
 # Check:
-https://b2.legace.ir/metrics/
+https://b1.legace.ir/metrics/
 http://b1.legace.ir:9100
 http://b1.legace.ir:8080 || http://b1.legace.ir:9338
 
 # Comment Proxies
 # sudo sed -i '/_proxy/s/^/#/g' /etc/environment
 # Check Settings
-sudo nginx -t
+nginx -t && nginx -s reload
 sudo bbb-conf --check
 # Apply Settings
 # sudo systemctl reload nginx
@@ -153,6 +165,7 @@ https://mconf.github.io/api-mate/#server=https://b1.legace.ir/bigbluebutton/&sha
 # Serverius
 cd  /home/ubuntu/docker/monitoring
 nano prometheus/prometheus.yml
+# add server address to 'nodeexporter' and 'bbb' Jobs
 docker-compose down && docker-compose up -d
 
 # -------==========-------
@@ -166,8 +179,8 @@ sudo nano /etc/cron.daily/bigbluebutton
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s b2.legace.ir -e admin@legace.ir -w -g
 sudo cp /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties{,.backup}
 sudo cp /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml{,.backup}
-sudo cp ~/devops-notebook/Apps/BigBlueButton/Settings/2.2.25/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-sudo cp ~/devops-notebook/Apps/BigBlueButton/Settings/2.2.25/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.25/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.25/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 # Beacuse we copy other server config file, we must set these again.
 sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 sudo bbb-conf --setip b3.legace.ir
