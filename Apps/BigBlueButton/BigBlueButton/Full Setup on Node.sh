@@ -9,24 +9,14 @@ https://docs.bigbluebutton.org/2.2/customize.html
 # source /etc/environment
 
 # Set Hostname
-sudo hostnamectl set-hostname big-3
-BBB-2
+sudo hostnamectl set-hostname big-1
+BBB-1
+
 # sudo nano /etc/cloud/templates/hosts.debian.tmpl
 sudo nano /etc/hosts  
 127.0.0.1 big-1
 127.0.0.1 b1.legace.ir
-# Farzanegan
-sudo hostnamectl set-hostname FB-3
-# sudo nano /etc/cloud/templates/hosts.debian.tmpl
-sudo nano /etc/hosts  
-127.0.0.1 FB-3
-127.0.0.1 fb3.legace.ir
-# Independent BBB
-sudo hostnamectl set-hostname Independent-BBB-1
-# sudo nano /etc/cloud/templates/hosts.debian.tmpl
-sudo nano /etc/hosts  
-127.0.0.1 Independent-BBB-1
-127.0.0.1 ib1.legace.ir
+
 # Ubuntu Automatic Update
 sudo nano /etc/update-manager/release-upgrades
 
@@ -35,13 +25,13 @@ sudo reboot
 # install
 # -------==========-------
 sudo apt install base-files
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s fb2.legace.ir -e admin@legace.ir -w -g
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s b1.legace.ir -e admin@legace.ir -w -g
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230-dev -s bbb.goldenstarc.ir -e admin@legace.ir -w -g -a
 # -------==========-------
 # Set Images
 # -------==========-------
 # Virgol
-sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/goldenstarc/devops-notebook.git
+git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
 sudo cp /var/www/bigbluebutton-default/favicon.ico{,.backup}
 sudo cp ~/devops-notebook/Apps/BigBlueButton/Theme/favicon.ico /var/www/bigbluebutton-default/favicon.ico
 sudo cp ~/devops-notebook/Apps/BigBlueButton/Theme/Slides/virgol-min.pdf /var/www/bigbluebutton-default/
@@ -70,7 +60,7 @@ sudo nano /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
 # -------==========-------
 # Install Fonts
 # -------==========-------
-sudo git clone https://github.com/Goldenstarc/FontPack.git  /usr/share/fonts/FontPack
+sudo git clone https://github.com/Hamid-Najafi/FontPack.git  /usr/share/fonts/FontPack
 # -------==========-------
 # 1. Hostname & Secrets
 # -------==========-------
@@ -200,3 +190,4 @@ sudo nginx -t
 sudo bbb-conf --check
 # Apply Settings
 sudo systemctl reload nginx
+

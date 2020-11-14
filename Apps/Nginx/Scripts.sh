@@ -54,7 +54,8 @@ rm /etc/nginx/nginx.conf
 nano /etc/nginx/nginx.conf
 # Paste rtmp-hls-dash here
 # Set Workers
-mkdir -p /usr/local/nginx/html/stream/hls
+mkdir -p/tmp/stream/hls
+mkdir -p/tmp/stream/dash
 mkdir -p /var/www/html/recordings
 chown -R www-data:www-data /var/www/html/recordings/
 
@@ -70,10 +71,8 @@ nginx -t && nginx -s reload
 nginx -s stop
 
 # ----- URLS ----- 
-# RTMP Server
-rtmp://conf.legace.ir/stream
-# Stream Key
-livestream
+# RTMP
+rtmp://conf.legace.ir/stream/livestream
 # HLS
 https://conf.legace.ir/hls/livestream.m3u8
 # DASH
