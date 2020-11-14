@@ -93,7 +93,7 @@ public:
     enableNetworkMonitoring: true
     packetLostThreshold: 10
   kurento:
-    wsUrl: wss://ib1.legace.ir/bbb-webrtc-sfu
+    wsUrl: wss://b1.legace.ir/bbb-webrtc-sfu
     # Valid for video-provider. Time (ms) before its WS connection times out
     # and tries to reconnect.
     wsConnectionTimeout: 4000
@@ -263,7 +263,7 @@ public:
       enabled: false
   note:
     enabled: true
-    url: https://ib1.legace.ir/pad
+    url: https://b1.legace.ir/pad
     config:
       showLineNumbers: true
       showChat: false
