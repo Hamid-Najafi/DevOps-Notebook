@@ -36,7 +36,8 @@ sudo reboot
 # install
 # -------==========-------
 sudo apt install base-files
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s b1.legace.ir -e admin@legace.ir -w -g
+#*    Set FQDN Correctly     *#
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib1.legace.ir -e admin@legace.ir -w -g
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230-dev -s bbb.goldenstarc.ir -e admin@legace.ir -w -g -a
 # -------==========-------
 # Set Images
@@ -58,7 +59,8 @@ sudo cp /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml{
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
-sudo bbb-conf --setip b1.legace.ir
+#*    Set FQDN Correctly     *#
+sudo bbb-conf --setip ib1.legace.ir
 
 # Locales #
 # List
@@ -94,13 +96,11 @@ sudo nano /var/lib/tomcat8/webapps/demo/bbb_api_conf.jsp
 # 3. Setup Greenligh (if needed)
 # -------==========-------
 sudo rm /etc/bigbluebutton/nginx/greenlight-redirect.nginx
-# If wanna change secret keys
-# cd ~/greenlight
-# bbb-conf --secret
-# sudo nano .env
-# BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
-# sudo docker run --rm --env-file .env bigbluebutton/greenlight:v2 bundle exec rake conf:check
-# sudo docker-compose up -d
+cd ~/greenlight
+sudo nano .env
+BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
+sudo docker run --rm --env-file .env bigbluebutton/greenlight:v2 bundle exec rake conf:check
+sudo docker-compose up -d
 sudo docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@legace.ir","BBBpass.24","admin"]
 # -------==========-------
 # 3. Downloadable Recording
@@ -121,7 +121,8 @@ cd ~/DevOps-Notebook/Apps/BigBlueButton/Monitoring/bbb-exporter/
 # If needed edit secret file
 # bbb-conf --secret
 sudo nano secrets.env
-API_BASE_URL=https://b1.legace.ir/bigbluebutton/api/
+#*    Set FQDN Correctly     *#
+API_BASE_URL=https://ib1.legace.ir/bigbluebutton/api/
 API_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 # Fix IP Address
 sudo docker-compose up -d
@@ -143,19 +144,11 @@ sudo nano /etc/nginx/sites-available/bigbluebutton
 # Node Exporter
 cd ~/DevOps-Notebook/Apps/Monitoring/Slave/
 sudo docker-compose up -d
+nginx -t && nginx -s reload
 # Check:
-https://b1.legace.ir/metrics/
+https://ib1.legace.ir/metrics/
 http://b1.legace.ir:9100
 http://b1.legace.ir:8080 || http://b1.legace.ir:9338
-
-# Comment Proxies
-# sudo sed -i '/_proxy/s/^/#/g' /etc/environment
-# Check Settings
-nginx -t && nginx -s reload
-sudo bbb-conf --check
-# Apply Settings
-# sudo systemctl reload nginx
-sudo bbb-conf --restart
 
 https://mconf.github.io/api-mate/#server=https://b1.legace.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 
@@ -176,14 +169,14 @@ sudo nano /etc/cron.daily/bigbluebutton
 # ---------------------------------------------------------------==========---------------------------------------------------------------
 #*                                                                Upgrade                                                               *#
 # ---------------------------------------------------------------==========---------------------------------------------------------------
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s b2.legace.ir -e admin@legace.ir -w -g
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s b1.legace.ir -e admin@legace.ir -w -g
 sudo cp /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties{,.backup}
 sudo cp /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml{,.backup}
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.25/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.25/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.*/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.*/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 # Beacuse we copy other server config file, we must set these again.
 sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
-sudo bbb-conf --setip b3.legace.ir
+sudo bbb-conf --setip b1.legace.ir
 
 sudo nano /etc/nginx/sites-available/bigbluebutton 
   location /metrics/ {
@@ -195,12 +188,14 @@ sudo nano /etc/nginx/sites-available/bigbluebutton
   location = / {
     return 301 https://lms.legace.ir/;
   }
+# Check and Apply
+nginx -t && nginx -s reload
+sudo bbb-conf --restart
 
-# Comment Proxies
-sudo sed -i '/_proxy/s/^/#/g' /etc/environment
-# Check Settings
-sudo nginx -t
-sudo bbb-conf --check
-# Apply Settings
-sudo systemctl reload nginx
+# -------==========-------
+#* Imporove Audio *#
+# -------==========-------
+/opt/freeswitch/etc/freeswitch/dialplan/default/bbb_echo_to_conference.xml
+/opt/freeswitch/etc/freeswitch/dialplan/default/bbb_conference.xml
 
+https://github.com/bigbluebutton/bigbluebutton/issues/7007

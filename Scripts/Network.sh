@@ -96,6 +96,7 @@ sudo reboot
 # Docker port check
 # -------==========-------
 docker run -d -p 8080:80 alexwhen/docker-2048
+docker run -d -p 636:80 alexwhen/docker-2048
 # -------==========-------
 # Netcat port check
 # -------==========-------

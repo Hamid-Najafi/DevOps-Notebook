@@ -3,19 +3,22 @@
 # -------==========-------
 1- Inside docker image - connect LDAP container directrly to host:
 like what we did
-2- In reverse proxy LDAPS->LDAP - put LDAP Container after reverse proxy:
+2- (Not recommended)In reverse proxy LDAPS->LDAP - put LDAP Container after reverse proxy:
 Nginx example
 https://jackiechen.blog/2019/01/24/nginx-sample-config-of-http-and-ldaps-reverse-proxy/
+Traefik Ddesnt support LDAPS
 # -------==========-------
 # 1.A:Build Exrended LDAP
 # -------==========-------
-mkdir dev
-cd dev
+mkdir ~/dev
+cd ~/dev
 git clone https://github.com/Goldenstarc/extended-docker-openldap.git
 openssl dhparam -out ~/dev/extended-docker-openldap/certs/dhparam.pem 2048
+# Run one of these three
 sudo certbot certonly --standalone -d ldap.legace.ir
 sudo certbot certonly --nginx -d ldap.legace.ir
 sudo certbot certonly --apache -d ldap.legace.ir
+
 sudo cp -RL /etc/letsencrypt/live/ldap.legace.ir/. ~/dev/extended-docker-openldap/certs/
 sudo chown ubuntu:ubuntu -R ~/dev/extended-docker-openldap/certs/
 cd ~/dev/extended-docker-openldap
@@ -78,3 +81,10 @@ docker run \
   --env LDAP_BACKUP_CONFIG_CRON_EXP="0 5 * * *" \
   --volume openldapDb:/home/ubuntu/data/backup \
   --detach osixia/openldap-backup
+
+# -------==========-------
+# Configurations
+# -------==========-------
+# OpenLDAP Software 2.4 Administrator's Guide
+https://www.openldap.org/doc/admin24/index.html
+https://www.openldap.org/devel/admin/index.html

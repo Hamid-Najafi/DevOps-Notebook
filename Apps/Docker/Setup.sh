@@ -7,6 +7,12 @@ https://www.composerize.com
 # Local
 npm install composerize -g 
 composerize <DOCKER RUN ...>
+
+# NETWORK: HOST
+# Compared to the default bridge mode, the host mode gives significantly better networking performance.
+# since it uses the host’s native networking stack whereas the bridge has to go through one level of virtualization through the docker daemon.
+# It is recommended to run containers in this mode when their networking performance is critical,
+# for example, a production Load Balancer or a High Performance Web Server.
 # -------==========-------
 # Backup Volume
 # -------==========-------
