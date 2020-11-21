@@ -39,6 +39,24 @@ helm install --debug gitlab gitlab/gitlab \
 # -------==========-------
 # GitLab Runner
 # -------==========-------
+# Fandogh
+# ==========
+ fandogh managed-service deploy gitlab-runner latest \
+       -c service_name=gitlab-runner \
+       -c gitlab_registration_token=REGISTRATION_TOKEN_FROM_GITLAB \
+       -c gitlab_runner_name=sample-docker-runner \
+       -m 700Mi
+
+ fandogh managed-service deploy gitlab-runner latest \
+      -c service_name=gitlab-runner \
+      -c gitlab_server_url=https://gitlab.com \
+      -c gitlab_registration_token=gL3prHb-GiWv_WgH-zeY \
+      -c gitlab_runner_name=docker-runner \
+      -c gitlab_runner_memory=256m \
+      -m 656Mi
+
+# Standalone
+# ==========
 # Add the GitLab official repository to your servers package manager.
 curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
 # Install the GitLab Runner service.

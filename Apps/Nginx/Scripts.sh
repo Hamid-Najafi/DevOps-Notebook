@@ -145,17 +145,7 @@ ffmpeg -hide_banner \
         -init_seg_name 'init-stream1-epresentationIDm4s' \
         -window_size 5  -extra_window_size 10 -remove_at_exit 1 -adaptation_sets "id=0,streams=v id=1,streams=a" -f flv rtmp://conf.legace.ir:1935/stream/livestream
 # Docker
-# 1.Install docker
-sudo apt install resolvconf
-sudo nano /etc/resolvconf/resolv.conf.d/head
-nameserver 185.51.200.2
-nameserver 178.22.122.100
-sudo service resolvconf restart
 snap install docker 
-docker  pull jrottenberg/ffmpeg 
-# Reset DNS
-sudo nano /etc/resolvconf/resolv.conf.d/head
-# Run container
 docker run --net="host" --name=ffmpegRmtpTest --restart=always \
         -d jrottenberg/ffmpeg -hide_banner \
         -re -f lavfi -i "testsrc2=size=1280x720:rate=30" -pix_fmt yuv420p \

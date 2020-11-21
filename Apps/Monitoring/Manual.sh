@@ -9,7 +9,13 @@ sudo cp -r /home/ubuntu/devops-notebook/Apps/Monitoring/Master/* /home/ubuntu/do
 cd  /home/ubuntu/docker/monitoring
 docker-compose up -d
 
-# Edit
+# Login to GF
+http://grafana.goldenstarc.ir
+admin, Grafanapass.24
+# Add prometheus DataSource in GF dashboard
+http://prometheus:9090
+
+# Edit prometheus
 cd  /home/ubuntu/docker/monitoring
 nano prometheus/prometheus.yml
 docker-compose down && docker-compose up -d

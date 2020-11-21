@@ -3,11 +3,13 @@
 # -------==========-------
 sudo snap install --classic certbot
 # get and install your certificates
+sudo certbot --standalone 
 sudo certbot --apache
 sudo certbot --nginx
 #  just get a certificate
-sudo certbot certonly --nginx
+sudo certbot certonly --standalone 
 sudo certbot certonly --apache
+sudo certbot certonly --nginx
 # Get Wildcard SSL for *.legace.ir
 sudo certbot certonly \
     --manual \

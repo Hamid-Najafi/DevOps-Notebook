@@ -14,16 +14,18 @@ mkdir ~/dev
 cd ~/dev
 git clone https://github.com/Goldenstarc/extended-docker-openldap.git
 openssl dhparam -out ~/dev/extended-docker-openldap/certs/dhparam.pem 2048
-# Run one of these three
-sudo certbot certonly --standalone -d ldap.legace.ir
-sudo certbot certonly --nginx -d ldap.legace.ir
-sudo certbot certonly --apache -d ldap.legace.ir
-
+sudo snap install --classic certbot
+sudo certbot certonly \
+    --manual \
+    --preferred-challenges dns \
+    --email admin@legace.ir \
+    --agree-tos \
+    --domains "ldap.legace.ir"
 sudo cp -RL /etc/letsencrypt/live/ldap.legace.ir/. ~/dev/extended-docker-openldap/certs/
 sudo chown ubuntu:ubuntu -R ~/dev/extended-docker-openldap/certs/
-cd ~/dev/extended-docker-openldap
-docker tag goldenstarc/extended-openldap:1.4.0 goldenstarc/extended-openldap:latest
+cd extended-docker-openldap
 docker build -t goldenstarc/extended-openldap:1.4.0 .
+docker tag goldenstarc/extended-openldap:1.4.0 goldenstarc/extended-openldap:latest
 docker push goldenstarc/extended-openldap
 # -------==========-------
 # 1.B:Extended LDAP
@@ -44,6 +46,7 @@ docker run \
 # -------==========-------
 # Add Users & Groups : 
 ldapadd -W -D "cn=admin,dc=legace,dc=ir" -f userimport-*.ldif -h ldap.legace.ir
+
 
 docker run \
 --name ldap-service \

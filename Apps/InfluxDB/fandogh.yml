@@ -1,0 +1,54 @@
+kind: ManagedService
+name: db
+spec:
+  service_name: postgresql
+  version: 10.4
+  parameters:
+    - name: adminer_enabled
+      value: false
+    - name: postgres_password
+      value: some_long_unpredictable_string
+    # - name: volume_name
+    #   value: YOUR_VOLUME_NAME
+  resources:
+      memory: 400Mi
+
+---
+ 
+kind: ExternalService
+name: pgadmin4
+spec:
+  image: dpage/pgadmin4
+  # domains:
+  #    - name: hello-world.my-company.com
+  resources:
+      memory: 200Mi
+  env:
+    - name: PGADMIN_DEFAULT_EMAIL
+      value: admin@legace.ir
+    - name: PGADMIN_DEFAULT_PASSWORD
+      value: pgAdminpass.24
+
+# ---
+
+# kind: InternalService
+# name: postgres
+# spec:
+#   image: postgres
+#   service_name: postgres 
+#   port_mapping:
+#     - port: 5432
+#       target_port: 5432
+#   # resources:
+#   #     memory: 200Mi
+#   env:
+#     - name: POSTGRES_DB
+#       value: virgol
+#     - name: POSTGRES_USER
+#       value: postgres
+#     - name: POSTGRES_PASSWORD
+#       value: Zky5M5na5AEcqMKm
+#   volume_mounts:
+#     - mount_path: /var/lib/postgresql/data
+#       sub_path: postgres
+
