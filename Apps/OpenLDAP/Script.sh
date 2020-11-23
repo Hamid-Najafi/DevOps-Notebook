@@ -24,14 +24,14 @@ sudo certbot certonly \
 sudo cp -RL /etc/letsencrypt/live/ldap.legace.ir/. ~/dev/extended-docker-openldap/certs/
 sudo chown ubuntu:ubuntu -R ~/dev/extended-docker-openldap/certs/
 cd extended-docker-openldap
+# nano environment/my-env.startup.yaml
 docker build -t goldenstarc/extended-openldap:1.4.0 .
 docker tag goldenstarc/extended-openldap:1.4.0 goldenstarc/extended-openldap:latest
 docker push goldenstarc/extended-openldap
 # -------==========-------
 # 1.B:Extended LDAP
 # -------==========-------
-# ENV Variables are saved inside docker container during image build.
-# in my-env.startup.yaml
+# 1.Run with docker
 docker run \
 --name ldap-service \
 --hostname ldap.legace.ir \
@@ -40,7 +40,11 @@ docker run \
 --restart=always \
 -p 389:389 \
 -p 636:636 \
--d goldenstarc/extended-openldap
+-d goldenstarc/extended-openldap:1.4.0
+
+# 2.Run with docker compose
+cd ~/virgol/
+docker-compose up -d
 # -------==========-------
 # 2.osixia/openldap
 # -------==========-------
