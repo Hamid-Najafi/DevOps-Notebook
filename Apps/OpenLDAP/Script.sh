@@ -42,30 +42,38 @@ docker run \
 -p 636:636 \
 -d goldenstarc/extended-openldap:1.4.0
 
+docker run \
+--name ldap-service \
+--volume openldapDb:/var/lib/ldap \
+--volume openldapConf:/etc/ldap/slapd.d \
+--restart=always \
+--net="host" \
+-d goldenstarc/extended-openldap:1.4.0
 # 2.Run with docker compose
 cd ~/virgol/
 docker-compose up -d
+# Test
+ldapsearch -x -h "ldap.legace.ir" -b "dc=legace,dc=ir" -D "cn=admin,dc=legace,dc=ir" -w "OpenLDAPpass.24"
 # -------==========-------
 # 2.osixia/openldap
 # -------==========-------
-# Add Users & Groups : 
-ldapadd -W -D "cn=admin,dc=legace,dc=ir" -f userimport-*.ldif -h ldap.legace.ir
-
-
+# User: cn=admin,dc=example,dc=org , Password: admin
 docker run \
 --name ldap-service \
---hostname ldap.legace.ir \
---env LDAP_TLS=true \
---env LDAP_ADMIN_PASSWORD="OpenLDAPpass.24" \
---env LDAP_ORGANISATION="Legace" \
---env LDAP_DOMAIN="legace.ir" \
---env LDAP_TLS_VERIFY_CLIENT=try \
---volume openldapDb3:/var/lib/ldap \
---volume openldapConf3:/etc/ldap/slapd.d \
+--volume openldapDb:/var/lib/ldap \
+--volume openldapConf:/etc/ldap/slapd.d \
 -p 389:389 \
 -p 636:636 \
 --restart=always \
 --detach  osixia/openldap:1.4.0
+
+--net="host" \
+
+# Test
+ldapsearch -x -h "su.legace.ir:389" -b "dc=example,dc=org " -D "cn=admin,dc=example,dc=org" -w "admin"
+ldapsearch -x -h "conf.legace.ir:390" -b "dc=example,dc=org " -D "cn=admin,dc=example,dc=org" -w "admin"
+# Add Users & Groups : 
+ldapadd -D "cn=admin,dc=legace,dc=ir" -f userimport-*.ldif -h ldap://ldap.legace.ir/ -W OpenLDAPpass.24
 # -------==========-------
 # osixia/phpldapadmin
 # -------==========-------

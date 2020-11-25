@@ -82,7 +82,7 @@ Acquire::http::Proxy "http://admin:Squidpass.24@su.legace.ir:3128";
 # Variables
 # -------==========-------
 export ftp_proxy=
-export http_proxy=
+export http_proxy=http://admin:Squidpass.24@su.legace.ir:3128
 export https_proxy=
 export all_proxy=
 export no_proxy=

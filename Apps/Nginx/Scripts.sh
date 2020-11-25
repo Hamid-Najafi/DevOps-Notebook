@@ -130,7 +130,7 @@ sudo add-apt-repository ppa:mc3man/trusty-media
 sudo apt-get update
 sudo apt-get install ffmpeg
 
-# Test RMTP
+# Test RTMP
 ffmpeg -re -i video2.mp4 -vcodec libx264 -profile:v main -preset:v medium -r 30 -g 60 -keyint_min 60 -sc_threshold 0 -b:v 2500k -maxrate 2500k -bufsize 2500k  -sws_flags lanczos+accurate_rnd -c:a aac -strict -2 -b:a 200k -ar 48000 -ac 2 -acodec copy -f flv rtmp://conf.legace.ir/stream/livestream
 ffmpeg -re -i video2.mp4 -vcodec libx264 -profile:v main -preset:v medium -r 30 -g 60 -c:a aac -b:a 2048k -strict -2 -acodec copy -f flv rtmp://conf.legace.ir/stream/livestream
 ffmpeg -re -i video2.mp4 -vcodec libx264 -c:a aac -strict -2 -acodec copy -b:a 4096k -f flv rtmp://conf.legace.ir/stream/livestream
@@ -146,7 +146,7 @@ ffmpeg -hide_banner \
         -window_size 5  -extra_window_size 10 -remove_at_exit 1 -adaptation_sets "id=0,streams=v id=1,streams=a" -f flv rtmp://conf.legace.ir:1935/stream/livestream
 # Docker
 snap install docker 
-docker run --net="host" --name=ffmpegRmtpTest --restart=always \
+docker run --net="host" --name=ffmpegRtmpTest --restart=always \
         -d jrottenberg/ffmpeg -hide_banner \
         -re -f lavfi -i "testsrc2=size=1280x720:rate=30" -pix_fmt yuv420p \
         -c:v libx264 -x264opts keyint=30:min-keyint=30:scenecut=-1 \

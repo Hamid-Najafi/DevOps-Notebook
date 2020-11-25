@@ -1,7 +1,7 @@
 # -------==========-------
 # Oh-My-Zsh!
 # -------==========-------
-sudo apt install git-core zsh
+sudo apt install git-core zsh  x11-apps
 git clone https://github.com/zsh-users/zsh-syntax-highlighting
 sudo apt install fonts-powerline
 git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k

@@ -1,3 +1,8 @@
+# REAL BUG:
+when someone is speaking its name is shown upside of presentaion. if he/she stop speaking its connection will remain connected for 10 second. with treansported name
+after his name will remove.
+if he/she speak while his/her name is treansport, there will be lag in sound.
+
 # Docs:
 https://docs.bigbluebutton.org/2.2/customize.html
 
@@ -37,8 +42,8 @@ sudo reboot
 # -------==========-------
 sudo apt install base-files
 #*    Set FQDN Correctly     *#
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib1.legace.ir -e admin@legace.ir -w -g
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230-dev -s bbb.goldenstarc.ir -e admin@legace.ir -w -g -a
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib2.legace.ir -e admin@legace.ir -w -g
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230-dev -s ib2.legace.ir -e admin@legace.ir -w -g
 # -------==========-------
 # Set Images
 # -------==========-------
@@ -75,6 +80,7 @@ sudo nano /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
 # Install Fonts
 # -------==========-------
 sudo git clone https://github.com/Hamid-Najafi/FontPack.git  /usr/share/fonts/FontPack
+sudo fc-cache -fv
 # -------==========-------
 # 1. Hostname & Secrets
 # -------==========-------
@@ -124,22 +130,28 @@ sudo nano secrets.env
 #*    Set FQDN Correctly     *#
 API_BASE_URL=https://ib1.legace.ir/bigbluebutton/api/
 API_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
-# Fix IP Address
+
 sudo docker-compose up -d
-sudo apt-get install -y apache2-utils
 # Username:metrics , Password: monitor@bbb
-sudo htpasswd -c /etc/nginx/.htpasswd metrics
-# Add bbb exporter to Nginx (in the last line just before '}' )
-sudo nano /etc/nginx/sites-available/bigbluebutton 
-  location /metrics/ {
-      auth_basic "BigBlueButton Exporter";
-      auth_basic_user_file /etc/nginx/.htpasswd;
-      proxy_pass http://127.0.0.1:9688/;
-      include proxy_params;
-  }
-  location = / {
-    return 301 https://lms.legace.ir/;
-  }
+# Method 1:
+echo "metrics:$apr1$pWpGXQUM$wg5/EWgLr3DjoiuXzFJ651" > /etc/nginx/.htpasswd
+# Method 2:
+# sudo apt-get install -y apache2-utils
+# sudo htpasswd -c /etc/nginx/.htpasswd metrics
+
+# Add Nginx Auth for exporter
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/bigbluebutton /etc/nginx/sites-available/bigbluebutton
+#  (in the last line just before '}' )
+# sudo nano /etc/nginx/sites-available/bigbluebutton 
+#   location /metrics/ {
+#       auth_basic "BigBlueButton Exporter";
+#       auth_basic_user_file /etc/nginx/.htpasswd;
+#       proxy_pass http://127.0.0.1:9688/;
+#       include proxy_params;
+#   }
+#   location = / {
+#     return 301 https://lms.legace.ir/;
+#   }
 
 # Node Exporter
 cd ~/DevOps-Notebook/Apps/Monitoring/Slave/
