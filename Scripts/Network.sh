@@ -125,6 +125,9 @@ curl ipinfo.io/ip
 # -------==========-------
 sudo apt install resolvconf
 sudo nano /etc/resolvconf/resolv.conf.d/head
+# Google
+nameserver 8.8.8.8
+nameserver 4.2.2.4
 # Shecan
 nameserver 185.51.200.2
 nameserver 178.22.122.100
@@ -132,6 +135,13 @@ nameserver 178.22.122.100
 #nameserver 185.55.226.2
 #nameserver 185.55.225.25
 sudo service resolvconf restart
+# -------==========-------
+# HTTP Proxy
+# -------==========-------
+echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
+source /etc/environment
+curl -x http://admin:Squidpass.24@su.legace.ir:3128/ -L http://lms.legace.ir
+wget https://charts.gitlab.io 
 # -------==========-------
 # SSH
 # -------==========-------

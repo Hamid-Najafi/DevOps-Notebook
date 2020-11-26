@@ -15,7 +15,6 @@ Europe
 {"apiUrl":"https://185.110.190.158:26356/p4Cn0zWapsN4ynGbhYttmw","certSha256":"DF8F473B13B62254511FE7A7381940587FD2185960CED3E0811F301DB6AACDA7"}
 ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTp0RXR5b0tmQXROdEI=@185.110.190.158:24676/?outline=1
 
-{"apiUrl":"https://168.119.206.245:58146/3R_WV9FKc3CZbV8dB_pWVA","certSha256":"D080B8B2EC01D4FCAC8AC97F4B399E5B613C15FA65B48DC89AF45D2F601EB74B"}
 # -------==========-------
 # Note: Outline has its own Prometheus & Exporter
 Outline setups prometheus and uses some ports like 9090

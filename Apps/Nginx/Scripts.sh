@@ -29,14 +29,14 @@ nginx -t && nginx -s reload
 nginx -s stop
 
 # -------==========------- 
-# Nginx with RTMP
+# Nginx with RTMP & HLS & DASH
 # -------==========------- 
 # 1.Install module nginx-plus
 # apt-get install nginx-plus-module-rtmp
 # 2.Build module
 # Install the Build Tools & Dependencies
 sudo apt update
-sudo apt install build-essential libpcre3-dev libssl-dev zlib1g-dev
+sudo apt install build-essential libpcre3-dev libssl-dev zlib1g-dev -y
 # Compiling NGINX with the RTMP Module
 mkdir ~/dev/nginx-binary -p
 cd ~/dev/nginx-binary
@@ -46,23 +46,26 @@ git clone https://github.com/nginx/nginx.git
 wget https://github.com/nginx/nginx/archive/release-1.19.4.tar.gz
 cd nginx
 # Simple build
-  ./auto/configure --add-module=../nginx-rtmp-module 
+  # ./auto/configure --add-module=../nginx-rtmp-module 
 # Full build
 mkdir /var/cache/nginx/client_temp -p
+
 CFLAGS=-Wno-error ./auto/configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log \
 --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp \
 --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=nginx --group=nginx \
 --with-http_ssl_module --with-http_realip_module --with-http_gunzip_module --with-http_gzip_static_module --with-threads --with-file-aio --with-http_v2_module \
 --with-cc-opt='-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -m64 -mtune=native' \
 --add-module=../nginx-rtmp-module 
+
 # --add-module=../incubator-pagespeed-ngx
 # --add-module=../ngx_cache_purge-2.3 --add-module=../headers-more-nginx-module-0.29 
-make -j 8 
+make -j8
 # last line is make[1]: Leaving directory '/root/nginx-rtmp/nginx'
 sudo make install
 sudo adduser --system --no-create-home --shell /bin/false --group --disabled-login nginx
 
 # add systemd Nginx Service conf
+mkdir  /usr/lib/systemd/system/
 cat <<EOF > /usr/lib/systemd/system/nginx.service
 [Unit]
 Description=nginx - high performance web server
@@ -91,7 +94,7 @@ sudo certbot certonly \
     --email admin@legace.ir \
     --server https://acme-v02.api.letsencrypt.org/directory \
     --agree-tos \
-    --domains "conf.legace.ir"
+    --domains "ib2.legace.ir"
 
 # RTMP
 mkdir /etc/nginx/logs/
@@ -105,6 +108,76 @@ nano /etc/nginx/nginx.conf
 nginx -t && nginx -s reload
 
 # -------==========------- 
+# Nginx with RTMP ONLY
+# -------==========------- 
+# 1.Install module nginx-plus
+# apt-get install nginx-plus-module-rtmp
+# 2.Build module
+# Install the Build Tools & Dependencies
+sudo apt update
+sudo apt install build-essential libpcre3-dev libssl-dev zlib1g-dev -y
+# Compiling NGINX with the RTMP Module
+mkdir ~/dev/nginx-binary -p
+cd ~/dev/nginx-binary
+git clone https://github.com/arut/nginx-rtmp-module.git
+git clone https://github.com/apache/incubator-pagespeed-ngx.git
+git clone https://github.com/nginx/nginx.git
+wget https://github.com/nginx/nginx/archive/release-1.19.4.tar.gz
+cd nginx
+# Simple build
+  # ./auto/configure --add-module=../nginx-rtmp-module 
+# Full build
+mkdir /var/cache/nginx/client_temp -p
+
+CFLAGS=-Wno-error ./auto/configure --prefix=/etc/nginx-rtmp --sbin-path=/usr/sbin/nginx-rtmp --conf-path=/etc/nginx-rtmp/nginx.conf --error-log-path=/var/log/nginx-rtmp/error.log --http-log-path=/var/log/nginx-rtmp/access.log \
+--pid-path=/var/run/nginx-rtmp.pid --lock-path=/var/run/nginx-rtmp.lock --http-client-body-temp-path=/var/cache/nginx-rtmp/client_temp --http-proxy-temp-path=/var/cache/nginx-rtmp/proxy_temp \
+--http-fastcgi-temp-path=/var/cache/nginx-rtmp/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx-rtmp/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx-rtmp/scgi_temp --user=nginx-rtmp --group=nginx-rtmp \
+--with-http_ssl_module --with-http_realip_module --with-http_gunzip_module --with-http_gzip_static_module --with-threads --with-file-aio --with-http_v2_module \
+--with-cc-opt='-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -m64 -mtune=native' \
+--add-module=../nginx-rtmp-module 
+
+# --add-module=../incubator-pagespeed-ngx
+# --add-module=../ngx_cache_purge-2.3 --add-module=../headers-more-nginx-module-0.29 
+make -j8
+# last line is make[1]: Leaving directory '/root/nginx-rtmp/nginx'
+sudo make install
+sudo adduser --system --no-create-home --shell /bin/false --group --disabled-login nginx-rtmp
+
+# add systemd Nginx Service conf
+mkdir  /usr/lib/systemd/system/
+
+cat <<EOF > /usr/lib/systemd/system/nginx-rtmp.service
+[Unit]
+Description=nginx - high performance web server
+Documentation=https://nginx.org/en/docs/
+After=network-online.target remote-fs.target nss-lookup.target
+Wants=network-online.target
+[Service]
+Type=forking
+PIDFile=/var/run/nginx-rtmp.pid
+ExecStartPre=/usr/sbin/nginx -t -c /etc/nginx-rtmp/nginx.conf
+ExecStart=/usr/sbin/nginx -c /etc/nginx-rtmp/nginx.conf
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# start Nginx,add systemd Nginx Service
+service nginx-rtmp start
+systemctl enable nginx-rtmp
+
+# RTMP
+mkdir /etc/nginx-rtmp/logs/
+mkdir /opt/data/hls -p
+mkdir /opt/data/dash -p
+mkdir -p /var/www/html/recordings
+chown -R www-data:www-data /var/www/html/recordings/
+rm /etc/nginx-rtmp/nginx.conf
+nano /etc/nginx-rtmp/nginx.conf
+# Paste RTMP here
+nginx-rtmp -t && nginx-rtmp -s reload
+# -------==========------- 
 # URLS
 # -------==========------- 
 # RTMP
@@ -114,7 +187,6 @@ https://conf.legace.ir/hls/livestream.m3u8
 # DASH
 https://conf.legace.ir/dash/livestream.mpd
 # ----- Arvan URLS ----- 
-
 # ----- HLS URLS ----- 
 https://bitmovin-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8
 edge.flowplayer.org/playful.m3u8
