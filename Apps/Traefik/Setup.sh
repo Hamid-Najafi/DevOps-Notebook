@@ -1,8 +1,13 @@
 # -------==========-------
 # Tips
 # -------==========-------
-mkdir -p ~/docker/traefik 
-cp ~/devops-notebook/Apps/Traefik/docker-compose.yml ~/docker/traefik/docker-compose.yml
-cp ~/devops-notebook/Apps/Traefik/traefik.yml ~/docker/traefik/traefik.yml
-cd ~/docker/traefik 
+mkdir -p ~/dev/traefik 
+cp ~/DevOps-Notebook/Apps/Traefik/docker-compose.yml ~/dev/traefik/docker-compose.yml
+cp ~/DevOps-Notebook/Apps/Traefik/traefik.yml ~/dev/traefik/traefik.yml
+cd ~/dev/traefik 
+nano docker-compose.yml 
+# Edit
+    #   - "traefik.http.routers.traefik.rule=Host(`traefik.goldenstarc.ir`)"
+
+# Set DNS Record
 docker-compose up -d

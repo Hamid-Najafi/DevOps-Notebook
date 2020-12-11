@@ -112,7 +112,7 @@ sudo nc -l -p 389
 sudo nc -u -l -p 993
 # NetCat Client:
 # TCP
-nc conf.legace.ir 389
+nc su.legace.ir 389
 # UDP
 nc -u ap.legace.ir 993
 # -------==========-------
@@ -125,6 +125,9 @@ curl ipinfo.io/ip
 # -------==========-------
 sudo apt install resolvconf
 sudo nano /etc/resolvconf/resolv.conf.d/head
+# Cloudflare
+nameserver 1.1.1.1
+nameserver 1.0.0.1
 # Google
 nameserver 8.8.8.8
 nameserver 4.2.2.4

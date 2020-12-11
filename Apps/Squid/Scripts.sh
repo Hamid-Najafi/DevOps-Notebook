@@ -14,7 +14,7 @@ docker exec -it squid tail -f /var/log/squid/access.log
 # Docker-Compose
 # -------==========-------
 mkdir -p ~/docker/squid 
-cp ~/devops-notebook/Apps/Squid/* ~/docker/squid
+cp ~/DevOps-Notebook/Apps/Squid/* ~/docker/squid
 cd ~/docker/squid 
 # Add new user if needed
 # sudo htpasswd -c passwords admin

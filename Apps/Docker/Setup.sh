@@ -43,18 +43,9 @@ docker rm helper
 # -------==========-------
 # Docker
 # -------==========-------
-# Method 1
 curl -sSL https://get.docker.com/ | sh
-# Method 2
-sudo apt-get update
-sudo apt-get install docker.io containerd
-docker --version
-sudo systemctl enable docker
-# sudo systemctl unmask docker
-sudo systemctl start docker
-sudo systemctl status docker
-#sudo apt install -y apt-transport-https curl
-# -------==========-------
+sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 sudo usermod -aG docker $USER
 # Logout & Login
 docker run hello-world
@@ -70,18 +61,6 @@ docker push goldenstarc/extended-openldap
 # NOTE: ADD HEALTH CHECK TO YAML FILE:
     # healthcheck:
     #   test: ["CMD-SHELL", "wget -q --spider --proxy=off localhost:4000/api/v1/streaming/health || exit 1"]
-# Method 1
-# find latest version
-# https://docs.docker.com/compose/install/#install-compose-on-linux-systems
-sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-# Method 2
-sudo pip3 install docker-compose
-# Method 3
-# INSTALL AS A CONTAINER
-sudo curl -L --fail https://github.com/docker/compose/releases/download/1.27.4/run.sh -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-
 # -------==========-------
 # Command-line completion
 # -------==========-------

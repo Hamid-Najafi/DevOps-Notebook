@@ -3,15 +3,24 @@
 # -------==========-------
 docker run \
     --name postgres \
-    -e "POSTGRES_PASSWORD=SugucSkY3k" \
+    -e "POSTGRES_PASSWORD=Postgrespass.24" \
     -p 5432:5432 \
-    -v postgresDb_Temp:/var/lib/postgresql/data \
+    -v postgresDb:/var/lib/postgresql/data \
     --restart=always \
     -d postgres
 
     command: postgres -c 'max_connections=200'
-
     # User : postgres
+
+# TEMP
+docker run \
+    --name postgres \
+    -e "POSTGRES_PASSWORD=JonSn0w" \
+    -p 5433:5432 \
+    -v postgresDb_Temp:/var/lib/postgresql/data \
+    --restart=always \
+    -d postgres
+
 # PGAdmin 4
 docker run \
     --name pgadmin4 \

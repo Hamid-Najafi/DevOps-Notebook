@@ -145,6 +145,14 @@ sudo adduser --system --no-create-home --shell /bin/false --group --disabled-log
 
 # add systemd Nginx Service conf
 mkdir  /usr/lib/systemd/system/
+mkdir /var/cache/nginx-rtmp/client_temp -p
+mkdir /etc/nginx-rtmp/logs/
+mkdir /opt/data/hls -p
+mkdir /opt/data/dash -p
+mkdir -p /var/www/html/recordings
+chown -R www-data:www-data /var/www/html/recordings/
+rm /etc/nginx-rtmp/nginx.conf
+nano /etc/nginx-rtmp/nginx.conf
 
 cat <<EOF > /usr/lib/systemd/system/nginx-rtmp.service
 [Unit]
@@ -165,18 +173,11 @@ EOF
 
 # start Nginx,add systemd Nginx Service
 service nginx-rtmp start
-systemctl enable nginx-rtmp
-
-# RTMP
-mkdir /etc/nginx-rtmp/logs/
-mkdir /opt/data/hls -p
-mkdir /opt/data/dash -p
-mkdir -p /var/www/html/recordings
-chown -R www-data:www-data /var/www/html/recordings/
-rm /etc/nginx-rtmp/nginx.conf
-nano /etc/nginx-rtmp/nginx.conf
-# Paste RTMP here
 nginx-rtmp -t && nginx-rtmp -s reload
+systemctl enable nginx-rtmp
+nginx-rtmp  -c /etc/nginx-rtmp/nginx.conf
+
+# Paste RTMP here
 # -------==========------- 
 # URLS
 # -------==========------- 

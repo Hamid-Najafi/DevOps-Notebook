@@ -5,8 +5,9 @@
 # -------==========-------
 # Docker-Compose
 # -------==========-------
+sudo git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
 mkdir -p ~/docker/ipsec-vpn 
-cp ~/devops-notebook/Apps/IPSec\ VPN/docker-ipsec-vpn-server-master/* ~/docker/ipsec-vpn 
+cp ~/DevOps-Notebook/Apps/IPSec\ VPN/docker-ipsec-vpn-server-master/* ~/docker/ipsec-vpn 
 cd ~/docker/ipsec-vpn 
 # Add new user if needed
 # sudo htpasswd -c passwords admin

@@ -37,8 +37,9 @@ sudo reboot
 # install
 # -------==========-------
 sudo apt install base-files
-#*    Set FQDN Correctly     *#
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib2.legace.ir -e admin@legace.ir -g 
+#*      Set FQDN Correctly      *#
+#* BE AWARE OF SSH PORT FOR FIREWALL *#
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib2.legace.ir -e admin@legace.ir -g -w
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230-dev -s ib2.legace.ir -e admin@legace.ir -w -g
 # -------==========-------
 # Set Images
@@ -54,7 +55,7 @@ sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Slides/Whiteboard-Virgol.pdf 
 # -------==========-------
 sudo mv /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conferenceBackup
 # This is for Version 2.2.29, if BBB is updated, first update setting files
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.30/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 #*    Set FQDN Correctly     *#
@@ -192,3 +193,22 @@ sudo bbb-conf --restart
 /opt/freeswitch/etc/freeswitch/dialplan/default/bbb_conference.xml
 
 https://github.com/bigbluebutton/bigbluebutton/issues/7007
+
+# -------==========-------
+# BBB Livestreaming
+# -------==========-------
+# It have 100Sec delay
+cd ~/dev
+git clone https://github.com/Hamid-Najafi/BigBlueButton-liveStreaming.git
+cd ~/dev/BigBlueButton-liveStreaming/
+docker-compose up
+# Join as moderator
+https://ib2.legace.ir/bigbluebutton/api/join?fullName=Admin&meetingID=livesteam-1&password=mp&redirect=true&checksum=4bc4b1d088f661c0d9ebe34b177e81dfe5d55388
+# Join as attendee
+https://ib2.legace.ir/bigbluebutton/api/join?fullName=User&meetingID=livesteam-1&password=ap&redirect=true&checksum=e68c7f594999a5770108b87075398175036ee525
+# RTMP
+rtmp://conf.legace.ir/stream/bbb-live-1
+# HLS
+https://conf.legace.ir/hls/bbb-live-2.m3u8
+# DASH
+https://conf.legace.ir/dash/bbb-live-1.mpd

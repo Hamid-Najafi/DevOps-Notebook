@@ -4,9 +4,12 @@ https://github.com/stefanprodan/dockprom
 # Master
 # -------==========-------
 # Start
-mkdir -p /home/ubuntu/docker/monitoring
-sudo cp -r /home/ubuntu/devops-notebook/Apps/Monitoring/Master/* /home/ubuntu/docker/monitoring
-cd  /home/ubuntu/docker/monitoring
+sudo git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
+mkdir -p ~/dev/monitoring
+sudo cp -r ~/DevOps-Notebook/Apps/Monitoring/Master/* ~/dev/monitoring
+cd  ~/dev/monitoring
+nano prometheus/prometheus.yml
+docker network create web
 docker-compose up -d
 
 # Login to GF
@@ -16,16 +19,17 @@ admin, Grafanapass.24
 http://prometheus:9090
 
 # Edit prometheus
-cd  /home/ubuntu/docker/monitoring
+cd  ~/docker/monitoring
 nano prometheus/prometheus.yml
 docker-compose down && docker-compose up -d
 
 # -------==========-------
 # Slave
 # -------==========-------
-mkdir -p /home/ubuntu/docker/monitoring
-sudo cp -r /home/ubuntu/devops-notebook/Apps/Monitoring/Slave/* /home/ubuntu/docker/monitoring
-cd  /home/ubuntu/docker/monitoring
+sudo git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
+mkdir -p ~/dev/monitoring
+sudo cp -r ~/DevOps-Notebook/Apps/Monitoring/Slave/* ~/dev/monitoring
+cd  ~/dev/monitoring
 # nano docker-compose.yml
 docker-compose up -d
 

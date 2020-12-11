@@ -34,6 +34,14 @@ docker push goldenstarc/extended-openldap
 # 1.Run with docker
 docker run \
 --name ldap-service \
+--volume openldapDb:/var/lib/ldap \
+--volume openldapConf:/etc/ldap/slapd.d \
+--restart=always \
+--net="host" \
+-d goldenstarc/extended-openldap:1.4.0
+
+docker run \
+--name ldap-service \
 --hostname ldap.legace.ir \
 --volume openldapDb:/var/lib/ldap \
 --volume openldapConf:/etc/ldap/slapd.d \
@@ -42,12 +50,14 @@ docker run \
 -p 636:636 \
 -d goldenstarc/extended-openldap:1.4.0
 
+
 docker run \
---name ldap-service \
---volume openldapDb:/var/lib/ldap \
---volume openldapConf:/etc/ldap/slapd.d \
+--name ldapService_Temp \
+--volume openldapDb_Temp:/var/lib/ldap \
+--volume openldapConf_Temp:/etc/ldap/slapd.d \
+-e LDAP_ADMIN_PASSWORD=JonSn0w \
 --restart=always \
---net="host" \
+-p 390:389 \
 -d goldenstarc/extended-openldap:1.4.0
 # 2.Run with docker compose
 cd ~/virgol/
