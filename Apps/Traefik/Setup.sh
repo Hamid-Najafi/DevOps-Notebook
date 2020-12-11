@@ -1,9 +1,8 @@
 # -------==========-------
 # Tips
 # -------==========-------
-mkdir -p ~/dev/traefik 
-cp ~/DevOps-Notebook/Apps/Traefik/docker-compose.yml ~/dev/traefik/docker-compose.yml
-cp ~/DevOps-Notebook/Apps/Traefik/traefik.yml ~/dev/traefik/traefik.yml
+mkdir -p ~/dev/traefik
+cp -R ~/DevOps-Notebook/Apps/Traefik ~/dev/traefik
 cd ~/dev/traefik 
 nano docker-compose.yml 
 # Edit

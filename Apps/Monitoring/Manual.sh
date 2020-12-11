@@ -4,12 +4,16 @@ https://github.com/stefanprodan/dockprom
 # Master
 # -------==========-------
 # Start
+# Run Traefik
 sudo git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
 mkdir -p ~/dev/monitoring
 sudo cp -r ~/DevOps-Notebook/Apps/Monitoring/Master/* ~/dev/monitoring
 cd  ~/dev/monitoring
-nano prometheus/prometheus.yml
+sudo nano prometheus/prometheus.yml
 docker network create web
+# change server URLs if needed
+# GF_SERVER_ROOT_URL=http://grafana.goldenstarc.ir
+# "traefik.http.routers.grafana.rule=Host(`grafana.goldenstarc.ir`)"
 docker-compose up -d
 
 # Login to GF

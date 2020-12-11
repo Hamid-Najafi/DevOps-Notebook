@@ -34,13 +34,27 @@ source /etc/environment
 
 sudo reboot
 # -------==========-------
-# install
+# Install
 # -------==========-------
+# Control+F : change all IB2 to IB*
 sudo apt install base-files
 #*      Set FQDN Correctly      *#
 #* BE AWARE OF SSH PORT FOR FIREWALL *#
+# Install latest version 2.3-dev.x
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230-dev -s ib2.legace.ir -e admin@legace.ir -g -w
+# Install latest version 2.2.x
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib2.legace.ir -e admin@legace.ir -g -w
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230-dev -s ib2.legace.ir -e admin@legace.ir -w -g
+# Install specific version (only for older versions) 
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s ib2.legace.ir -e admin@legace.ir -g -w
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.27 -s ib2.legace.ir -e admin@legace.ir -g -w
+# http://ubuntu.bigbluebutton.org/xenial-220-2.2.29/dists/bigbluebutton-xenial/Release.gpg
+# -------==========-------
+# Uninstall
+# -------==========-------
+sudo apt-get purge nodejs mongodb-org  bigbluebutton bbb-* 
+#sudo apt-get purge apt-transport-https haveged build-essential yq
+sudo apt autoremove
+sudo ufw disable
 # -------==========-------
 # Set Images
 # -------==========-------
@@ -55,7 +69,7 @@ sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Slides/Whiteboard-Virgol.pdf 
 # -------==========-------
 sudo mv /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conferenceBackup
 # This is for Version 2.2.29, if BBB is updated, first update setting files
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.30/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 #*    Set FQDN Correctly     *#
@@ -104,8 +118,8 @@ sudo docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@legac
 # -------==========-------
 # 3. Downloadable Recording
 # -------==========-------
-git clone https://github.com/vova-zush/bbb-download.git
-cd bbb-download
+git clone https://github.com/vova-zush/bbb-download.git ~/bbb-download
+cd ~/bbb-download
 chmod u+x install.sh 
 sudo ./install.sh
 # To convert all of your current recordings to MP4 format use command:
@@ -116,7 +130,8 @@ https://b1.legace.ir/download/presentation/{InternalmeetingID}/{InternalmeetingI
 # 3. Setup Monitoring
 # -------==========-------
 # BBB Exporter
-cd ~/DevOps-Notebook/Apps/BigBlueButton/Monitoring/bbb-exporter/
+cp -R ~/DevOps-Notebook/Apps/BigBlueButton/Monitoring/bbb-exporter ~/bbb-exporter 
+cd ~/bbb-exporter
 # If needed edit secret file
 # bbb-conf --secret
 sudo nano secrets.env
@@ -128,6 +143,7 @@ sudo docker-compose up -d
 # Add Nginx Auth for exporter
 # Username:metrics , Password: monitor@bbb
     # Method 1:
+sudo su
 echo "metrics:$apr1$pWpGXQUM$wg5/EWgLr3DjoiuXzFJ651" > /etc/nginx/.htpasswd
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
     # Method 2:
@@ -146,15 +162,16 @@ sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/bigbluebutton.nginx
 #   }
 
 # Node Exporter
-cd ~/DevOps-Notebook/Apps/Monitoring/Slave/
+cp -R ~/DevOps-Notebook/Apps/Monitoring/Slave/ ~/monitoring
+cd ~/monitoring
 sudo docker-compose up -d
-nginx -t && nginx -s reload
+sudo nginx -t && sudo nginx -s reload
 # Check:
-https://ib1.legace.ir/metrics/
+https://ib2.legace.ir/metrics/
 http://b1.legace.ir:9100
 http://b1.legace.ir:8080 || http://b1.legace.ir:9338
 
-https://mconf.github.io/api-mate/#server=https://b1.legace.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
+https://mconf.github.io/api-mate/#server=https://ib2.legace.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 
 # -------==========-------
 #* Prometheus Montoring *#
