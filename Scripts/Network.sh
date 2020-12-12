@@ -112,7 +112,7 @@ sudo nc -l -p 389
 sudo nc -u -l -p 993
 # NetCat Client:
 # TCP
-nc su.legace.ir 389
+nc ib2.legace.ir 389
 # UDP
 nc -u ap.legace.ir 993
 # -------==========-------

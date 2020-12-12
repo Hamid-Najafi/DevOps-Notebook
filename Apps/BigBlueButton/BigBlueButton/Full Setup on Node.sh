@@ -6,9 +6,6 @@ if he/she speak while his/her name is treansport, there will be lag in sound.
 # Docs:
 https://docs.bigbluebutton.org/2.2/customize.html
 
-# API Mate
-https://mconf.github.io/api-mate/#server=https://ib2.legace.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
-
 # -------==========-------
 # Pre-install
 # -------==========-------
@@ -17,13 +14,11 @@ https://mconf.github.io/api-mate/#server=https://ib2.legace.ir/bigbluebutton/&sh
 # source /etc/environment
 
 # Set Hostname
-sudo hostnamectl set-hostname big-1
-BBB-1
-
+sudo hostnamectl set-hostname ib2
 # sudo nano /etc/cloud/templates/hosts.debian.tmpl
 sudo nano /etc/hosts  
-127.0.0.1 big-1
-127.0.0.1 b1.legace.ir
+127.0.0.1       ib2
+127.0.0.1       ib2.legace.ir
 
 # Ubuntu Automatic Update
 sudo nano /etc/update-manager/release-upgrades
@@ -65,7 +60,7 @@ sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Slides/virgol-min.pdf /var/ww
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Slides/Whiteboard-Virgol.pdf /var/www/bigbluebutton-default/
 
 # -------==========-------
-#*    BBB - Configs     *#
+# BBB - Configs     
 # -------==========-------
 sudo mv /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conferenceBackup
 # This is for Version 2.2.29, if BBB is updated, first update setting files
@@ -143,12 +138,11 @@ sudo docker-compose up -d
 # Add Nginx Auth for exporter
 # Username:metrics , Password: monitor@bbb
     # Method 1:
-sudo su
-echo "metrics:$apr1$pWpGXQUM$wg5/EWgLr3DjoiuXzFJ651" > /etc/nginx/.htpasswd
+echo 'admin:$apr1$k98EN1wL$.4puamdnCPS46oGRDvRKx/' | sudo tee  /etc/nginx/.htpasswd
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
     # Method 2:
 # sudo apt-get install -y apache2-utils
-# sudo htpasswd -c /etc/nginx/.htpasswd metrics
+# sudo htpasswd -c /etc/nginx/.htpasswd admin
 #  (in the last line just before '}' )
 # sudo nano /etc/nginx/sites-available/bigbluebutton 
 #   location /metrics/ {
@@ -165,22 +159,33 @@ sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/bigbluebutton.nginx
 cp -R ~/DevOps-Notebook/Apps/Monitoring/Slave/ ~/monitoring
 cd ~/monitoring
 sudo docker-compose up -d
+sudo ufw allow 9100
+sudo ufw allow 9338
+sudo ufw allow 9688
 sudo nginx -t && sudo nginx -s reload
-# Check:
-https://ib2.legace.ir/metrics/
-http://b1.legace.ir:9100
-http://b1.legace.ir:8080 || http://b1.legace.ir:9338
-
-https://mconf.github.io/api-mate/#server=https://ib2.legace.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 
 # -------==========-------
-#* Prometheus Montoring *#
+# Prometheus Montoring
 # -------==========-------
 # Serverius
-cd  /home/ubuntu/docker/monitoring
+cd  ~/dev/monitoring
 nano prometheus/prometheus.yml
 # add server address to 'nodeexporter' and 'bbb' Jobs
 docker-compose down && docker-compose up -d
+
+# -------==========-------
+# Test
+# -------==========-------
+# Postman or Firefox:
+# BBB
+https://mconf.github.io/api-mate/#server=https://ib2.legace.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
+# Username:admin , Password: Metricpass.24
+# BBB Exporter
+https://ib2.legace.ir/metrics/
+# Node Exporter
+http://ib2.legace.ir:9100
+# CAdvisor,
+http://ib2.legace.ir:8080 || http://ib2.legace.ir:9338
 
 # -------==========-------
 # Cron Job

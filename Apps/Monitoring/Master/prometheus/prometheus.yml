@@ -63,8 +63,8 @@ scrape_configs:
     scrape_interval: 5s
     scheme: https
     basic_auth:
-      username: "metrics"
-      password: "monitor@bbb"
+      username: "admin"
+      password: "Metricpass.24"
     static_configs:
     - targets: ['b1.legace.ir']
 

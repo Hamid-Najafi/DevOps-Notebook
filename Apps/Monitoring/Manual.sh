@@ -10,7 +10,6 @@ mkdir -p ~/dev/monitoring
 sudo cp -r ~/DevOps-Notebook/Apps/Monitoring/Master/* ~/dev/monitoring
 cd  ~/dev/monitoring
 sudo nano prometheus/prometheus.yml
-docker network create web
 # change server URLs if needed
 # GF_SERVER_ROOT_URL=http://grafana.goldenstarc.ir
 # "traefik.http.routers.grafana.rule=Host(`grafana.goldenstarc.ir`)"
