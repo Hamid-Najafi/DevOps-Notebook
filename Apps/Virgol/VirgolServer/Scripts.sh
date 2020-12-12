@@ -114,8 +114,18 @@ docker run --rm \
 blacklabelops/volumerize restore
 
 # -------==========-------
+# MinIO S3 Server
+# -------==========-------
+mkdir -p ~/dev
+cp -R ~/DevOps-Notebook/Apps/MinIO  ~/dev/minio
+cd  ~/dev/minio
+docker-compose up -d
+# ACCESS_KEY=minio
+# SECRET_KEY=MinIOpass.24
+# -------==========-------
 # Start Daily Backups
 # -------==========-------
+
 docker run -d \
 --name volumerize \
 --restart=always \
@@ -132,7 +142,7 @@ docker run -d \
 -e "VOLUMERIZE_JOBBER_TIME=0 0 0 * * *" \
 -e "TZ=Asia/Tehran" \
 -e "VOLUMERIZE_SOURCE=/source" \
--e "VOLUMERIZE_TARGET=s3://minio.goldenstarc.ir/virgol" \
+-e "VOLUMERIZE_TARGET=s3://minio.legace.ir/virgol" \
 -e "VOLUMERIZE_CONTAINERS=virgol_main virgol_db virgol_moodle virgol_moodle_db virgol_openldap" \
 -e "AWS_ACCESS_KEY_ID=minio" \
 -e "AWS_SECRET_ACCESS_KEY=MinIOpass.24" \
@@ -141,9 +151,8 @@ blacklabelops/volumerize backup
 # -------==========-------
 # Update All containers
 # -------==========-------
-# This will not work!
 docker-compose pull      
-
+# OR
 docker pull goldenstarc/virgol && \
 docker pull postgres && \
 docker pull dpage/pgadmin4 && \
@@ -163,6 +172,7 @@ docker-compose up -d
 # -------==========-------
 # postgres
 sudo sh -c 'docker exec -t postgres pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql'
+sudo sh -c 'docker exec -t virgol_db pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql'
 ca dump.sql | docker exec -i virgol_db psql -U postgres
 
 # moodle

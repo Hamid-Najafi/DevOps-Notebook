@@ -1,10 +1,12 @@
 # -------==========-------
 # MinIO Docker-Compose
 # -------==========-------
-mkdir -p ~/docker/minio
-cp /home/ubuntu/devops-notebook/Apps/MinIO/docker-compose.yml ~/docker/minio
-cd ~/docker/minio
+mkdir -p ~/dev
+cp -R ~/DevOps-Notebook/Apps/MinIO  ~/dev/minio
+cd  ~/dev/minio
 docker-compose up -d
+# ACCESS_KEY=minio
+# SECRET_KEY=MinIOpass.24
 # -------==========-------
 # Stable
 docker run -p 9000:9000 \
