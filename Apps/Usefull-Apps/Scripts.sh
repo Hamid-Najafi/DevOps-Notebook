@@ -1,7 +1,7 @@
 # -------==========-------
 # Oh-My-Zsh!
 # -------==========-------
-sudo apt install git-core zsh  x11-apps
+sudo apt install git-core zsh x11-apps
 git clone https://github.com/zsh-users/zsh-syntax-highlighting
 sudo apt install fonts-powerline
 git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
@@ -19,9 +19,8 @@ noglob sudo apt-get purge kube*
 # UseFull apps
 # -------==========-------
 sudo add-apt-repository universe
-sudo add-apt-repository ppa:certbot/certbot
 sudo apt-get update
-sudo apt-get install certbot dtrx python3-certbot-apache python3-certbot-nginx bmon htop software-properties-common traceroute
+sudo apt-get install ncdu dtrx bmon htop software-properties-common traceroute
 sudo apt-get install build-essential
 sudo apt install python3-pip
 # -------==========-------

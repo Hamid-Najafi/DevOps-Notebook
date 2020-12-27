@@ -49,7 +49,7 @@ sudo nano /etc/environment
 # -------==========-------
 # Check proxy
 # -------==========-------
-curl -x http://admin:Squidpass.24@su.legace.ir:3128/ -L http://lms.legace.ir
+curl -x http://admin:Squidpass.24@su.legace.ir:3128/ -L http://panel.vir-gol.ir
 curl -x http://su.legace.ir:3128/ -L http://lms.legace.ir
 # THIS will HANG on Irans IP & downloads index.html on others IP
 wget https://charts.gitlab.io 

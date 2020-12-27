@@ -27,6 +27,11 @@ C:\Certbot\live\m1.legace.ir\
 
 >C:\Users\Administrator\Desktop\stunnel-5.56-win64-installer.exe -install
 
+# Adobe Connect Services Autostart
+Send a copy from Start "Adobe Connect Central Application Server" and "Start Adobe Connect Meeting Server" to startup folder
+C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Adobe Connect Server
+%userprofile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp
 
 # Adobe Connect Meeting Server
 net start AMS

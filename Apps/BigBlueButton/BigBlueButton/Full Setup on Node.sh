@@ -17,8 +17,8 @@ https://docs.bigbluebutton.org/2.2/customize.html
 sudo hostnamectl set-hostname ib2
 # sudo nano /etc/cloud/templates/hosts.debian.tmpl
 sudo nano /etc/hosts  
-127.0.0.1       ib2
-127.0.0.1       ib2.legace.ir
+185.141.106.36       ib2
+185.141.106.36       ib2.legace.ir
 
 # Ubuntu Automatic Update
 sudo nano /etc/update-manager/release-upgrades
@@ -40,9 +40,12 @@ wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v b
 # Install latest version 2.2.x
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib2.legace.ir -e admin@legace.ir -g -w
 # Install specific version (only for older versions) 
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s ib2.legace.ir -e admin@legace.ir -g -w
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s ib2.legace.ir -e admin@legace.ir -g -w  -c turn.legace.ir:1b6s1esK
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.27 -s ib2.legace.ir -e admin@legace.ir -g -w
 # http://ubuntu.bigbluebutton.org/xenial-220-2.2.29/dists/bigbluebutton-xenial/Release.gpg
+
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.legace.ir:1b6s1esK -e admin@legace.ir
+
 # -------==========-------
 # Uninstall
 # -------==========-------
@@ -141,19 +144,19 @@ sudo docker-compose up -d
 echo 'admin:$apr1$k98EN1wL$.4puamdnCPS46oGRDvRKx/' | sudo tee  /etc/nginx/.htpasswd
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
     # Method 2:
-# sudo apt-get install -y apache2-utils
-# sudo htpasswd -c /etc/nginx/.htpasswd admin
-#  (in the last line just before '}' )
-# sudo nano /etc/nginx/sites-available/bigbluebutton 
-#   location /metrics/ {
-#       auth_basic "BigBlueButton Exporter";
-#       auth_basic_user_file /etc/nginx/.htpasswd;
-#       proxy_pass http://127.0.0.1:9688/;
-#       include proxy_params;
-#   }
-#   location = / {
-#     return 301 https://lms.legace.ir/;
-#   }
+sudo apt install -y apache2-utils
+sudo htpasswd -c /etc/nginx/.htpasswd admin
+ (in the last line just before '}' )
+sudo nano /etc/nginx/sites-available/bigbluebutton 
+  location /metrics/ {
+      auth_basic "BigBlueButton Exporter";
+      auth_basic_user_file /etc/nginx/.htpasswd;
+      proxy_pass http://127.0.0.1:9688/;
+      include proxy_params;
+  }
+  location = / {
+    return 301 https://lms.legace.ir/;
+  }
 
 # Node Exporter
 cp -R ~/DevOps-Notebook/Apps/Monitoring/Slave/ ~/monitoring
@@ -221,9 +224,10 @@ https://github.com/bigbluebutton/bigbluebutton/issues/7007
 # -------==========-------
 # It have 100Sec delay
 cd ~/dev
-git clone https://github.com/Hamid-Najafi/BigBlueButton-liveStreaming.git
+git clone https://github.com/Hamid-Najafi/BigBlueButton-liveStreaming.git 
 cd ~/dev/BigBlueButton-liveStreaming/
-docker-compose up
+docker-compose up -d
+docker-compose down
 # Join as moderator
 https://ib2.legace.ir/bigbluebutton/api/join?fullName=Admin&meetingID=livesteam-1&password=mp&redirect=true&checksum=4bc4b1d088f661c0d9ebe34b177e81dfe5d55388
 # Join as attendee

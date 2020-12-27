@@ -1,9 +1,12 @@
 # -------==========-------
 # Certbot
 # -------==========-------
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get install certbot python3-certbot-apache python3-certbot-nginx
+
 sudo snap install --classic certbot
 # get and install your certificates
-sudo certbot --standalone 
+sudo certbot --standalone
 sudo certbot --apache
 sudo certbot --nginx
 #  just get a certificate
@@ -27,7 +30,7 @@ sudo certbot \
     --agree-tos \
     --domains legace.ir -d www.legace.ir
 # -------==========-------
-# Certbot
+# Setup
 # -------==========-------
 sudo docker run \
     -it --rm \
@@ -36,3 +39,7 @@ sudo docker run \
     -v "/var/lib/letsencrypt:/var/lib/letsencrypt" \
     --restart=always \
     certbot/certbot certonly
+# -------==========-------
+# TIPs
+# -------==========-------
+https://www.ssllabs.com/ssltest

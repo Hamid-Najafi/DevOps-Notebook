@@ -6,9 +6,9 @@ https://github.com/stefanprodan/dockprom
 # Start
 # Run Traefik
 sudo git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
-mkdir -p ~/dev/monitoring
-sudo cp -r ~/DevOps-Notebook/Apps/Monitoring/Master/* ~/dev/monitoring
-cd  ~/dev/monitoring
+mkdir -p ~/docker/monitoring
+sudo cp -r ~/DevOps-Notebook/Apps/Monitoring/Master/* ~/docker/monitoring
+cd  ~/docker/monitoring
 sudo nano prometheus/prometheus.yml
 # change server URLs if needed
 # GF_SERVER_ROOT_URL=http://grafana.goldenstarc.ir
@@ -39,7 +39,6 @@ docker-compose up -d
 # -------==========-------
 # Install Grafana Plugins
 # -------==========-------
-docker exec -it grafana sh 
-grafana-cli plugins install grafana-piechart-panel  
+docker exec -it grafana grafana-cli plugins install grafana-piechart-panel  
 # grafana-cli plugins install grafana-image-renderer
 docker restart grafana

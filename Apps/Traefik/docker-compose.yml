@@ -39,6 +39,9 @@ services:
       - traefik.http.routers.prometheus.service=prometheus@internal
       - traefik.http.routers.prometheus.middlewares=prometheusauth
       - traefik.http.middlewares.prometheusauth.basicauth.users=traefik:$$2y$$05$$vSakkQt0wevdRaBJF9fe3Oz0PADs2dW1OsA5Tlr209/rGxfIB86sW"
+      # Compressing the Response before Sending it to the Client
+      - traefik.http.routers.traefik.middlewares=traefik-compress
+      - traefik.http.middlewares.traefik-compress.compress=true
     networks:
       - web
 networks:

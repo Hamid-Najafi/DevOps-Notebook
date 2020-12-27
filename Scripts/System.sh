@@ -36,6 +36,19 @@ usermod -aG sudo parspack
 adduser tiger
 usermod -aG sudo tiger
 # -------==========-------
+# Add Swap
+# -------==========-------
+sudo fallocate -l 1G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+sudo swapon --show
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+# Tuning Swap Settings
+sudo nano /etc/sysctl.conf
+vm.swappiness=30
+vm.vfs_cache_pressure=50
+# -------==========-------
 # SSH
 # -------==========-------
 ssh-keygen
