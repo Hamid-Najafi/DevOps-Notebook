@@ -1,9 +1,9 @@
 # -------==========-------
 # Setup
 # -------==========-------
-mkdir -p ~/dev
-cp -R ~/DevOps-Notebook/Apps/Traefik ~/dev/traefik
-cd ~/dev/traefik 
+mkdir -p ~/docker
+cp -R ~/DevOps-Notebook/Apps/Traefik ~/docker/traefik
+cd ~/docker/traefik 
 nano docker-compose.yml 
 # Set DNS Record
 # Edit

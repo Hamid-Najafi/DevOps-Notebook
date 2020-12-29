@@ -88,6 +88,6 @@ server {
       include proxy_params;
   }
   location = / {
-    return 301 https://lms.legace.ir/;
+    return 301 https://panel.vir-gol.ir/;
   }
 }

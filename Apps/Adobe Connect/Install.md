@@ -59,9 +59,9 @@ Administration -> Users andd Groups -> Edit Login and Password Policies -> Login
 http://localhost:8510/console/directory-service-settings/directory-service-settings/connection-settings
 
 URL:ldap://ldap.legace.ir:389
-Authentication mechanism:Simple 
+Authentication mechanism:Simple
 UserName:cn=admin,dc=legace,dc=ir
-Password:password123 
+Password:password123
 Query timeout:120
 Query page size:100
 

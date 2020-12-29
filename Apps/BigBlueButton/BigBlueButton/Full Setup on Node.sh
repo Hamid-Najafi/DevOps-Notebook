@@ -14,11 +14,10 @@ https://docs.bigbluebutton.org/2.2/customize.html
 # source /etc/environment
 
 # Set Hostname
-sudo hostnamectl set-hostname ib2
-# sudo nano /etc/cloud/templates/hosts.debian.tmpl
+sudo hostnamectl set-hostname ib1
 sudo nano /etc/hosts  
-185.141.106.36       ib2
-185.141.106.36       ib2.legace.ir
+185.141.106.36       ib1
+# sudo nano /etc/cloud/templates/hosts.debian.tmpl
 
 # Ubuntu Automatic Update
 sudo nano /etc/update-manager/release-upgrades
@@ -31,20 +30,20 @@ sudo reboot
 # -------==========-------
 # Install
 # -------==========-------
-# Control+F : change all IB2 to IB*
+# Control+F : change all ib1 to IB*
 sudo apt install base-files
 #*      Set FQDN Correctly      *#
 #* BE AWARE OF SSH PORT FOR FIREWALL *#
 # Install latest version 2.3-dev.x
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230-dev -s ib2.legace.ir -e admin@legace.ir -g -w
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230-dev -s ib1.legace.ir -e admin@legace.ir -g -w
 # Install latest version 2.2.x
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib2.legace.ir -e admin@legace.ir -g -w
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib1.legace.ir -e admin@legace.ir -g -w
 # Install specific version (only for older versions) 
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s ib2.legace.ir -e admin@legace.ir -g -w  -c turn.legace.ir:1b6s1esK
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.27 -s ib2.legace.ir -e admin@legace.ir -g -w
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s ib1.vir-gol.ir -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.27 -s ib1.legace.ir -e admin@legace.ir -g -w
 # http://ubuntu.bigbluebutton.org/xenial-220-2.2.29/dists/bigbluebutton-xenial/Release.gpg
-
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.legace.ir:1b6s1esK -e admin@legace.ir
+# Install Turn Server
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.vir-gol.ir:1b6s1esK -e admin@vir-gol.ir
 
 # -------==========-------
 # Uninstall
@@ -53,6 +52,13 @@ sudo apt-get purge nodejs mongodb-org  bigbluebutton bbb-*
 #sudo apt-get purge apt-transport-https haveged build-essential yq
 sudo apt autoremove
 sudo ufw disable
+
+# -------==========-------
+# Troubleshooting
+# -------==========-------
+sudo bbb-conf --clean
+sudo bbb-conf --check
+
 # -------==========-------
 # Set Images
 # -------==========-------
@@ -71,7 +77,7 @@ sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/bigbluebutton.prope
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 #*    Set FQDN Correctly     *#
-sudo bbb-conf --setip ib2.legace.ir
+sudo bbb-conf --setip ib1.vir-gol.ir
 
 # Locales #
 # List
@@ -112,7 +118,7 @@ sudo nano .env
 BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 sudo docker run --rm --env-file .env bigbluebutton/greenlight:v2 bundle exec rake conf:check
 sudo docker-compose up -d
-sudo docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@legace.ir","BBBpass.24","admin"]
+sudo docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@vir-gol.ir","BBBpass.24","admin"]
 # -------==========-------
 # 3. Downloadable Recording
 # -------==========-------
@@ -155,7 +161,7 @@ sudo nano /etc/nginx/sites-available/bigbluebutton
       include proxy_params;
   }
   location = / {
-    return 301 https://lms.legace.ir/;
+    return 301 https://panel.vir-gol.ir/;
   }
 
 # Node Exporter
@@ -181,14 +187,14 @@ docker-compose down && docker-compose up -d
 # -------==========-------
 # Postman or Firefox:
 # BBB
-https://mconf.github.io/api-mate/#server=https://ib2.legace.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
+https://mconf.github.io/api-mate/#server=https://ib1.legace.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 # Username:admin , Password: Metricpass.24
 # BBB Exporter
-https://ib2.legace.ir/metrics/
+https://ib1.legace.ir/metrics/
 # Node Exporter
-http://ib2.legace.ir:9100
+http://ib1.legace.ir:9100
 # CAdvisor,
-http://ib2.legace.ir:8080 || http://ib2.legace.ir:9338
+http://ib1.legace.ir:8080 || http://ib1.legace.ir:9338
 
 # -------==========-------
 # Cron Job
@@ -229,9 +235,9 @@ cd ~/dev/BigBlueButton-liveStreaming/
 docker-compose up -d
 docker-compose down
 # Join as moderator
-https://ib2.legace.ir/bigbluebutton/api/join?fullName=Admin&meetingID=livesteam-1&password=mp&redirect=true&checksum=4bc4b1d088f661c0d9ebe34b177e81dfe5d55388
+https://ib1.legace.ir/bigbluebutton/api/join?fullName=Admin&meetingID=livesteam-1&password=mp&redirect=true&checksum=4bc4b1d088f661c0d9ebe34b177e81dfe5d55388
 # Join as attendee
-https://ib2.legace.ir/bigbluebutton/api/join?fullName=User&meetingID=livesteam-1&password=ap&redirect=true&checksum=e68c7f594999a5770108b87075398175036ee525
+https://ib1.legace.ir/bigbluebutton/api/join?fullName=User&meetingID=livesteam-1&password=ap&redirect=true&checksum=e68c7f594999a5770108b87075398175036ee525
 # RTMP
 rtmp://conf.legace.ir/stream/bbb-live-1
 # HLS
