@@ -37,7 +37,7 @@ sudo apt install base-files
 # Install latest version 2.3-dev.x
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230-dev -s ib1.legace.ir -e admin@legace.ir -g -w
 # Install latest version 2.2.x
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib2.vir-gol.ir -e admin@legace.ir -g -w
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib1.vir-gol.ir -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
 # Install specific version (only for older versions) 
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s ib1.vir-gol.ir -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.27 -s ib1.legace.ir -e admin@legace.ir -g -w
