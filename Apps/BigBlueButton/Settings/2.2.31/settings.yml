@@ -6,7 +6,7 @@ public:
     autoJoin: true
     listenOnlyMode: true
     forceListenOnly: false
-    skipCheck: false
+    skipCheck: true
     clientTitle: سامانه کلاس مجازی ویرگول
     appName: کلاس مجازی - نسخه مرورگر
     bbbServerVersion: 2.2

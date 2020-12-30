@@ -35,12 +35,12 @@ sudo apt install base-files
 #*      Set FQDN Correctly      *#
 #* BE AWARE OF SSH PORT FOR FIREWALL *#
 # Install latest version 2.3-dev.x
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230-dev -s ib1.legace.ir -e admin@legace.ir -g -w
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230-dev -s ib1.vir-gol.ir -e admin@legace.ir -g -w
 # Install latest version 2.2.x
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib1.vir-gol.ir -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
 # Install specific version (only for older versions) 
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s ib1.vir-gol.ir -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.27 -s ib1.legace.ir -e admin@legace.ir -g -w
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.27 -s ib1.vir-gol.ir -e admin@legace.ir -g -w
 # http://ubuntu.bigbluebutton.org/xenial-220-2.2.29/dists/bigbluebutton-xenial/Release.gpg
 # Install Turn Server
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.vir-gol.ir:1b6s1esK -e admin@vir-gol.ir
@@ -49,13 +49,12 @@ wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.v
 # Uninstall
 # -------==========-------
 sudo apt-get purge nodejs mongodb-org  bigbluebutton bbb-* 
-
+# OR
 sudo apt-get purge bbb-apps bbb-apps-akka bbb-apps-screenshare bbb-apps-sip bbb-apps-video bbb-apps-video-broadcast bbb-client bbb-etherpad \
 bbb-freeswitch-core bbb-freeswitch-sounds bbb-fsesl-akka bbb-mkclean bbb-playback-presentation bbb-record-core bbb-red5 bbb-transcode-akka bbb-web
 #sudo apt-get purge apt-transport-https haveged build-essential yq
 sudo apt autoremove
 sudo ufw disable
-
 # -------==========-------
 # Troubleshooting
 # -------==========-------
@@ -76,8 +75,8 @@ sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Slides/Whiteboard-Virgol.pdf 
 # -------==========-------
 sudo mv /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conferenceBackup
 # This is for Version 2.2.29, if BBB is updated, first update setting files
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.31/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.31/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 #*    Set FQDN Correctly     *#
 sudo bbb-conf --setip ib1.vir-gol.ir
@@ -149,13 +148,13 @@ API_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 sudo docker-compose up -d
 # Add Nginx Auth for exporter
 # Username:metrics , Password: monitor@bbb
-    # Method 1:
 echo 'admin:$apr1$k98EN1wL$.4puamdnCPS46oGRDvRKx/' | sudo tee /etc/nginx/.htpasswd
+# sudo apt install -y apache2-utils
+# sudo htpasswd -c /etc/nginx/.htpasswd admin
+    # Method 1:
 # Replace FQDDN Address
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
     # Method 2:
-sudo apt install -y apache2-utils
-sudo htpasswd -c /etc/nginx/.htpasswd admin
  (in the last line just before '}' )
 sudo nano /etc/nginx/sites-available/bigbluebutton 
   location /metrics/ {
@@ -194,11 +193,11 @@ docker-compose down && docker-compose up -d
 https://mconf.github.io/api-mate/#server=https://ib1.vir-gol.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 # Username:admin , Password: Metricpass.24
 # BBB Exporter
-https://ib1.legace.ir/metrics/
+https://ib1.vir-gol.ir/metrics/
 # Node Exporter
-http://ib1.legace.ir:9100
+http://ib1.vir-gol.ir:9100
 # CAdvisor,
-http://ib1.legace.ir:8080 || http://ib1.legace.ir:9338
+http://ib1.vir-gol.ir:8080 || http://ib1.vir-gol.ir:9338
 
 # -------==========-------
 # Cron Job
@@ -208,14 +207,14 @@ sudo nano /etc/cron.daily/bigbluebutton
 # ---------------------------------------------------------------==========---------------------------------------------------------------
 #*                                                                Upgrade                                                               *#
 # ---------------------------------------------------------------==========---------------------------------------------------------------
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib1.legace.ir -e admin@legace.ir -w -g
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib1.vir-gol.ir -e admin@legace.ir -w -g
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.*/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.*/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.*/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
 
 # Beacuse we copy other server config file, we must set these again.
 sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
-sudo bbb-conf --setip ib1.legace.ir
+sudo bbb-conf --setip ib1.vir-gol.ir
 
 # Check and Apply
 nginx -t && nginx -s reload
@@ -239,9 +238,9 @@ cd ~/dev/BigBlueButton-liveStreaming/
 docker-compose up -d
 docker-compose down
 # Join as moderator
-https://ib1.legace.ir/bigbluebutton/api/join?fullName=Admin&meetingID=livesteam-1&password=mp&redirect=true&checksum=4bc4b1d088f661c0d9ebe34b177e81dfe5d55388
+https://ib1.vir-gol.ir/bigbluebutton/api/join?fullName=Admin&meetingID=livesteam-1&password=mp&redirect=true&checksum=4bc4b1d088f661c0d9ebe34b177e81dfe5d55388
 # Join as attendee
-https://ib1.legace.ir/bigbluebutton/api/join?fullName=User&meetingID=livesteam-1&password=ap&redirect=true&checksum=e68c7f594999a5770108b87075398175036ee525
+https://ib1.vir-gol.ir/bigbluebutton/api/join?fullName=User&meetingID=livesteam-1&password=ap&redirect=true&checksum=e68c7f594999a5770108b87075398175036ee525
 # RTMP
 rtmp://conf.legace.ir/stream/bbb-live-1
 # HLS
