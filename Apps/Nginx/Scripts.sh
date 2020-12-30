@@ -28,6 +28,8 @@ nginx -t && nginx -s reload
 # Kill nginx
 nginx -s stop
 
+
+
 # -------==========------- 
 # Nginx with RTMP & HLS & DASH
 # -------==========------- 
@@ -88,16 +90,7 @@ systemctl enable nginx
 service nginx start
 
 # Generate SSL
-sudo snap install core; sudo snap refresh core
 sudo snap install --classic certbot
-sudo ln -s /snap/bin/certbot /usr/bin/certbot
-sudo /snap/bin/certbot certonly \
-    --nginx\
-    --email admin@vir-gol.ir \
-    --server https://acme-v02.api.letsencrypt.org/directory \
-    --agree-tos \
-    --domains "live.vir-gol.ir"
-
 sudo certbot certonly \
     --nginx\
     --email admin@vir-gol.ir \

@@ -37,7 +37,7 @@ sudo apt install base-files
 # Install latest version 2.3-dev.x
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230-dev -s ib1.legace.ir -e admin@legace.ir -g -w
 # Install latest version 2.2.x
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib1.legace.ir -e admin@legace.ir -g -w
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib2.vir-gol.ir -e admin@legace.ir -g -w
 # Install specific version (only for older versions) 
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s ib1.vir-gol.ir -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.27 -s ib1.legace.ir -e admin@legace.ir -g -w
@@ -49,6 +49,9 @@ wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.v
 # Uninstall
 # -------==========-------
 sudo apt-get purge nodejs mongodb-org  bigbluebutton bbb-* 
+
+sudo apt-get purge bbb-apps bbb-apps-akka bbb-apps-screenshare bbb-apps-sip bbb-apps-video bbb-apps-video-broadcast bbb-client bbb-etherpad \
+bbb-freeswitch-core bbb-freeswitch-sounds bbb-fsesl-akka bbb-mkclean bbb-playback-presentation bbb-record-core bbb-red5 bbb-transcode-akka bbb-web
 #sudo apt-get purge apt-transport-https haveged build-essential yq
 sudo apt autoremove
 sudo ufw disable
@@ -78,8 +81,9 @@ sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/settings.yml /usr/s
 sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 #*    Set FQDN Correctly     *#
 sudo bbb-conf --setip ib1.vir-gol.ir
-
-# Locales #
+# -------==========-------
+# Change Locales 
+# -------==========-------
 # List
 ls /usr/share/meteor/bundle/programs/server/assets/app/locales/
 # Set to Arabic
@@ -87,7 +91,6 @@ sudo nano /usr/share/meteor/bundle/programs/server/assets/app/config/settings.ym
         fallbackLocale: ar
         overrideLocale: ar
 sudo nano /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-
 # -------==========-------
 # Install Fonts
 # -------==========-------
@@ -140,14 +143,15 @@ cd ~/bbb-exporter
 # bbb-conf --secret
 sudo nano secrets.env
 #*    Set FQDN Correctly     *#
-API_BASE_URL=https://ib1.legace.ir/bigbluebutton/api/
+API_BASE_URL=https://ib1.vir-gol.ir/bigbluebutton/api/
 API_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 
 sudo docker-compose up -d
 # Add Nginx Auth for exporter
 # Username:metrics , Password: monitor@bbb
     # Method 1:
-echo 'admin:$apr1$k98EN1wL$.4puamdnCPS46oGRDvRKx/' | sudo tee  /etc/nginx/.htpasswd
+echo 'admin:$apr1$k98EN1wL$.4puamdnCPS46oGRDvRKx/' | sudo tee /etc/nginx/.htpasswd
+# Replace FQDDN Address
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
     # Method 2:
 sudo apt install -y apache2-utils
@@ -187,7 +191,7 @@ docker-compose down && docker-compose up -d
 # -------==========-------
 # Postman or Firefox:
 # BBB
-https://mconf.github.io/api-mate/#server=https://ib1.legace.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
+https://mconf.github.io/api-mate/#server=https://ib1.vir-gol.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 # Username:admin , Password: Metricpass.24
 # BBB Exporter
 https://ib1.legace.ir/metrics/

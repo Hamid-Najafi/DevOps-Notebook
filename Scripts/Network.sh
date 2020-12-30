@@ -160,3 +160,25 @@ sudo lsof -p 15014
 # speedtest:
 # -------==========-------
 curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -
+# -------==========-------
+# 0-1 Network Config
+# -------==========-------
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+auto enp3s0f0
+iface enp3s0f0 inet static
+        address 185.141.106.36
+        netmask 255.255.255.255
+        broadcast 185.141.106.36
+        post-up route add 172.27.32.13 dev enp3s0f0
+        post-up route add default gw 172.27.32.13
+        pre-down route del 172.27.32.13 dev enp3s0f0
+        pre-down route del default gw 172.27.32.13
