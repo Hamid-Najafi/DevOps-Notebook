@@ -35,12 +35,13 @@ sudo apt install base-files
 #*      Set FQDN Correctly      *#
 #* BE AWARE OF SSH PORT FOR FIREWALL *#
 # Install latest version 2.3-dev.x
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230-dev -s ib1.vir-gol.ir -e admin@legace.ir -g -w
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230-dev -s ib2.vir-gol.ir -e admin@vir-gol.ir -g -w
+ -c turn.vir-gol.ir:1b6s1esK
 # Install latest version 2.2.x
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib1.vir-gol.ir -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
 # Install specific version (only for older versions) 
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s ib1.vir-gol.ir -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.27 -s ib1.vir-gol.ir -e admin@legace.ir -g -w
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.27 -s ib1.vir-gol.ir -e admin@vir-gol.ir -g -w
 # http://ubuntu.bigbluebutton.org/xenial-220-2.2.29/dists/bigbluebutton-xenial/Release.gpg
 # Install Turn Server
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.vir-gol.ir:1b6s1esK -e admin@vir-gol.ir
@@ -99,12 +100,13 @@ sudo fc-cache -fv
 # 1. Hostname & Secrets
 # -------==========-------
 # Dont run setip, use install-script to change FQDN instead.
-# sudo bbb-conf --setip b1.legace.ir
+# sudo bbb-conf --setip b1.vir-gol.ir
 # sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 # sudo bbb-conf --restart
 # -------==========-------
-# 2. Remove Demo API
+# 2. Demo API
 # -------==========-------
+sudo apt-get install bbb-demo
 sudo apt-get purge bbb-demo
 # Secret Location
 # Version 2.2
@@ -131,7 +133,7 @@ sudo ./install.sh
 # To convert all of your current recordings to MP4 format use command:
 sudo bbb-record --rebuildall
 sudo bbb-record --list
-https://b1.legace.ir/download/presentation/{InternalmeetingID}/{InternalmeetingID}.mp4
+https://b1.vir-gol.ir/download/presentation/{InternalmeetingID}/{InternalmeetingID}.mp4
 # -------==========-------
 # 3. Setup Monitoring
 # -------==========-------
@@ -207,7 +209,7 @@ sudo nano /etc/cron.daily/bigbluebutton
 # ---------------------------------------------------------------==========---------------------------------------------------------------
 #*                                                                Upgrade                                                               *#
 # ---------------------------------------------------------------==========---------------------------------------------------------------
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib1.vir-gol.ir -e admin@legace.ir -w -g
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib1.vir-gol.ir -e admin@vir-gol.ir -w -g
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.*/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.*/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.*/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
@@ -242,8 +244,9 @@ https://ib1.vir-gol.ir/bigbluebutton/api/join?fullName=Admin&meetingID=livesteam
 # Join as attendee
 https://ib1.vir-gol.ir/bigbluebutton/api/join?fullName=User&meetingID=livesteam-1&password=ap&redirect=true&checksum=e68c7f594999a5770108b87075398175036ee525
 # RTMP
-rtmp://conf.legace.ir/stream/bbb-live-1
+rtmp://live.vir-gol.ir/stream/bbb-live-1
+rtmp://live.vir-gol.ir/stream/MEETINGID
 # HLS
-https://conf.legace.ir/hls/bbb-live-2.m3u8
+https://live.vir-gol.ir/hls/bbb-live-1.m3u8
 # DASH
-https://conf.legace.ir/dash/bbb-live-1.mpd
+https://live.vir-gol.ir/dash/bbb-live-1.mpd

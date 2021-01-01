@@ -143,17 +143,19 @@ cd streamingservice
 # Makse service
 cat <<EOF > /etc/systemd/system/kestrel-livestream.service
 [Unit]
-Description=.NET Web API for LiveStream in BBB 
+Description=.NET Web API for LiveStream in BBB
 
 [Service]
-WorkingDirectory=/root/streamingservice
-ExecStart=/usr/bin/dotnet /var/www/streamingservice/streamingservice.dll
+WorkingDirectory=/var/www/streamingservice
+#ExecStart=dotnet run --urls http://localhost:5000/
+ExecStart=/usr/bin/dotnet /var/www/streamingservice/streamingservice.dll  --urls http://localhost:5000/
 Restart=always
 # Restart service after 10 seconds if the dotnet service crashes:
 RestartSec=10
 KillSignal=SIGINT
 SyslogIdentifier=dotnet-livestream
-User=www-data
+#User=www-data
+User=root
 Environment=ASPNETCORE_ENVIRONMENT=Production
 Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
 
@@ -163,7 +165,7 @@ EOF
 
 sudo systemctl enable kestrel-livestream.service
 sudo systemctl start kestrel-livestream.service
+sudo systemctl stop kestrel-livestream.service
 sudo systemctl status kestrel-livestream.service
 sudo journalctl -fu kestrel-livestream.service
-
-sudo bash build.sh
+systemctl daemon-reload

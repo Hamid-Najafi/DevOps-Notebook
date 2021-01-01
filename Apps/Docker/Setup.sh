@@ -53,8 +53,8 @@ docker run hello-world
 # Docker Build & Push
 # -------==========-------
 docker login
-docker build -t goldenstarc/extended-openldap .
-docker push goldenstarc/extended-openldap
+docker build -t goldenstarc/bigbluebutton-livestreaming .
+docker push goldenstarc/bigbluebutton-livestreaming
 # -------==========-------
 # Docker-Compose
 # -------==========-------
@@ -86,3 +86,7 @@ sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
 Environment="HTTP_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
 sudo systemctl daemon-reload
 sudo systemctl restart docker
+
+string mkdir = ShellRunner.Execute("bash /var/push.sh");
+
+su - www-data -c \'docker-compose up -d\'
