@@ -65,11 +65,13 @@ sudo bbb-conf --check
 # -------==========-------
 # Set Images
 # -------==========-------
-# Virgol
 git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/favicon.ico /var/www/bigbluebutton-default/favicon.ico
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Slides/virgol.pdf /var/www/bigbluebutton-default/Whiteboard.pdf
-# sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Slides/dei.pdf /var/www/bigbluebutton-default/Whiteboard.pdf
+# Virgol
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Virgol/favicon.ico /var/www/bigbluebutton-default/favicon.ico
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Virgol/Whiteboard.pdf /var/www/bigbluebutton-default/Whiteboard.pdf
+# Dei
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Dei/favicon.ico /var/www/bigbluebutton-default/favicon.ico
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Dei/Whiteboard.pdf /var/www/bigbluebutton-default/Whiteboard.pdf
 
 # -------==========-------
 # BBB - Configs     
