@@ -3,7 +3,7 @@
 # -------==========-------
 docker run \
     --name postgres \
-    -e "POSTGRES_PASSWORD=Postgrespass.24" \
+    -e "POSTGRES_PASSWORD=PostgreSQLpass.24" \
     -p 5432:5432 \
     -v postgresDb:/var/lib/postgresql/data \
     --restart=always \

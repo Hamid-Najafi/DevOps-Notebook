@@ -9,9 +9,9 @@ docker run \
     -v blynk:/data \
     -p 8080:8080 \
     -p 9443:9443 \
+    --network=host \
     -d mpherg/blynk-server
 
-    --network=host \
     -v $(PWD)/server.properties:/config/server.properties \
 
 # -------==========-------

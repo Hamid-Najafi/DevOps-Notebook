@@ -123,3 +123,9 @@ if [ -f /var/run/reboot-required ]; then
         echo "Packages causing reboot:"
         cat /var/run/reboot-required.pkgs
 fi
+# -------==========-------
+# grep file content location
+# -------==========-------
+grep -rl --include="*.js" "searchString" ${PWD}
+grep -rl "vir-gol" .
+grep -rl "lms.legace.ir" .

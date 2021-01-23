@@ -141,10 +141,11 @@ sudo service resolvconf restart
 # -------==========-------
 # HTTP Proxy
 # -------==========-------
-sudo nano  /etc/environment
-echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
+sudo nano  /etc/environmenttp
+echo -e "http_proxy=http://tpr
+:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
 source /etc/environment
-curl -x http://admin:Squidpass.24@su.legace.ir:3128/ -L http://lms.legace.ir
+curl -x http://admin:Squidpass.24@su.legace.ir:3128/ -L http://panel.vir-gol.ir
 wget https://charts.gitlab.io 
 # -------==========-------
 # SSH

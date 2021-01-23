@@ -11,4 +11,4 @@ docker run \
     -d mongo  
     # User : admin
 # ConnectionString
-mongodb://admin:MongoDBpass.24@legace.ir:27017/grandnode?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false
+c
