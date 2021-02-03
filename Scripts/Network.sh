@@ -114,10 +114,10 @@ sudo nc -u -l -p 80
 # NetCat Client:
 # TCP
 nc phpldapadmin-dei.vir-gol.ir 80
-nc 10.69.78.21 390
+nc 10.69.78.21 82
 nc ib2.legace.ir 389
 # UDP
-nc -u 10.69.78.21 80
+nc -u 10.69.78.21 82
 nc -u ap.legace.ir 993
 # -------==========-------
 # IP Information

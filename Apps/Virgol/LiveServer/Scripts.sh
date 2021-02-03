@@ -125,11 +125,6 @@ docker pull goldenstarc/bigbluebutton-livestreaming
 # add the Microsoft package signing key 
 wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
-# Install the runtime
-sudo apt-get update; \
-  sudo apt-get install -y apt-transport-https && \
-  sudo apt-get update && \
-  sudo apt-get install -y aspnetcore-runtime-3.1
 # Install the SDK
 sudo apt-get update; \
   sudo apt-get install -y apt-transport-https && \
@@ -146,7 +141,7 @@ cat <<EOF > /etc/systemd/system/kestrel-livestream.service
 Description=.NET Web API for LiveStream in BBB
 
 [Service]
-WorkingDirectory=/var/www/streamingservice
+WorkingDirectory=/var/www/webHook
 #ExecStart=dotnet run --urls http://localhost:5000/
 ExecStart=/usr/bin/dotnet /var/www/streamingservice/streamingservice.dll  --urls http://localhost:5000/
 Restart=always

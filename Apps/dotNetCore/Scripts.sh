@@ -3,19 +3,71 @@
 # -------==========-------
 # Ubuntu 16.04
 wget https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
 # Ubuntu 20.04
 wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
-# Install the SDK
+
+# Install the SDK 2.2
+sudo apt-get update; \
+  sudo apt-get install -y apt-transport-https && \
+  sudo apt-get update && \
+  sudo apt-get install -y dotnet-sdk-2.2
+
+# Install the SDK 3.1
 sudo apt-get update; \
   sudo apt-get install -y apt-transport-https && \
   sudo apt-get update && \
   sudo apt-get install -y dotnet-sdk-3.1
+
+# Install the SDK 5.0
+sudo apt-get update; \
+  sudo apt-get install -y apt-transport-https && \
+  sudo apt-get update && \
+  sudo apt-get install -y dotnet-sdk-5.0
+
 # Install the runtime
 sudo apt-get update; \
   sudo apt-get install -y apt-transport-https && \
   sudo apt-get update && \
   sudo apt-get install -y aspnetcore-runtime-3.1
+
+
+# -------==========-------
+# Linux Service
+# -------==========-------
+sudo su
+dotnet publish -c release -o /var/www/webHook
+cat <<EOF > /etc/systemd/system/kestrel-webHook.service
+[Unit]
+Description=.NET Web API for IoT Webhook
+
+[Service]
+WorkingDirectory=/var/www/webHook
+#ExecStart=dotnet run --urls http://0.0.0.0:5000/
+ExecStart=/usr/bin/dotnet /var/www/webHook/webHookApi.dll --urls http://0.0.0.0:55000/
+Restart=always
+# Restart service after 10 seconds if the dotnet service crashes:
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=dotnet-webHook
+#User=www-data
+User=root
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl enable kestrel-webHook.service
+sudo systemctl start kestrel-webHook.service
+sudo systemctl stop kestrel-webHook.service
+sudo systemctl restart kestrel-webHook.service
+sudo systemctl status kestrel-webHook.service
+sudo journalctl -fu kestrel-webHook.service
+systemctl daemon-reload
+
 # -------==========-------
 # Docker
 # -------==========-------
@@ -93,6 +145,8 @@ dotnet run --environment Staging
 dotnet run --urls http://localhost:8080/
 
 dotnet run --urls http://localhost:5000/ --environment Development
+
+dotnet publish -c release -o ./release/linux-x64
 
 dotnet publish -c release -o ./release/linux-x64 -r linux-x64 --self-contained false
 
