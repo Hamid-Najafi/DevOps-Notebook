@@ -107,13 +107,17 @@ https://www.yougetsignal.com/tools/open-ports/
 sudo apt-get install netcat
 # NetCat Server:
 # TCP
+sudo nc -l -p 80
 sudo nc -l -p 389
 # UDP
-sudo nc -u -l -p 993
+sudo nc -u -l -p 80
 # NetCat Client:
 # TCP
+nc phpldapadmin-dei.vir-gol.ir 80
+nc 10.69.78.21 390
 nc ib2.legace.ir 389
 # UDP
+nc -u 10.69.78.21 80
 nc -u ap.legace.ir 993
 # -------==========-------
 # IP Information
@@ -135,8 +139,8 @@ nameserver 4.2.2.4
 nameserver 185.51.200.2
 nameserver 178.22.122.100
 # Begzar
-#nameserver 185.55.226.2
-#nameserver 185.55.225.25
+nameserver 185.55.226.2
+nameserver 185.55.225.25
 sudo service resolvconf restart
 # -------==========-------
 # HTTP Proxy

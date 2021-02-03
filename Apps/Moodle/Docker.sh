@@ -30,13 +30,14 @@ cd /home/tiger/devops-notebook/Apps/Moodle
 docker-compose up -d  
 docker exec -it moodle sh 
 docker exec -it moodle_moodle_1 sh 
+docker exec -it virgol_moodle sh 
 apt update
 apt install nano
 # -------==========-------
-nano cconfig.php
+nano ./bitnami/moodle/config.php
 # Comment if statements which sets $CFG->wwwroot (5 Lines) 
 # Add these: 
-$CFG->wwwroot   = 'https://moodle.legace.ir';
+$CFG->wwwroot   = 'https://m-dei.vir-gol.ir';
 $CFG->sslproxy = 1;
 # -------==========-------
 # disable 3.5.1 cookie policy popup

@@ -24,12 +24,6 @@ sudo apt-get install ncdu dtrx bmon htop software-properties-common traceroute
 sudo apt-get install build-essential
 sudo apt install python3-pip
 # -------==========-------
-# Git
-# -------==========-------
-sudo chown -R ubuntu:ubuntu ~/.git ~/.config  
-sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/goldenstarc/devops-notebook.git
-sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/saleh_prg/lms-with-moodle.git
-# -------==========-------
 # Node Version Manager
 # -------==========-------
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash

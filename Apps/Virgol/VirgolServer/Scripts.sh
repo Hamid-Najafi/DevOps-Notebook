@@ -4,6 +4,8 @@
 sudo apt update 
 sudo apt upgrade -y
 
+sudo apt-get install ncdu dtrx bmon htop software-properties-common traceroute
+
 # Set Server DNS FQDN 
 legace.ir
 
@@ -19,10 +21,7 @@ sudo reboot
 
 # Set Proxy
 echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
-# sudo nano ~/.bash_profile
-# alias proxyon="source /etc/environment"
-# alias proxyoff="export http_proxy='';export https_proxy='';export ftp_proxy=''"
-# source ~/.bash_profile /etc/environment
+source /etc/environment
 
 # Install Docker
 curl -sSL https://get.docker.com/ | sh
@@ -59,19 +58,34 @@ docker-compose up -d
 # Setup Services
 # -------==========-------
 mkdir -p ~/docker/virgol
+# Docker Method
 cp ~/DevOps-Notebook/Apps/Virgol/PaaS/docker-compose.yml ~/docker/virgol/
 cd ~/docker/virgol
-# mv  ~/lms-with-moodle ~/virgol
-# cd  ~/virgol
+docker-compose up -d
+
+# Main Method 
+cd ~
+sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/saleh_prg/lms-with-moodle.git
+mv  ~/lms-with-moodle ~/virgol
+cd  ~/virgol
 nano docker-compose.yml
 # REPLACE ALL Hosts
 # CTRL + \
-# sudo git branch --track Beta origin/Beta
-# sudo git checkout Beta
-docker-compose up -d
+sudo bash build.sh 1.8.4
 # -------==========-------
-# fix
+# fix Moodle
 # -------==========-------
+docker exec -it virgol_moodle sh 
+apt update
+apt install nano
+nano ./bitnami/moodle/config.php
+# Comment if statements which sets $CFG->wwwroot (5 Lines) 
+# Add these: 
+$CFG->wwwroot   = 'https://moodle.vir-gol.ir';
+$CFG->sslproxy = 1;
+exit
+docker restart virgol_moodle
+
 # Not needed
 # sudo chown root:root -R /var/lib/docker/volumes/virgol_moodle/
 # sudo chown root:root -R /var/lib/docker/volumes/virgol_moodleData/
