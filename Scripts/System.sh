@@ -127,5 +127,4 @@ fi
 # grep file content location
 # -------==========-------
 grep -rl --include="*.js" "searchString" ${PWD}
-grep -rl "vir-gol" .
 grep -rl "lms.legace.ir" .

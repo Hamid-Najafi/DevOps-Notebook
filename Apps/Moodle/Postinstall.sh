@@ -80,8 +80,12 @@ https://moodle.legace.ir/admin/settings.php?section=frontpagesettings
  Logged IP address source : first one
 # -------==========-------
 13- https://moodle.legace.ir/admin/category.php?category=email
- Bitnami handles this but:
 -- SMTP Auth Type : PLAIN
+- MOODLE_SMTP_HOST=mail.legace.ir
+- MOODLE_SMTP_PORT=587
+- MOODLE_SMTP_USER=noreply@legace.ir
+- MOODLE_SMTP_PASSWORD=Mailpass.24
+- MOODLE_SMTP_PROTOCOL=tls
 # -------==========-------
 14- https://moodle.legace.ir/admin/settings.php?section=optionalsubsystems
 Enable web services 
