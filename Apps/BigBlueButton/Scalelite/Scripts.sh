@@ -2,8 +2,8 @@
 # Pre-install
 # -------==========-------
 # Set host to use proxy
-# echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
-# source /etc/environment
+echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
+source /etc/environment
 
 # Set Hostname
 # sudo nano /etc/cloud/templates/hosts.debian.tmpl

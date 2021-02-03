@@ -18,7 +18,7 @@ sudo nano /etc/hosts
 sudo reboot
 
 # Set Proxy
-# echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
+echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
 # sudo nano ~/.bash_profile
 # alias proxyon="source /etc/environment"
 # alias proxyoff="export http_proxy='';export https_proxy='';export ftp_proxy=''"
@@ -27,42 +27,42 @@ sudo reboot
 # Install Docker
 curl -sSL https://get.docker.com/ | sh
 sudo usermod -aG docker $USER
-# https://docs.docker.com/compose/install/#install-compose-on-linux-systems
-sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-compose/master/run.sh -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 
 # Clone Repos
-sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/goldenstarc/devops-notebook.git
-sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/saleh_prg/lms-with-moodle.git
+sudo git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
+# sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/saleh_prg/lms-with-moodle.git
 
 # -------==========-------
 # Setup Monitoring
 # -------==========-------
-mkdir -p /home/ubuntu/docker/monitoring
-cp -r /home/ubuntu/devops-notebook/Apps/Monitoring/Slave/* /home/ubuntu/docker/monitoring
-cd  /home/ubuntu/docker/monitoring
+mkdir -p ~/docker/monitoring
+sudo cp -r ~/DevOps-Notebook/Apps/Monitoring/Slave/* ~/docker/monitoring
+cd  ~/docker/monitoring
 # nano docker-compose.yml
 docker-compose up -d
+
 # -------==========-------
 # Setup Traefik
 # -------==========-------
-mkdir -p ~/docker/traefik 
-cp ~/devops-notebook/Apps/Traefik/docker-compose.yml ~/docker/traefik/docker-compose.yml
-cp ~/devops-notebook/Apps/Traefik/traefik.yml ~/docker/traefik/traefik.yml
+mkdir -p ~/docker
+cp -R ~/DevOps-Notebook/Apps/Traefik ~/docker/traefik
 cd ~/docker/traefik 
-nano docker-compose.yml
-# REPLACE Traefik Hosts
-# CTRL + w
+nano docker-compose.yml 
+# Set DNS Record
+# Edit
+    #   - "traefik.http.routers.traefik.rule=Host(`traefik.goldenstarc.ir`)"
 docker network create web
 docker-compose up -d
 # -------==========-------
 # Setup Services
 # -------==========-------
-# mkdir -p ~/virgol
-# cp /home/ubuntu/devops-notebook/Apps/Virgol/VirgolServer/docker-compose.yml ~/virgol/
-# cd ~/virgol
-mv  ~/lms-with-moodle ~/virgol
-cd  ~/virgol
+mkdir -p ~/docker/virgol
+cp ~/DevOps-Notebook/Apps/Virgol/PaaS/docker-compose.yml ~/docker/virgol/
+cd ~/docker/virgol
+# mv  ~/lms-with-moodle ~/virgol
+# cd  ~/virgol
 nano docker-compose.yml
 # REPLACE ALL Hosts
 # CTRL + \

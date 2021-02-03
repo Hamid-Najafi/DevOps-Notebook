@@ -41,9 +41,9 @@ docker-compose down && docker-compose up -d
 # Slave
 # -------==========-------
 sudo git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
-mkdir -p ~/dev/monitoring
-sudo cp -r ~/DevOps-Notebook/Apps/Monitoring/Slave/* ~/dev/monitoring
-cd  ~/dev/monitoring
+mkdir -p ~/docker/monitoring
+sudo cp -r ~/DevOps-Notebook/Apps/Monitoring/Slave/* ~/docker/monitoring
+cd  ~/docker/monitoring
 # nano docker-compose.yml
 docker-compose up -d
 
