@@ -1,0 +1,160 @@
+version: "3.5"
+services:
+  virgol-dei:
+    image: goldenstarc/virgol:latest-dei
+    restart: always
+    container_name: virgol_dei
+    volumes:
+      - virgolDeiData:/app/BulkData
+    # build:
+    #   context: .
+    environment:
+      - ASPNETCORE_URLS=http://+ # ;https://+
+      - ASPNETCORE_ENVIRONMENT=Production
+      - NODE_ENV=production
+      - VIRGOL_SERVER_ROOT_URL=https://dei.razaviedu.ir
+      - VIRGOL_DATABASE_TYPE=postgres
+      - VIRGOL_DATABASE_HOST=postgres
+      - VIRGOL_DATABASE_NAME=LMS_DEI
+      - VIRGOL_DATABASE_USER=postgres
+      - VIRGOL_DATABASE_PASSWORD=PostgreSQLpass.24
+      - VIRGOL_MOODLE_TOKEN=0e68f54e65aea7bbac176acd69b7378a
+      - VIRGOL_MOODLE_BASE_URL=http://m-10.69.78.21dei.vir-gol.ir/webservice/rest/server.php?moodlewsrestformat=json
+      - VIRGOL_FARAZAPI_URL=http://rest.ippanel.com
+      - VIRGOL_FARAZAPI_SENDER_NUMBER=+98500010707
+      - VIRGOL_FARAZAPI_USERNAME=goldenstarc
+      - VIRGOL_FARAZAPI_PASSWORD=hektug-fakbAm-0vypje
+      - VIRGOL_FARAZAPI_API_KEY=qcP4IQp3PPRV3ppvkG9ScHJcwvUPL3iOJrV9n7QiqDA=
+      - VIRGOL_JWT_SECRET=Saleh Secret Key
+      - VIRGOL_LDAP_SERVER=openldap
+      - VIRGOL_LDAP_PORT=389
+      - VIRGOL_LDAP_USER_ADMIN=cn=admin,dc=legace,dc=ir
+      - VIRGOL_LDAP_PASSWORD=OpenLDAPpass.24
+      - REACT_APP_MOODLE_URL=https://m-dei.vir-gol.ir/login/index.php
+      - REACT_APP_VERSION=1.8.4
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.virgol_compress.compress=true"
+      # HTTP
+      - "traefik.http.routers.virgolDei.middlewares=virgol_compress"
+      - "traefik.http.routers.virgolDei.rule=Host(`dei.razaviedu.ir`)"
+      - "traefik.http.routers.virgolDei.entrypoints=insecure"
+      #- "traefik.http.services.virgolDei.loadbalancer.server.port=80"
+      # HTTPS
+      - "traefik.http.routers.virgolDei2.middlewares=virgol_compress"
+      - "traefik.http.routers.virgolDei2.rule=Host(`dei.razaviedu.ir`)"
+      - "traefik.http.routers.virgolDei2.entrypoints=secure"
+      #- "traefik.http.services.virgolDei2.loadbalancer.server.port=80"
+      - "traefik.http.routers.virgolDei2.tls=true"
+      - "traefik.http.routers.virgolDei2.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=web"
+    networks:
+      - virgol
+      - web
+    depends_on:
+      - postgres
+      - openldap
+  postgres:
+    image: postgres
+    hostname: postgres-dei.vir-gol.ir
+    container_name: virgol_db
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      # - POSTGRES_DB=virgol
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=PostgreSQLpass.24
+    volumes:
+      - postgresDb:/var/lib/postgresql/data
+    networks:
+      - virgol
+      - web
+  moodle:
+    image: 'goldenstarc/moodle:3.9.1-debian-10-r18'
+    container_name: virgol_moodle
+    restart: always
+    environment:
+      - ALLOW_EMPTY_PASSWORD=no
+      - MOODLE_DATABASE_HOST=mariadb
+      - MOODLE_DATABASE_PORT_NUMBER=3306
+      - MOODLE_DATABASE_USER=bn_moodle
+      - MOODLE_DATABASE_PASSWORD=Bitnamipass.24
+      - MOODLE_DATABASE_NAME=bitnami_moodle
+      - MOODLE_USERNAME=admin
+      - MOODLE_PASSWORD=wydta4-voqvAb-vadpaf
+      - MOODLE_EMAIL=admin@vir-gol.ir
+      - MOODLE_SITE_NAME=Virgol-dei
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.virgol_compress.compress=true"
+      # HTTP
+      - "traefik.http.routers.moodle.middlewares=virgol_compress"
+      - "traefik.http.routers.moodle.rule=Host(`m-dei.vir-gol.ir`)"
+      - "traefik.http.routers.moodle.entrypoints=insecure"
+      #- "traefik.http.services.moodle.loadbalancer.server.port=8080"
+      # HTTPS
+      - "traefik.http.routers.moodle2.middlewares=virgol_compress"
+      - "traefik.http.routers.moodle2.rule=Host(`m-dei.vir-gol.ir`)"
+      - "traefik.http.routers.moodle2.entrypoints=secure"
+      #- "traefik.http.services.moodle2.loadbalancer.server.port=8080"
+      - "traefik.http.routers.moodle2.tls=true"
+      - "traefik.http.routers.moodle2.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=web"
+    volumes:
+      - moodle:/bitnami/moodle
+      - moodleData:/bitnami/moodledata
+      # - '/docker/moodle-bitnami:/bitnami/moodle'
+      # - '/docker/moodle-data-bitnami:/bitnami/moodledata'
+    depends_on:
+      - mariadb
+      - openldap
+    networks:
+      - web
+      - virgol
+  mariadb:
+    image: 'docker.io/bitnami/mariadb:10.3-debian-10'
+    container_name: virgol_moodle_db
+    restart: always
+    environment:
+      - ALLOW_EMPTY_PASSWORD=no
+      - MARIADB_ROOT_PASSWORD=mySQLpass.24
+      - MARIADB_USER=bn_moodle
+      - MARIADB_DATABASE=bitnami_moodle
+      - MARIADB_PASSWORD=Bitnamipass.24
+    volumes:
+      - mariaDb:/bitnami/mariadb
+      # - '/docker/mariadb-bitnami:/bitnami/mariadb'
+    networks:
+      - virgol
+  openldap:
+    image: goldenstarc/extended-openldap
+    hostname: openldap
+    container_name: virgol_openldap
+    ports:
+      - '389:389'
+      - '636:636'
+    restart: always
+    volumes:
+      - openldapDb:/var/lib/ldap
+      - openldapConf:/etc/ldap/slapd.d
+    networks:
+      - virgol
+      - web
+# Username and Password is hard-coded inside docker image
+# Username: cn=admin,dc=legace,dc=ir
+# Password: OpenLDAPpass.24
+networks:
+  virgol:
+    internal: true
+  web:
+    external: true
+volumes:
+  virgolData:
+  virgolDeiData:
+  postgresDb:
+  openldapDb:
+  openldapConf:
+  moodle:
+  moodleData:
+  mariaDb:

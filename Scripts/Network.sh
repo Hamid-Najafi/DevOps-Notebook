@@ -118,7 +118,7 @@ nc 10.69.78.21 82
 nc ib2.legace.ir 389
 # UDP
 nc -u 10.69.78.21 82
-nc -u ap.legace.ir 993
+nc -u vir-gol.ir 636
 # -------==========-------
 # IP Information
 # -------==========-------

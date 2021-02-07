@@ -13,6 +13,7 @@ Traefik Ddesnt support LDAPS
 mkdir ~/dev
 cd ~/dev
 git clone https://github.com/Goldenstarc/extended-docker-openldap.git
+export DOMAIN="ldap.vir-gol.ir"
 openssl dhparam -out ~/dev/extended-docker-openldap/certs/dhparam.pem 2048
 sudo snap install --classic certbot
 sudo certbot certonly \
@@ -20,17 +21,22 @@ sudo certbot certonly \
     --preferred-challenges dns \
     --email admin@legace.ir \
     --agree-tos \
-    --domains "ldap.legace.ir"
-sudo cp -RL /etc/letsencrypt/live/ldap.legace.ir/. ~/dev/extended-docker-openldap/certs/
-sudo chown ubuntu:ubuntu -R ~/dev/extended-docker-openldap/certs/
+    --domains $DOMAIN
+sudo cp -RL /etc/letsencrypt/live/$DOMAIN/. ~/dev/extended-docker-openldap/certs/
+sudo chown $USER:$USER -R ~/dev/extended-docker-openldap/certs/
 cd extended-docker-openldap
 # nano environment/my-env.startup.yaml
-docker build -t goldenstarc/extended-openldap:1.4.0 .
-docker tag goldenstarc/extended-openldap:1.4.0 goldenstarc/extended-openldap:latest
+docker build -t goldenstarc/extended-openldap -t goldenstarc/extended-openldap:1.4.0 .
 docker push goldenstarc/extended-openldap
+git config --global --edit
+git add .
+git commit -m "set certs" -a
+git push
 # -------==========-------
 # 1.B:Extended LDAP
 # -------==========-------
+# Username: cn=admin,dc=legace,dc=ir, Password: OpenLDAPpass.24
+
 # 1.Run with docker
 docker run \
 --name ldap-service \
@@ -39,6 +45,13 @@ docker run \
 --restart=always \
 --net="host" \
 -d goldenstarc/extended-openldap:1.4.0
+
+# For Testing Purpose
+docker run \
+--name ldap-service \
+--restart=always \
+-p 389:389 \
+goldenstarc/extended-openldap
 
 docker run \
 --name ldap-service \
@@ -77,13 +90,14 @@ docker run \
 --restart=always \
 --detach  osixia/openldap:1.4.0
 
+docker run \
+--name ldap-service \
+--volume openldapDb:/var/lib/ldap \
+--volume openldapConf:/etc/ldap/slapd.d \
 --net="host" \
+--restart=always \
+--detach  osixia/openldap:1.4.0
 
-# Test
-ldapsearch -x -h "su.legace.ir:389" -b "dc=example,dc=org " -D "cn=admin,dc=example,dc=org" -w "admin"
-ldapsearch -x -h "conf.legace.ir:390" -b "dc=example,dc=org " -D "cn=admin,dc=example,dc=org" -w "admin"
-# Add Users & Groups : 
-ldapadd -D "cn=admin,dc=legace,dc=ir" -f userimport-*.ldif -h ldap://ldap.legace.ir/ -W OpenLDAPpass.24
 # -------==========-------
 # osixia/phpldapadmin
 # -------==========-------
@@ -113,3 +127,13 @@ docker run \
 # OpenLDAP Software 2.4 Administrator's Guide
 https://www.openldap.org/doc/admin24/index.html
 https://www.openldap.org/devel/admin/index.html
+
+
+# -------==========-------
+# LDAP Commands
+# -------==========-------
+# Search
+ldapsearch -x -h "su.legace.ir:389" -b "dc=example,dc=org " -D "cn=admin,dc=example,dc=org" -w "admin"
+ldapsearch -x -h "conf.legace.ir:390" -b "dc=example,dc=org " -D "cn=admin,dc=example,dc=org" -w "admin"
+# Add Users & Groups : 
+ldapadd -D "cn=admin,dc=legace,dc=ir" -f userimport-*.ldif -h ldap://ldap.legace.ir/ -W OpenLDAPpass.24

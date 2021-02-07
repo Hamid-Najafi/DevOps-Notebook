@@ -1,0 +1,51 @@
+# https://pilot.traefik.io/instances
+# docker network create web
+version: '3.7'
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+      - "9094:9094"
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.yml:/traefik.yml:ro
+      - ./letsencrypt:/letsencrypt
+    labels:
+      - "traefik.enable=true"
+      # Docker labels for enabling Traefik dashboard   
+      # HTTP
+      - "traefik.http.routers.traefik.middlewares=dashboardauth"
+      - "traefik.http.routers.traefik.rule=Host(`traefik-dei.vir-gol.ir`)"
+      - "traefik.http.routers.traefik.entrypoints=insecure"
+      - "traefik.http.routers.traefik.service=api@internal"
+      # HTTPS
+      - "traefik.http.routers.traefik2.middlewares=dashboardauth"
+      - "traefik.http.routers.traefik2.rule=Host(`traefik-dei.vir-gol.ir`)"
+      - "traefik.http.routers.traefik2.entrypoints=secure"
+      - "traefik.http.routers.traefik2.service=api@internal"
+      - "traefik.http.routers.traefik2.tls=true"
+      - "traefik.http.routers.traefik2.tls.certresolver=letsencrypt"
+      # Generate Password using following command, Username: admin, Password: Traefikpass.24
+      # sudo apt-get install apache2-utils
+      # echo $(htpasswd -nbB admin "Traefikpass.24") | sed -e s/\\$/\\$\\$/g
+      - "traefik.http.middlewares.dashboardauth.basicauth.users=admin:$$2y$$05$$vSakkQt0wevdRaBJF9fe3Oz0PADs2dW1OsA5Tlr209/rGxfIB86sW"
+      # Monitoring Traefik With Prometheus
+      # - traefik.http.services.prometheus.loadbalancer.server.port=9092
+      - traefik.http.routers.prometheus.rule=PathPrefix(`/metrics`)
+      - traefik.http.routers.prometheus.entrypoints=metrics
+      - traefik.http.routers.prometheus.service=prometheus@internal
+      - traefik.http.routers.prometheus.middlewares=prometheusauth
+      - traefik.http.middlewares.prometheusauth.basicauth.users=traefik:$$2y$$05$$vSakkQt0wevdRaBJF9fe3Oz0PADs2dW1OsA5Tlr209/rGxfIB86sW"
+      # Compressing the Response before Sending it to the Client
+      - traefik.http.routers.traefik.middlewares=traefik-compress
+      - traefik.http.middlewares.traefik-compress.compress=true
+    networks:
+      - web
+networks:
+  web:
+    external: true
+

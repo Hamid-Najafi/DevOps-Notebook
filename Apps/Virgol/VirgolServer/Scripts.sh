@@ -79,12 +79,15 @@ docker exec -it virgol_moodle sh
 apt update
 apt install nano
 nano ./bitnami/moodle/config.php
-# Comment if statements which sets $CFG->wwwroot (5 Lines) 
-# Add these: 
-$CFG->wwwroot   = 'https://moodle.vir-gol.ir';
-$CFG->sslproxy = 1;
+if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+  $CFG->wwwroot   = 'https://' . $_SERVER['HTTP_HOST'];
+  # Add this line
+  $CFG->sslproxy = 1;
+} else {
+  $CFG->wwwroot   = 'http://' . $_SERVER['HTTP_HOST'];
+}
 exit
-docker restart virgol_moodle
+# Done
 
 # Not needed
 # sudo chown root:root -R /var/lib/docker/volumes/virgol_moodle/
