@@ -100,10 +100,13 @@ exit
 # Optimize Services
 # -------==========-------
 # Postgresql
-docker exec -it virgol_db sh   
-apt update
-apt install nano
+
+https://www.pgconfig.org/#/?max_connections=400&pg_version=13&environment_name=WEB&total_ram=16&cpus=4&drive_type=SSD&arch=x86-64&os_type=linux
+
+docker exec -it virgol_db apt update &&  apt install nano && sh
+docker exec -it virgol_db sh
 nano /var/lib/postgresql/data/postgresql.conf
+cp /var/lib/postgresql/data/postgresql.conf /var/lib/postgresql/data/postgresql.conf.backup
 docker restart virgol_db
 # openLDAP
 

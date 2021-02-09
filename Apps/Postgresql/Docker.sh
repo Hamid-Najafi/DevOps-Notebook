@@ -34,16 +34,20 @@ User ID=root;Password=myPassword;Host=localhost;Port=5432;Database=myDataBase;Po
 User ID=postgres;Password=SugucSkY3k;Host=db.legace.ir;Port=5431;
 
 # -------==========-------
-# Optimize Postgres    
+# Optimize Postgres
 # -------==========-------
-docker exec -it postgres sh   
-docker exec -it virgol_db sh   
-apt update
-apt install nano
+# Postgresql
+
+https://www.pgconfig.org/#/?max_connections=400&pg_version=13&environment_name=WEB&total_ram=16&cpus=4&drive_type=SSD&arch=x86-64&os_type=linux
+
+docker exec -it virgol_db apt update &&  apt install nano && sh
+docker exec -it virgol_db sh
+mv /var/lib/postgresql/data/postgresql.conf /var/lib/postgresql/data/postgresql.conf.backup
 nano /var/lib/postgresql/data/postgresql.conf
-
 docker restart virgol_db
+# openLDAP
 
+# mariaDB
 # -------==========-------
 # Upgrade Postgres Version   
 # -------==========-------

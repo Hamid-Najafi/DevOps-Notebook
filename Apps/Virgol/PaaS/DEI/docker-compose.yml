@@ -19,7 +19,7 @@ services:
       - VIRGOL_DATABASE_USER=postgres
       - VIRGOL_DATABASE_PASSWORD=PostgreSQLpass.24
       - VIRGOL_MOODLE_TOKEN=0e68f54e65aea7bbac176acd69b7378a
-      - VIRGOL_MOODLE_BASE_URL=http://m-10.69.78.21dei.vir-gol.ir/webservice/rest/server.php?moodlewsrestformat=json
+      - VIRGOL_MOODLE_BASE_URL=http://m-dei.vir-gol.ir/webservice/rest/server.php?moodlewsrestformat=json
       - VIRGOL_FARAZAPI_URL=http://rest.ippanel.com
       - VIRGOL_FARAZAPI_SENDER_NUMBER=+98500010707
       - VIRGOL_FARAZAPI_USERNAME=goldenstarc
@@ -34,20 +34,13 @@ services:
       - REACT_APP_VERSION=1.8.4
     labels:
       - "traefik.enable=true"
-      - "traefik.http.middlewares.virgol_compress.compress=true"
-      # HTTP
-      - "traefik.http.routers.virgolDei.middlewares=virgol_compress"
       - "traefik.http.routers.virgolDei.rule=Host(`dei.razaviedu.ir`)"
-      - "traefik.http.routers.virgolDei.entrypoints=insecure"
-      #- "traefik.http.services.virgolDei.loadbalancer.server.port=80"
-      # HTTPS
-      - "traefik.http.routers.virgolDei2.middlewares=virgol_compress"
-      - "traefik.http.routers.virgolDei2.rule=Host(`dei.razaviedu.ir`)"
-      - "traefik.http.routers.virgolDei2.entrypoints=secure"
-      #- "traefik.http.services.virgolDei2.loadbalancer.server.port=80"
-      - "traefik.http.routers.virgolDei2.tls=true"
-      - "traefik.http.routers.virgolDei2.tls.certresolver=letsencrypt"
+      - "traefik.http.services.virgolDei.loadbalancer.server.port=80"
+      - "traefik.http.routers.virgolDei.entrypoints=secure"
+      - "traefik.http.routers.virgolDei.tls.certresolver=letsencrypt"
       - "traefik.docker.network=web"
+      - "traefik.http.middlewares.virgol_compress.compress=true"
+      - "traefik.http.routers.virgolDei.middlewares=virgol_compress"
     networks:
       - virgol
       - web
@@ -87,19 +80,10 @@ services:
       - MOODLE_SITE_NAME=Virgol-dei
     labels:
       - "traefik.enable=true"
-      - "traefik.http.middlewares.virgol_compress.compress=true"
-      # HTTP
-      - "traefik.http.routers.moodle.middlewares=virgol_compress"
       - "traefik.http.routers.moodle.rule=Host(`m-dei.vir-gol.ir`)"
-      - "traefik.http.routers.moodle.entrypoints=insecure"
-      #- "traefik.http.services.moodle.loadbalancer.server.port=8080"
-      # HTTPS
-      - "traefik.http.routers.moodle2.middlewares=virgol_compress"
-      - "traefik.http.routers.moodle2.rule=Host(`m-dei.vir-gol.ir`)"
-      - "traefik.http.routers.moodle2.entrypoints=secure"
-      #- "traefik.http.services.moodle2.loadbalancer.server.port=8080"
-      - "traefik.http.routers.moodle2.tls=true"
-      - "traefik.http.routers.moodle2.tls.certresolver=letsencrypt"
+      - "traefik.http.services.moodle.loadbalancer.server.port=8080"
+      - "traefik.http.routers.moodle.entrypoints=secure"
+      - "traefik.http.routers.moodle.tls.certresolver=letsencrypt"
       - "traefik.docker.network=web"
     volumes:
       - moodle:/bitnami/moodle
