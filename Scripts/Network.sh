@@ -108,7 +108,7 @@ sudo apt-get install netcat
 # NetCat Server:
 # TCP
 sudo nc -l -p 80
-sudo nc -l -p 389
+sudo nc -l -p 5433
 # UDP
 sudo nc -u -l -p 80
 # NetCat Client:
@@ -116,6 +116,7 @@ sudo nc -u -l -p 80
 nc phpldapadmin-dei.vir-gol.ir 80
 nc 10.69.78.21 82
 nc ib2.legace.ir 389
+nc vir-gol.ir 5433
 # UDP
 nc -u 10.69.78.21 82
 nc -u vir-gol.ir 636
