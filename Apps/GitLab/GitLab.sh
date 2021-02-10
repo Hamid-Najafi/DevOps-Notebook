@@ -36,6 +36,21 @@ helm install --debug gitlab gitlab/gitlab \
   --set certmanager-issuer.email=info@legace.ir \
   --set certmanager.createCustomResource=false 
 
+
+# -------==========-------
+# Fandogh CI/CD
+# -------==========-------
+# make Deploy Token
+https://docs.gitlab.com/ee/user/project/deploy_tokens/
+
+# Set token in fandogh
+fandogh secret create  \
+  --name gitlab-cred-virgol \
+  -t docker-registry \
+  -f server=registry.gitlab.com \
+  -f username=fandogh \
+  -f password=s4ZsgNDo2QqC46CvGx_z
+
 # -------==========-------
 # GitLab Runner
 # -------==========-------
