@@ -43,7 +43,7 @@ helm install --debug gitlab gitlab/gitlab \
 # make Deploy Token
 https://docs.gitlab.com/ee/user/project/deploy_tokens/
 
-# Set token in fandogh
+# Set Token in fandogh's secret
 fandogh secret create  \
   --name gitlab-cred-virgol \
   -t docker-registry \
