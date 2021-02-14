@@ -55,12 +55,10 @@ goldenstarc/extended-openldap
 
 docker run \
 --name ldap-service \
---hostname ldap.legace.ir \
 --volume openldapDb:/var/lib/ldap \
 --volume openldapConf:/etc/ldap/slapd.d \
 --restart=always \
--p 389:389 \
--p 636:636 \
+-p 390:389 \
 -d goldenstarc/extended-openldap:1.4.0
 
 

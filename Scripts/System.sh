@@ -128,3 +128,5 @@ fi
 # -------==========-------
 grep -rl --include="*.js" "searchString" ${PWD}
 grep -rl "lms.legace.ir" .
+grep -rl "REACT_APP_VERSION" .
+grep -rl "IMAGE_TAG" .
