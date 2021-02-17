@@ -12,20 +12,32 @@ Connectpass.24
 # Console Settings
 http://localhost:8510/console
 
-# Firewall Ports:
+# Open Firewall Ports:
 80 an 443 and 1945 for RTMP traffic 
 
-# Stunnel install location
+## Certbot
+# Install Certbot 
+https://dl.eff.org/certbot-beta-installer-win32.exe
+# Generate Cert
+certbot certonly --standalone  --preferred-challenges http -d c1.vir-gol.ir
+# Certs location
+C:\Certbot\live\c1.vir-gol.ir\
+
+## Stunnel
+# Install Stunnel
+C:\Users\Administrator\Desktop\stunnel-5.56-win64-installer.exe -install
+# Installation Location
 C:\Connect\stunnel\
 mkdir C:\Connect\stunnel\certs
+## Set Configucarion
+# Adobe configs
+C:\Connect\10.8.0\custom.ini
+C:\Connect\10.8.0\appserv\conf\server.xml
+# Stunnel config
+C:\Connect\Stunnel\config\stunnel.conf
+# Load Configs
+open Stunnel, Configuration -> Reload Configuration
 
-# Certbot install
-https://dl.eff.org/certbot-beta-installer-win32.exe
-certbot certonly --standalone  --preferred-challenges http -d m1.legace.ir
-C:\Certbot\live\c1.legace.ir\
-C:\Certbot\live\m1.legace.ir\
-
->C:\Users\Administrator\Desktop\stunnel-5.56-win64-installer.exe -install
 
 # Adobe Connect Services Autostart
 Send a copy from Start "Adobe Connect Central Application Server" and "Start Adobe Connect Meeting Server" to startup folder
@@ -58,7 +70,7 @@ Administration -> Users andd Groups -> Edit Login and Password Policies -> Login
 
 http://localhost:8510/console/directory-service-settings/directory-service-settings/connection-settings
 
-URL:ldap://ldap.legace.ir:389
+URL:ldap://ldap.vir-gol.ir:390
 Authentication mechanism:Simple
 UserName:cn=admin,dc=legace,dc=ir
 Password:password123
