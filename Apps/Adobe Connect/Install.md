@@ -85,7 +85,9 @@ Email:mail
 
 <!-- NetworkLogin:mail -->
 ou=people,dc=legace,dc=ir
+# FILTER 1
 Filter:(objectClass=person) 
+# OR FILTER 2 (WITH POSTFIX BOOKMAIL)
 Filter:(mailEnabled=TRUE)
 Subtree search:True
 

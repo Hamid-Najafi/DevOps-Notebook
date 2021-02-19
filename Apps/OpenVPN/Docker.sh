@@ -1,7 +1,8 @@
 # -------==========-------
 # OpenVPN
 # -------==========-------
-OVPN_DATA="ovpn-data"
+echo -e "OVPN_DATA="ovpn-data"" | sudo tee -a /etc/environment
+source /etc/environment
 docker volume create --name $OVPN_DATA
 docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_genconfig -u udp://su.legace.ir
 # passphrase : 1234
@@ -9,24 +10,20 @@ docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm -it kylemanna/openv
 docker run -v $OVPN_DATA:/etc/openvpn -d -p 1194:1194/udp --cap-add=NET_ADMIN kylemanna/openvpn
 # New Client: Generate a client certificate without a passphrase
 docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full Serverius nopass
-docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full Server-1 nopass
-docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full Server-2 nopass
-docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full Server-3 nopass
+docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full User-1 nopass
+docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full User-2 nopass
+docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full User-3 nopass
 # Retrieve the client configuration with embedded certificates
-docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient Serverius > Serverius.ovpn
-docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient Server-1 > Server-1.ovpn
-docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient Server-2 > Server-2.ovpn
-docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient Server-3 > Server-3.ovpn
+mkdir ~/OpenVPN
+docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient Serverius >  ~/OpenVPN/Serverius.ovpn
+docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient User-1 >  ~/OpenVPN/User-1.ovpn
+docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient User-2 >  ~/OpenVPN/User-2.ovpn
+docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient User-3 > ~/OpenVPN/User-3.ovpn
 # Download client configuratio to host
-scp ubuntu@su.legace.ir:/home/ubuntu/OVPN/Serverius.ovpn .
-scp ubuntu@su.legace.ir:/home/ubuntu/OVPN/Server-1.ovpn .
-scp ubuntu@su.legace.ir:/home/ubuntu/OVPN/Server-2.ovpn .
-scp ubuntu@su.legace.ir:/home/ubuntu/OVPN/Server-3.ovpn .
-
-Server-1 -> 37.156.28.38 
-Server-2 -> 37.156.28.37
-Server-3 -> 5.202.53.184
-
+scp ubuntu@su.legace.ir:~/OpenVPN/Serverius.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius
+scp ubuntu@su.legace.ir:~/OpenVPN/User-1.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius
+scp ubuntu@su.legace.ir:~/OpenVPN/User-2.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius
+scp ubuntu@su.legace.ir:~/OpenVPN/User-3.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius
 # -------==========-------
 # Ubuntu Client
 # -------==========-------

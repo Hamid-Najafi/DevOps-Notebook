@@ -85,9 +85,10 @@ sudo gitlab-runner register
 sudo nano /etc/sudoers
 gitlab-runner ALL=(ALL) NOPASSWD: ALL
 
-sudo nano .toml
+sudo nano  /etc/gitlab-runner/config.toml
 
     volumes = ["/cache","/var/run/docker.sock:/var/run/docker.sock"]
+sudo service gitlab-runner restart
 
 # -------==========-------
 # GitLab Runner HTTP-Proxy
