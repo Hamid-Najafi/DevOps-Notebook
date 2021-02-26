@@ -47,7 +47,7 @@ services:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
     environment:
-      - GF_SERVER_ROOT_URL=http://grafana.goldenstarc.ir
+      - GF_SERVER_ROOT_URL=http://grafana.vir-gol.ir
       - GF_SERVER_ENABLE_GZIP=true
       - GF_DATABASE_TYPE=postgres
       - GF_DATABASE_HOST=postgres
@@ -82,8 +82,8 @@ services:
       - postgres
 
   postgres:
-    image: postgres
-    hostname: postgres.legace.ir
+    image: postgres:latest
+    container_name: postgres_grafana
     restart: always
     environment:
       - POSTGRES_DB=grafana

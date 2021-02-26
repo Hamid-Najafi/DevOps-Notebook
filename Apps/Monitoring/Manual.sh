@@ -27,15 +27,15 @@ sudo nano prometheus/prometheus.yml
 docker-compose up -d
 # -------==========-------
 # Login to GF
-http://grafana.goldenstarc.ir
+https://grafana.vir-gol.ir
 admin, Grafanapass.24
 # Add prometheus DataSource in GF dashboard
-http://prometheus:9090
+http://prometheus:9090 
 # -------==========-------
 # Edit prometheus
 cd  ~/docker/monitoring
 nano prometheus/prometheus.yml
-docker-compose down && docker-compose up -d
+docker-compose up -d --force-recreate --no-deps prometheus
 
 # -------==========-------
 # Slave

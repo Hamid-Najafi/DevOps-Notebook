@@ -40,9 +40,17 @@ User ID=postgres;Password=SugucSkY3k;Host=db.legace.ir;Port=5431;
 https://www.pgconfig.org/
 
 docker exec -it virgol_db apt update &&  apt install nano && sh
-docker exec -it virgol_db sh
 mv /var/lib/postgresql/data/postgresql.conf /var/lib/postgresql/data/postgresql.conf.backup
 nano /var/lib/postgresql/data/postgresql.conf
+exit
+docker restart virgol_db
+
+docker exec -it virgol_db sh
+mv /var/lib/postgresql/data/postgresql.conf /var/lib/postgresql/data/postgresql.conf.backup
+cat <<EOF > /var/lib/postgresql/data/postgresql.conf
+# PASTE CONFIG HERE
+EOF
+exit
 docker restart virgol_db
 
 # -------==========-------
