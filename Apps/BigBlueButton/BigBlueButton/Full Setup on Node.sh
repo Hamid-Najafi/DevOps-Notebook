@@ -23,8 +23,15 @@ sudo nano /etc/hosts
 sudo nano /etc/update-manager/release-upgrades
 
 # HTTP Proxy
-echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
-source /etc/environment
+sudo mkdir -p /etc/systemd/system/docker.service.d
+sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
+[Service]
+Environment="HTTP_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
+Environment="HTTPS_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
+Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
+
+sudo systemctl daemon-reload
+sudo systemctl restart docker
 
 sudo reboot
 # -------==========-------

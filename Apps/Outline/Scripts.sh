@@ -14,8 +14,7 @@ Virgol
 ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTo5RkNrSGR5ZW5JWUM%3D@185.231.115.134:20501/?outline=1
 # -------==========-------
 # IB1
-{"apiUrl":"https://185.141.106.36:6227/CwDPcnDfBxKc42XhN7_caQ","certSha256":"2DD1AA0D7B08D4D117A27A03FDC91717A3B5B945AC172A225B1F8C73BCEF7096"}
-ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNToxM3lzSzJxZjlKSDk%3D@185.141.106.36:49078/?outline=1
+idess://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNToxM3lzSzJxZjlKSDk%3D@185.141.106.36:49078/?outline=1
 # -------==========-------
 # Note: Outline has its own Prometheus & Exporter
 Outline setups prometheus and uses some ports like 9090
