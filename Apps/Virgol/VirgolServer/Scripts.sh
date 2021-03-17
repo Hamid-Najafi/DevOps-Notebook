@@ -7,16 +7,10 @@ sudo apt upgrade -y
 sudo apt-get install ncdu dtrx bmon htop software-properties-common traceroute
 
 # Set Server DNS FQDN 
-legace.ir
+vir-gol.ir
 
 # Set Hostname
 sudo hostnamectl set-hostname virgol
-# Set Hosts
-sudo nano /etc/hosts
-127.0.0.1 virgol
-127.0.0.1 legace.ir
-127.0.0.1 ldap.legace.ir
-
 sudo reboot
 
 # Set Proxy
@@ -64,24 +58,17 @@ docker-compose up -d
 # -------==========-------
 # Setup Services
 # -------==========-------
+# 1. Restore Database Using TablePlus App
+# 2. Start Virgol Services
 mkdir -p ~/docker/virgol
 # Docker Method
-cp ~/DevOps-Notebook/Apps/Virgol/PaaS/docker-compose.ymlc
+cp ~/DevOps-Notebook/Apps/Virgol/PaaS/docker-compose.yml ~/docker/virgol/
 cd ~/docker/virgol
 docker-compose up -d
-
-# Main Method 
-cd ~
-sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/saleh_prg/lms-with-moodle.git
-mv  ~/lms-with-moodle ~/virgol
-cd  ~/virgol
-nano docker-compose.yml
-# REPLACE ALL Hosts
-# CTRL + \
-sudo bash build.sh 1.8.4
 # -------==========-------
-# fix Moodle
+# Moodle HTTPS
 # -------==========-------
+# Wait few minutes for moodle to finish setup
 docker exec -it virgol_moodle sh 
 apt update
 apt install nano
@@ -94,28 +81,22 @@ if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
   $CFG->wwwroot   = 'http://' . $_SERVER['HTTP_HOST'];
 }
 exit
-# Done
-
-# Not needed
-# sudo chown root:root -R /var/lib/docker/volumes/virgol_moodle/
-# sudo chown root:root -R /var/lib/docker/volumes/virgol_moodleData/
-
-# sudo chmod 777 -R /var/lib/docker/volumes/virgol_moodle/
-# sudo chmod 777 -R /var/lib/docker/volumes/virgol_moodleData/
-# sudo chmod 777 -R /var/lib/docker/volumes/virgol_mariaDb
 # -------==========-------
 # Optimize Services
 # -------==========-------
 # Postgresql
 
-https://www.pgconfig.org/#/?max_connections=400&pg_version=13&environment_name=WEB&total_ram=16&cpus=4&drive_type=SSD&arch=x86-64&os_type=linux
+https://www.pgconfig.org/#/?max_connections=400&pg_version=13&environment_name=WEB&total_ram=2&cpus=4&drive_type=SSD&arch=x86-64&os_type=linux
 
-docker exec -it virgol_db apt update &&  apt install nano && sh
 docker exec -it virgol_db sh
-nano /var/lib/postgresql/data/postgresql.conf
-cp /var/lib/postgresql/data/postgresql.conf /var/lib/postgresql/data/postgresql.conf.backup
+mv /var/lib/postgresql/data/postgresql.conf /var/lib/postgresql/data/postgresql.conf.backup
+cat <<EOF > /var/lib/postgresql/data/postgresql.conf
+# PASTE CONFIG HERE
+EOF
+exit
 docker restart virgol_db
 # openLDAP
+
 
 # mariaDB
 
@@ -173,23 +154,7 @@ docker run -d \
 -e "VOLUMERIZE_CONTAINERS=virgol_main virgol_db virgol_moodle virgol_moodle_db virgol_openldap" \
 -e "AWS_ACCESS_KEY_ID=minio" \
 -e "AWS_SECRET_ACCESS_KEY=MinIOpass.24" \
-blacklabelops/volumerize backup
-
-# -------==========-------
-# Update All containers
-# -------==========-------
-docker-compose pull      
-# OR
-docker pull goldenstarc/virgol && \
-docker pull postgres && \
-docker pull dpage/pgadmin4 && \
-docker pull goldenstarc/moodle && \
-docker pull docker.io/bitnami/mariadb && \
-docker pull docker.io/bitnami/phpmyadmin && \
-docker pull goldenstarc/extended-openldap && \
-docker pull osixia/phpldapadmin
-
-docker-compose up -d   
+blacklabelops/volumerize backup  
 # -------==========-------
 # Done
 # -------==========-------
