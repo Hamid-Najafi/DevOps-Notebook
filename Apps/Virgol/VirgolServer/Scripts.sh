@@ -66,7 +66,7 @@ docker-compose up -d
 # -------==========-------
 mkdir -p ~/docker/virgol
 # Docker Method
-cp ~/DevOps-Notebook/Apps/Virgol/PaaS/docker-compose.yml ~/docker/virgol/
+cp ~/DevOps-Notebook/Apps/Virgol/PaaS/docker-compose.ymlc
 cd ~/docker/virgol
 docker-compose up -d
 
