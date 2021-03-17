@@ -6,23 +6,11 @@ mkdir -p ~/docker/ipsec-vpn
 cp ~/DevOps-Notebook/Apps/IPSec\ VPN/docker-ipsec-vpn-server-master/* ~/docker/ipsec-vpn 
 cd ~/docker/ipsec-vpn
 # Add new user if needed
-# sudo htpasswd -c passwords admin
+nano vpn.env
 docker-compose up -d
 
 # -------==========-------
-# Docker
-# -------==========-------
-sudo docker run \
-    --name ipsec-vpn-server \
-    --env-file ./vpn.env \
-    --restart=always \
-    -p 500:500/udp \
-    -p 4500:4500/udp \
-    -d --privileged \
-    hwdsl2/ipsec-vpn-server
-
-# -------==========-------
-# IPSec VPN
+# Ubuntu IPSec VPN Cleint 
 # -------==========-------
 # Add new connection
 # sudo add-apt-repository universe
