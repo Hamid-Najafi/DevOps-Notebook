@@ -31,8 +31,7 @@ sudo curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-
 sudo chmod +x /usr/local/bin/docker-compose
 
 # Clone Repos
-sudo git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
-# sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/saleh_prg/lms-with-moodle.git
+sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@ggithub.com/Hamid-Najafi/DevOps-Notebook.git
 
 # -------==========-------
 # Setup Monitoring
@@ -207,3 +206,10 @@ busybox cp -a /var/lib/ldap /backups/ldap/openldapDb
 
 cd ~/backup
 sudo zip -r openldap_`date +%d-%m-%Y"_"%H_%M_%S`.zip ~/backup/ldap
+
+# -------==========-------
+# Build Virgol
+# -------==========-------
+sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/saleh_prg/lms-with-moodle.git
+cd lms-with-moodle/
+sudo bash build.sh 1.9.5

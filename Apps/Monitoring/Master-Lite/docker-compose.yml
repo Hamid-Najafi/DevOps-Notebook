@@ -73,7 +73,7 @@ services:
     labels:
       - "org.label-schema.group=monitoring"
       - "traefik.enable=true"
-      - "traefik.http.routers.grafana.rule=Host(`grafana.goldenstarc.ir`)"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.vir-gol.ir`)"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
       - "traefik.http.routers.grafana.entrypoints=secure"
       - "traefik.http.routers.grafana.tls.certresolver=letsencrypt"

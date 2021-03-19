@@ -16,14 +16,17 @@ sudo nano prometheus/prometheus.yml
 docker-compose up -d
 # -------==========-------
 # Master Light
+# -------==========-------
 sudo git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
 mkdir -p ~/docker/monitoringLite
 sudo cp -r ~/DevOps-Notebook/Apps/Monitoring/Master-Lite/* ~/docker/monitoringLite
 cd  ~/docker/monitoringLite
+# Set prometheus config
 sudo nano prometheus/prometheus.yml
-# change server URLs if needed
-# GF_SERVER_ROOT_URL=http://grafana.goldenstarc.ir
-# "traefik.http.routers.grafana.rule=Host(`grafana.goldenstarc.ir`)"
+# Change server URLs
+sudo nano docker-compose.yml 
+# GF_SERVER_ROOT_URL=http://grafana.golvir-goldenstarc.ir
+# "traefik.http.routers.grafana.rule=Host(`grafana.vir-gol.ir`)"
 docker-compose up -d
 # -------==========-------
 # Login to GF
@@ -36,7 +39,8 @@ http://prometheus:9090
 cd  ~/docker/monitoring
 nano prometheus/prometheus.yml
 docker-compose up -d --force-recreate --no-deps prometheus
-
+# Check targets
+http://vir-gol.ir:7090/targets
 # -------==========-------
 # Slave
 # -------==========-------
@@ -53,3 +57,14 @@ docker-compose up -d
 docker exec -it grafana grafana-cli plugins install grafana-piechart-panel  
 # grafana-cli plugins install grafana-image-renderer
 docker restart grafana
+
+# -------==========-------
+# Windows Exporter
+# -------==========-------
+# Download & Install .msi file
+https://github.com/prometheus-community/windows_exporter/releases
+# it should start exposing metrics on 
+http://localhost:9182/metrics
+
+# Full manual
+https://devconnected.com/windows-server-monitoring-using-prometheus-and-wmi-exporter/

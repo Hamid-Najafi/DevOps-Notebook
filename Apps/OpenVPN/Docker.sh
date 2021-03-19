@@ -4,26 +4,29 @@
 echo -e "OVPN_DATA="ovpn-data"" | sudo tee -a /etc/environment
 source /etc/environment
 docker volume create --name $OVPN_DATA
-docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_genconfig -u udp://su.legace.ir
+docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_genconfig -u udp://eu.legace.ir
 # passphrase : 1234
 docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn ovpn_initpki
-docker run -v $OVPN_DATA:/etc/openvpn -d -p 1194:1194/udp --cap-add=NET_ADMIN kylemanna/openvpn
+
 # New Client: Generate a client certificate without a passphrase
-docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full Serverius nopass
 docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full User-1 nopass
 docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full User-2 nopass
 docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full User-3 nopass
+docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full Miner-1 nopass
+docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full Miner-2 nopass
 # Retrieve the client configuration with embedded certificates
 mkdir ~/OpenVPN
-docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient Serverius >  ~/OpenVPN/Serverius.ovpn
 docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient User-1 >  ~/OpenVPN/User-1.ovpn
 docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient User-2 >  ~/OpenVPN/User-2.ovpn
 docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient User-3 > ~/OpenVPN/User-3.ovpn
+docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient Miner-1 > ~/OpenVPN/Miner-1.ovpn
+docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient Miner-2 > ~/OpenVPN/Miner-2.ovpn
 # Download client configuratio to host
-scp ubuntu@su.legace.ir:~/OpenVPN/Serverius.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius
-scp ubuntu@su.legace.ir:~/OpenVPN/User-1.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius
-scp ubuntu@su.legace.ir:~/OpenVPN/User-2.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius
-scp ubuntu@su.legace.ir:~/OpenVPN/User-3.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius
+scp root@eu.legace.ir:~/OpenVPN/User-1.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius
+scp root@eu.legace.ir:~/OpenVPN/User-2.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius
+scp root@eu.legace.ir:~/OpenVPN/User-3.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius
+scp root@eu.legace.ir:~/OpenVPN/Miner-1.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius
+scp root@eu.legace.ir:~/OpenVPN/Miner-2.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius
 # -------==========-------
 # Ubuntu Client
 # -------==========-------

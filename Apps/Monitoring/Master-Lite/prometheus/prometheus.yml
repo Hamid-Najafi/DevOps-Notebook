@@ -1,7 +1,7 @@
 global:
-  scrape_interval:     15s
-  evaluation_interval: 15s
-
+  scrape_interval:     6s
+  evaluation_interval: 6s
+  scrape_timeout:      5s
   # Attach these labels to any time series or alerts when communicating with
   # external systems (federation, remote storage, Alertmanager).
   external_labels:
@@ -14,43 +14,38 @@ rule_files:
 # A scrape configuration containing exactly one endpoint to scrape.
 scrape_configs:
   - job_name: 'prometheus'
-    scrape_interval: 10s
     static_configs:
-      - targets: ['localhost:9090']
+    - targets: ['localhost:9090']
 
   - job_name: 'pushgateway'
-    scrape_interval: 10s
     honor_labels: true
     static_configs:
-      - targets: ['pushgateway:9091']
+    - targets: ['pushgateway:9091']
 
   - job_name: 'nodeexporter'
-    scrape_interval: 5s
     scheme: http
     basic_auth:
       username: "admin"
       password: "Metricpass.24"
     static_configs:
-      - targets: ['localhost:9100', 'b1.vir-gol.ir:9100']
+    - targets: ['b1.vir-gol.ir:9100']
 
   - job_name: 'cadvisor'
-    scrape_interval: 5s
     scheme: http
     basic_auth:
       username: "admin"
       password: "Metricpass.24"
     static_configs:
-      - targets: ['localhost:9338', 'b1.vir-gol.ir:9338']
+    - targets: ['b1.vir-gol.ir:9338']
 
   - job_name: 'traefik'
-    scrape_interval: 15s
     metrics_path: /metrics
     scheme: http
     basic_auth:
       username: "traefik"
       password: "Traefikpass.24"
     static_configs:
-      - targets: ['traefik:9094']
+    - targets: ['traefik:9094']
 
   - job_name: minio
     # bearer_token: <secret>
@@ -60,7 +55,6 @@ scrape_configs:
     - targets: ['minio.vir-gol.ir']
 
   - job_name: 'bbb'
-    scrape_interval: 5s
     scheme: https
     basic_auth:
       username: "admin"
@@ -68,12 +62,17 @@ scrape_configs:
     static_configs:
     - targets: ['b1.vir-gol.ir']
 
+  - job_name: 'connect'
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+    - targets: ['c1.vir-gol.ir:9182']
+
 alerting:
   alertmanagers:
   - scheme: http
     static_configs:
-    - targets: 
-      - 'alertmanager:9093'
+    - targets:  ['alertmanager:9093']
 
 #  - job_name: 'nginx'
 #    scrape_interval: 10s
