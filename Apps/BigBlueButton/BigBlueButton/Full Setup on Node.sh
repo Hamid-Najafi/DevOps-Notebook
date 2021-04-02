@@ -7,6 +7,11 @@ if he/she speak while his/her name is treansport, there will be lag in sound.
 https://docs.bigbluebutton.org/2.2/customize.html
 
 # -------==========-------
+# Minimum Req
+# -------==========-------
+Memory: 4GB
+OS: Ubuntu 16 or 18 (64bit)
+# -------==========-------
 # Pre-install
 # -------==========-------
 # Set host to use proxy
@@ -14,9 +19,10 @@ https://docs.bigbluebutton.org/2.2/customize.html
 # source /etc/environment
 
 # Set Hostname
-sudo hostnamectl set-hostname ib1
+sudo hostnamectl set-hostname ib2
 sudo nano /etc/hosts  
-185.141.106.36       ib1
+127.0.1.1       ib2
+# 185.8.172.20    ib2
 # sudo nano /etc/cloud/templates/hosts.debian.tmpl
 
 # Ubuntu Automatic Update
@@ -45,14 +51,14 @@ sudo apt install base-files
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230-dev -s ib2.vir-gol.ir -e admin@vir-gol.ir -g -w
  -c turn.vir-gol.ir:1b6s1esK
 # Install latest version 2.2.x
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib1.vir-gol.ir -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib1.vir-gol.ir -e admin@vir-gol.ir -g -w
+ -c turn.vir-gol.ir:1b6s1esK
 # Install specific version (only for older versions) 
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s ib1.vir-gol.ir -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.27 -s ib1.vir-gol.ir -e admin@vir-gol.ir -g -w
 # http://ubuntu.bigbluebutton.org/xenial-220-2.2.29/dists/bigbluebutton-xenial/Release.gpg
 # Install Turn Server
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.vir-gol.ir:1b6s1esK -e admin@vir-gol.ir
-
 # -------==========-------
 # Uninstall
 # -------==========-------
@@ -90,7 +96,11 @@ sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Sampad/Whiteboard.pdf /var/ww
 # BBB - Configs     
 # -------==========-------
 sudo mv /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conferenceBackup
-# This is for Version 2.2.29, if BBB is updated, first update setting files
+# Version 2.2.29
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.31/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.31/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
+sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
+# Version 2.3-alpha-8
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.31/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.31/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
