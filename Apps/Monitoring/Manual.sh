@@ -51,6 +51,8 @@ cd  ~/docker/monitoring
 # nano docker-compose.yml
 docker-compose up -d
 
+docker pull docker.io/goldenstarc/virgol:1.9 && cd ~/docker/virgol/ && docker-compose up -d
+
 # -------==========-------
 # Install Grafana Plugins
 # -------==========-------
