@@ -44,18 +44,20 @@ sudo reboot
 # Install
 # -------==========-------
 # Control+F : change all ib1 to IB*
+export fqdnHost=ib2.vir-gol.ir
+
 sudo apt install base-files
 #*      Set FQDN Correctly      *#
 #* BE AWARE OF SSH PORT FOR FIREWALL *#
-# Install latest version 2.3-dev.x
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230-dev -s ib2.vir-gol.ir -e admin@vir-gol.ir -g -w
+# Install latest version 2.3-beta-x
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230 -s $fqdnHost -e admin@vir-gol.ir -g -w
  -c turn.vir-gol.ir:1b6s1esK
 # Install latest version 2.2.x
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib1.vir-gol.ir -e admin@vir-gol.ir -g -w
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s $fqdnHost -e admin@vir-gol.ir -g -w
  -c turn.vir-gol.ir:1b6s1esK
 # Install specific version (only for older versions) 
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s ib1.vir-gol.ir -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.27 -s ib1.vir-gol.ir -e admin@vir-gol.ir -g -w
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s $fqdnHost -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.27 -s $fqdnHost -e admin@vir-gol.ir -g -w
 # http://ubuntu.bigbluebutton.org/xenial-220-2.2.29/dists/bigbluebutton-xenial/Release.gpg
 # Install Turn Server
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.vir-gol.ir:1b6s1esK -e admin@vir-gol.ir
@@ -96,16 +98,11 @@ sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Sampad/Whiteboard.pdf /var/ww
 # BBB - Configs     
 # -------==========-------
 sudo mv /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conferenceBackup
-# Version 2.2.29
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.31/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.31/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
+export version=2.3.0-beta-2
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
-# Version 2.3-alpha-8
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.31/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.31/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
-sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
-#*    Set FQDN Correctly     *#
-sudo bbb-conf --setip ib1.vir-gol.ir
+sudo bbb-conf --setip $fqdnHost
 # -------==========-------
 # Change Locales 
 # -------==========-------
@@ -169,7 +166,7 @@ cd ~/bbb-exporter
 # bbb-conf --secret
 sudo nano secrets.env
 #*    Set FQDN Correctly     *#
-API_BASE_URL=https://ib1.vir-gol.ir/bigbluebutton/api/
+API_BASE_URL=https://$fqdnHost/bigbluebutton/api/
 API_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 
 sudo docker-compose up -d
@@ -180,7 +177,7 @@ echo 'admin:$apr1$k98EN1wL$.4puamdnCPS46oGRDvRKx/' | sudo tee /etc/nginx/.htpass
 # sudo htpasswd -c /etc/nginx/.htpasswd admin
     # Method 1:
 # Replace FQDDN Address
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.29/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
     # Method 2:
  (in the last line just before '}' )
 sudo nano /etc/nginx/sites-available/bigbluebutton 
@@ -207,24 +204,24 @@ sudo nginx -t && sudo nginx -s reload
 # Prometheus Montoring
 # -------==========-------
 # Serverius
-cd  ~/dev/monitoring
+cd docker/monitoringLite/
 nano prometheus/prometheus.yml
-# add server address to 'nodeexporter' and 'bbb' Jobs
-docker-compose down && docker-compose up -d
+# add server address to 'nodeexporter' , 'cadvisor', and 'bbb' Jobs
+docker-compose up -d --force-recreate --no-deps prometheus
 
 # -------==========-------
 # Test
 # -------==========-------
 # Postman or Firefox:
 # BBB
-https://mconf.github.io/api-mate/#server=https://ib1.vir-gol.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
+https://mconf.github.io/api-mate/#server=https://$fqdnHost/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 # Username:admin , Password: Metricpass.24
 # BBB Exporter
-https://ib1.vir-gol.ir/metrics/
+https://$fqdnHost/metrics/
 # Node Exporter
-http://ib1.vir-gol.ir:9100
+http://$fqdnHost:9100
 # CAdvisor,
-http://ib1.vir-gol.ir:8080 || http://ib1.vir-gol.ir:9338
+http://$fqdnHost:8080 || http://$fqdnHost:9338
 
 # -------==========-------
 # Cron Job
