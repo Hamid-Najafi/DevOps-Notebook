@@ -18,7 +18,7 @@ OS: Ubuntu 16 or 18 (64bit)
 echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
 echo -e "http_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/" | sudo tee -a /etc/environment
 source /etc/environment
-curl -x http://admin:Squidpass.24@su.legace.ir:3128/ -L http://panel.vir-gol.ir
+wget https://charts.gitlab.io 
 
 # HTTP Proxy
 # sudo mkdir -p /etc/systemd/system/docker.service.d
@@ -58,7 +58,7 @@ sudo apt install base-files
 #*      Set FQDN Correctly      *#
 #* BE AWARE OF SSH PORT FOR FIREWALL *#
 # Install latest version 2.3-beta-x
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230 -s $fqdnHost -e admin@vir-gol.ir -g -w
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230 -s ib2.vir-gol.ir -e admin@vir-gol.ir -g -w
  -c turn.vir-gol.ir:1b6s1esK
 # Install latest version 2.2.x
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s $fqdnHost -e admin@vir-gol.ir -g -w
@@ -76,6 +76,7 @@ sudo apt-get purge nodejs mongodb-org  bigbluebutton bbb-*
 # OR
 sudo apt-get purge bbb-apps bbb-apps-akka bbb-apps-screenshare bbb-apps-sip bbb-apps-video bbb-apps-video-broadcast bbb-client bbb-etherpad \
 bbb-freeswitch-core bbb-freeswitch-sounds bbb-fsesl-akka bbb-mkclean bbb-playback-presentation bbb-record-core bbb-red5 bbb-transcode-akka bbb-web
+
 #sudo apt-get purge apt-transport-https haveged build-essential yq
 sudo apt autoremove
 sudo ufw disable

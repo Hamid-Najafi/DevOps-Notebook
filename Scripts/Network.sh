@@ -169,6 +169,9 @@ curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.p
 # -------==========-------
 # 0-1 Network Config
 # -------==========-------
+http://185.141.105.194/
+
+# Ubunut 16.04
 # This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
 
@@ -188,3 +191,22 @@ iface enp3s0f0 inet static
         post-up route add default gw 172.27.32.13
         pre-down route del 172.27.32.13 dev enp3s0f0
         pre-down route del default gw 172.27.32.13
+
+
+# Ubunut 18.04
+# This is the network config written by 'subiquity'
+network:
+    ethernets:
+        eno1:
+            addresses:
+                - 195.211.44.208/32
+            nameservers:
+                addresses:
+                    - 4.2.2.4
+                search: []
+            optional: true
+            routes:
+                - to: 0.0.0.0/0
+                  via: 172.27.36.125
+                  on-link: true
+    version: 2
