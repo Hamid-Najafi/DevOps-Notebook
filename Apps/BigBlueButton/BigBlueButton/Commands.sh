@@ -26,3 +26,9 @@ https://docs.bigbluebutton.org/dev/recording.html
 
  bbb-record --watch --withDesc  
 
+# -------==========-------
+# Cron Job
+# -------==========-------
+sudo nano /etc/cron.daily/bigbluebutton
+sudo nano /etc/cron.daily/bbb-recording-cleanup
+sudo bbb-record --rebuildall

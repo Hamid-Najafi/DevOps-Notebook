@@ -15,29 +15,37 @@ OS: Ubuntu 16 or 18 (64bit)
 # Pre-install
 # -------==========-------
 # Set host to use proxy
-# echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
-# source /etc/environment
+echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
+echo -e "http_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/" | sudo tee -a /etc/environment
+source /etc/environment
+curl -x http://admin:Squidpass.24@su.legace.ir:3128/ -L http://panel.vir-gol.ir
+
+# HTTP Proxy
+# sudo mkdir -p /etc/systemd/system/docker.service.d
+# sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
+# [Service]
+# Environment="HTTP_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
+# Environment="HTTPS_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
+# Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
+
+# sudo systemctl daemon-reload
+# sudo systemctl restart docker
+
+# DNS Proxy
+sudo apt install resolvconf
+sudo nano /etc/resolvconf/resolv.conf.d/head
+nameserver 185.51.200.2
+nameserver 178.22.122.100
+
+sudo service resolvconf restart
 
 # Set Hostname
 sudo hostnamectl set-hostname ib2
 sudo nano /etc/hosts  
-127.0.1.1       ib2
-# 185.8.172.20    ib2
-# sudo nano /etc/cloud/templates/hosts.debian.tmpl
+127.0.1.1 ib2
 
 # Ubuntu Automatic Update
 sudo nano /etc/update-manager/release-upgrades
-
-# HTTP Proxy
-sudo mkdir -p /etc/systemd/system/docker.service.d
-sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
-[Service]
-Environment="HTTP_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
-Environment="HTTPS_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
-Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
-
-sudo systemctl daemon-reload
-sudo systemctl restart docker
 
 sudo reboot
 # -------==========-------
@@ -203,7 +211,7 @@ sudo nginx -t && sudo nginx -s reload
 # -------==========-------
 # Prometheus Montoring
 # -------==========-------
-# Serverius
+# Virgol
 cd docker/monitoringLite/
 nano prometheus/prometheus.yml
 # add server address to 'nodeexporter' , 'cadvisor', and 'bbb' Jobs
@@ -216,25 +224,23 @@ docker-compose up -d --force-recreate --no-deps prometheus
 # BBB
 https://mconf.github.io/api-mate/#server=https://$fqdnHost/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 # Username:admin , Password: Metricpass.24
+export fqdnHost=ib2.vir-gol.ir
 # BBB Exporter
-https://$fqdnHost/metrics/
+curl -u admin:Metricpass.24 https://$fqdnHost/metrics/
 # Node Exporter
-http://$fqdnHost:9100
-# CAdvisor,
-http://$fqdnHost:8080 || http://$fqdnHost:9338
-
-# -------==========-------
-# Cron Job
-# -------==========-------
-sudo nano /etc/cron.daily/bigbluebutton
+curl -u admin:Metricpass.24 http://$fqdnHost:9100/metrics
+# CAdvisor
+curl -u admin:Metricpass.24 http://$fqdnHost:9338/containers/
+curl -u admin:Metricpass.24 http://$fqdnHost:8080/containers/
 
 # ---------------------------------------------------------------==========---------------------------------------------------------------
 #*                                                                Upgrade                                                               *#
 # ---------------------------------------------------------------==========---------------------------------------------------------------
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib1.vir-gol.ir -e admin@vir-gol.ir -w -g
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.*/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.*/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/2.2.*/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
+export version=2.3.0-beta-2
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
 
 # Beacuse we copy other server config file, we must set these again.
 sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
@@ -272,3 +278,4 @@ rtmp://live.vir-gol.ir/stream/MEETINGID
 https://live.vir-gol.ir/hls/bbb-live-1.m3u8
 # DASH
 https://live.vir-gol.ir/dash/bbb-live-1.mpd
+

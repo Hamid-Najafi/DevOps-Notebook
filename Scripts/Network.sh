@@ -115,7 +115,7 @@ sudo nc -u -l -p 80
 # TCP
 nc phpldapadmin-dei.vir-gol.ir 80
 nc 10.69.78.21 82
-nc ib2.legace.ir 389
+nc ib2.vir-gol.ir 389
 nc vir-gol.ir 5433
 # UDP
 nc -u 10.69.78.21 82
@@ -148,6 +148,7 @@ sudo service resolvconf restart
 # -------==========-------
 sudo nano  /etc/environment
 echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
+echo -e "http_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/" | sudo tee -a /etc/environment
 source /etc/environment
 curl -x http://admin:Squidpass.24@su.legace.ir:3128/ -L http://panel.vir-gol.ir
 wget https://charts.gitlab.io 

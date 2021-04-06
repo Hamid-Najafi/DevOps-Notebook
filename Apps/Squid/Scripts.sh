@@ -35,6 +35,7 @@ sudo htpasswd -c passwords admin
 sudo nano /etc/environment
 
 echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
+echo -e "http_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/" | sudo tee -a /etc/environment
 sudo nano ~/.bash_profile
 alias proxyon="source /etc/environment"
 alias proxyoff="export http_proxy='';export https_proxy='';export ftp_proxy=''"
@@ -50,6 +51,7 @@ sudo nano /etc/environment
 # Check proxy
 # -------==========-------
 curl -x http://admin:Squidpass.24@su.legace.ir:3128/ -L http://panel.vir-gol.ir
+curl -x http://admin:Squidpass.24@eu.legace.ir:3128/ -L http://panel.vir-gol.ir
 curl -x http://su.legace.ir:3128/ -L http://lms.legace.ir
 # THIS will HANG on Irans IP & downloads index.html on others IP
 wget https://charts.gitlab.io 

@@ -35,7 +35,7 @@ git push
 # -------==========-------
 # 1.B:Extended LDAP
 # -------==========-------
-# Username: cn=admin,dc=legace,dc=ir, Password: OpenLDAPpass.24
+# Username: cn=admin,dc=legace,dc=ir , Password: OpenLDAPpass.24
 
 # 1.Run with docker
 docker run \
