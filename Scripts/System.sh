@@ -28,6 +28,14 @@ sudo apt-get update
 # -------==========-------
 wget -qO- bench.sh | bash
 # -------==========-------
+# Enable root Account
+# -------==========-------
+sudo passwd root
+sudo nano /etc/ssh/sshd_config 
+#PermitRootLogin prohibit-password
+PermitRootLogin yes
+systemctl restart sshd.service
+# -------==========-------
 # Add user
 # -------==========-------
 adduser ubuntu

@@ -161,10 +161,24 @@ git clone https://github.com/vova-zush/bbb-download.git ~/bbb-download
 cd ~/bbb-download
 chmod u+x install.sh 
 sudo ./install.sh
+bbb-conf --restart
 # To convert all of your current recordings to MP4 format use command:
 sudo bbb-record --rebuildall
 sudo bbb-record --list
-https://b1.vir-gol.ir/download/presentation/{InternalmeetingID}/{InternalmeetingID}.mp4
+sudo bbb-record --rebuild 013c5db3388968aca08dd0350913345545303d8e-1617597209571
+sudo bbb-record --rebuild 9c245dd384542368fc86c61382de2df6bd58dbd5-1618121537831
+https://ib2.vir-gol.ir/playback/presentation/2.3/013c5db3388968aca08dd0350913345545303d8e-1617597209571
+https://ib2.vir-gol.ir/download/presentation/{InternalmeetingID}/{InternalmeetingID}.mp4
+https://ib2.vir-gol.ir/download/presentation/013c5db3388968aca08dd0350913345545303d8e-1617597209571/013c5db3388968aca08dd0350913345545303d8e-1617597209571.mp4
+https://ib2.vir-gol.ir/download/presentation/6b35a9c681e8c6d7e64d10bd2662c48c6d5c2f88-1618119138489/6b35a9c681e8c6d7e64d10bd2662c48c6d5c2f88-1618119138489.mp4
+https://ib2.vir-gol.ir/download/presentation/9c245dd384542368fc86c61382de2df6bd58dbd5-1618121537831/9c245dd384542368fc86c61382de2df6bd58dbd5-1618121537831.mp4
+
+# Logs
+ls /var/log/bigbluebutton/download
+# Videos
+# /var/bigbluebutton/published/presentation &  /var/www/bigbluebutton-default/download/presentation
+ls /var/www/bigbluebutton-default/download/presentation
+ls /var/www/bigbluebutton-default/download/presentation/b791c26dda0912d6ba7d288f17811402e3c4e5b7-1618123810860/b791c26dda0912d6ba7d288f17811402e3c4e5b7-1618123810860.mp4
 # -------==========-------
 # 3. Setup Monitoring
 # -------==========-------
@@ -187,6 +201,7 @@ echo 'admin:$apr1$k98EN1wL$.4puamdnCPS46oGRDvRKx/' | sudo tee /etc/nginx/.htpass
     # Method 1:
 # Replace FQDDN Address
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
+sudo nginx -t && sudo nginx -s reload
     # Method 2:
  (in the last line just before '}' )
 sudo nano /etc/nginx/sites-available/bigbluebutton 
@@ -199,6 +214,7 @@ sudo nano /etc/nginx/sites-available/bigbluebutton
   location = / {
     return 301 https://panel.vir-gol.ir/;
   }
+sudo nginx -t && sudo nginx -s reload
 
 # Node Exporter
 cp -R ~/DevOps-Notebook/Apps/Monitoring/Slave/ ~/monitoring
@@ -207,8 +223,6 @@ sudo docker-compose up -d
 sudo ufw allow 9100
 sudo ufw allow 9338
 sudo ufw allow 9688
-sudo nginx -t && sudo nginx -s reload
-
 # -------==========-------
 # Prometheus Montoring
 # -------==========-------
