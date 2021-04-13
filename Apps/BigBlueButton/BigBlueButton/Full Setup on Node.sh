@@ -18,7 +18,14 @@ OS: Ubuntu 16 or 18 (64bit)
 echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
 echo -e "http_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/" | sudo tee -a /etc/environment
 source /etc/environment
+exit
 wget https://charts.gitlab.io 
+
+sudo apt install resolvconf
+sudo nano /etc/resolvconf/resolv.conf.d/head
+nameserver 185.51.200.2
+nameserver 178.22.122.100
+sudo service resolvconf restart
 
 # HTTP Proxy
 # sudo mkdir -p /etc/systemd/system/docker.service.d
@@ -52,13 +59,13 @@ sudo reboot
 # Install
 # -------==========-------
 # Control+F : change all ib1 to IB*
-export fqdnHost=ib2.vir-gol.ir
+export fqdnHost=ib3.vir-gol.ir
 
 sudo apt install base-files
 #*      Set FQDN Correctly      *#
 #* BE AWARE OF SSH PORT FOR FIREWALL *#
 # Install latest version 2.3-beta-x
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230 -s ib2.vir-gol.ir -e admin@vir-gol.ir -g -w
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230 -s $fqdnHost -e admin@vir-gol.ir -g -w
  -c turn.vir-gol.ir:1b6s1esK
 # Install latest version 2.2.x
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s $fqdnHost -e admin@vir-gol.ir -g -w
@@ -86,6 +93,12 @@ sudo ufw disable
 sudo bbb-conf --clean
 sudo bbb-conf --check
 
+IF
+# Failed authorization procedure. ib3.vir-gol.ir (http-01): urn:ietf:params:acme:error:unauthorized :: The client lacks sufficient authorization :: 
+# Invalid response from http://ib3.vir-gol.ir/.well-known/acme-challenge/KOvfj8Qs2NXyTuD9RjUf75EKd1Qer2eZO-CCnIBZDuE [185.239.107.221]: 
+# "<html>\r\n<head><title>404 Not Found</title></head>\r\n<body bgcolor=\"white\">\r\n<center><h1>404 Not Found</h1></center>\r\n<hr><center>"
+THEN
+docker login
 # -------==========-------
 # Set Images
 # -------==========-------
@@ -158,6 +171,7 @@ sudo docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@vir-g
 # 3. Downloadable Recording
 # -------==========-------
 git clone https://github.com/vova-zush/bbb-download.git ~/bbb-download
+git clone https://github.com/Hamid-Najafi/bbb-download.git ~/bbb-download
 cd ~/bbb-download
 chmod u+x install.sh 
 sudo ./install.sh
@@ -166,19 +180,22 @@ bbb-conf --restart
 sudo bbb-record --rebuildall
 sudo bbb-record --list
 sudo bbb-record --rebuild 013c5db3388968aca08dd0350913345545303d8e-1617597209571
-sudo bbb-record --rebuild 9c245dd384542368fc86c61382de2df6bd58dbd5-1618121537831
+sudo bbb-record --rebuild 64c863ab0739360c689fc6d45bad5f97fa9c5c8f-1618186276307
 https://ib2.vir-gol.ir/playback/presentation/2.3/013c5db3388968aca08dd0350913345545303d8e-1617597209571
 https://ib2.vir-gol.ir/download/presentation/{InternalmeetingID}/{InternalmeetingID}.mp4
 https://ib2.vir-gol.ir/download/presentation/013c5db3388968aca08dd0350913345545303d8e-1617597209571/013c5db3388968aca08dd0350913345545303d8e-1617597209571.mp4
 https://ib2.vir-gol.ir/download/presentation/6b35a9c681e8c6d7e64d10bd2662c48c6d5c2f88-1618119138489/6b35a9c681e8c6d7e64d10bd2662c48c6d5c2f88-1618119138489.mp4
-https://ib2.vir-gol.ir/download/presentation/9c245dd384542368fc86c61382de2df6bd58dbd5-1618121537831/9c245dd384542368fc86c61382de2df6bd58dbd5-1618121537831.mp4
+https://ib3.vir-gol.ir/download/presentation/64c863ab0739360c689fc6d45bad5f97fa9c5c8f-1618186276307/64c863ab0739360c689fc6d45bad5f97fa9c5c8f-1618186276307.mp4
 
+# Run standalone
+/usr/bin/python /usr/local/bigbluebutton/core/scripts/post_publish/download.py 64c863ab0739360c689fc6d45bad5f97fa9c5c8f-1618186276307
+cd /usr/local/bigbluebutton/core/scripts/post_publish && ruby download_control.rb -m  64c863ab0739360c689fc6d45bad5f97fa9c5c8f-1618186276307
 # Logs
-ls /var/log/bigbluebutton/download
+ls -la /var/log/bigbluebutton/download
 # Videos
 # /var/bigbluebutton/published/presentation &  /var/www/bigbluebutton-default/download/presentation
-ls /var/www/bigbluebutton-default/download/presentation
-ls /var/www/bigbluebutton-default/download/presentation/b791c26dda0912d6ba7d288f17811402e3c4e5b7-1618123810860/b791c26dda0912d6ba7d288f17811402e3c4e5b7-1618123810860.mp4
+ls -la /var/bigbluebutton/published/presentation
+ls -la /var/bigbluebutton/published/presentation/64c863ab0739360c689fc6d45bad5f97fa9c5c8f-1618186276307/
 # -------==========-------
 # 3. Setup Monitoring
 # -------==========-------

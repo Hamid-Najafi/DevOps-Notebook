@@ -213,3 +213,6 @@ sudo zip -r openldap_`date +%d-%m-%Y"_"%H_%M_%S`.zip ~/backup/ldap
 sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/saleh_prg/lms-with-moodle.git
 cd lms-with-moodle/
 sudo bash build.sh 1.9.6.2
+
+git config --global user.email Hamid.Najafi@email.com
+git config --global user.name Hamid Najafi

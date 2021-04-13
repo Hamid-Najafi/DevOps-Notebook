@@ -2,7 +2,10 @@
 # Certbot
 # -------==========-------
 sudo add-apt-repository ppa:certbot/certbot
-sudo apt-get install certbot python3-certbot-apache python3-certbot-nginx
+sudo apt-get install certbot
+sudo apt-get install certbot python3-certbot-nginx
+sudo apt-get install certbot python3-certbot-apache 
+sudo apt-get purge certbot python3-certbot-apache 
 
 sudo snap install --classic certbot
 # get and install your certificates
@@ -28,7 +31,7 @@ sudo certbot \
     --email admin@legace.ir \
     --server https://acme-v02.api.letsencrypt.org/directory \
     --agree-tos \
-    --domains legace.ir -d www.legace.ir
+    --domains ib3.vir-gol.ir -d www.legace.ir
 # -------==========-------
 # Setup
 # -------==========-------
