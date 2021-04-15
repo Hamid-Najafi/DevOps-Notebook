@@ -95,6 +95,10 @@ sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Custom/Javanehha.pdf /var/www
 # -------==========-------
 # BBB - Configs     
 # -------==========-------
+# sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/Orig/bigbluebutton.properties.orig /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+# sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/Orig/settings.yml.orig /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
+# sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/Orig/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
+
 sudo mv /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conferenceBackup
 export version=2.3.0-beta-2
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
@@ -299,7 +303,7 @@ sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/bigbluebutton.pro
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
 sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
-sudo bbb-conf --setip sudo bbb-conf --setip $fqdnHost
+sudo bbb-conf --setip $fqdnHost
 # Check and Apply
 nginx -t && nginx -s reload
 sudo bbb-conf --restart
