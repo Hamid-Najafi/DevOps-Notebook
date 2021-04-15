@@ -15,36 +15,11 @@ OS: Ubuntu 16 or 18 (64bit)
 # Pre-install
 # -------==========-------
 # Set host to use proxy
+# ITS NECESSARY FOR BBB 2.3
 echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
-echo -e "http_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/" | sudo tee -a /etc/environment
 source /etc/environment
 exit
 wget https://charts.gitlab.io 
-
-sudo apt install resolvconf
-sudo nano /etc/resolvconf/resolv.conf.d/head
-nameserver 185.51.200.2
-nameserver 178.22.122.100
-sudo service resolvconf restart
-
-# HTTP Proxy
-# sudo mkdir -p /etc/systemd/system/docker.service.d
-# sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
-# [Service]
-# Environment="HTTP_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
-# Environment="HTTPS_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
-# Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
-
-# sudo systemctl daemon-reload
-# sudo systemctl restart docker
-
-# DNS Proxy
-sudo apt install resolvconf
-sudo nano /etc/resolvconf/resolv.conf.d/head
-nameserver 185.51.200.2
-nameserver 178.22.122.100
-
-sudo service resolvconf restart
 
 # Set Hostname
 sudo hostnamectl set-hostname ib2
@@ -59,7 +34,7 @@ sudo reboot
 # Install
 # -------==========-------
 # Control+F : change all ib1 to IB*
-export fqdnHost=ib3.vir-gol.ir
+export fqdnHost=ib2.vir-gol.ir
 
 sudo apt install base-files
 #*      Set FQDN Correctly      *#
@@ -115,7 +90,8 @@ sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Dei/Whiteboard.pdf /var/www/b
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Sampad/favicon.ico /var/www/bigbluebutton-default/favicon.ico
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Sampad/Whiteboard.pdf /var/www/bigbluebutton-default/Whiteboard-Sampad.pdf
 # sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Sampad/Whiteboard.pdf /var/www/bigbluebutton-default/Whiteboard.pdf
-
+# Custom
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Custom/Javanehha.pdf /var/www/bigbluebutton-default/Whiteboard.pdf
 # -------==========-------
 # BBB - Configs     
 # -------==========-------
@@ -125,6 +101,51 @@ sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/bigbluebutton.pro
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 sudo bbb-conf --setip $fqdnHost
+
+1.Delete raw data from published recordings
+sudo nano /etc/cron.daily/bigbluebutton
+# uncommenting the following line
+remove_raw_of_published_recordings
+
+2.Delete recordings older than N days
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/bbb-recording-cleanup.sh /etc/cron.daily/bbb-recording-cleanup
+chmod +x /etc/cron.daily/bbb-recording-cleanup
+sudo nano /etc/cron.daily/bbb-recording-cleanup
+
+3.Move recordings to a different partition
+
+4.Increase number of processes for nodejs
+/usr/share/meteor/bundle/bbb-html5-with-roles.conf
+
+5.Increase number of recording workers
+# systemd main service
+/usr/lib/systemd/system/bbb-rap-resque-worker.service
+# systemd override file
+mkdir -p /etc/systemd/system/bbb-rap-resque-worker.service.d
+cat > /etc/systemd/system/bbb-rap-resque-worker.service.d/override.conf << EOF
+[Service]
+Environment=COUNT=12
+EOF
+# nano /etc/systemd/system/bbb-rap-resque-worker.service.d/override.conf
+systemctl daemon-reload
+systemctl restart bbb-rap-resque-worker.service
+systemctl status bbb-rap-resque-worker.service
+
+6. Change recorded sessions processing time
+# systemd main service
+/usr/lib/systemd/system/bbb-rap-resque-worker.service
+# systemd override file
+mkdir -p /etc/systemd/system/bbb-record-core.timer.d
+cat > /etc/systemd/system/bbb-record-core.timer.d/override.conf << EOF
+[Timer]
+OnActiveSec=
+OnUnitInactiveSec=
+OnCalendar=19,20,21,22,23,00,01:*:00
+Persistent=false
+EOF
+systemctl daemon-reload
+
+sudo bbb-conf --restart
 # -------==========-------
 # Change Locales 
 # -------==========-------
@@ -185,7 +206,8 @@ https://ib2.vir-gol.ir/playback/presentation/2.3/013c5db3388968aca08dd0350913345
 https://ib2.vir-gol.ir/download/presentation/{InternalmeetingID}/{InternalmeetingID}.mp4
 https://ib2.vir-gol.ir/download/presentation/013c5db3388968aca08dd0350913345545303d8e-1617597209571/013c5db3388968aca08dd0350913345545303d8e-1617597209571.mp4
 https://ib2.vir-gol.ir/download/presentation/6b35a9c681e8c6d7e64d10bd2662c48c6d5c2f88-1618119138489/6b35a9c681e8c6d7e64d10bd2662c48c6d5c2f88-1618119138489.mp4
-https://ib3.vir-gol.ir/download/presentation/64c863ab0739360c689fc6d45bad5f97fa9c5c8f-1618186276307/64c863ab0739360c689fc6d45bad5f97fa9c5c8f-1618186276307.mp4
+https://ib2.vir-gol.ir/download/presentation/9c9e16629f9176df30ec52a7d57d46d4c6213274-1618199732033/9c9e16629f9176df30ec52a7d57d46d4c6213274-1618199732033.mp4
+https://ib2.vir-gol.ir/playback/presentation/2.3/9c9e16629f9176df30ec52a7d57d46d4c6213274-1618199732033
 
 # Run standalone
 /usr/bin/python /usr/local/bigbluebutton/core/scripts/post_publish/download.py 64c863ab0739360c689fc6d45bad5f97fa9c5c8f-1618186276307
@@ -254,7 +276,7 @@ docker-compose up -d --force-recreate --no-deps prometheus
 # -------==========-------
 # Postman or Firefox:
 # BBB
-https://mconf.github.io/api-mate/#server=https://$fqdnHost/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
+https://mconf.github.io/api-mate/#server=https://ib2.vir-gol.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 # Username:admin , Password: Metricpass.24
 export fqdnHost=ib2.vir-gol.ir
 # BBB Exporter
@@ -268,20 +290,19 @@ curl -u admin:Metricpass.24 http://$fqdnHost:8080/containers/
 # ---------------------------------------------------------------==========---------------------------------------------------------------
 #*                                                                Upgrade                                                               *#
 # ---------------------------------------------------------------==========---------------------------------------------------------------
+export fqdnHost=ib2.vir-gol.ir
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib1.vir-gol.ir -e admin@vir-gol.ir -w -g
-export version=2.3.0-beta-2
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230 -s $fqdnHost -e admin@vir-gol.ir -g -w
+
+export version=2.3.0-beta-3
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
-
-# Beacuse we copy other server config file, we must set these again.
 sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
-sudo bbb-conf --setip ib1.vir-gol.ir
-
+sudo bbb-conf --setip sudo bbb-conf --setip $fqdnHost
 # Check and Apply
 nginx -t && nginx -s reload
 sudo bbb-conf --restart
-
 # -------==========-------
 #* Imporove Audio *#
 # -------==========-------
