@@ -78,24 +78,19 @@ docker login
 # Set Images
 # -------==========-------
 git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
-# Virgol
+# FAVICON
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Virgol/favicon.ico /var/www/bigbluebutton-default/favicon.ico
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Virgol/Whiteboard.pdf /var/www/bigbluebutton-default/Whiteboard.pdf
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Virgol/Whiteboard.pdf /var/www/bigbluebutton-default/Whiteboard-Virgol.pdf
-# Dei
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Dei/favicon.ico /var/www/bigbluebutton-default/favicon.ico
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Dei/Whiteboard.pdf /var/www/bigbluebutton-default/Whiteboard-DEI.pdf
-# sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Dei/Whiteboard.pdf /var/www/bigbluebutton-default/Whiteboard.pdf
-# Sampad
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Sampad/favicon.ico /var/www/bigbluebutton-default/favicon.ico
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Dei/favicon.ico /var/www/bigbluebutton-default/favicon.ico
+# PDF
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Virgol/Whiteboard.pdf /var/www/bigbluebutton-default/Whiteboard-Virgol.pdf
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Dei/Whiteboard.pdf /var/www/bigbluebutton-default/Whiteboard-DEI.pdf
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Sampad/Whiteboard.pdf /var/www/bigbluebutton-default/Whiteboard-Sampad.pdf
-# sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Sampad/Whiteboard.pdf /var/www/bigbluebutton-default/Whiteboard.pdf
-# Custom
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Custom/Javanehha.pdf /var/www/bigbluebutton-default/Whiteboard.pdf
+sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Custom/Javaneha.pdf /var/www/bigbluebutton-default/Whiteboard-Javaneha.pdf
 # -------==========-------
 # BBB - Configs     
 # -------==========-------
-sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/Orig/bigbluebutton.properties.orig /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+# sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/Orig/bigbluebutton.properties.orig /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
 # sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/Orig/settings.yml.orig /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 # sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/Orig/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
 
@@ -210,7 +205,7 @@ https://ib2.vir-gol.ir/playback/presentation/2.3/013c5db3388968aca08dd0350913345
 https://ib2.vir-gol.ir/download/presentation/{InternalmeetingID}/{InternalmeetingID}.mp4
 https://ib2.vir-gol.ir/download/presentation/013c5db3388968aca08dd0350913345545303d8e-1617597209571/013c5db3388968aca08dd0350913345545303d8e-1617597209571.mp4
 https://ib2.vir-gol.ir/download/presentation/6b35a9c681e8c6d7e64d10bd2662c48c6d5c2f88-1618119138489/6b35a9c681e8c6d7e64d10bd2662c48c6d5c2f88-1618119138489.mp4
-https://ib2.vir-gol.ir/download/presentation/9c9e16629f9176df30ec52a7d57d46d4c6213274-1618199732033/9c9e16629f9176df30ec52a7d57d46d4c6213274-1618199732033.mp4
+https://ib2.vir-gol.ir/download/presentation/e7828bf71ce22e4afd8a1380ec9cccbe3107183b-1618515774695.mp4/e7828bf71ce22e4afd8a1380ec9cccbe3107183b-1618515774695.mp4
 https://ib2.vir-gol.ir/playback/presentation/2.3/9c9e16629f9176df30ec52a7d57d46d4c6213274-1618199732033
 
 # Run standalone
@@ -280,6 +275,7 @@ docker-compose up -d --force-recreate --no-deps prometheus
 # -------==========-------
 # Postman or Firefox:
 # BBB
+curl https://ib2.vir-gol.ir/bigbluebutton/api/
 https://mconf.github.io/api-mate/#server=https://ib2.vir-gol.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 # Username:admin , Password: Metricpass.24
 export fqdnHost=ib2.vir-gol.ir
@@ -295,10 +291,10 @@ curl -u admin:Metricpass.24 http://$fqdnHost:8080/containers/
 #*                                                                Upgrade                                                               *#
 # ---------------------------------------------------------------==========---------------------------------------------------------------
 export fqdnHost=ib2.vir-gol.ir
+export version=2.3.0-beta-3
+
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s ib1.vir-gol.ir -e admin@vir-gol.ir -w -g
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230 -s $fqdnHost -e admin@vir-gol.ir -g -w
-
-export version=2.3.0-beta-3
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
