@@ -1,3 +1,0 @@
-mail._domainkey	IN	TXT	( "v=DKIM1; h=sha256; k=rsa; "
-	  "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnqNJ6nn6P/Qipxs0RAj0AoLLAUM8XXB4I0uGu2WHLsmuDKGc1T3myXRqQDJx1d4mdWRUq/P/fp0hNPsNrVtAoQnaeoEcQRbuOSevW2ayzgkpIk/DelH0XN3pSI9ouJUWrlqqNrGHltyhXw/89+ONakG53HaSwRrYPSS6fHohfYWytTnwftBu3enkluJNBOdRTEnvWoMVIZqmFm"
-	  "UffXvvHFVx3O76hB4h59F4E1f5R8zB2BunUP9sasWf74bjcpd8S8vWeeLy3edZZtAJxRUYe69XWVXhPh7ttyUwIKxdfi1et92DTvC264XHBDk+Od2FakGrwRaZxYqb3Re50a93GQIDAQAB" )  ; ----- DKIM key mail for legace.ir

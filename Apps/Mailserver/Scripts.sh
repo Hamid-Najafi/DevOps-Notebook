@@ -109,6 +109,7 @@ cd ~/docker/mailserver
 ./setup.sh email add admin@mail.vir-gol.ir
 ./setup.sh email add admin@vir-gol.ir
 ./setup.sh email add sales@vir-gol.ir
+./setup.sh email add support@vir-gol.ir
 Mailpass.2476
 # -------==========-------
 # Testing a Certificate is Valid
