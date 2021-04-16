@@ -8,11 +8,25 @@ https://docs.nginx.com/nginx/admin-guide/mail-proxy/mail-proxy/
 # 1. Customized Mailserver
 # -------==========-------
 # Generate Certificate
-sudo certbot certonly --apache -d mail.legace.ir
-sudo certbot certonly --nginx -d mail.legace.ir
-sudo certbot certonly --standalone -d mail.legace.ir
-git clone https://gitlab.com/goldenstarc/devops-notebook.git
-cd DevOps-Notebook/Apps/Mailserver/Setup
+export fqdnHost=mail.vir-gol.ir
+
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get install certbot
+sudo certbot certonly \
+    --email admin@vir-gol.ir \
+    --server https://acme-v02.api.letsencrypt.org/directory \
+    --agree-tos \
+    --domains mail.vir-gol.ir
+  
+# Mail
+admin@vir-gol.ir
+git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
+
+mkdir -p ~/docker
+cp -R ~/DevOps-Notebook/Apps/Mailserver/Setup ~/docker/mailserver
+cd ~/docker/mailserver 
+nano .env
+nano env-mailserver 
 docker-compose up -d mail
 docker exec -it mail sh 
 #mkdir /srv/vmail
@@ -48,12 +62,11 @@ exit
 # -------==========-------
 # DNS Records
 # -------==========-------
-# MX
-legace.ir.		120	IN	MX	1 mail.legace.ir.
-# SPF
-legace.ir.		120	IN	TXT	"v=spf1 mx ~all"
+export fqdnHost=mail.vir-gol.ir
+$fqdnHost.ir.		120	IN	MX	1 $fqdnHost.ir.
+#$fqdnHost.ir.		120	IN	TXT	"v=spf1 mx ~all"
 # DMARK (_dmarc)
-v=DMARC1; p=none; rua=mailto:dmarc.report@legace.ir; ruf=mailto:dmarc.report@legace.ir; sp=none; ri=86400
+v=DMARC1; p=none; rua=mailto:dmarc.report@$fqdnHost.ir; ruf=mailto:dmarc.report@$fqdnHost.ir; sp=none; ri=86400
 # DKIM (mail._domainkey)
 docker run --rm \
   -v "$(pwd)/config":/tmp/docker-mailserver \
