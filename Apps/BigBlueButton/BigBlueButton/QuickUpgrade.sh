@@ -1,18 +1,13 @@
 #!/bin/bash
 
 echo "Configuring proxy"
-echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
+sed -i 's/http_proxy=.*/http_proxy=http:\/\/admin:Squidpass.24@su.legace.ir:3128\//g' /etc/environment
+sed -i 's/https_proxy=.*/https_proxy=http:\/\/admin:Squidpass.24@su.legace.ir:3128\//g' /etc/environment
 source /etc/environment
-sudo apt install resolvconf
-echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | sudo tee -a /etc/resolvconf/resolv.conf.d/head
-sudo service resolvconf restart
-
-echo "Disable Ubuntu auto update"
-sed -i 's/Prompt=.*/Prompt=never/g' /etc/update-manager/release-upgrades
 
 echo "Running BBB-Install script"
-sudo apt install base-files
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230 -s $1 -e admin@vir-gol.ir -g -w
+apt install base-files
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-230 -s $1 -e admin@vir-gol.ir -g -w
 
 echo "Using BBB-Apply-lib Script"
 source /etc/bigbluebutton/bbb-conf/apply-lib.sh
@@ -45,10 +40,10 @@ echo "Configuring secret"
 bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 bbb-conf --restart
 
-echo "Cloning repos"
-git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git /root/DevOps-Notebook
-git clone https://github.com/Hamid-Najafi/FontPack.git  /usr/share/fonts/FontPack
-git clone https://github.com/Hamid-Najafi/bbb-download.git /root/bbb-download
+echo "ReCloning repos"
+cd /root/DevOps-Notebook && git pull
+cd /usr/share/fonts/FontPack && git pull
+cd /root/bbb-download && git pull
 
 echo "Setting favicon"
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Theme/Virgol/favicon.ico /var/www/bigbluebutton-default/favicon.ico
@@ -60,48 +55,48 @@ find /root/DevOps-Notebook/Apps/BigBlueButton/Theme -type f -name "*.pdf" | xarg
 echo "Removing freeswitch sounds"
 mv /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conferenceBackup
 
-echo "Delete recordings older than 12 days script"
-cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/bbb-recording-cleanup.sh /etc/cron.daily/bbb-recording-cleanup
-chmod +x /etc/cron.daily/bbb-recording-cleanup
+# echo "Delete recordings older than 12 days script"
+# cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/bbb-recording-cleanup.sh /etc/cron.daily/bbb-recording-cleanup
+# chmod +x /etc/cron.daily/bbb-recording-cleanup
 
 echo "Increase number of processes for nodejs"
 sed -i 's/NUMBER_OF_BACKEND_NODEJS_PROCESSES=.*/NUMBER_OF_BACKEND_NODEJS_PROCESSES=4/g' /usr/share/meteor/bundle/bbb-html5-with-roles.conf
 sed -i 's/NUMBER_OF_FRONTEND_NODEJS_PROCESSES=.*/NUMBER_OF_FRONTEND_NODEJS_PROCESSES=4/g' /usr/share/meteor/bundle/bbb-html5-with-roles.conf
 
-echo "Increase number of recording workers"
-mkdir -p /etc/systemd/system/bbb-rap-resque-worker.service.d
-cat > /etc/systemd/system/bbb-rap-resque-worker.service.d/override.conf << EOF
-[Service]
-Environment=COUNT=16
-EOF
+# echo "Increase number of recording workers"
+# mkdir -p /etc/systemd/system/bbb-rap-resque-worker.service.d
+# cat > /etc/systemd/system/bbb-rap-resque-worker.service.d/override.conf << EOF
+# [Service]
+# Environment=COUNT=16
+# EOF
 
-echo "Change recorded sessions processing time"
-mkdir -p /etc/systemd/system/bbb-record-core.timer.d
-cat > /etc/systemd/system/bbb-record-core.timer.d/override.conf << EOF
-[Timer]
-OnActiveSec=
-OnUnitInactiveSec=
-OnCalendar=19,20,21,22,23,00,01:*:00
-Persistent=false
-EOF
+# echo "Change recorded sessions processing time"
+# mkdir -p /etc/systemd/system/bbb-record-core.timer.d
+# cat > /etc/systemd/system/bbb-record-core.timer.d/override.conf << EOF
+# [Timer]
+# OnActiveSec=
+# OnUnitInactiveSec=
+# OnCalendar=19,20,21,22,23,00,01:*:00
+# Persistent=false
+# EOF
 
-systemctl daemon-reload
-systemctl restart bbb-rap-resque-worker.service
+# systemctl daemon-reload
+# systemctl restart bbb-rap-resque-worker.service
 
-echo "build font information cache files"
-fc-cache -fv
+# echo "build font information cache files"
+# fc-cache -fv
 
-echo "Configuring exporters"
-echo "bbb-exporter"
-cp -R /root/DevOps-Notebook/Apps/BigBlueButton/Monitoring/bbb-exporter /root/bbb-exporter 
-sed -i 's|API_BASE_URL=.*|API_BASE_URL=https:\/\/'$fqdnHost'\/bigbluebutton\/api\/|g' /root/bbb-exporter/secrets.env
-cd /root/bbb-exporter
-docker-compose up -d
+# echo "Configuring exporters"
+# echo "bbb-exporter"
+# cp -R /root/DevOps-Notebook/Apps/BigBlueButton/Monitoring/bbb-exporter /root/bbb-exporter 
+# sed -i 's|API_BASE_URL=.*|API_BASE_URL=https:\/\/'$fqdnHost'\/bigbluebutton\/api\/|g' /root/bbb-exporter/secrets.env
+# cd /root/bbb-exporter
+# docker-compose up -d
 
-echo "node-exporter & cadvisor"
-cp -R /root/DevOps-Notebook/Apps/Monitoring/Slave/ /root/monitoring
-cd /root/monitoring
-docker-compose up -d
+# echo "node-exporter & cadvisor"
+# cp -R /root/DevOps-Notebook/Apps/Monitoring/Slave/ /root/monitoring
+# cd /root/monitoring
+# docker-compose up -d
 
 echo "Applying NGINX_CONFIG"
 sed -i '$d' /etc/nginx/sites-available/bigbluebutton
@@ -122,22 +117,22 @@ echo "Configuring Nginx auth"
 echo 'admin:$apr1$k98EN1wL$.4puamdnCPS46oGRDvRKx/' | tee /etc/nginx/.htpasswd
 nginx -t &&  nginx -s reload
 
-echo "Configuring Firewall"
-ufw allow 9100
-ufw allow 9338
-ufw allow 9688
+# echo "Configuring Firewall"
+# ufw allow 9100
+# ufw allow 9338
+# ufw allow 9688
 
-echo "Configuring bbb-download"
-chmod u+x  /root/bbb-download/install.sh 
-/root/bbb-download/install.sh 
+# echo "Configuring bbb-download"
+# chmod u+x  /root/bbb-download/install.sh 
+# /root/bbb-download/install.sh 
 
 echo "Configuring greenlight"
 rm /etc/bigbluebutton/nginx/greenlight-redirect.nginx
-sed -i 's/BIGBLUEBUTTON_SECRET=.*/BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk/g' ~/greenlight/.env
-cd ~/greenlight
-docker run --rm --env-file .env bigbluebutton/greenlight:v2 bundle exec rake conf:check
-docker-compose up -d
-docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@vir-gol.ir","BBBpass.24","admin"]
+# sed -i 's/BIGBLUEBUTTON_SECRET=.*/BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk/g' ~/greenlight/.env
+# cd ~/greenlight
+# docker run --rm --env-file .env bigbluebutton/greenlight:v2 bundle exec rake conf:check
+# docker-compose up -d
+# docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@vir-gol.ir","BBBpass.24","admin"]
 
 echo "Disabling proxy"
 sed -i 's/http_proxy=.*/http_proxy=/g' /etc/environment
