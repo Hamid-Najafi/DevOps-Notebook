@@ -5,9 +5,9 @@ public:
     audioChatNotification: false
     autoJoin: true
     listenOnlyMode: true
-    forceListenOnly: true
+    forceListenOnly: false
     skipCheck: true
-    skipCheckOnJoin: false
+    skipCheckOnJoin: true
     #
     # Allow users to change microphone/speaker dinamically
     # The device is changed immediately, without the need to rejoin

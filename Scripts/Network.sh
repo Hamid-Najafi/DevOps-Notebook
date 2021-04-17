@@ -1,4 +1,4 @@
-https://itnext.io/automated-delivery-of-asp-net-core-apps-on-on-prem-kubernetes-1d6327ee1454
+4https://itnext.io/automated-delivery-of-asp-net-core-apps-on-on-prem-kubernetes-1d6327ee1454
 # -------==========-------
 # Used ports
 # -------==========-------

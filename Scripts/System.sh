@@ -30,11 +30,12 @@ wget -qO- bench.sh | bash
 # -------==========-------
 # Enable root Account
 # -------==========-------
+# Connect to server via SSH 
 sudo passwd root
 sudo nano /etc/ssh/sshd_config 
 #PermitRootLogin prohibit-password
 PermitRootLogin yes
-systemctl restart sshd.service
+service sshd restart
 # -------==========-------
 # Add user
 # -------==========-------
