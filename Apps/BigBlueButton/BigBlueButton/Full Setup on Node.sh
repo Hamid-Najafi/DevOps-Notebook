@@ -17,12 +17,10 @@ OS: Ubuntu 16 or 18 (64bit)
 # Set host to use proxy
 # ITS NECESSARY FOR BBB 2.3
 echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
-source /etc/environment
-wget https://charts.gitlab.io 
-
 sudo apt install resolvconf
 echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | sudo tee -a /etc/resolvconf/resolv.conf.d/head
 sudo service resolvconf restart
+wget https://charts.gitlab.io 
 
 # Set Hostname
 sudo hostnamectl set-hostname ib2
@@ -215,7 +213,7 @@ https://ib2.vir-gol.ir/playback/presentation/2.3/013c5db3388968aca08dd0350913345
 https://ib2.vir-gol.ir/download/presentation/{InternalmeetingID}/{InternalmeetingID}.mp4
 https://ib2.vir-gol.ir/download/presentation/013c5db3388968aca08dd0350913345545303d8e-1617597209571/013c5db3388968aca08dd0350913345545303d8e-1617597209571.mp4
 https://ib2.vir-gol.ir/download/presentation/6b35a9c681e8c6d7e64d10bd2662c48c6d5c2f88-1618119138489/6b35a9c681e8c6d7e64d10bd2662c48c6d5c2f88-1618119138489.mp4
-https://ib2.vir-gol.ir/download/presentation/02d2f78e78310ad76b83352ce3e9cc4bfdb935dd-1618668129351/02d2f78e78310ad76b83352ce3e9cc4bfdb935dd-1618668129351.mp4
+https://ib2.vir-gol.ir/download/presentation/134c0b3b267df918319e6ec823c789cf712888be-1617773562988/134c0b3b267df918319e6ec823c789cf712888be-1617773562988.mp4
 https://ib2.vir-gol.ir/playback/presentation/2.3/9c9e16629f9176df30ec52a7d57d46d4c6213274-1618199732033
 
 # Run standalone
@@ -268,7 +266,7 @@ sudo nano /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
 # -------==========-------
 # ******** NOTEICE ********
 # * Backup all recorded meetings first!
-cp /var/bigbluebutton/recording/raw/ toSomeWhere
+unlink /var/bigbluebutton
 # -------==========-------
 
 sudo apt-get purge nodejs mongodb-org  bigbluebutton bbb-* 
