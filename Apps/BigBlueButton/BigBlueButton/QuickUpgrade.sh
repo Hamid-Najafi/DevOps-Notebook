@@ -90,13 +90,11 @@ sed -i 's/NUMBER_OF_FRONTEND_NODEJS_PROCESSES=.*/NUMBER_OF_FRONTEND_NODEJS_PROCE
 # echo "bbb-exporter"
 # cp -R /root/DevOps-Notebook/Apps/BigBlueButton/Monitoring/bbb-exporter /root/bbb-exporter 
 # sed -i 's|API_BASE_URL=.*|API_BASE_URL=https:\/\/'$fqdnHost'\/bigbluebutton\/api\/|g' /root/bbb-exporter/secrets.env
-# cd /root/bbb-exporter
-# docker-compose up -d
+# docker-compose -f /root/bbb-exporter/docker-compose.yaml up -d
 
 # echo "node-exporter & cadvisor"
 # cp -R /root/DevOps-Notebook/Apps/Monitoring/Slave/ /root/monitoring
-# cd /root/monitoring
-# docker-compose up -d
+# docker-compose -f /root/monitoring/docker-compose.yml up -d
 
 echo "Applying NGINX_CONFIG"
 sed -i '$d' /etc/nginx/sites-available/bigbluebutton
@@ -129,9 +127,8 @@ nginx -t &&  nginx -s reload
 echo "Configuring greenlight"
 rm /etc/bigbluebutton/nginx/greenlight-redirect.nginx
 # sed -i 's/BIGBLUEBUTTON_SECRET=.*/BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk/g' /root/greenlight/.env
-# cd /root/greenlight
-# docker run --rm --env-file .env bigbluebutton/greenlight:v2 bundle exec rake conf:check
-# docker-compose up -d
+# docker run --rm --env-file /root/greenlight/.env bigbluebutton/greenlight:v2 bundle exec rake conf:check
+# docker-compose -f /root/greenlight/docker-compose.yml up -d
 # docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@vir-gol.ir","BBBpass.24","admin"]
 
 echo "Disabling proxy"

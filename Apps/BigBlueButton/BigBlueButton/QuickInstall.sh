@@ -1,5 +1,7 @@
 #!/bin/bash
 
+if [ $EUID != 0 ]; then err "You must run this command as root."; fi
+
 echo "Configuring proxy"
 echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
 source /etc/environment
@@ -11,7 +13,29 @@ echo "Disable Ubuntu auto update"
 sed -i 's/Prompt=.*/Prompt=never/g' /etc/update-manager/release-upgrades
 
 echo "Installing Docker"
-install_docker
+need_pkg apt-transport-https ca-certificates curl gnupg-agent software-properties-common openssl
+
+# Install Docker
+if ! apt-key list | grep -q Docker; then
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+fi
+
+if ! dpkg -l | grep -q docker-ce; then
+  add-apt-repository \
+    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+    $(lsb_release -cs) \
+    stable"
+
+  apt-get update
+  need_pkg docker-ce docker-ce-cli containerd.io
+fi
+if ! which docker; then err "Docker did not install"; fi
+
+# Install Docker Compose
+if dpkg -l | grep -q docker-compose; then
+  apt-get purge -y docker-compose
+fi
+if ! which docker; then err "Docker did not install"; fi
 docker login -u goldenstarc -p hgoldenstarcn
 
 echo "Running BBB-Install script"
@@ -99,13 +123,11 @@ echo "Configuring exporters"
 echo "bbb-exporter"
 cp -R /root/DevOps-Notebook/Apps/BigBlueButton/Monitoring/bbb-exporter /root/bbb-exporter 
 sed -i 's|API_BASE_URL=.*|API_BASE_URL=https:\/\/'$fqdnHost'\/bigbluebutton\/api\/|g' /root/bbb-exporter/secrets.env
-cd /root/bbb-exporter
-docker-compose up -d
+docker-compose -f /root/bbb-exporter/docker-compose.yaml up -d
 
 echo "node-exporter & cadvisor"
 cp -R /root/DevOps-Notebook/Apps/Monitoring/Slave/ /root/monitoring
-cd /root/monitoring
-docker-compose up -d
+docker-compose -f /root/monitoring/docker-compose.yml up -d
 
 echo "Applying NGINX_CONFIG"
 sed -i '$d' /etc/nginx/sites-available/bigbluebutton
@@ -138,9 +160,8 @@ chmod u+x  /root/bbb-download/install.sh
 echo "Configuring greenlight"
 rm /etc/bigbluebutton/nginx/greenlight-redirect.nginx
 sed -i 's/BIGBLUEBUTTON_SECRET=.*/BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk/g' /root/greenlight/.env
-cd /root/greenlight
-docker run --rm --env-file .env bigbluebutton/greenlight:v2 bundle exec rake conf:check
-docker-compose up -d
+docker run --rm --env-file /root/greenlight/.env bigbluebutton/greenlight:v2 bundle exec rake conf:check
+docker-compose -f /root/greenlight/docker-compose.yml up -d
 docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@vir-gol.ir","BBBpass.24","admin"]
 
 echo "Disabling proxy"
@@ -149,30 +170,3 @@ sed -i 's/https_proxy=.*/https_proxy=/g' /etc/environment
 source /etc/environment
 
 echo "Done!"
-
-
-install_docker() {
-  need_pkg apt-transport-https ca-certificates curl gnupg-agent software-properties-common openssl
-
-  # Install Docker
-  if ! apt-key list | grep -q Docker; then
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-  fi
-
-  if ! dpkg -l | grep -q docker-ce; then
-    add-apt-repository \
-     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-     $(lsb_release -cs) \
-     stable"
-
-    apt-get update
-    need_pkg docker-ce docker-ce-cli containerd.io
-  fi
-  if ! which docker; then err "Docker did not install"; fi
-
-  # Install Docker Compose
-  if dpkg -l | grep -q docker-compose; then
-    apt-get purge -y docker-compose
-  fi
-  if ! which docker; then err "Docker did not install"; fi
-}
