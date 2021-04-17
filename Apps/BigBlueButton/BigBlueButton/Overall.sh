@@ -2,7 +2,7 @@
 # **** Quick Install ****
 # -------==========-------
 su root
-export FQDN=ib2.vir-gol.ir
+export FQDN=ib3.vir-gol.ir
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/BigBlueButton/QuickInstall.sh
 bash QuickInstall.sh $FQDN
 # -------==========-------

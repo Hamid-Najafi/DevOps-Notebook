@@ -128,8 +128,8 @@ nginx -t &&  nginx -s reload
 
 echo "Configuring greenlight"
 rm /etc/bigbluebutton/nginx/greenlight-redirect.nginx
-# sed -i 's/BIGBLUEBUTTON_SECRET=.*/BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk/g' ~/greenlight/.env
-# cd ~/greenlight
+# sed -i 's/BIGBLUEBUTTON_SECRET=.*/BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk/g' /root/greenlight/.env
+# cd /root/greenlight
 # docker run --rm --env-file .env bigbluebutton/greenlight:v2 bundle exec rake conf:check
 # docker-compose up -d
 # docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@vir-gol.ir","BBBpass.24","admin"]
