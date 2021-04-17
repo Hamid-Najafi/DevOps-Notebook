@@ -10,6 +10,10 @@ sudo service resolvconf restart
 echo "Disable Ubuntu auto update"
 sed -i 's/Prompt=.*/Prompt=never/g' /etc/update-manager/release-upgrades
 
+echo "Installing Docker"
+install_docker
+docker login -u goldenstarc -p hgoldenstarcn
+
 echo "Running BBB-Install script"
 sudo apt install base-files
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230 -s $1 -e admin@vir-gol.ir -g -w
@@ -145,3 +149,30 @@ sed -i 's/https_proxy=.*/https_proxy=/g' /etc/environment
 source /etc/environment
 
 echo "Done!"
+
+
+install_docker() {
+  need_pkg apt-transport-https ca-certificates curl gnupg-agent software-properties-common openssl
+
+  # Install Docker
+  if ! apt-key list | grep -q Docker; then
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  fi
+
+  if ! dpkg -l | grep -q docker-ce; then
+    add-apt-repository \
+     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+     $(lsb_release -cs) \
+     stable"
+
+    apt-get update
+    need_pkg docker-ce docker-ce-cli containerd.io
+  fi
+  if ! which docker; then err "Docker did not install"; fi
+
+  # Install Docker Compose
+  if dpkg -l | grep -q docker-compose; then
+    apt-get purge -y docker-compose
+  fi
+  if ! which docker; then err "Docker did not install"; fi
+}
