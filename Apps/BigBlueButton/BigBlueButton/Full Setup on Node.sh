@@ -11,6 +11,14 @@ https://docs.bigbluebutton.org/2.2/customize.html
 # -------==========-------
 Memory: 4GB
 OS: Ubuntu 16 or 18 (64bit)
+
+# -------==========-------
+# **** Quick Install ****
+# -------==========-------
+
+su root
+export FQDN=ib2.vir-gol.ir
+bash minimalInstall.sh $FQDN
 # -------==========-------
 # Pre-install
 # -------==========-------
@@ -32,7 +40,7 @@ sudo nano /etc/update-manager/release-upgrades
 
 sudo reboot
 # -------==========-------
-# Install
+# BigBlueButton
 # -------==========-------
 # export fqdnHost=ib2.vir-gol.ir
 # export version=2.3.0-beta-3
@@ -55,7 +63,6 @@ wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v x
 
 # Install Turn Server
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.vir-gol.ir:1b6s1esK -e admin@vir-gol.ir
-
 # -------==========-------
 # Set Images
 # -------==========-------

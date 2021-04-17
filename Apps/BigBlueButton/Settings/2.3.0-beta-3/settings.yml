@@ -16,7 +16,7 @@ public:
     # "media.setsinkid.enabled" to make it work properly
     # enableDynamicAudioDeviceSelection: true
     #
-    clientTitle: سامانه کلاس مجازی ویرگول
+    clientTitle: سامانه ویرگول
     appName: کلاس مجازی - نسخه مرورگر
     bbbServerVersion: 2.3-dev
     copyright: '©2021 Virgol Inc. Powerd by BigBlueButton'
