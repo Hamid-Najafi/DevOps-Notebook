@@ -1,24 +1,10 @@
-# REAL BUG:
-when someone is speaking its name is shown upside of presentaion. if he/she stop speaking its connection will remain connected for 10 second. with treansported name
-after his name will remove.
-if he/she speak while his/her name is treansport, there will be lag in sound.
-
-# Docs:
-https://docs.bigbluebutton.org/2.2/customize.html
-
-# -------==========-------
-# Minimum Req
-# -------==========-------
-Memory: 4GB
-OS: Ubuntu 16 or 18 (64bit)
-
 # -------==========-------
 # **** Quick Install ****
 # -------==========-------
-
 su root
 export FQDN=ib2.vir-gol.ir
-bash minimalInstall.sh $FQDN
+
+bash QuickInstall.sh $FQDN
 # -------==========-------
 # Pre-install
 # -------==========-------
@@ -335,3 +321,16 @@ https://live.vir-gol.ir/hls/bbb-live-1.m3u8
 # DASH
 https://live.vir-gol.ir/dash/bbb-live-1.mpd
 
+# -------==========-------
+# BBB Server
+# -------==========-------
+# Minimum Req
+Memory: 4GB
+OS: Ubuntu 16 or 18 (64bit)
+# Utilization
+400 Person: 
+12GB Ram
+12 Core @ 2.10GHz
+200 Person:
+8GB Ram
+8 Core @ 2.10GHz
