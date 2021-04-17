@@ -33,8 +33,10 @@ sudo reboot
 # -------==========-------
 # Install
 # -------==========-------
-# Control+F : change all ib1 to IB*
-export fqdnHost=ib2.vir-gol.ir
+# export fqdnHost=ib2.vir-gol.ir
+# export version=2.3.0-beta-3
+echo -e "fqdnHost=ib2.vir-gol.ir\nversion=2.3.0-beta-3" | sudo tee -a /etc/environment
+source /etc/environment
 
 sudo apt install base-files
 #*      Set FQDN Correctly      *#
@@ -49,6 +51,7 @@ wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v x
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s $fqdnHost -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.27 -s $fqdnHost -e admin@vir-gol.ir -g -w
 # http://ubuntu.bigbluebutton.org/xenial-220-2.2.29/dists/bigbluebutton-xenial/Release.gpg
+
 # Install Turn Server
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.vir-gol.ir:1b6s1esK -e admin@vir-gol.ir
 # -------==========-------
@@ -59,6 +62,11 @@ sudo apt-get purge nodejs mongodb-org  bigbluebutton bbb-*
 sudo apt-get purge bbb-apps bbb-apps-akka bbb-apps-screenshare bbb-apps-sip bbb-apps-video bbb-apps-video-broadcast bbb-client bbb-etherpad \
 bbb-freeswitch-core bbb-freeswitch-sounds bbb-fsesl-akka bbb-mkclean bbb-playback-presentation bbb-record-core bbb-red5 bbb-transcode-akka bbb-web
 
+sudo apt-get purge nodejs mongodb-org bbb-apps-akka bbb-freeswitch-core bbb-html5 bbb-playback bbb-web bbb-config bbb-freeswitch-sounds \
+bbb-playback-presentation bbb-webrtc-sfu bbb-etherpad  bbb-fsesl-akka bbb-mkclean bbb-record-core bbb-libreoffice-docker
+
+apt --fix-broken install
+
 #sudo apt-get purge apt-transport-https haveged build-essential yq
 sudo apt autoremove
 sudo ufw disable
@@ -67,13 +75,6 @@ sudo ufw disable
 # -------==========-------
 sudo bbb-conf --clean
 sudo bbb-conf --check
-
-IF
-# Failed authorization procedure. ib3.vir-gol.ir (http-01): urn:ietf:params:acme:error:unauthorized :: The client lacks sufficient authorization :: 
-# Invalid response from http://ib3.vir-gol.ir/.well-known/acme-challenge/KOvfj8Qs2NXyTuD9RjUf75EKd1Qer2eZO-CCnIBZDuE [185.239.107.221]: 
-# "<html>\r\n<head><title>404 Not Found</title></head>\r\n<body bgcolor=\"white\">\r\n<center><h1>404 Not Found</h1></center>\r\n<hr><center>"
-THEN
-docker login
 # -------==========-------
 # Set Images
 # -------==========-------
@@ -96,7 +97,6 @@ sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Theme/Custom/Javaneha.pdf /var/www/
 # sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/Orig/bigbluebutton.nginx /etc/nginx/sites-available/bigbluebutton
 
 sudo mv /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conferenceBackup
-export version=2.3.0-beta-3
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/bigbluebutton.properties /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
 sudo cp ~/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/settings.yml /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 sudo bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk

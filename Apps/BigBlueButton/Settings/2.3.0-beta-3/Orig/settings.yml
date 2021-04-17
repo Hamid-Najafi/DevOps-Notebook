@@ -6,7 +6,7 @@ public:
     autoJoin: true
     listenOnlyMode: true
     forceListenOnly: false
-    skipCheck: true
+    skipCheck: false
     skipCheckOnJoin: false
     #
     # Allow users to change microphone/speaker dinamically
@@ -16,10 +16,10 @@ public:
     # "media.setsinkid.enabled" to make it work properly
     # enableDynamicAudioDeviceSelection: true
     #
-    clientTitle: سامانه کلاس مجازی ویرگول
-    appName: کلاس مجازی - نسخه مرورگر
+    clientTitle: BigBlueButton
+    appName: BigBlueButton HTML5 Client
     bbbServerVersion: 2.3-dev
-    copyright: '©2021 Virgol Inc. Powerd by BigBlueButton'
+    copyright: '©2021 BigBlueButton Inc.'
     html5ClientBuild: 1588
     helpLink: https://bigbluebutton.org/html5/
     lockOnJoin: true
@@ -80,7 +80,7 @@ public:
         # Users can individually set their preferred locale through Settings,
         # but on first page load overrideLocale will trump the browser's
         # preferred locale
-        overrideLocale: fa_IR
+        overrideLocale: null
         #Audio constraints for microphone. Use this to control browser's
         #filters, such as AGC (Auto Gain Control) , Echo Cancellation,
         #Noise Supression, etc.
@@ -352,7 +352,7 @@ public:
     max_custom: 5
     allowDragAndDropFile: false
   captions:
-    enabled: false
+    enabled: true
     enableDictation: false
     backgroundColor: '#000000'
     fontColor: '#FFFFFF'
@@ -607,7 +607,7 @@ private:
     pencilChunkLength: 100
     loadSlidesFromHttpAlways: false
   etherpad:
-    apikey: 99eOtBZ8YEm8d6EH7WybGywk8Khsc1z8BMhMw1ekvdqi5k6TdbaVNzXDqw2Lqn
+    apikey: fM9HWuQv1h9nPcvYBAMqFaTwJCRR64hQ0M0Qoae0sIxbiC4kipqmcaVemY9RN
     version: 1.2.13
     host: 127.0.0.1
     port: 9001

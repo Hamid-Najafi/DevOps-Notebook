@@ -3,7 +3,7 @@
 # -------==========-------
 export version=2.3.0-beta-3
 export fqdnHost=ib2.vir-gol.ir
-export user=ubuntu
+export user=root
 
 mkdir /Users/hamid/Development/Software/DevOps-Notebook/Apps/BigBlueButton/Settings/$version/Orig
 scp $user@$fqdnHost:/etc/nginx/sites-available/bigbluebutton  /Users/hamid/Development/Software/DevOps-Notebook/Apps/BigBlueButton/Settings/$version//Orig/bigbluebutton.nginx

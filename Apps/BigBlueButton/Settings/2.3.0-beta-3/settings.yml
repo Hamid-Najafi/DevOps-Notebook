@@ -5,7 +5,7 @@ public:
     audioChatNotification: false
     autoJoin: true
     listenOnlyMode: true
-    forceListenOnly: false
+    forceListenOnly: true
     skipCheck: true
     skipCheckOnJoin: false
     #
@@ -154,7 +154,7 @@ public:
     enableNetworkMonitoring: false
     packetLostThreshold: 10
   kurento:
-    wsUrl: wss://ib3.vir-gol.ir/bbb-webrtc-sfu
+    wsUrl: wss://ib2.vir-gol.ir/bbb-webrtc-sfu
     # Valid for video-provider. Time (ms) before its WS connection times out
     # and tries to reconnect.
     wsConnectionTimeout: 4000
@@ -387,7 +387,7 @@ public:
       enabled: true
   note:
     enabled: true
-    url: https://ib3.vir-gol.ir/pad
+    url: https://ib2.vir-gol.ir/pad
   layout:
     autoSwapLayout: false
     hidePresentation: false
@@ -607,7 +607,7 @@ private:
     pencilChunkLength: 100
     loadSlidesFromHttpAlways: false
   etherpad:
-    apikey: 99eOtBZ8YEm8d6EH7WybGywk8Khsc1z8BMhMw1ekvdqi5k6TdbaVNzXDqw2Lqn
+    apikey: fM9HWuQv1h9nPcvYBAMqFaTwJCRR64hQ0M0Qoae0sIxbiC4kipqmcaVemY9RN
     version: 1.2.13
     host: 127.0.0.1
     port: 9001
