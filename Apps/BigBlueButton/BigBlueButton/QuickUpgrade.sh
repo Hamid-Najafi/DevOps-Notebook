@@ -121,7 +121,7 @@ nginx -t &&  nginx -s reload
 # ufw allow 9688
 
 # echo "Configuring bbb-download"
-# chmod u+x  /root/bbb-download/install.sh 
+# chmod u+x /root/bbb-download/install.sh 
 # /root/bbb-download/install.sh 
 
 echo "Configuring greenlight"
