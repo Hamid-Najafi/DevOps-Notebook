@@ -3,11 +3,11 @@
 if [ $EUID != 0 ]; then err "You must run this command as root."; fi
 
 echo "Configuring proxy"
-echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
-source /etc/environment
-sudo apt install resolvconf
-echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | sudo tee -a /etc/resolvconf/resolv.conf.d/head
-sudo service resolvconf restart
+export http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
+export https_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
+apt install resolvconf
+echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head
+service resolvconf restart
 
 echo "Disable Ubuntu auto update"
 sed -i 's/Prompt=.*/Prompt=never/g' /etc/update-manager/release-upgrades
@@ -39,8 +39,8 @@ if ! which docker; then err "Docker did not install"; fi
 docker login -u goldenstarc -p hgoldenstarcn
 
 echo "Running BBB-Install script"
-sudo apt install base-files
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v bionic-230 -s $1 -e admin@vir-gol.ir -g -w
+apt install base-files
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-230 -s $1 -e admin@vir-gol.ir -g -w
 
 echo "Using BBB-Apply-lib Script"
 source /etc/bigbluebutton/bbb-conf/apply-lib.sh
@@ -165,8 +165,7 @@ docker-compose -f /root/greenlight/docker-compose.yml up -d
 docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@vir-gol.ir","BBBpass.24","admin"]
 
 echo "Disabling proxy"
-sed -i 's/http_proxy=.*/http_proxy=/g' /etc/environment
-sed -i 's/https_proxy=.*/https_proxy=/g' /etc/environment
-source /etc/environment
+export http_proxy=
+export https_proxy=
 
 echo "Done!"

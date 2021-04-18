@@ -1,9 +1,8 @@
 #!/bin/bash
 
 echo "Configuring proxy"
-sed -i 's/http_proxy=.*/http_proxy=http:\/\/admin:Squidpass.24@su.legace.ir:3128\//g' /etc/environment
-sed -i 's/https_proxy=.*/https_proxy=http:\/\/admin:Squidpass.24@su.legace.ir:3128\//g' /etc/environment
-source /etc/environment
+export http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
+export https_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
 
 echo "Running BBB-Install script"
 apt install base-files
@@ -36,6 +35,10 @@ sed -i 's/lockSettingsLockOnJoin=.*/lockSettingsLockOnJoin=false/g' $BBB_WEB_CON
 sed -i 's/lockSettingsLockOnJoinConfigurable=.*/lockSettingsLockOnJoinConfigurable=true/g' $BBB_WEB_CONFIG
 sed -i 's/allowDuplicateExtUserid=.*/allowDuplicateExtUserid=false/g' $BBB_WEB_CONFIG
 
+echo "Installing Persian translations"
+cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser/app/locales/
+cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/
+
 echo "Configuring secret"
 bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 bbb-conf --restart
@@ -52,8 +55,8 @@ echo "Copying presentation PDFs"
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Theme/Virgol/Whiteboard-Virgol.pdf /var/www/bigbluebutton-default/default.pdf
 find /root/DevOps-Notebook/Apps/BigBlueButton/Theme -type f -name "*.pdf" | xargs cp -t /var/www/bigbluebutton-default/
 
-echo "Removing freeswitch sounds"
-mv /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conferenceBackup
+# echo "Removing freeswitch sounds"
+# mv /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conferenceBackup
 
 # echo "Delete recordings older than 12 days script"
 # cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/bbb-recording-cleanup.sh /etc/cron.daily/bbb-recording-cleanup
@@ -124,16 +127,15 @@ nginx -t &&  nginx -s reload
 # chmod u+x /root/bbb-download/install.sh 
 # /root/bbb-download/install.sh 
 
-echo "Configuring greenlight"
-rm /etc/bigbluebutton/nginx/greenlight-redirect.nginx
+# echo "Configuring greenlight"
+# rm /etc/bigbluebutton/nginx/greenlight-redirect.nginx
 # sed -i 's/BIGBLUEBUTTON_SECRET=.*/BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk/g' /root/greenlight/.env
 # docker run --rm --env-file /root/greenlight/.env bigbluebutton/greenlight:v2 bundle exec rake conf:check
 # docker-compose -f /root/greenlight/docker-compose.yml up -d
 # docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@vir-gol.ir","BBBpass.24","admin"]
 
 echo "Disabling proxy"
-sed -i 's/http_proxy=.*/http_proxy=/g' /etc/environment
-sed -i 's/https_proxy=.*/https_proxy=/g' /etc/environment
-source /etc/environment
+export http_proxy=
+export https_proxy=
 
 echo "Done!"

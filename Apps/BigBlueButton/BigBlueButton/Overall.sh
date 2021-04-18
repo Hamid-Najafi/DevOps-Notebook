@@ -12,7 +12,7 @@ chmod +x QuickInstall.sh
 su root
 export FQDN=ib2.vir-gol.ir
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/BigBlueButton/QuickUpgrade.sh
-chmod +x QuickInstall.sh
+chmod +x QuickUpgrade.sh
 ./QuickUpgrade.sh $FQDN
 # -------==========-------
 # Pre-install
@@ -257,6 +257,11 @@ sudo nano /var/lib/tomcat8/webapps/demo/bbb_api_conf.jsp
 # Change Locales 
 # -------==========-------
 # List
+# BBB-2.3
+(Both are same)
+/usr/share/meteor/bundle/programs/web.browser/app/locales/
+/usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/
+# BBB-2.2
 ls /usr/share/meteor/bundle/programs/server/assets/app/locales/
 # Set to Arabic
 sudo nano /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
