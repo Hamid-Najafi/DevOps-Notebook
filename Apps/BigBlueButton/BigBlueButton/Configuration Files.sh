@@ -1,5 +1,11 @@
 # -------==========-------
-# *** BBB - Settings *** #
+#  BBB_WEB_CONFIG
+# -------==========-------
+/usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+# -------==========-------
+#  .HTML5 client
+# -------==========-------
+/usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 # -------==========-------
 #  .Nginx
 # -------==========-------
@@ -9,12 +15,14 @@
 # -------==========-------
 /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
 # -------==========-------
-#  .HTML5 client
+#  Locales
 # -------==========-------
-/usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
-
-# list of locales
-ls /usr/share/meteor/bundle/programs/server/assets/app/locales
+# BBB-2.3
+(Both are same)
+/usr/share/meteor/bundle/programs/web.browser/app/locales/
+/usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/
+# BBB-2.2
+ls /usr/share/meteor/bundle/programs/server/assets/app/locales/
 # -------==========-------
 #  .Flash (SWF) client
 # -------==========-------
@@ -23,7 +31,7 @@ ls /usr/share/meteor/bundle/programs/server/assets/app/locales
 #  .FreeSWITCH
 # -------==========-------
 # Playback settings
-sudo nano /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
+/opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
       <!-- File to play to acknowledge muted -->
       <!--param name="muted-sound" value="conference/conf-muted.wav"/> -->
       <!-- File to play to acknowledge unmuted -->
@@ -48,11 +56,3 @@ sudo nano /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
 # .Kurento SFU
 # -------==========-------
 /usr/local/bigbluebutton/bbb-webrtc-sfu/config/default.yml
-# -------==========-------
-# .Tomcat 7
-# -------==========-------
-/var/lib/tomcat7/webapps/bigbluebutton/WEB-INF/classes/bigbluebutton.properties
-# -------==========-------
-# deletes the archived media
-# -------==========-------
-sudo nano /etc/cron.daily/bigbluebutton

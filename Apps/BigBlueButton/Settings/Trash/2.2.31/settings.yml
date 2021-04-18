@@ -41,10 +41,10 @@ public:
     defaultSettings:
       application:
         animations: true
-        chatAudioAlerts: true
-        chatPushAlerts: true
-        userJoinAudioAlerts: true
-        userJoinPushAlerts: true
+        chatAudioAlerts: false
+        chatPushAlerts: false
+        userJoinAudioAlerts: false
+        userJoinPushAlerts: false
         fallbackLocale: fa_IR
         overrideLocale: fa_IR
       audio:

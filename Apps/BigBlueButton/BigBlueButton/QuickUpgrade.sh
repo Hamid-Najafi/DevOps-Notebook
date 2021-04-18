@@ -18,6 +18,9 @@ yq w -i $HTML5_CONFIG public.app.clientTitle 'سامانه ویرگول'
 yq w -i $HTML5_CONFIG public.app.appName 'سامانه ویرگول'
 yq w -i $HTML5_CONFIG public.app.copyright '©2021 Virgol Inc. Powerd by BigBlueButton' 
 yq w -i $HTML5_CONFIG public.app.helpLink https://panel.vir-gol.ir/video/guide-pr
+yq w -i $HTML5_CONFIG public.app.remainingTimeAlertThreshold 10
+yq w -i $HTML5_CONFIG public.app.defaultSettings.application.chatPushAlerts true
+yq w -i $HTML5_CONFIG public.app.defaultSettings.application.userJoinPushAlerts true
 yq w -i $HTML5_CONFIG public.app.defaultSettings.application.overrideLocale fa_IR
 yq w -i $HTML5_CONFIG public.caption.enabled false
 

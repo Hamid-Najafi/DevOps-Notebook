@@ -2,6 +2,8 @@
 
 if [ $EUID != 0 ]; then err "You must run this command as root."; fi
 
+# echo $1 | cut -d'.' -f 1 | xargs -I{} hostnamectl set-hostname {}
+
 echo "Configuring proxy"
 export http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
 export https_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
@@ -40,7 +42,20 @@ docker login -u goldenstarc -p hgoldenstarcn
 
 echo "Running BBB-Install script"
 apt install base-files
+# BBB 2.3 - Ubuntu 18.04
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-230 -s $1 -e admin@vir-gol.ir -g -w
+
+# Coturn Server - Ubuntu 18.04
+# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.vir-gol.ir:1b6s1esK -e admin@vir-gol.ir
+
+# BBB 2.3 + Coturn - Ubuntu 18.04
+# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-230 -s $1 -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
+
+# BBB 2.2 - Ubuntu 16.04
+# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s $fqdnHost -e admin@vir-gol.ir -g -w
+
+# BBB 2.2 specific version + Coturn - Ubuntu 16.04
+# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s $fqdnHost -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
 
 echo "Using BBB-Apply-lib Script"
 source /etc/bigbluebutton/bbb-conf/apply-lib.sh
@@ -52,6 +67,9 @@ yq w -i $HTML5_CONFIG public.app.clientTitle 'سامانه ویرگول'
 yq w -i $HTML5_CONFIG public.app.appName 'سامانه ویرگول'
 yq w -i $HTML5_CONFIG public.app.copyright '©2021 Virgol Inc. Powerd by BigBlueButton' 
 yq w -i $HTML5_CONFIG public.app.helpLink https://panel.vir-gol.ir/video/guide-pr
+yq w -i $HTML5_CONFIG public.app.remainingTimeAlertThreshold 10
+yq w -i $HTML5_CONFIG public.app.defaultSettings.application.chatPushAlerts true
+yq w -i $HTML5_CONFIG public.app.defaultSettings.application.userJoinPushAlerts true
 yq w -i $HTML5_CONFIG public.app.defaultSettings.application.overrideLocale fa_IR
 yq w -i $HTML5_CONFIG public.caption.enabled false
 
@@ -68,6 +86,10 @@ sed -i 's/lockSettingsDisableNote=.*/lockSettingsDisableNote=true/g' $BBB_WEB_CO
 sed -i 's/lockSettingsLockOnJoin=.*/lockSettingsLockOnJoin=false/g' $BBB_WEB_CONFIG
 sed -i 's/lockSettingsLockOnJoinConfigurable=.*/lockSettingsLockOnJoinConfigurable=true/g' $BBB_WEB_CONFIG
 sed -i 's/allowDuplicateExtUserid=.*/allowDuplicateExtUserid=false/g' $BBB_WEB_CONFIG
+
+echo "Installing Persian translations"
+cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser/app/locales/
+cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/
 
 echo "Configuring secret"
 bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
@@ -87,6 +109,11 @@ find /root/DevOps-Notebook/Apps/BigBlueButton/Theme -type f -name "*.pdf" | xarg
 
 echo "Removing freeswitch sounds"
 mv /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conferenceBackup
+
+echo "Delete raw recordings older than 14 days script"
+# sudo nano /etc/cron.daily/bigbluebutton
+# # uncommenting the following line
+# remove_raw_of_published_recordings
 
 echo "Delete recordings older than 12 days script"
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/bbb-recording-cleanup.sh /etc/cron.daily/bbb-recording-cleanup
@@ -167,5 +194,14 @@ docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@vir-gol.ir
 echo "Disabling proxy"
 export http_proxy=
 export https_proxy=
+
+while true; do
+    read -p "System Reboot is recommended.[Yy/Nn]" yn
+    case $yn in
+        [Yy]* ) reboot;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
 
 echo "Done!"
