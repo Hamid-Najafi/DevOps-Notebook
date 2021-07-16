@@ -5,11 +5,8 @@ if [ $EUID != 0 ]; then err "You must run this command as root."; fi
 # echo $1 | cut -d'.' -f 1 | xargs -I{} hostnamectl set-hostname {}
 
 apt-get update
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
-sudo add-apt-repository ppa:rmescandon/yq
-sudo apt update
-LC_CTYPE=C.UTF-8 apt-get install -yq yq apt-transport-https ca-certificates curl gnupg-agent software-properties-common openssl resolvconf
-
+LC_CTYPE=C.UTF-8 apt-get install -yq apt-transport-https ca-certificates curl gnupg-agent software-properties-common openssl resolvconf
+sudo snap install yq
 # echo "Configuring proxy"
 # export http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
 # export https_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
