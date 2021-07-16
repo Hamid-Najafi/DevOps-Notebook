@@ -4,10 +4,12 @@ if [ $EUID != 0 ]; then err "You must run this command as root."; fi
 
 # echo $1 | cut -d'.' -f 1 | xargs -I{} hostnamectl set-hostname {}
 
+apt-get update
+LC_CTYPE=C.UTF-8 apt-get install -yq apt-transport-https ca-certificates curl gnupg-agent software-properties-common openssl resolvconf
+
 # echo "Configuring proxy"
 # export http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
 # export https_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
-apt install resolvconf -y
 echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head
 service resolvconf restart
 
@@ -15,9 +17,6 @@ echo "Disable Ubuntu auto update"
 sed -i 's/Prompt=.*/Prompt=never/g' /etc/update-manager/release-upgrades
 
 echo "Installing Docker"
-need_pkg apt-transport-https ca-certificates curl gnupg-agent software-properties-common openssl
-
-# Install Docker
 if ! apt-key list | grep -q Docker; then
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 fi
