@@ -28,7 +28,7 @@ if ! dpkg -l | grep -q docker-ce; then
     stable"
 
   apt-get update
-  need_pkg docker-ce docker-ce-cli containerd.io
+  LC_CTYPE=C.UTF-8 apt-get install -yq docker-ce docker-ce-cli containerd.io
 fi
 if ! which docker; then err "Docker did not install"; fi
 
@@ -40,7 +40,6 @@ if ! which docker; then err "Docker did not install"; fi
 docker login -u goldenstarc -p hgoldenstarcn
 
 echo "Running BBB-Install script"
-apt install base-files -y
 # BBB 2.3 - Ubuntu 18.04
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-230 -s $1 -e admin@vir-gol.ir -g -w
 
