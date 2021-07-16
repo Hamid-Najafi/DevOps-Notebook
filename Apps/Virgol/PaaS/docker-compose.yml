@@ -15,11 +15,12 @@ services:
       - VIRGOL_SERVER_ROOT_URL=https://panel.vir-gol.ir
       - VIRGOL_DATABASE_HOST=postgres.vir-gol.ir
       - VIRGOL_DATABASE_PORT=5432
-      - VIRGOL_DATABASE_NAME=LMS
+      - VIRGOL_DATABASE_NAME=Virgol
       - VIRGOL_DATABASE_USER=postgres
       - VIRGOL_DATABASE_PASSWORD=PostgreSQLpass.24
       - VIRGOL_MOODLE_BASE_URL=https://moodle.vir-gol.ir
       - VIRGOL_MOODLE_TOKEN=9892ddea1b8c09ef2e37e00c15ebbbb3
+      - VIRGOL_Default_SMSProvider=Faraz
       - VIRGOL_FARAZAPI_URL=http://rest.ippanel.com
       - VIRGOL_FARAZAPI_SENDER_NUMBER=+98500010707
       - VIRGOL_FARAZAPI_USERNAME=goldenstarc
@@ -30,6 +31,7 @@ services:
       - VIRGOL_LDAP_PORT=390
       - VIRGOL_LDAP_USER_ADMIN=cn=admin,dc=legace,dc=ir
       - VIRGOL_LDAP_PASSWORD=OpenLDAPpass.24
+      - VIRGOL_TZ=Asia/Tehran
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.virgol.rule=Host(`panel.vir-gol.ir`)"

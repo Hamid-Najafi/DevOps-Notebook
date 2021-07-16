@@ -1,6 +1,12 @@
 # -------==========-------
 # Install .Net Core
 # -------==========-------
+# macos
+https://github.com/isen-ng/homebrew-dotnet-sdk-versions
+brew tap isen-ng/dotnet-sdk-versions
+brew install --cask <version>
+dotnet --list-sdks
+
 # Ubuntu 16.04
 wget https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
@@ -33,6 +39,7 @@ sudo apt-get update; \
   sudo apt-get install -y aspnetcore-runtime-3.1
 
 
+dotnet run --urls=http://localhost:5001/
 # -------==========-------
 # Linux Service
 # -------==========-------
@@ -144,13 +151,21 @@ dotnet run --environment Staging
 
 dotnet run --urls http://localhost:8080/
 
+export ASPNETCORE_ENVIRONMENT=Production
 dotnet run --urls http://localhost:5000/ --environment Development
+dotnet run --urls http://localhost:5000/ --environment Production
+dotnet run --urls http://localhost:5000/ --environment Staging
 
+.NET RID Catalog
+https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
+
+https://docs.microsoft.com/en-us/dotnet/core/rid-catalog#linux-rids
 dotnet publish -c release -o ./release/linux-x64
-
 dotnet publish -c release -o ./release/linux-x64 -r linux-x64 --self-contained false
 
+https://docs.microsoft.com/en-us/dotnet/core/rid-catalog#macos-rids
 dotnet publish -c release -o ./release/osx-x64 -r osx.10.14-x64 --self-contained false
+dotnet publish -c release -o ./release/osx-x64 -r osx.11.0-x64 --self-contained false
 
 # -------==========-------
 # add sln

@@ -62,6 +62,7 @@ vm.vfs_cache_pressure=50
 # -------==========-------
 ssh-keygen
 ssh-copy-id username@remote_host
+ssh-copy-id root@vir-gol.ir
 # -------==========-------
 # NCurses Disk Usage
 # -------==========-------

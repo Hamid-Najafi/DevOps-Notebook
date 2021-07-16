@@ -4,10 +4,12 @@ if [ $EUID != 0 ]; then err "You must run this command as root."; fi
 
 # echo $1 | cut -d'.' -f 1 | xargs -I{} hostnamectl set-hostname {}
 
-echo "Configuring proxy"
-export http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
-export https_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
-apt install resolvconf
+apt-get update
+LC_CTYPE=C.UTF-8 apt-get install -yq apt-transport-https ca-certificates curl gnupg-agent software-properties-common openssl resolvconf
+
+# echo "Configuring proxy"
+# export http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
+# export https_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
 echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head
 service resolvconf restart
 
@@ -15,9 +17,6 @@ echo "Disable Ubuntu auto update"
 sed -i 's/Prompt=.*/Prompt=never/g' /etc/update-manager/release-upgrades
 
 echo "Installing Docker"
-need_pkg apt-transport-https ca-certificates curl gnupg-agent software-properties-common openssl
-
-# Install Docker
 if ! apt-key list | grep -q Docker; then
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 fi
@@ -125,23 +124,39 @@ sed -i 's/NUMBER_OF_FRONTEND_NODEJS_PROCESSES=.*/NUMBER_OF_FRONTEND_NODEJS_PROCE
 
 echo "Increase number of recording workers"
 mkdir -p /etc/systemd/system/bbb-rap-resque-worker.service.d
-cat > /etc/systemd/system/bbb-rap-resque-worker.service.d/override.conf << EOF
+cat > n << EOF
 [Service]
 Environment=COUNT=16
 EOF
 
-echo "Change recorded sessions processing time"
-mkdir -p /etc/systemd/system/bbb-record-core.timer.d
-cat > /etc/systemd/system/bbb-record-core.timer.d/override.conf << EOF
-[Timer]
-OnActiveSec=
-OnUnitInactiveSec=
-OnCalendar=19,20,21,22,23,00,01:*:00
-Persistent=false
-EOF
+# echo "Change recorded sessions processing time"
+# mkdir -p /etc/systemd/system/bbb-rap-starter.timer.d
+# cat > /etc/systemd/system/bbb-rap-starter.timer.d/override.conf << EOF
+# [Timer]
+# OnActiveSec=
+# OnUnitInactiveSec=
+# OnCalendar=19,20,21,22,23,00,01:*:00
+# Persistent=false
+# EOF
+
+# BBB 2.2 - Ubuntu 16.04
+# echo "Change recorded sessions processing time"
+# mkdir -p /etc/systemd/system/bbb-record-core.timer.d
+# cat > /etc/systemd/system/bbb-rap-starter.timer.d/override.conf << EOF
+# [Timer]
+# OnActiveSec=
+# OnUnitInactiveSec=
+# OnCalendar=19,20,21,22,23,00,01:*:00
+# Persistent=false
+# EOF
+
+# systemctl list-timers --all
+# systemctl enable bbb-rap-starter.service
+# systemctl enable bbb-rap-resque-worker.service
 
 systemctl daemon-reload
 systemctl restart bbb-rap-resque-worker.service
+
 
 echo "build font information cache files"
 fc-cache -fv

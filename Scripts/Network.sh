@@ -128,6 +128,9 @@ curl ipinfo.io/ip
 # -------==========-------
 # DNS
 # -------==========-------
+# Quick Install
+apt install resolvconf && echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head && service resolvconf restart
+# Manuall Install
 sudo apt install resolvconf
 sudo nano /etc/resolvconf/resolv.conf.d/head
 # Cloudflare
@@ -136,17 +139,19 @@ nameserver 1.0.0.1
 # Google
 nameserver 8.8.8.8
 nameserver 4.2.2.4
-# Shecan
+# Shecan (https://shecan.ir)
 nameserver 185.51.200.2
 nameserver 178.22.122.100
-# Begzar
-nameserver 185.55.226.2
+# Begzar (https://begzar.ir)
 nameserver 185.55.225.25
+nameserver 185.55.225.26
 sudo service resolvconf restart
 # -------==========-------
 # HTTP Proxy
 # -------==========-------
 sudo nano  /etc/environment
+export http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
+export https_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
 echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
 echo -e "http_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/" | sudo tee -a /etc/environment
 source /etc/environment
@@ -169,12 +174,24 @@ curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.p
 # -------==========-------
 # 0-1 Network Config
 # -------==========-------
+PPTP VPN:
+Address: 10.30.70.35
+Username: ilo-01
+Password: sefr0yek@il0
+
+IPMI/ILO:
+IB1 (A10-DS02)
+http://185.141.105.194/
+
+IB2 (B06-DS07)
+http://185.141.105.194/
+
+OS Files
 http://185.141.105.194/
 
 # Ubunut 16.04
 # This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
-
 source /etc/network/interfaces.d/*
 
 # The loopback network interface

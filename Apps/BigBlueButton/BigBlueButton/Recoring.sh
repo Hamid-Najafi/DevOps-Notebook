@@ -32,4 +32,6 @@ bbb-record --list
 # Run these commands on new server
 rsync -rP root@old-bbb-server.vir-gol.ir:/var/bigbluebutton/recording/raw/ /var/bigbluebutton/recording/raw/
 rsync -rP root@ib1.vir-gol.ir:/var/bigbluebutton/recording/raw/ /var/bigbluebutton/recording/raw/
+rsync -rP --ignore-existing root@ib1.vir-gol.ir:/var/bigbluebutton/recording/raw/ /var/bigbluebutton/recording/raw/
+
 sudo bbb-record --rebuildall

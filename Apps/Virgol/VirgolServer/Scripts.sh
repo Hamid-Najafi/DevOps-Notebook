@@ -10,6 +10,7 @@ sudo apt-get install ncdu dtrx bmon htop software-properties-common traceroute
 vir-gol.ir
 
 # Set Hostname
+sudo hostnamectl set-hostname herman
 sudo hostnamectl set-hostname virgol
 sudo reboot
 
@@ -21,8 +22,8 @@ Environment="HTTP_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
 Environment="HTTPS_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
 Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
 
-sudo systemctl daemon-reload
-sudo systemctl restart docker
+# sudo systemctl daemon-reload
+# sudo systemctl restart docker
 
 # Install Docker
 curl -sSL https://get.docker.com/ | sh
@@ -31,7 +32,7 @@ sudo curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-
 sudo chmod +x /usr/local/bin/docker-compose
 
 # Clone Repos
-sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@ggithub.com/Hamid-Najafi/DevOps-Notebook.git
+sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@github.com/Hamid-Najafi/DevOps-Notebook.git
 
 # -------==========-------
 # Setup Monitoring
@@ -164,6 +165,7 @@ blacklabelops/volumerize backup
 # postgres
 sudo sh -c 'docker exec -t postgres pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql'
 sudo sh -c 'docker exec -t virgol_db pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql'
+ca dump.sql | docker exec -i postgres psql -U postgres
 ca dump.sql | docker exec -i virgol_db psql -U postgres
 
 # moodle
@@ -212,7 +214,18 @@ sudo zip -r openldap_`date +%d-%m-%Y"_"%H_%M_%S`.zip ~/backup/ldap
 # -------==========-------
 sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/saleh_prg/lms-with-moodle.git
 cd lms-with-moodle/
-sudo bash build.sh 1.9.6.2
-
+sudo bash build.sh 1.6.9
 git config --global user.email Hamid.Najafi@email.com
 git config --global user.name Hamid Najafi
+
+
+# On virgol server
+mkdir docker/virgol-landing/
+nano docker-compose.yml
+put docker-compose here
+
+# On complier server
+sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/saleh_prg/virgollanding.git
+cd virgollanding/
+sudo bash build.sh 0.1
+

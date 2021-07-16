@@ -49,9 +49,11 @@ docker run \
 # For Testing Purpose
 docker run \
 --name ldap-service \
+--volume openldapDb:/var/lib/ldap \
+--volume openldapConf:/etc/ldap/slapd.d \
 --restart=always \
--p 389:389 \
-goldenstarc/extended-openldap
+-p 390:389 \
+-d goldenstarc/extended-openldap 
 
 docker run \
 --name ldap-service \
