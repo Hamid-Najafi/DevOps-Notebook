@@ -7,7 +7,7 @@ if [ $EUID != 0 ]; then err "You must run this command as root."; fi
 # echo "Configuring proxy"
 # export http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
 # export https_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
-apt install resolvconf
+apt install resolvconf -y
 echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head
 service resolvconf restart
 
@@ -41,7 +41,7 @@ if ! which docker; then err "Docker did not install"; fi
 docker login -u goldenstarc -p hgoldenstarcn
 
 echo "Running BBB-Install script"
-apt install base-files
+apt install base-files -y
 # BBB 2.3 - Ubuntu 18.04
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-230 -s $1 -e admin@vir-gol.ir -g -w
 
