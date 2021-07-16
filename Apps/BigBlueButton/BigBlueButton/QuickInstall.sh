@@ -10,8 +10,8 @@ sudo snap install yq
 # echo "Configuring proxy"
 # export http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
 # export https_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
-echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head
-service resolvconf restart
+# echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head
+# service resolvconf restart
 
 echo "Disable Ubuntu auto update"
 sed -i 's/Prompt=.*/Prompt=never/g' /etc/update-manager/release-upgrades
