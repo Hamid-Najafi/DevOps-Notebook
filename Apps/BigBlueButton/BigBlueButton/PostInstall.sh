@@ -1,46 +1,46 @@
 #!/bin/bash
 
-if [ $EUID != 0 ]; then err "You must run this command as root."; fi
+# if [ $EUID != 0 ]; then err "You must run this command as root."; fi
 
-# echo $1 | cut -d'.' -f 1 | xargs -I{} hostnamectl set-hostname {}
+# # echo $1 | cut -d'.' -f 1 | xargs -I{} hostnamectl set-hostname {}
 
-apt-get update
-LC_CTYPE=C.UTF-8 apt-get install -yq apt-transport-https ca-certificates curl gnupg-agent software-properties-common openssl resolvconf
-# echo "Configuring proxy"
-# export http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
-# export https_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
-echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head
-service resolvconf restart
+# apt-get update
+# LC_CTYPE=C.UTF-8 apt-get install -yq apt-transport-https ca-certificates curl gnupg-agent software-properties-common openssl resolvconf
+# # echo "Configuring proxy"
+# # export http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
+# # export https_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
+# echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head
+# service resolvconf restart
 
-echo "Disable Ubuntu auto update"
-sed -i 's/Prompt=.*/Prompt=never/g' /etc/update-manager/release-upgrades
+# echo "Disable Ubuntu auto update"
+# sed -i 's/Prompt=.*/Prompt=never/g' /etc/update-manager/release-upgrades
 
-echo "Installing Docker"
-if ! apt-key list | grep -q Docker; then
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-fi
+# echo "Installing Docker"
+# if ! apt-key list | grep -q Docker; then
+#   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+# fi
 
-if ! dpkg -l | grep -q docker-ce; then
-  add-apt-repository \
-    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-    $(lsb_release -cs) \
-    stable"
+# if ! dpkg -l | grep -q docker-ce; then
+#   add-apt-repository \
+#     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+#     $(lsb_release -cs) \
+#     stable"
 
-  apt-get update
-  LC_CTYPE=C.UTF-8 apt-get install -yq docker-ce docker-ce-cli containerd.io
-fi
-if ! which docker; then err "Docker did not install"; fi
+#   apt-get update
+#   LC_CTYPE=C.UTF-8 apt-get install -yq docker-ce docker-ce-cli containerd.io
+# fi
+# if ! which docker; then err "Docker did not install"; fi
 
-# Install Docker Compose
-if dpkg -l | grep -q docker-compose; then
-  apt-get purge -y docker-compose
-fi
-if ! which docker; then err "Docker did not install"; fi
-docker login -u goldenstarc -p hgoldenstarcn
+# # Install Docker Compose
+# if dpkg -l | grep -q docker-compose; then
+#   apt-get purge -y docker-compose
+# fi
+# if ! which docker; then err "Docker did not install"; fi
+# docker login -u goldenstarc -p hgoldenstarcn
 
-echo "Running BBB-Install script"
+# echo "Running BBB-Install script"
 # BBB 2.3 - Ubuntu 18.04
-wget -qO- http://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-23 -s $1 -e admin@vir-gol.ir -g -w
+# wget -qO- http://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-23 -s $1 -e admin@vir-gol.ir -g -w
 
 # Coturn Server - Ubuntu 18.04
 # wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.vir-gol.ir:1b6s1esK -e admin@vir-gol.ir

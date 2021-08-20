@@ -1,7 +1,21 @@
 # -------==========-------
 # **** Quick Install ****
 # -------==========-------
-s
+su root
+# "Configure proxy"
+export http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
+export https_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
+# OR
+echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head
+service resolvconf restart
+# "Use BBB-install"
+export FQDN=b1.vir-gol.ir
+wget -qO- http://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-23 -s $FQDN -e admin@vir-gol.ir -g -w
+# "Run post install Script"
+wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/BigBlueButton/PostInstall.sh
+chmod +x QuickInstall.sh
+./PostInstall.sh $FQDN
+
 http://www.jsondiff.com
 # -------==========-------
 # **** Quick Upgrade ****
