@@ -56,7 +56,7 @@ nano docker-compose.yml
 docker network create web
 docker-compose up -d
 # -------==========-------
-# Setup Services
+# Setup Virgol + Services
 # -------==========-------
 # 1. Restore Database Using TablePlus App
 # 2. Start Virgol Services
@@ -65,7 +65,13 @@ mkdir -p ~/docker/virgol
 cp ~/DevOps-Notebook/Apps/Virgol/PaaS/docker-compose.yml ~/docker/virgol/
 cd ~/docker/virgol
 docker-compose up -d
-
+# -------==========-------
+# Setup Virgol Landing
+# -------==========-------
+mkdir -p ~/docker/virgol-landing
+cp ~/DevOps-Notebook/Apps/Virgol/VirgolLanding/docker-compose.yml ~/docker/virgol-landing/
+cd ~/docker/virgol-landing
+docker-compose up -d
 
 # -------==========-------
 # Moodle HTTPS

@@ -1,11 +1,7 @@
 # -------==========-------
 # **** Quick Install ****
 # -------==========-------
-su root
-export FQDN=b1.vir-gol.ir
-wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/BigBlueButton/QuickInstall.sh
-chmod +x QuickInstall.sh
-./QuickInstall.sh $FQDN
+s
 http://www.jsondiff.com
 # -------==========-------
 # **** Quick Upgrade ****
