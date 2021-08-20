@@ -44,13 +44,13 @@ docker rm helper
 # Docker
 # -------==========-------
 curl -sSL https://get.docker.com/ | sh
+sudo usermod -aG docker $USER
 # The LinuxServer.io Method:
 sudo curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-compose/master/run.sh -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 # Traditional Method:
 sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
-sudo usermod -aG docker $USER
 # Logout & Login
 docker run hello-world
 # -------==========-------

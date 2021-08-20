@@ -4,7 +4,7 @@
 echo -e "OVPN_DATA="ovpn-data"" | sudo tee -a /etc/environment
 source /etc/environment
 docker volume create --name $OVPN_DATA
-docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_genconfig -u udp://eu.legace.ir
+docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_genconfig -u udp://hr.hamid-najafi.ir
 # passphrase : 1234
 docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn ovpn_initpki
 
@@ -22,6 +22,7 @@ docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn o
 docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient Miner-1 > ~/OpenVPN/Miner-1.ovpn
 docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient Miner-2 > ~/OpenVPN/Miner-2.ovpn
 # Download client configuratio to host
+scp ubuntu@hr.hamid-najafi.ir:~/OpenVPN/User-1.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius
 scp ubuntu@su.legace.ir:~/OpenVPN/User-1.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius
 scp ubuntu@su.legace.ir:~/OpenVPN/User-2.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius
 scp ubuntu@su.legace.ir:~/OpenVPN/User-3.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius

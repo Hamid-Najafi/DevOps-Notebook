@@ -18,8 +18,8 @@ sudo reboot
 sudo mkdir -p /etc/systemd/system/docker.service.d
 sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
 [Service]
-Environment="HTTP_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
-Environment="HTTPS_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
+Environment="HTTP_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
+Environment="HTTPS_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
 Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
 
 # sudo systemctl daemon-reload
@@ -30,7 +30,7 @@ curl -sSL https://get.docker.com/ | sh
 sudo usermod -aG docker $USER
 sudo curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-compose/master/run.sh -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
-
+docker login
 # Clone Repos
 sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@github.com/Hamid-Najafi/DevOps-Notebook.git
 
@@ -65,6 +65,8 @@ mkdir -p ~/docker/virgol
 cp ~/DevOps-Notebook/Apps/Virgol/PaaS/docker-compose.yml ~/docker/virgol/
 cd ~/docker/virgol
 docker-compose up -d
+
+
 # -------==========-------
 # Moodle HTTPS
 # -------==========-------

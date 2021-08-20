@@ -32,10 +32,14 @@ htpasswd stores the password hashed (various hashing algos are available)
 sudo htpasswd -c passwords admin 
 # -------==========-------
 # Set host to use proxy
-sudo nano /etc/environment
-
+echo -e "http_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/\nftp_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/" | sudo tee -a /etc/environment
+# OR
 echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
+# OR
 echo -e "http_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/" | sudo tee -a /etc/environment
+source /etc/environment
+# -------==========-------
+
 sudo nano ~/.bash_profile
 alias proxyon="source /etc/environment"
 alias proxyoff="export http_proxy='';export https_proxy='';export ftp_proxy=''"
