@@ -176,15 +176,15 @@ curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.p
 # -------==========-------
 PPTP VPN:
 Address: 10.30.70.35
-Username: ilo-01
-Password: sefr0yek@il0
+Username: ilo-01, 0923789091
+Password: sefr0yek@il0, eft0923789091
+
 
 IPMI/ILO:
-IB1 (A10-DS02)
-http://185.141.105.194/
+Username: D08-DS17
+Password: @epfl4739@
+http://172.28.249.20
 
-IB2 (B06-DS07)
-http://185.141.105.194/
 
 OS Files
 http://185.141.105.194/
@@ -211,19 +211,20 @@ iface enp3s0f0 inet static
 
 
 # Ubunut 18.04
-# This is the network config written by 'subiquity'
+# This file describes the network interfaces available on your system
+# For more information, see netplan(5).
 network:
-    ethernets:
-        eno1:
-            addresses:
-                - 195.211.44.208/32
-            nameservers:
-                addresses:
-                    - 4.2.2.4
-                search: []
-            optional: true
-            routes:
-                - to: 0.0.0.0/0
-                  via: 172.27.36.125
-                  on-link: true
-    version: 2
+  ethernets:
+          enp3s0f0:
+                  addresses:
+                          - 185.170.8.250/32
+                  nameservers:
+                          addresses:
+                                  - 185.51.200.2
+                                  - 8.8.8.8
+                          search: []
+                  routes:
+                     - to: 0.0.0.0/0
+                       via: 172.27.6.125
+                       on-link: true
+  version: 2
