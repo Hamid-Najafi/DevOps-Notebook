@@ -85,6 +85,8 @@ sed -i 's/lockSettingsLockOnJoinConfigurable=.*/lockSettingsLockOnJoinConfigurab
 sed -i 's/allowDuplicateExtUserid=.*/allowDuplicateExtUserid=false/g' $BBB_WEB_CONFIG
 
 echo "Installing Persian translations"
+cp /usr/share/meteor/bundle/programs/web.browser/app/locales/fa_IR.json{,.backup}
+cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json{,.backup}
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser/app/locales/
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/
 
