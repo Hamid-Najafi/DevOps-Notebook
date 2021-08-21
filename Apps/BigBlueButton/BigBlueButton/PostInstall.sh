@@ -86,7 +86,7 @@ sed -i 's/allowDuplicateExtUserid=.*/allowDuplicateExtUserid=false/g' $BBB_WEB_C
 
 echo "Installing Persian translations"
 cp /usr/share/meteor/bundle/programs/web.browser/app/locales/fa_IR.json{,.backup}
-cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json{,.backup}
+cp /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/fa_IR.json{,.backup}
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser/app/locales/
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/
 
