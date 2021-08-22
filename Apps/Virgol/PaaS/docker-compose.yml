@@ -19,7 +19,7 @@ services:
       - VIRGOL_DATABASE_USER=postgres
       - VIRGOL_DATABASE_PASSWORD=PostgreSQLpass.24
       - VIRGOL_MOODLE_BASE_URL=https://moodle.vir-gol.ir
-      - VIRGOL_MOODLE_TOKEN=9892ddea1b8c09ef2e37e00c15ebbbb3
+      - VIRGOL_MOODLE_TOKEN=f6b34b01c4c660329a9e95a5ed349946
       - VIRGOL_Default_SMSProvider=Faraz
       - VIRGOL_FARAZAPI_URL=http://rest.ippanel.com
       - VIRGOL_FARAZAPI_SENDER_NUMBER=+98500010707
@@ -27,11 +27,17 @@ services:
       - VIRGOL_FARAZAPI_PASSWORD=hektug-fakbAm-0vypje
       - VIRGOL_FARAZAPI_API_KEY=qcP4IQp3PPRV3ppvkG9ScHJcwvUPL3iOJrV9n7QiqDA=
       - VIRGOL_JWT_SECRET=Saleh Secret Key
-      - VIRGOL_LDAP_SERVER=openldap.vir-gol.ir
+      - VIRGOL_LDAP_SERVER=b1.vir-gol.ir
+      #   WHY ?!
+      # - VIRGOL_LDAP_SERVER=openldap.vir-gol.ir
       - VIRGOL_LDAP_PORT=390
       - VIRGOL_LDAP_USER_ADMIN=cn=admin,dc=legace,dc=ir
       - VIRGOL_LDAP_PASSWORD=OpenLDAPpass.24
       - VIRGOL_TZ=Asia/Tehran
+      # - VIRGOL_SMTP_HOST
+      # - VIRGOL_SMTP_PASS
+      # - VIRGOL_SMTP_PORT
+      # - VIRGOL_SMTP_USER
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.virgol.rule=Host(`panel.vir-gol.ir`)"

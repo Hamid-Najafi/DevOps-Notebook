@@ -56,15 +56,25 @@ nano docker-compose.yml
 docker network create web
 docker-compose up -d
 # -------==========-------
-# Setup Virgol + Services
+# Setup Virgol
 # -------==========-------
 # 1. Restore Database Using TablePlus App
 # 2. Start Virgol Services
 mkdir -p ~/docker/virgol
-# Docker Method
 cp ~/DevOps-Notebook/Apps/Virgol/PaaS/docker-compose.yml ~/docker/virgol/
 cd ~/docker/virgol
 docker-compose up -d
+# -------==========-------
+# Setup Services
+# -------==========-------
+1. Config postgres settings
+2. Check Openldap is working
+3. Postman: Sync LDAP with Virgol
+4. Restore moodle settings as documented (Restore moodle ldap users)
+6. Database: Set moodle token (SiteSettings)
+6. Database: Set all moodleIds to -1 (AdminDetails, Schools, AspNetUsers)
+5. Postman: Sync Virgol Moodle ID
+7. Postman: Recreate School Moodle
 # -------==========-------
 # Setup Virgol Landing
 # -------==========-------
@@ -235,5 +245,16 @@ put docker-compose here
 # On complier server
 sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/saleh_prg/virgollanding.git
 cd virgollanding/
-sudo bash build.sh 0.1
+sudo bash build.sh 1.0
 
+# -------==========-------
+# Top SQLs
+# -------==========-------
+SELECT * FROM "AspNetUsers" WHERE "UserName" = '09237890911'
+UPDATE "AspNetUsers" SET "Moodle_Id" = 0
+SELECT * FROM "AspNetUsers" WHERE "Moodle_Id" != 0
+
+# -------==========-------
+# Clear docker logs
+# -------==========-------
+echo "" > $(docker inspect --format='{{.LogPath}}' virgol_main)

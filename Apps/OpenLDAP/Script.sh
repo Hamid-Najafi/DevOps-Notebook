@@ -98,6 +98,18 @@ docker run \
 --restart=always \
 --detach  osixia/openldap:1.4.0
 
+# For Testing Purpose
+docker run \
+--name ldap-service \
+--volume openldapDb:/var/lib/ldap \
+--volume openldapConf:/etc/ldap/slapd.d \
+--env LDAP_ORGANISATION="Virgol" \
+--env LDAP_DOMAIN="vir-gol.ir" \
+--env LDAP_ADMIN_PASSWORD="OpenLDAPpass.24" \
+-p 390:389 \
+--restart=always \
+--detach  osixia/openldap:1.4.0
+
 # -------==========-------
 # osixia/phpldapadmin
 # -------==========-------

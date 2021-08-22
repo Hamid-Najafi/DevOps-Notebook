@@ -38,22 +38,6 @@
 # if ! which docker; then err "Docker did not install"; fi
 # docker login -u goldenstarc -p hgoldenstarcn
 
-# echo "Running BBB-Install script"
-# BBB 2.3 - Ubuntu 18.04
-# wget -qO- http://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-23 -s $1 -e admin@vir-gol.ir -g -w
-
-# Coturn Server - Ubuntu 18.04
-# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.vir-gol.ir:1b6s1esK -e admin@vir-gol.ir
-
-# BBB 2.3 + Coturn - Ubuntu 18.04
-# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-230 -s $1 -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
-
-# BBB 2.2 - Ubuntu 16.04
-# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s $fqdnHost -e admin@vir-gol.ir -g -w
-
-# BBB 2.2 specific version + Coturn - Ubuntu 16.04
-# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s $fqdnHost -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
-
 echo "Using BBB-Apply-lib Script"
 source /etc/bigbluebutton/bbb-conf/apply-lib.sh
 
@@ -164,7 +148,7 @@ fc-cache -fv
 echo "Configuring exporters"
 echo "bbb-exporter"
 cp -R /root/DevOps-Notebook/Apps/BigBlueButton/Monitoring/bbb-exporter /root/bbb-exporter 
-sed -i 's|API_BASE_URL=.*|API_BASE_URL=https:\/\/'$fqdnHost'\/bigbluebutton\/api\/|g' /root/bbb-exporter/secrets.env
+sed -i 's|API_BASE_URL=.*|API_BASE_URL=https:\/\/'$1'\/bigbluebutton\/api\/|g' /root/bbb-exporter/secrets.env
 docker-compose -f /root/bbb-exporter/docker-compose.yaml up -d
 
 echo "node-exporter & cadvisor"

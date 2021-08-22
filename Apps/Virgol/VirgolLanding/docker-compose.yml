@@ -10,7 +10,7 @@ services:
       - ASPNETCORE_URLS=http://+ # ;https://+
       - ASPNETCORE_ENVIRONMENT=Production
       - NODE_ENV=production
-      - VIRGOL_SERVER_ROOT_URL=https://panel.vir-gol.ir
+      - VIRGOL_SERVER_ROOT_URL=https://vir-gol.ir
       - VIRGOL_DATABASE_HOST=postgres.vir-gol.ir
       - VIRGOL_DATABASE_PORT=5432
       - VIRGOL_DATABASE_NAME=LMSLanding
@@ -28,7 +28,7 @@ services:
     labels:
     - "traefik.enable=true"
     - "traefik.http.routers.virgolLand.rule=Host(`vir-gol.ir`)"
-    - "traefik.http.services.virgolLand.loadbalancer.server.port=8080"
+    - "traefik.http.services.virgolLand.loadbalancer.server.port=80"
     - "traefik.http.routers.virgolLand.entrypoints=secure"
     - "traefik.http.routers.virgolLand.tls.certresolver=letsencrypt"
     - "traefik.docker.network=web"

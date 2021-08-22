@@ -13,6 +13,7 @@ sudo nano prometheus/prometheus.yml
 # change server URLs if needed
 # GF_SERVER_ROOT_URL=http://grafana.goldenstarc.ir
 # "traefik.http.routers.grafana.rule=Host(`grafana.goldenstarc.ir`)"
+# sudo nano docker-compose.yml 
 docker-compose up -d
 # -------==========-------
 # Master Light

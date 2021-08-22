@@ -2,22 +2,42 @@
 # **** Quick Install ****
 # -------==========-------
 # "Configure proxy"
+apt install resolvconf && echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head && service resolvconf restart
+# OR
 echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
 source /etc/environment
-# OR
-echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head
-service resolvconf restart
-# "Use BBB-install"
+
+# -------==========-------
+# BBB-Install script
+
 echo -e "FQDN=b1.vir-gol.ir" | sudo tee -a /etc/environment
 source /etc/environment
 # Node GPG Key
 # curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - 
+
+# BBB 2.3 - Ubuntu 18.04
 wget -qO- http://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-23 -s $FQDN -e admin@vir-gol.ir -g -w
-# "Run post install Script"
+
+# Coturn Server - Ubuntu 20.04
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.vir-gol.ir:1b6s1esK -e admin@vir-gol.ir
+
+# BBB 2.3 + Coturn - Ubuntu 18.04
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-230 -s $FQDN -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
+
+# BBB 2.2 - Ubuntu 16.04
+# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s $FQDN -e admin@vir-gol.ir -g -w
+
+# BBB 2.2 specific version + Coturn - Ubuntu 16.04
+# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s $FQDN -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
+
+# -------==========-------
+# "Post install Script"
+
 su root
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/BigBlueButton/PostInstall.sh
 chmod +x PostInstall.sh
 sudo ./PostInstall.sh $FQDN
+
 http://www.jsondiff.com
 # -------==========-------
 # **** Quick Upgrade ****
@@ -74,16 +94,16 @@ ls -la /var/bigbluebutton/published/presentation/64c863ab0739360c689fc6d45bad5f9
 # -------==========-------
 # Postman or Firefox:
 # BBB
-curl https://ib2.vir-gol.ir/bigbluebutton/api/
+curl https://b1.vir-gol.ir/bigbluebutton/api/
 https://mconf.github.io/api-mate/#server=https://ib2.vir-gol.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 # Username:admin , Password: Metricpass.24
-export fqdnHost=ib2.vir-gol.ir
+export FQDN=b1.vir-gol.ir
 # BBB Exporter
-curl -u admin:Metricpass.24 https://$fqdnHost/metrics/
+curl -u admin:Metricpass.24 https://$FQDN/metrics/
 # Node Exporter
-curl -u admin:Metricpass.24 http://$fqdnHost:9100/metrics
+curl -u admin:Metricpass.24 http://$FQDN:9100/metrics
 # CAdvisor
-curl -u admin:Metricpass.24 http://$fqdnHost:9338/containers/
+curl -u admin:Metricpass.24 http://$FQDN:9338/containers/
 # curl -u admin:Metricpass.24 http://$fqdnHost:8080/containers/
 # -------==========-------
 # Demo API
