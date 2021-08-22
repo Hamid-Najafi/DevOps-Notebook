@@ -75,6 +75,9 @@ docker-compose up -d
 6. Database: Set all moodleIds to -1 (AdminDetails, Schools, AspNetUsers)
 5. Postman: Sync Virgol Moodle ID
 7. Postman: Recreate School Moodle
+8. Check
+    Users: https://moodle.vir-gol.ir/admin/user.php
+    Courses & Categories: https://moodle.vir-gol.ir/course/management.php
 # -------==========-------
 # Setup Virgol Landing
 # -------==========-------
