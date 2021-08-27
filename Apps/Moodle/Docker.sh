@@ -3,16 +3,16 @@ Moodle LMS, Canvas LMS, Talent LMS
 # Customized Bitnami image
 # -------==========-------
 # Docker Volume init
-sudo mkdir /docker/mariadb-bitnami -p
-sudo mkdir /docker/moodle-bitnami
-sudo mkdir cmoodle-data-bitnami
+sudo mkdir /home/ubuntu/docker/mariadb-bitnami -p
+sudo mkdir /home/ubuntu/docker/moodle-bitnami
+sudo mkdir /home/ubuntu/docker/moodle-data-bitnami
 sudo chown $UID:$UID /home/ubuntu/docker/mariadb-bitnami
 sudo chown $UID:$UID /home/ubuntu/docker/moodle-bitnami 
 sudo chown $UID:$UID /home/ubuntu/docker/moodle-data-bitnami
 
-sudo chmod 777 -r /home/ubuntu/docker/mariadb-bitnami
-sudo chown 777 -r /home/ubuntu/docker/moodle-bitnami 
-sudo chown 777 -r /home/ubuntu/docker/moodle-data-bitnami
+sudo chmod 777 -R /home/ubuntu/docker/mariadb-bitnami
+sudo chown 777 -R /home/ubuntu/docker/moodle-bitnami 
+sudo chown 777 -R /home/ubuntu/docker/moodle-data-bitnami
 
 # cd /home/ubuntu/devops-notebook/Apps/Bitnami/bitnami-docker-moodle/3/debian-10
 mkdir ~/dev
@@ -22,29 +22,11 @@ cd bitnami-docker-moodle/3/debian-10
 sudo nano Dockerfile
 RUN echo 'fa_IR.UTF-8 UTF-8' >> /etc/locale.gen && locale-gen
 
-docker build -t goldenstarc/moodle:3.9.1-debian-10-r18 .
-docker push goldenstarc/moodle:3.9.1-debian-10-r18
+docker build -t goldenstarc/moodle:3.11.2-debian-10-r29 -t goldenstarc/moodle:latest .
+docker push goldenstarc/moodle:3.11.2-debian-10-r29
+docker push goldenstarc/moodle:latest
 # docker build -t goldenstarc/moodle:latest --build-arg EXTRA_LOCALES="fa_IR.UTF-8 UTF-8" .
 
-cd /home/tiger/devops-notebook/Apps/Moodle
-docker-compose up -d  
-docker exec -it moodle sh 
-docker exec -it moodle_moodle_1 sh 
-docker exec -it virgol_moodle sh 
-apt update
-apt install nano
-# -------==========-------
-nano ./bitnami/moodle/config.php
-# Comment if statements which sets $CFG->wwwroot (5 Lines) 
-# Add these: 
-$CFG->wwwroot   = 'https://m-dei.vir-gol.ir';
-$CFG->sslproxy = 1;
-# -------==========-------
-# disable 3.5.1 cookie policy popup
-rm admin/tool/policy/templates/guestconsent.moustache
-touch admin/tool/policy/templates/guestconsent.moustache
-# -------==========-------
-exit
 # -------==========-------
 # Quick Start
 # -------==========-------
@@ -93,9 +75,3 @@ docker run -d --name moodle \
 
   -p 8443:8443 \
   --env MOODLE_SKIP_BOOTSTRAP=yes \ 
-
-
-# -------==========-------
-# Location of LDAP Settings
-# -------==========-------
-./moodle-data-bitnami/cache/cachestore_file/default_application/core_config/6e2-cache/6e20e804f907a76922a0e63306e325fb695e3963.cache

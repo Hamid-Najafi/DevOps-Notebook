@@ -152,6 +152,7 @@ sudo service resolvconf restart
 sudo nano  /etc/environment
 export http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
 export https_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
+echo -e "http_proxy=http://admin:Squidpass.24@185.235.41.48:3128/\nhttps_proxy=http://admin:Squidpass.24@185.235.41.48:3128/" | sudo tee -a /etc/environment
 echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
 echo -e "http_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/" | sudo tee -a /etc/environment
 source /etc/environment

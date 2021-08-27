@@ -1,7 +1,7 @@
 version: "3.5"
 services:
   moodle:
-    image: 'goldenstarc/moodle:3.9.1-debian-10-r18'
+    image: 'goldenstarc/moodle:latest'
     restart: always
     ports:
       - '8086:8080'
@@ -24,7 +24,7 @@ services:
       - MOODLE_SMTP_PROTOCOL=tls
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.moodle.rule=Host(`moodle.legace.ir`)"
+      - "traefik.http.routers.moodle.rule=Host(`moodle2.vir-gol.ir`)"
       - "traefik.http.services.moodle.loadbalancer.server.port=8080"
       - "traefik.http.routers.moodle.entrypoints=secure"
       - "traefik.http.routers.moodle.tls.certresolver=letsencrypt"
@@ -41,7 +41,7 @@ services:
       - web
 
   mariadb:
-    image: 'docker.io/bitnami/mariadb:10.3-debian-10'
+    image: docker.io/bitnami/mariadb:10.5
     restart: always
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
@@ -49,6 +49,8 @@ services:
       - MARIADB_USER=bn_moodle
       - MARIADB_DATABASE=bitnami_moodle
       - MARIADB_PASSWORD=Bitnamipass.24
+      - MARIADB_CHARACTER_SET=utf8mb4
+      - MARIADB_COLLATE=utf8mb4_unicode_ci
     volumes:
       - mariaDb:/bitnami/mariadb
       # - '/docker/mariadb-bitnami:/bitnami/mariadb'

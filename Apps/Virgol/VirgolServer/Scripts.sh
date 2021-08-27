@@ -70,14 +70,18 @@ docker-compose up -d
 1. Config postgres settings
 2. Check Openldap is working
 3. Postman: Sync LDAP with Virgol
-4. Restore moodle settings as documented (Restore moodle ldap users)
+4. Restore moodle settings as documented 
+5. Restore moodle ldap users
+docker exec -it virgol_moodle php ./bitnami/moodle/auth/ldap/cli/sync_users.php
 6. Database: Set moodle token (SiteSettings)
-6. Database: Set all moodleIds to -1 (AdminDetails, Schools, AspNetUsers)
-5. Postman: Sync Virgol Moodle ID
-7. Postman: Recreate School Moodle
-8. Check
+7. Database: Set all moodleIds (AdminDetails & Schools to -1, AspNetUsers to 0)
+8. Postman: Sync Virgol Moodle ID
+9. Postman: Recreate School Moodle (if want to fix admin without school, leave desiredSchoolId with random number)
+0. Check
     Users: https://moodle.vir-gol.ir/admin/user.php
     Courses & Categories: https://moodle.vir-gol.ir/course/management.php
+
+
 # -------==========-------
 # Setup Virgol Landing
 # -------==========-------
@@ -235,10 +239,11 @@ sudo zip -r openldap_`date +%d-%m-%Y"_"%H_%M_%S`.zip ~/backup/ldap
 # -------==========-------
 sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/saleh_prg/lms-with-moodle.git
 cd lms-with-moodle/
-sudo bash build.sh 1.6.9
+sudo bash build.sh 1.7.2
 git config --global user.email Hamid.Najafi@email.com
 git config --global user.name Hamid Najafi
 
+cd ~/docker/virgol/ && docker-compose pull && docker-compose up -d
 
 # On virgol server
 mkdir docker/virgol-landing/
@@ -246,9 +251,9 @@ nano docker-compose.yml
 put docker-compose here
 
 # On complier server
-sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/saleh_prg/virgollanding.git
+sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/saleh_prg/virgollanding.git 
 cd virgollanding/
-sudo bash build.sh 1.0
+sudo bash build.sh 1.1
 
 # -------==========-------
 # Top SQLs
