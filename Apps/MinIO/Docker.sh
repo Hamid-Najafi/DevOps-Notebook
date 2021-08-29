@@ -1,9 +1,13 @@
 # -------==========-------
 # MinIO Docker-Compose
 # -------==========-------
-mkdir -p ~/dev
-cp -R ~/DevOps-Notebook/Apps/MinIO  ~/dev/minio
-cd  ~/dev/minio
+# Setup traefik
+mkdir -p ~/docker/minio
+cp -R ~/DevOps-Notebook/Apps/MinIO/*  ~/docker/minio
+cd  ~/docker/minio
+# Set Host
+    #   - "traefik.http.routers.traefik.rule=Host(`minio.hamid-najafi.ir`)"
+nano docker-compose.yml
 docker-compose up -d
 # ACCESS_KEY=minio
 # SECRET_KEY=MinIOpass.24

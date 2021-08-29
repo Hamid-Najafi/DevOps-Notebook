@@ -3,16 +3,16 @@ services:
   minio:
     image: minio/minio:latest
     restart: always
-    hostname: minio.legace.ir
     volumes:
       - /mnt/data:/data
-    # ports:
-    #   - "9000:9000"
+    ports:
+      - "9000:9000" # S3 Service
+      - "9001:9001" # Console
     environment:
-      MINIO_ACCESS_KEY: minio
-      MINIO_SECRET_KEY: MinIOpass.24
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: MinIOpass.24
       MINIO_PROMETHEUS_AUTH_TYPE: public
-    command: server /data
+    command: server /data --console-address ":9001"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 30s
@@ -20,11 +20,12 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.minio.rule=Host(`minio.legace.ir`)"
-      - "traefik.http.services.minio.loadbalancer.server.port=9000"
+      - "traefik.http.routers.minio.rule=Host(`minio.hamid-najafi.ir`)"
+      - "traefik.http.services.minio.loadbalancer.server.port=9000" # S3 Service runs in port 443 (HTTPS)
       - "traefik.http.routers.minio.entrypoints=secure"
       - "traefik.http.routers.minio.tls.certresolver=letsencrypt"
       - "traefik.docker.network=web"
+      # ToDO: add console (port 9001 ) to traefik
     networks:
       - web
 networks:

@@ -15,15 +15,8 @@ sudo hostnamectl set-hostname virgol
 sudo reboot
 
 # Set Proxy
-sudo mkdir -p /etc/systemd/system/docker.service.d
-sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
-[Service]
-Environment="HTTP_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
-Environment="HTTPS_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
-Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
-
-# sudo systemctl daemon-reload
-# sudo systemctl restart docker
+echo -e "http_proxy=http://admin:Squidpass.24@185.235.41.48:3128/\nhttps_proxy=http://admin:Squidpass.24@185.235.41.48:3128/" | sudo tee -a /etc/environment
+source /etc/environment
 
 # Install Docker
 curl -sSL https://get.docker.com/ | sh
@@ -35,7 +28,7 @@ docker login
 sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@github.com/Hamid-Najafi/DevOps-Notebook.git
 
 # -------==========-------
-# Setup Monitoring
+# Setup Monitoring (optional)
 # -------==========-------
 mkdir -p ~/docker/monitoring
 sudo cp -r ~/DevOps-Notebook/Apps/Monitoring/Slave/* ~/docker/monitoring
@@ -74,7 +67,7 @@ docker-compose up -d
 5. Restore moodle ldap users
 docker exec -it virgol_moodle php ./bitnami/moodle/auth/ldap/cli/sync_users.php
 6. Database: Set moodle token (SiteSettings)
-7. Database: Set all moodleIds (AdminDetails & Schools to -1, AspNetUsers to 0)
+7. Database: Set all moodleId => AdminDetails & Schools to -1, AspNetUsers to 0
 8. Postman: Sync Virgol Moodle ID
 9. Postman: Recreate School Moodle (if want to fix admin without school, leave desiredSchoolId with random number)
 0. Check
@@ -91,22 +84,6 @@ cd ~/docker/virgol-landing
 docker-compose up -d
 
 # -------==========-------
-# Moodle HTTPS
-# -------==========-------
-# Wait few minutes for moodle to finish setup
-docker exec -it virgol_moodle sh 
-apt update
-apt install nano
-nano ./bitnami/moodle/config.php
-if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
-  $CFG->wwwroot   = 'https://' . $_SERVER['HTTP_HOST'];
-  # Add this line
-  $CFG->sslproxy = 1;
-} else {
-  $CFG->wwwroot   = 'http://' . $_SERVER['HTTP_HOST'];
-}
-exit
-# -------==========-------
 # Optimize Services
 # -------==========-------
 # Postgresql
@@ -122,117 +99,7 @@ exit
 docker restart virgol_db
 # openLDAP
 
-
 # mariaDB
-
-# -------==========-------
-# Restore Backups
-# -------==========-------
-docker run --rm \
--v virgol_virgolData:/source/virgolData \
--v virgol_postgresDb:/source/postgresDb \
--v virgol_openldapDb:/source/openldapDb \
--v virgol_openldapConf:/source/openldapConf \
--v virgol_moodle:/source/moodle \
--v virgol_moodleData:/source/moodleData \
--v virgol_mariaDb:/source/mariaDb \
--v backup_volume:/backup:ro \
--v cache_volume:/volumerize-cache \
--v /var/run/docker.sock:/var/run/docker.sock \
--e "VOLUMERIZE_SOURCE=/source" \
--e "VOLUMERIZE_TARGET=s3://minio.goldenstarc.ir/virgol" \
--e "VOLUMERIZE_CONTAINERS=virgol_main virgol_db virgol_moodle virgol_moodle_db virgol_openldap" \
--e "AWS_ACCESS_KEY_ID=minio" \
--e "AWS_SECRET_ACCESS_KEY=MinIOpass.24" \
-blacklabelops/volumerize restore
-
-# -------==========-------
-# MinIO S3 Server
-# -------==========-------
-mkdir -p ~/dev
-cp -R ~/DevOps-Notebook/Apps/MinIO  ~/dev/minio
-cd  ~/dev/minio
-docker-compose up -d
-# ACCESS_KEY=minio
-# SECRET_KEY=MinIOpass.24
-# -------==========-------
-# Start Daily Backups
-# -------==========-------
-
-docker run -d \
---name volumerize \
---restart=always \
--v virgol_virgolData:/source/virgolData:ro \
--v virgol_postgresDb:/source/postgresDb:ro \
--v virgol_openldapDb:/source/openldapDb:ro \
--v virgol_openldapConf:/source/openldapConf:ro \
--v virgol_moodle:/source/moodle:ro \
--v virgol_moodleData:/source/moodleData:ro \
--v virgol_mariaDb:/source/mariaDb:ro \
--v backup_volume:/backup \
--v cache_volume:/volumerize-cache \
--v /var/run/docker.sock:/var/run/docker.sock \
--e "VOLUMERIZE_JOBBER_TIME=0 0 0 * * *" \
--e "TZ=Asia/Tehran" \
--e "VOLUMERIZE_SOURCE=/source" \
--e "VOLUMERIZE_TARGET=s3://minio.legace.ir/virgol" \
--e "VOLUMERIZE_CONTAINERS=virgol_main virgol_db virgol_moodle virgol_moodle_db virgol_openldap" \
--e "AWS_ACCESS_KEY_ID=minio" \
--e "AWS_SECRET_ACCESS_KEY=MinIOpass.24" \
-blacklabelops/volumerize backup  
-# -------==========-------
-# Done
-# -------==========-------
-
-# -------==========-------
-# Traditional Backup
-# -------==========-------
-# postgres
-sudo sh -c 'docker exec -t postgres pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql'
-sudo sh -c 'docker exec -t virgol_db pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql'
-ca dump.sql | docker exec -i postgres psql -U postgres
-ca dump.sql | docker exec -i virgol_db psql -U postgres
-
-# moodle
-sudo zip -r ~/backup/moodle_`date +%d-%m-%Y"_"%H_%M_%S`.zip /docker
-
-# move data from /docker/ to docker volume
-docker run -v virgol_moodle:/data --name helper busybox true
-cd /home/ubuntu/docker/moodle-bitnami
-sudo docker cp . helper:/data
-docker rm -f helper
-
-docker run -v virgol_moodleData:/data --name helper busybox true
-cd /home/ubuntu/docker/moodle-data-bitnami
-sudo docker cp . helper:/data
-docker rm -f helper
-
-docker run -v virgol_mariaDb:/data --name helper busybox true
-cd /home/ubuntu/docker/moodle-bitnami
-sudo docker cp . helper:/data
-docker rm -f helper
-
-sudo chmod 777 -R /var/lib/docker/volumes/virgol_moodle/
-sudo chmod 777 -R /var/lib/docker/volumes/virgol_moodleData/
-sudo chmod 777 -R /var/lib/docker/volumes/virgol_mariaDb
-
-
-# openldap
-sudo mkdir -p ~/backup/ldap/openldapConf 
-sudo mkdir -p ~/backup/ldap/openldapDb 
-
-docker run --rm \
--v ~/backup:/backups \
---volumes-from ldap-service \
-busybox cp -a /etc/ldap/slapd.d /backups/ldap/openldapConf
-
-docker run --rm \
--v ~/backup:/backups \
---volumes-from ldap-service \
-busybox cp -a /var/lib/ldap /backups/ldap/openldapDb
-
-cd ~/backup
-sudo zip -r openldap_`date +%d-%m-%Y"_"%H_%M_%S`.zip ~/backup/ldap
 
 # -------==========-------
 # Build Virgol

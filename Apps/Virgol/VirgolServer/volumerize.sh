@@ -1,13 +1,12 @@
 # -------==========-------
 # S3 Storage Server
 # -------==========-------
-Setup MinIO first:
-s3://minio.goldenstarc.ir/virgol
+first setup MinIO as S3 compatible server 
+
 # -------==========-------
 # Schedule Backup
 # -------==========-------
-docker rm -f volumerize
-
+# There is no need to make bucket in S3
     docker run -d \
     --name volumerize \
     --restart=always \
@@ -18,8 +17,8 @@ docker rm -f volumerize
     -v virgol_moodle:/source/moodle:ro \
     -v virgol_moodleData:/source/moodleData:ro \
     -v virgol_mariaDb:/source/mariaDb:ro \
-    -v backup_volume:/backup \
-    -v cache_volume:/volumerize-cache \
+    -v volumerize_backup:/backup \
+    -v volumerize_cache:/volumerize-cache \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -e "VOLUMERIZE_JOBBER_TIME=0 0 0 * * *" \
     -e "TZ=Asia/Tehran" \
@@ -30,6 +29,7 @@ docker rm -f volumerize
     -e "AWS_SECRET_ACCESS_KEY=MinIOpass.24" \
     blacklabelops/volumerize backup
 
+# Run Manual Backup
  docker exec volumerize backup
 
 # -------==========-------
