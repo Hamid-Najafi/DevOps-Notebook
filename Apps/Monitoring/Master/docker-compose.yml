@@ -120,7 +120,6 @@ services:
 
   postgres:
     image: postgres
-    hostname: postgres.legace.ir
     restart: always
     environment:
       - POSTGRES_DB=grafana

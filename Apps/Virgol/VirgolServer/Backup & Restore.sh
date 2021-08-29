@@ -16,6 +16,29 @@ docker-compose up -d
 # Schedule Backup
 # -------==========-------
 # There is no need to make bucket in S3
+
+# Realtime Backup
+docker run -d \
+--name volumerize \
+--restart=always \
+-v virgol_virgolData:/source/virgolData:ro \
+-v virgol_postgresDb:/source/postgresDb:ro \
+-v virgol_openldapDb:/source/openldapDb:ro \
+-v virgol_openldapConf:/source/openldapConf:ro \
+-v virgol_moodle:/source/moodle:ro \
+-v virgol_moodleData:/source/moodleData:ro \
+-v virgol_mariaDb:/source/mariaDb:ro \
+-v volumerize_backup:/backup \
+-v volumerize_cache:/volumerize-cache \
+-v /var/run/docker.sock:/var/run/docker.sock \
+-e "VOLUMERIZE_SOURCE=/source" \
+-e "VOLUMERIZE_TARGET=s3://minio.hamid-najafi.ir/virgol" \
+-e "VOLUMERIZE_CONTAINERS=virgol_main virgol_db virgol_moodle virgol_moodle_db virgol_openldap" \
+-e "AWS_ACCESS_KEY_ID=minio" \
+-e "AWS_SECRET_ACCESS_KEY=MinIOpass.24" \
+blacklabelops/volumerize backup
+
+# Daily backup at 12:00 AM
 docker run -d \
 --name volumerize \
 --restart=always \

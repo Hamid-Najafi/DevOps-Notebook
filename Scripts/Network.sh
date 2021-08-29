@@ -126,7 +126,35 @@ nc -u vir-gol.ir 636
 curl ipinfo.io
 curl ipinfo.io/ip
 # -------==========-------
-# DNS
+# SSH
+# -------==========-------
+ssh-keygen
+ssh-copy-id username@remote_host
+# -------==========-------
+# Get port procces id
+# -------==========-------
+sudo lsof -i -P -n | grep 9090
+sudo lsof -p 15014
+# -------==========-------
+# SSH Proxy (the best)
+# -------==========-------
+# In Iran Server
+ssh-keygen -t rsa -b 4096 -C "server@identifier"
+cat /root/.ssh/id_rsa.pub
+# copy id_rsa and paste here in foreign server
+nano ~/.ssh/authorized_keys 
+# test ssh worling without password
+ssh username@server-ip
+ssh ubuntu@185.235.41.48 
+# If worked, setup ssh proxy
+ssh username@server-ip -p 22 -D 5555 -C -q -N -f -g
+ssh ubuntu@185.235.41.48 -p 22 -D 5555 -C -q -N -f -g
+sudo lsof -i -P -n | grep 5555
+apt install proxychains && tail -n 2 /etc/proxychains.conf | wc -c | xargs -I {} truncate /etc/proxychains.conf -s -{} && echo -e "socks5 127.0.0.1 5555" | tee -a /etc/proxychains.conf
+# Done
+proxychains wget https://charts.gitlab.io 
+# -------==========-------
+# DNS Proxy
 # -------==========-------
 # Quick Install
 apt install resolvconf && echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head && service resolvconf restart
@@ -146,6 +174,7 @@ nameserver 178.22.122.100
 nameserver 185.55.225.25
 nameserver 185.55.225.26
 sudo service resolvconf restart
+
 # -------==========-------
 # HTTP Proxy
 # -------==========-------
@@ -158,16 +187,6 @@ echo -e "http_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nhttps_proxy=ht
 source /etc/environment
 curl -x http://admin:Squidpass.24@su.legace.ir:3128/ -L http://panel.vir-gol.ir
 wget https://charts.gitlab.io 
-# -------==========-------
-# SSH
-# -------==========-------
-ssh-keygen
-ssh-copy-id username@remote_host
-# -------==========-------
-# Get port procces id
-# -------==========-------
-sudo lsof -i -P -n | grep 9090
-sudo lsof -p 15014
 # -------==========-------
 # speedtest:
 # -------==========-------

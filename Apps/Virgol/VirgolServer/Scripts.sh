@@ -26,16 +26,22 @@ sudo chmod +x /usr/local/bin/docker-compose
 docker login
 # Clone Repos
 sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@github.com/Hamid-Najafi/DevOps-Notebook.git
-
-# -------==========-------
-# Setup Monitoring (optional)
-# -------==========-------
-mkdir -p ~/docker/monitoring
-sudo cp -r ~/DevOps-Notebook/Apps/Monitoring/Slave/* ~/docker/monitoring
-cd  ~/docker/monitoring
-# nano docker-compose.yml
-docker-compose up -d
-
+# Docker images
+proxychains docker pull traefik:latest
+proxychains docker pull prom/prometheus:latest
+proxychains docker pull prom/alertmanager:latest
+proxychains docker pull prom/node-exporter:latest
+proxychains docker pull google/cadvisor:latest
+proxychains docker pull grafana/grafana:latest
+proxychains docker pull stefanprodan/caddy:latest
+proxychains docker pull goldenstarc/virgol:latest
+proxychains docker pull postgres
+proxychains docker pull goldenstarc/moodle:3.9.1-debian-10-r18
+proxychains docker pull docker.io/bitnami/mariadb:10.3-debian-10
+proxychains docker pull goldenstarc/extended-openldap
+# dpage/pgadmin4
+# docker.io/bitnami/phpmyadmin:5-debian-10
+# osixia/phpldapadmin
 # -------==========-------
 # Setup Traefik
 # -------==========-------
@@ -43,11 +49,25 @@ mkdir -p ~/docker
 cp -R ~/DevOps-Notebook/Apps/Traefik ~/docker/traefik
 cd ~/docker/traefik 
 nano docker-compose.yml 
-# Set DNS Record
-# Edit
+# Set Host
     #   - "traefik.http.routers.traefik.rule=Host(`traefik.goldenstarc.ir`)"
 docker network create web
 docker-compose up -d
+
+# -------==========-------
+# Setup Monitoring (optional)
+# -------==========-------
+sudo git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
+mkdir -p ~/docker/monitoring
+sudo cp -r ~/DevOps-Notebook/Apps/Monitoring/Master/* ~/docker/monitoring
+cd  ~/docker/monitoring
+sudo nano prometheus/prometheus.yml
+# change server URLs if needed
+# GF_SERVER_ROOT_URL=http://grafana.goldenstarc.ir
+# "traefik.http.routers.grafana.rule=Host(`grafana.goldenstarc.ir`)"
+# sudo nano docker-compose.yml 
+docker-compose up -d
+
 # -------==========-------
 # Setup Virgol
 # -------==========-------

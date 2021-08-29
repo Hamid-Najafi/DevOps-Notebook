@@ -55,7 +55,6 @@ services:
       - openldap
   postgres:
     image: postgres
-    hostname: postgres.vir-gol.ir
     container_name: virgol_db
     ports:
       - "5432:5432"
@@ -71,7 +70,6 @@ services:
       - web
   # pgadmin4:
   #   image: dpage/pgadmin4
-  #   hostname: pgadmin.vir-gol.ir 
   #   container_name: virgol_pgadmin4
   #   environment:
   #     - PGADMIN_DEFAULT_EMAIL=admin@vir-gol.ir
