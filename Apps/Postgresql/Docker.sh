@@ -38,6 +38,7 @@ User ID=postgres;Password=SugucSkY3k;Host=db.legace.ir;Port=5431;
 # -------==========-------
 # PostgreSQL configuration builder
 https://www.pgconfig.org/
+https://pgtune.leopard.in.ua/#/
 
 sudo docker exec -it virgol_db sh
 # rm /var/lib/postgresql/data/postgresql.conf 
