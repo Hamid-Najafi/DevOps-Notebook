@@ -40,6 +40,9 @@ User ID=postgres;Password=SugucSkY3k;Host=db.legace.ir;Port=5431;
 https://www.pgconfig.org/
 https://pgtune.leopard.in.ua/#/
 
+# get CPU(s)
+lscpu | grep -E '^Thread|^Core|^Socket|^CPU\('
+ 
 sudo docker exec -it virgol_db sh
 # rm /var/lib/postgresql/data/postgresql.conf 
 mv /var/lib/postgresql/data/postgresql.conf /var/lib/postgresql/data/postgresql.conf.backup
