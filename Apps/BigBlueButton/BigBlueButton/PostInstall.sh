@@ -93,7 +93,7 @@ find /root/DevOps-Notebook/Apps/BigBlueButton/Theme -type f -name "*.pdf" | xarg
 echo "Removing freeswitch sounds"
 mv /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conferenceBackup
 
-echo "Delete raw recordings older than 14 days script"
+# echo "Delete raw recordings older than 14 days script"
 # sudo nano /etc/cron.daily/bigbluebutton
 # # uncommenting the following line
 # remove_raw_of_published_recordings

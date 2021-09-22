@@ -1,13 +1,5 @@
 #!/bin/bash
 
-echo "Configuring proxy"
-export http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
-export https_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
-
-echo "Running BBB-Install script"
-apt install base-files
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-230 -s $1 -e admin@vir-gol.ir -g -w
-
 echo "Using BBB-Apply-lib Script"
 source /etc/bigbluebutton/bbb-conf/apply-lib.sh
 
@@ -39,12 +31,14 @@ sed -i 's/lockSettingsLockOnJoinConfigurable=.*/lockSettingsLockOnJoinConfigurab
 sed -i 's/allowDuplicateExtUserid=.*/allowDuplicateExtUserid=false/g' $BBB_WEB_CONFIG
 
 echo "Installing Persian translations"
+cp /usr/share/meteor/bundle/programs/web.browser/app/locales/fa_IR.json{,.backup}
+cp /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/fa_IR.json{,.backup}
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser/app/locales/
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/
 
-echo "Configuring secret"
-bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
-bbb-conf --restart
+# echo "Configuring secret"
+# bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
+# bbb-conf --restart
 
 echo "ReCloning repos"
 cd /root/DevOps-Notebook && git pull
@@ -57,13 +51,6 @@ cp /root/DevOps-Notebook/Apps/BigBlueButton/Theme/Virgol/favicon.ico /var/www/bi
 echo "Copying presentation PDFs"
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Theme/Virgol/Whiteboard-Virgol.pdf /var/www/bigbluebutton-default/default.pdf
 find /root/DevOps-Notebook/Apps/BigBlueButton/Theme -type f -name "*.pdf" | xargs cp -t /var/www/bigbluebutton-default/
-
-# echo "Removing freeswitch sounds"
-# mv /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conferenceBackup
-
-# echo "Delete recordings older than 12 days script"
-# cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/bbb-recording-cleanup.sh /etc/cron.daily/bbb-recording-cleanup
-# chmod +x /etc/cron.daily/bbb-recording-cleanup
 
 echo "Increase number of processes for nodejs"
 sed -i 's/NUMBER_OF_BACKEND_NODEJS_PROCESSES=.*/NUMBER_OF_BACKEND_NODEJS_PROCESSES=4/g' /usr/share/meteor/bundle/bbb-html5-with-roles.conf
@@ -89,18 +76,9 @@ sed -i 's/NUMBER_OF_FRONTEND_NODEJS_PROCESSES=.*/NUMBER_OF_FRONTEND_NODEJS_PROCE
 # systemctl daemon-reload
 # systemctl restart bbb-rap-resque-worker.service
 
-# echo "build font information cache files"
-# fc-cache -fv
+echo "build font information cache files"
+fc-cache -fv
 
-# echo "Configuring exporters"
-# echo "bbb-exporter"
-# cp -R /root/DevOps-Notebook/Apps/BigBlueButton/Monitoring/bbb-exporter /root/bbb-exporter 
-# sed -i 's|API_BASE_URL=.*|API_BASE_URL=https:\/\/'$fqdnHost'\/bigbluebutton\/api\/|g' /root/bbb-exporter/secrets.env
-# docker-compose -f /root/bbb-exporter/docker-compose.yaml up -d
-
-# echo "node-exporter & cadvisor"
-# cp -R /root/DevOps-Notebook/Apps/Monitoring/Slave/ /root/monitoring
-# docker-compose -f /root/monitoring/docker-compose.yml up -d
 
 echo "Applying NGINX_CONFIG"
 sed -i '$d' /etc/nginx/sites-available/bigbluebutton
@@ -117,28 +95,10 @@ cat >> /etc/nginx/sites-available/bigbluebutton << EOF
 }
 EOF
 
-echo "Configuring Nginx auth"
-echo 'admin:$apr1$k98EN1wL$.4puamdnCPS46oGRDvRKx/' | tee /etc/nginx/.htpasswd
 nginx -t &&  nginx -s reload
-
-# echo "Configuring Firewall"
-# ufw allow 9100
-# ufw allow 9338
-# ufw allow 9688
 
 # echo "Configuring bbb-download"
 # chmod u+x /root/bbb-download/install.sh 
 # /root/bbb-download/install.sh 
-
-# echo "Configuring greenlight"
-# rm /etc/bigbluebutton/nginx/greenlight-redirect.nginx
-# sed -i 's/BIGBLUEBUTTON_SECRET=.*/BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk/g' /root/greenlight/.env
-# docker run --rm --env-file /root/greenlight/.env bigbluebutton/greenlight:v2 bundle exec rake conf:check
-# docker-compose -f /root/greenlight/docker-compose.yml up -d
-# docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@vir-gol.ir","BBBpass.24","admin"]
-
-echo "Disabling proxy"
-export http_proxy=
-export https_proxy=
 
 echo "Done!"
