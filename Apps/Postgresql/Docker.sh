@@ -37,12 +37,17 @@ User ID=postgres;Password=SugucSkY3k;Host=db.legace.ir;Port=5431;
 # Optimize Postgres
 # -------==========-------
 # PostgreSQL configuration builder
+http://pgconfigurator.cybertec.at/
 https://www.pgconfig.org/
 https://pgtune.leopard.in.ua/#/
 
 # get CPU(s)
+# CPUs = threads per core * cores per socket * sockets
 lscpu | grep -E '^Thread|^Core|^Socket|^CPU\('
- 
+
+# Add this to generated config
+listen_addresses = '*'
+
 sudo docker exec -it virgol_db sh
 # rm /var/lib/postgresql/data/postgresql.conf 
 mv /var/lib/postgresql/data/postgresql.conf /var/lib/postgresql/data/postgresql.conf.backup
