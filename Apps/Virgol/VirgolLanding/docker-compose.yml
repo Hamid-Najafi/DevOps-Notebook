@@ -13,7 +13,7 @@ services:
       - VIRGOL_SERVER_ROOT_URL=https://vir-gol.ir
       - VIRGOL_DATABASE_HOST=postgres.vir-gol.ir
       - VIRGOL_DATABASE_PORT=5432
-      - VIRGOL_DATABASE_NAME=LMSLanding
+      - VIRGOL_DATABASE_NAME=VirgolLanding
       - VIRGOL_DATABASE_USER=postgres
       - VIRGOL_DATABASE_PASSWORD=PostgreSQLpass.24
       - VIRGOL_FARAZAPI_URL=http://rest.ippanel.com
