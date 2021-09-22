@@ -40,6 +40,8 @@ docker run -v my-unattached-volume:/data --name helper busybox true
 cd /location-of-files
 docker cp . helper:/data
 docker rm helper
+# -------===== OR =====-------
+docker cp <containerId>:/file/path/within/container /host/path/target
 # -------==========-------
 # Docker
 # -------==========-------
