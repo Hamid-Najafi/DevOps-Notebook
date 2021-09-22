@@ -32,7 +32,7 @@ docker run -d \
 -v volumerize_cache:/volumerize-cache \
 -v /var/run/docker.sock:/var/run/docker.sock \
 -e "VOLUMERIZE_SOURCE=/source" \
--e "VOLUMERIZE_TARGET=s3://minio.hamid-najafi.ir/virgol" \
+-e "VOLUMERIZE_TARGET=s3://s3.hamid-najafi.ir/virgoool" \
 -e "VOLUMERIZE_CONTAINERS=virgol_main virgol_db virgol_moodle virgol_moodle_db virgol_openldap" \
 -e "AWS_ACCESS_KEY_ID=minio" \
 -e "AWS_SECRET_ACCESS_KEY=MinIOpass.24" \
@@ -55,7 +55,7 @@ docker run -d \
 -e "VOLUMERIZE_JOBBER_TIME=0 0 0 * * *" \
 -e "TZ=Asia/Tehran" \
 -e "VOLUMERIZE_SOURCE=/source" \
--e "VOLUMERIZE_TARGET=s3://minio.hamid-najafi.ir/virgol" \
+-e "VOLUMERIZE_TARGET=s3://s3.hamid-najafi.ir/virgol" \
 -e "VOLUMERIZE_CONTAINERS=virgol_main virgol_db virgol_moodle virgol_moodle_db virgol_openldap" \
 -e "AWS_ACCESS_KEY_ID=minio" \
 -e "AWS_SECRET_ACCESS_KEY=MinIOpass.24" \
@@ -79,7 +79,7 @@ docker run --rm \
 -v cache_volume:/volumerize-cache \
 -v /var/run/docker.sock:/var/run/docker.sock \
 -e "VOLUMERIZE_SOURCE=/source" \
--e "VOLUMERIZE_TARGET=s3://minio.hamid-najafi.ir/virgol" \
+-e "VOLUMERIZE_TARGET=s3://s3.hamid-najafi.ir/virgol" \
 -e "VOLUMERIZE_CONTAINERS=virgol_main virgol_db virgol_moodle virgol_moodle_db virgol_openldap" \
 -e "AWS_ACCESS_KEY_ID=minio" \
 -e "AWS_SECRET_ACCESS_KEY=MinIOpass.24" \

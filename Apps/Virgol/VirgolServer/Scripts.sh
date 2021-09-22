@@ -158,9 +158,9 @@ docker restart virgol_db
 # -------==========-------
 sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/saleh_prg/lms-with-moodle.git
 cd lms-with-moodle/
-sudo bash build.sh 1.7.2
 git config --global user.email Hamid.Najafi@email.com
 git config --global user.name Hamid Najafi
+sudo bash build.sh 1.7.3
 
 cd ~/docker/virgol/ && docker-compose pull && docker-compose up -d
 
