@@ -13,7 +13,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - NODE_ENV=production
       - VIRGOL_SERVER_ROOT_URL=https://panel.vir-gol.ir
-      - VIRGOL_DATABASE_HOST=postgres.vir-gol.ir
+      - VIRGOL_DATABASE_HOST=virgol_db
       - VIRGOL_DATABASE_PORT=5432
       - VIRGOL_DATABASE_NAME=Virgol
       - VIRGOL_DATABASE_USER=postgres
@@ -27,10 +27,8 @@ services:
       - VIRGOL_FARAZAPI_PASSWORD=hektug-fakbAm-0vypje
       - VIRGOL_FARAZAPI_API_KEY=qcP4IQp3PPRV3ppvkG9ScHJcwvUPL3iOJrV9n7QiqDA=
       - VIRGOL_JWT_SECRET=Saleh Secret Key
-      - VIRGOL_LDAP_SERVER=b1.vir-gol.ir
-      #   WHY ?!
-      # - VIRGOL_LDAP_SERVER=openldap.vir-gol.ir
-      - VIRGOL_LDAP_PORT=390
+      - VIRGOL_LDAP_SERVER=virgol_openldap
+      - VIRGOL_LDAP_PORT=389
       - VIRGOL_LDAP_USER_ADMIN=cn=admin,dc=legace,dc=ir
       - VIRGOL_LDAP_PASSWORD=OpenLDAPpass.24
       - VIRGOL_TZ=Asia/Tehran
@@ -160,7 +158,7 @@ services:
     hostname: openldap.vir-gol.ir
     container_name: virgol_openldap
     ports:
-      - '390:389'
+      - '389:389'
       - '637:636'
     restart: always
     volumes:
