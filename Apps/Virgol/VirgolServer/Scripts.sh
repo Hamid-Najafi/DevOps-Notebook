@@ -4,7 +4,7 @@
 sudo apt update 
 sudo apt upgrade -y
 
-sudo apt-get install ncdu dtrx bmon htop software-properties-common traceroute
+sudo apt-get install ncdu dtrx bmon htop software-properties-common traceroute curl git
 
 # Set Server DNS FQDN 
 vir-gol.ir
@@ -18,14 +18,43 @@ sudo reboot
 echo -e "http_proxy=http://admin:Squidpass.24@185.235.41.48:3128/\nhttps_proxy=http://admin:Squidpass.24@185.235.41.48:3128/" | sudo tee -a /etc/environment
 source /etc/environment
 
+# -------==========-------
+# SSH Proxy (the best)
+# -------==========-------
+# In Iran Server
+ssh-keygen -t rsa -b 4096 -C "server@identifier"
+cat /root/.ssh/id_rsa.pub
+# copy id_rsa and paste here in foreign server
+nano ~/.ssh/authorized_keys 
+# test ssh worling without password
+ssh username@server-ip
+ssh ubuntu@185.235.41.48 
+# If worked, setup ssh proxy
+ssh username@server-ip -p 22 -D 5555 -C -q -N -f -g
+ssh ubuntu@185.235.41.48 -p 22 -D 5555 -C -q -N -f -g
+sudo lsof -i -P -n | grep 5555
+apt install proxychains && tail -n 2 /etc/proxychains.conf | wc -c | xargs -I {} truncate /etc/proxychains.conf -s -{} && echo -e "socks5 127.0.0.1 5555" | tee -a /etc/proxychains.conf
+# -------==========-------
 # Install Docker
-curl -sSL https://get.docker.com/ | sh
-sudo usermod -aG docker $USER
-sudo curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-compose/master/run.sh -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-docker login
+# -------==========-------
+proxychains curl -sSL https://get.docker.com/ | sh
+usermod -aG docker $USER
+proxychains curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-compose/master/run.sh -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+proxychains docker login
+# Docker HTTP Proxy
+sudo mkdir -p /etc/systemd/system/docker.service.d
+sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
+[Service]
+Environment="HTTP_PROXY=http://admin:Squidpass.24@185.235.41.48:3128"
+Environment="HTTPS_PROXY=http://admin:Squidpass.24@185.235.41.48:3128"
+Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
+
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+sudo systemctl show --property=Environment docker
 # Clone Repos
-sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@github.com/Hamid-Najafi/DevOps-Notebook.git
+proxychains git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@github.com/Hamid-Najafi/DevOps-Notebook.git
 # Docker images
 proxychains docker pull traefik:latest
 proxychains docker pull prom/prometheus:latest
