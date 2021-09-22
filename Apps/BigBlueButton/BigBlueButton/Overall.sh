@@ -43,9 +43,9 @@ http://www.jsondiff.com
 # **** Quick Upgrade ****
 # -------==========-------
 su root
-wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/BigBlueButton/QuickUpgrade.sh
-chmod +x QuickUpgrade.sh
-./QuickUpgrade.sh $FQDN
+wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/BigBlueButton/PostUpgrade.sh
+chmod +x PostUpgrade.sh
+./PostUpgrade.sh $FQDN
 # -------==========-------
 # Move recordings to a different partition
 # -------==========-------

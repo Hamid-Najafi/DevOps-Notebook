@@ -30,20 +30,18 @@ sed -i 's/lockSettingsLockOnJoin=.*/lockSettingsLockOnJoin=false/g' $BBB_WEB_CON
 sed -i 's/lockSettingsLockOnJoinConfigurable=.*/lockSettingsLockOnJoinConfigurable=true/g' $BBB_WEB_CONFIG
 sed -i 's/allowDuplicateExtUserid=.*/allowDuplicateExtUserid=false/g' $BBB_WEB_CONFIG
 
+echo "ReCloning repos"
+cd /root/DevOps-Notebook && git pull
+cd /usr/share/fonts/FontPack && git pull
+
 echo "Installing Persian translations"
 cp /usr/share/meteor/bundle/programs/web.browser/app/locales/fa_IR.json{,.backup}
 cp /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/fa_IR.json{,.backup}
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser/app/locales/
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/
 
-# echo "Configuring secret"
-# bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
-# bbb-conf --restart
-
-echo "ReCloning repos"
-cd /root/DevOps-Notebook && git pull
-cd /usr/share/fonts/FontPack && git pull
-cd /root/bbb-download && git pull
+echo "build font information cache files"
+fc-cache -fv
 
 echo "Setting favicon"
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Theme/Virgol/favicon.ico /var/www/bigbluebutton-default/favicon.ico
@@ -76,9 +74,6 @@ sed -i 's/NUMBER_OF_FRONTEND_NODEJS_PROCESSES=.*/NUMBER_OF_FRONTEND_NODEJS_PROCE
 # systemctl daemon-reload
 # systemctl restart bbb-rap-resque-worker.service
 
-echo "build font information cache files"
-fc-cache -fv
-
 
 echo "Applying NGINX_CONFIG"
 sed -i '$d' /etc/nginx/sites-available/bigbluebutton
@@ -95,10 +90,10 @@ cat >> /etc/nginx/sites-available/bigbluebutton << EOF
 }
 EOF
 
+echo "Restarting NGINX"
 nginx -t &&  nginx -s reload
 
-# echo "Configuring bbb-download"
-# chmod u+x /root/bbb-download/install.sh 
-# /root/bbb-download/install.sh 
+echo "Restarting BBB"
+bbb-conf --restart
 
 echo "Done!"
