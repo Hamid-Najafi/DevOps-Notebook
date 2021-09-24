@@ -1,43 +1,5 @@
 #!/bin/bash
 
-# if [ $EUID != 0 ]; then err "You must run this command as root."; fi
-
-# # echo $1 | cut -d'.' -f 1 | xargs -I{} hostnamectl set-hostname {}
-
-# apt-get update
-# LC_CTYPE=C.UTF-8 apt-get install -yq apt-transport-https ca-certificates curl gnupg-agent software-properties-common openssl resolvconf
-# # echo "Configuring proxy"
-# # export http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
-# # export https_proxy=http://admin:Squidpass.24@su.legace.ir:3128/
-# echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head
-# service resolvconf restart
-
-# echo "Disable Ubuntu auto update"
-# sed -i 's/Prompt=.*/Prompt=never/g' /etc/update-manager/release-upgrades
-
-# echo "Installing Docker"
-# if ! apt-key list | grep -q Docker; then
-#   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-# fi
-
-# if ! dpkg -l | grep -q docker-ce; then
-#   add-apt-repository \
-#     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-#     $(lsb_release -cs) \
-#     stable"
-
-#   apt-get update
-#   LC_CTYPE=C.UTF-8 apt-get install -yq docker-ce docker-ce-cli containerd.io
-# fi
-# if ! which docker; then err "Docker did not install"; fi
-
-# # Install Docker Compose
-# if dpkg -l | grep -q docker-compose; then
-#   apt-get purge -y docker-compose
-# fi
-# if ! which docker; then err "Docker did not install"; fi
-# docker login -u goldenstarc -p hgoldenstarcn
-
 echo "Using BBB-Apply-lib Script"
 source /etc/bigbluebutton/bbb-conf/apply-lib.sh
 
@@ -68,20 +30,19 @@ sed -i 's/lockSettingsLockOnJoin=.*/lockSettingsLockOnJoin=false/g' $BBB_WEB_CON
 sed -i 's/lockSettingsLockOnJoinConfigurable=.*/lockSettingsLockOnJoinConfigurable=true/g' $BBB_WEB_CONFIG
 sed -i 's/allowDuplicateExtUserid=.*/allowDuplicateExtUserid=false/g' $BBB_WEB_CONFIG
 
+echo "Cloning repos"
+git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git /root/DevOps-Notebook || cd /root/DevOps-Notebook && git pull
+git clone https://github.com/Hamid-Najafi/FontPack.git  /usr/share/fonts/FontPack || cd /usr/share/fonts/FontPack && git pull
+git clone https://github.com/Hamid-Najafi/bbb-download.git /root/bbb-download || cd /root/bbb-download && git pull
+
 echo "Installing Persian translations"
 cp /usr/share/meteor/bundle/programs/web.browser/app/locales/fa_IR.json{,.backup}
 cp /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/fa_IR.json{,.backup}
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser/app/locales/
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/
 
-echo "Configuring secret"
-bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
-bbb-conf --restart
-
-echo "Cloning repos"
-git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git /root/DevOps-Notebook
-git clone https://github.com/Hamid-Najafi/FontPack.git  /usr/share/fonts/FontPack
-git clone https://github.com/Hamid-Najafi/bbb-download.git /root/bbb-download
+echo "build font information cache files"
+fc-cache -fv
 
 echo "Setting favicon"
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Theme/Virgol/favicon.ico /var/www/bigbluebutton-default/favicon.ico
@@ -93,7 +54,7 @@ find /root/DevOps-Notebook/Apps/BigBlueButton/Theme -type f -name "*.pdf" | xarg
 echo "Removing freeswitch sounds"
 mv /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conferenceBackup
 
-echo "Delete raw recordings older than 14 days script"
+# echo "Delete raw recordings older than 14 days script"
 # sudo nano /etc/cron.daily/bigbluebutton
 # # uncommenting the following line
 # remove_raw_of_published_recordings
@@ -113,37 +74,28 @@ cat > n << EOF
 Environment=COUNT=16
 EOF
 
-# echo "Change recorded sessions processing time"
-# mkdir -p /etc/systemd/system/bbb-rap-starter.timer.d
-# cat > /etc/systemd/system/bbb-rap-starter.timer.d/override.conf << EOF
-# [Timer]
-# OnActiveSec=
-# OnUnitInactiveSec=
-# OnCalendar=19,20,21,22,23,00,01:*:00
-# Persistent=false
-# EOF
+echo "Change recorded sessions processing time"
+mkdir -p /etc/systemd/system/bbb-rap-starter.timer.d
+cat > /etc/systemd/system/bbb-rap-starter.timer.d/override.conf << EOF
+[Timer]
+OnActiveSec=
+OnUnitInactiveSec=
+OnCalendar=19,20,21,22,23,00,01:*:00
+Persistent=false
+EOF
 
-# BBB 2.2 - Ubuntu 16.04
-# echo "Change recorded sessions processing time"
-# mkdir -p /etc/systemd/system/bbb-record-core.timer.d
-# cat > /etc/systemd/system/bbb-rap-starter.timer.d/override.conf << EOF
-# [Timer]
-# OnActiveSec=
-# OnUnitInactiveSec=
-# OnCalendar=19,20,21,22,23,00,01:*:00
-# Persistent=false
-# EOF
-
-# systemctl list-timers --all
-# systemctl enable bbb-rap-starter.service
-# systemctl enable bbb-rap-resque-worker.service
+systemctl list-timers --all
+systemctl enable bbb-rap-starter.service
+systemctl enable bbb-rap-resque-worker.service
 
 systemctl daemon-reload
 systemctl restart bbb-rap-resque-worker.service
 
+echo "Configuring secret"
+bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 
-echo "build font information cache files"
-fc-cache -fv
+echo "Restarting BBB"
+bbb-conf --restart
 
 echo "Configuring exporters"
 echo "bbb-exporter"
@@ -189,10 +141,6 @@ sed -i 's/BIGBLUEBUTTON_SECRET=.*/BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTe
 docker run --rm --env-file /root/greenlight/.env bigbluebutton/greenlight:v2 bundle exec rake conf:check
 docker-compose -f /root/greenlight/docker-compose.yml up -d
 docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@vir-gol.ir","BBBpass.24","admin"]
-
-echo "Disabling proxy"
-export http_proxy=
-export https_proxy=
 
 while true; do
     read -p "System Reboot is recommended.[Yy/Nn]" yn

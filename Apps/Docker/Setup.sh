@@ -40,6 +40,8 @@ docker run -v my-unattached-volume:/data --name helper busybox true
 cd /location-of-files
 docker cp . helper:/data
 docker rm helper
+# -------===== OR =====-------
+docker cp <containerId>:/file/path/within/container /host/path/target
 # -------==========-------
 # Docker
 # -------==========-------
@@ -87,8 +89,8 @@ USER appuser
 sudo mkdir -p /etc/systemd/system/docker.service.d
 sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
 [Service]
-Environment="HTTP_PROXY=http://admin:Squidpass.24@185.235.41.48:3128"
-Environment="HTTPS_PROXY=http://admin:Squidpass.24@185.235.41.48:3128"
+Environment="HTTP_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
+Environment="HTTPS_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
 Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
 
 sudo systemctl daemon-reload

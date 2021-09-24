@@ -2,10 +2,9 @@
 # **** Quick Install ****
 # -------==========-------
 # "Configure proxy"
-apt install resolvconf && echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head && service resolvconf restart
-# OR
-echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
+echo -e "http_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/" | sudo tee -a /etc/environment
 source /etc/environment
+wget https://charts.gitlab.io 
 
 # -------==========-------
 # BBB-Install script
@@ -19,6 +18,7 @@ source /etc/environment
 wget -qO- http://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-23 -s $FQDN -e admin@vir-gol.ir -g -w
 
 # Coturn Server - Ubuntu 20.04
+# DISABLE PROXY FOR certificate REQUEST
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.vir-gol.ir:1b6s1esK -e admin@vir-gol.ir
 
 # BBB 2.3 + Coturn - Ubuntu 18.04
@@ -43,10 +43,9 @@ http://www.jsondiff.com
 # **** Quick Upgrade ****
 # -------==========-------
 su root
-export FQDN=ib2.vir-gol.ir
-wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/BigBlueButton/QuickUpgrade.sh
-chmod +x QuickUpgrade.sh
-./QuickUpgrade.sh $FQDN
+wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/BigBlueButton/PostUpgrade.sh
+chmod +x PostUpgrade.sh
+./PostUpgrade.sh $FQDN
 # -------==========-------
 # Move recordings to a different partition
 # -------==========-------

@@ -136,12 +136,18 @@ docker-compose up -d
 # Optimize Services
 # -------==========-------
 # PostgreSQL configuration builder
+http://pgconfigurator.cybertec.at/
 https://www.pgconfig.org/
 https://pgtune.leopard.in.ua/#/
 
 # get CPU(s)
+# CPUs = threads per core * cores per socket * sockets
 lscpu | grep -E '^Thread|^Core|^Socket|^CPU\('
 
+# Add this to generated config
+listen_addresses = '*'
+
+docker cp virgol_db:/var/lib/postgresql/data/postgresql.conf .
 docker exec -it virgol_db sh
 mv /var/lib/postgresql/data/postgresql.conf /var/lib/postgresql/data/postgresql.conf.backup
 cat <<EOF > /var/lib/postgresql/data/postgresql.conf
