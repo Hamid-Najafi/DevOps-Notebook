@@ -52,27 +52,7 @@ find /root/DevOps-Notebook/Apps/BigBlueButton/Theme -type f -name "*.pdf" | xarg
 
 echo "Increase number of processes for nodejs"
 sed -i 's/NUMBER_OF_BACKEND_NODEJS_PROCESSES=.*/NUMBER_OF_BACKEND_NODEJS_PROCESSES=4/g' /usr/share/meteor/bundle/bbb-html5-with-roles.conf
-sed -i 's/NUMBER_OF_FRONTEND_NODEJS_PROCESSES=.*/NUMBER_OF_FRONTEND_NODEJS_PROCESSES=4/g' /usr/share/meteor/bundle/bbb-html5-with-roles.conf
-
-# echo "Increase number of recording workers"
-# mkdir -p /etc/systemd/system/bbb-rap-resque-worker.service.d
-# cat > /etc/systemd/system/bbb-rap-resque-worker.service.d/override.conf << EOF
-# [Service]
-# Environment=COUNT=16
-# EOF
-
-# echo "Change recorded sessions processing time"
-# mkdir -p /etc/systemd/system/bbb-record-core.timer.d
-# cat > /etc/systemd/system/bbb-record-core.timer.d/override.conf << EOF
-# [Timer]
-# OnActiveSec=
-# OnUnitInactiveSec=
-# OnCalendar=19,20,21,22,23,00,01:*:00
-# Persistent=false
-# EOF
-
-# systemctl daemon-reload
-# systemctl restart bbb-rap-resque-worker.service
+sed -i 's/NUMBER_OF_FRONTEND_NODEJS_PROCESSES=.*/NUMBER_OF_FRONTEND_NODEJS_PROCESSES=8/g' /usr/share/meteor/bundle/bbb-html5-with-roles.conf
 
 
 echo "Applying NGINX_CONFIG"
