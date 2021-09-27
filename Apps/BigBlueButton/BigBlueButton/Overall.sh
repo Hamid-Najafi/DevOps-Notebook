@@ -24,22 +24,6 @@ wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic
 # BBB 2.3 - Ubuntu 18.04
 wget -qO- http://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-23 -s $FQDN -e admin@vir-gol.ir -g -w
 # -------==========-------
-# Coturn Server - Ubuntu 20.04
-# DISABLE PROXY FOR certificate REQUEST
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.vir-gol.ir:1b6s1esK -e admin@vir-gol.ir
-# Verify Turn server is accessible
-sudo apt install stun-client
-stun turn.vir-gol.ir
-# -------==========-------
-# BBB 2.2 - Ubuntu 16.04
-# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s $FQDN -e admin@vir-gol.ir -g -w
-
-# BBB 2.2 specific version + Coturn - Ubuntu 16.04
-# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s $FQDN -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
-# -------==========-------
-# "Disable Proxy"
-sed -e '/https_proxy/ s/^#*/#/' -i  /etc/environment && sed -e '/http_proxy/ s/^#*/#/' -i  /etc/environment
-# -------==========-------
 # **** Post Install ****
 su root
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/BigBlueButton/PostInstall.sh
@@ -52,6 +36,19 @@ su root
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/BigBlueButton/PostUpgrade.sh
 chmod +x PostUpgrade.sh
 ./PostUpgrade.sh $FQDN
+# -------==========-------
+# Coturn Server - Ubuntu 20.04
+# DISABLE PROXY FOR certificate REQUEST
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.vir-gol.ir:1b6s1esK -e admin@vir-gol.ir
+# Verify Turn server is accessible
+sudo apt install stun-client
+stun turn.vir-gol.ir
+# -------==========-------
+# BBB 2.2 - Ubuntu 16.04
+# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s $FQDN -e admin@vir-gol.ir -g -w
+
+# BBB 2.2 specific version + Coturn - Ubuntu 16.04
+# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s $FQDN -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
 # -------==========-------
 # Move recordings to a different partition
 # -------==========-------
