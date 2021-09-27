@@ -81,12 +81,10 @@ systemctl enable bbb-rap-resque-worker.service
 systemctl restart bbb-rap-resque-worker.service
 systemctl status bbb-rap-resque-worker.service
 
-echo "Change recorded sessions processing time"
+echo "Set Cropnjob for recorded sessions processing task"
 sudo timedatectl set-timezone Asia/Tehran 
-# Stop recording at 7 AM during week days
-echo "0 7 * * * systemctl stop bbb-rap-resque-worker" >> /etc/crontab
-# Start recording at 6 PM during week days; bbb-rap-resque-worker will automatically launch all workers required for processing
-echo "0 18 * * * systemctl start bbb-rap-resque-worker" >> /etc/crontab
+(crontab -l 2>/dev/null; echo "0 7 * * * systemctl stop bbb-rap-resque-worker") | crontab -
+(crontab -l 2>/dev/null; echo "0 18 * * * systemctl start bbb-rap-resque-worker") | crontab -
 
 echo "Configuring secret"
 bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
