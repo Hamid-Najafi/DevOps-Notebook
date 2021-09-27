@@ -30,6 +30,10 @@ sed -i 's/lockSettingsLockOnJoin=.*/lockSettingsLockOnJoin=false/g' $BBB_WEB_CON
 sed -i 's/lockSettingsLockOnJoinConfigurable=.*/lockSettingsLockOnJoinConfigurable=true/g' $BBB_WEB_CONFIG
 sed -i 's/allowDuplicateExtUserid=.*/allowDuplicateExtUserid=false/g' $BBB_WEB_CONFIG
 
+echo "Use MP4 format for playback of recordings"
+sed -i 's/# - mp4/- mp4/g' /usr/local/bigbluebutton/core/scripts/presentation.yml
+sed -i 's/- webm/# - webm/g' /usr/local/bigbluebutton/core/scripts/presentation.yml
+
 echo "Cloning repos"
 git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git /root/DevOps-Notebook || cd /root/DevOps-Notebook && git pull
 git clone https://github.com/Hamid-Najafi/FontPack.git  /usr/share/fonts/FontPack || cd /usr/share/fonts/FontPack && git pull
