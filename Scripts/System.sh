@@ -30,8 +30,9 @@ sudo apt-get update
 # -------==========-------
 wget -qO- bench.sh | bash
 # -------==========-------
-# Enable root Account
+# SSH Configs
 # -------==========-------
+# Enable root Account
 # Connect to server via SSH 
 sudo passwd root
 sudo nano /etc/ssh/sshd_config 
@@ -64,7 +65,15 @@ vm.vfs_cache_pressure=50
 # -------==========-------
 ssh-keygen
 ssh-copy-id username@remote_host
-ssh-copy-id root@vir-gol.ir
+ssh-copy-id root@185.234.14.99
+
+sudo nano /etc/ssh/sshd_config 
+PasswordAuthentication no
+service sshd restart
+
+sudo nano /root/.ssh/authorized_keys 
+# Hamid@MacbookPro PubKey 
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCm5HhH5maCzUQvNuf2mOgrCG3j16PfFiHIhhCXObZFVVCB2/L46/eYHKdvnVa03EeOw35y7PGLuDQimSi1IUbKP3fhkw30KDISIf7ARH5PZnJt6sXRUV1JZhabFbrjuJn3HVBQd0e2vqKSGbpEEg1Zz9yg1xLmLwiz0eVMh31J1PfAIX0DTaqpHhSijcKiB/93rE/AbaKwgoiDIbWHOR8VJaN6VfdvY+FtlmUsq70SpD5fwP/9C3AZX45KSQrGOAKwhd9vMFRrcTMnr/geyMpMAI+82L6yn3H7Mx0KZPgBoZafUbQ3FkC0g9dTg4N4jczxCTDRGy+DWqN22RNu3A2l hamid@MacbookPro
 # -------==========-------
 # NCurses Disk Usage
 # -------==========-------
@@ -120,6 +129,8 @@ sudo dmidecode | grep Product
 # -------==========-------
 # Commenting With SED
 # -------==========-------
+# Change pattern
+sed -i 's/old_string/new_string/g' file
 # to comment line
 sed -i '/<pattern>/s/^/#/g' file
 # And to uncomment it:
