@@ -34,6 +34,10 @@ echo "Use MP4 format for playback of recordings"
 sed -i 's/# - mp4/- mp4/g' /usr/local/bigbluebutton/core/scripts/presentation.yml
 sed -i 's/- webm/# - webm/g' /usr/local/bigbluebutton/core/scripts/presentation.yml
 
+
+echo "Optimize NodeJS (If 16GB RAM or more)"
+sed -i 's/--max-old-space-size=2048/--max-old-space-size=4096/g' /usr/share/meteor/bundle/systemd_start.sh
+
 echo "Cloning repos"
 git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git /root/DevOps-Notebook || cd /root/DevOps-Notebook && git pull
 git clone https://github.com/Hamid-Najafi/FontPack.git  /usr/share/fonts/FontPack || cd /usr/share/fonts/FontPack && git pull
