@@ -1,3 +1,5 @@
+# We’re using sudo /bin/bash before echo because the user needs root access to both echo and redirect as the root user. Otherwise, we’ll get a permission denied error because just echo will run by root and the redirection will be made with the current user’s permission. The -c option tells bash to get the command in single quotes as a string and run it in a shell.
+sudo /bin/bash -c 'echo "0 7 * * * systemctl stop bbb-rap-resque-worker" >> /etc/crontab'
 # -------==========-------
 # Apt Repository
 # -------==========-------
@@ -77,7 +79,11 @@ sudo lsof -p 15014
 # -------==========-------
 # Set TimeZone
 # -------==========-------
+# Current timezone
 timedatectl
+# List of available timezone
+timedatectl list-timezones
+# Set new timezone by replacing Asia/Kolkata with your timezone
 sudo timedatectl set-timezone Asia/Tehran 
 # -------==========-------
 # Ubuntu Automatic Update

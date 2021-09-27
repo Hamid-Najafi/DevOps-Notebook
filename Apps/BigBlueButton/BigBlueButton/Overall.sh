@@ -1,16 +1,29 @@
 # -------==========-------
 # **** Quick Install ****
 # -------==========-------
+# Disable Ubuntu Automatic Update
+sudo nano /etc/update-manager/release-upgrades
+# -------==========-------
 # "Configure proxy"
 echo -e "http_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/" | sudo tee -a /etc/environment
-source /etc/environment
 wget https://charts.gitlab.io 
 
+sudo mkdir -p /etc/systemd/system/docker.service.d
+cat >>  /etc/systemd/system/docker.service.d/http-proxy.conf << EOF
+[Service]
+Environment="HTTP_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
+Environment="HTTPS_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
+Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl restart docker
 # -------==========-------
 # BBB-Install script
 
 echo -e "FQDN=b1.vir-gol.ir" | sudo tee -a /etc/environment
 source /etc/environment
+exit
 # Node GPG Key
 # curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - 
 
@@ -20,6 +33,9 @@ wget -qO- http://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-
 # Coturn Server - Ubuntu 20.04
 # DISABLE PROXY FOR certificate REQUEST
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.vir-gol.ir:1b6s1esK -e admin@vir-gol.ir
+# Verify Turn server is accessible
+sudo apt install stun-client
+stun turn.vir-gol.ir
 
 # BBB 2.3 + Coturn - Ubuntu 18.04
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-230 -s $FQDN -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
@@ -31,16 +47,16 @@ wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic
 # wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s $FQDN -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
 
 # -------==========-------
-# "Post install Script"
-
+# "Disable Proxy"
+sed -e '/https_proxy/ s/^#*/#/' -i  /etc/environment && sed -e '/http_proxy/ s/^#*/#/' -i  /etc/environment
+# -------==========-------
+# **** Post Install ****
 su root
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/BigBlueButton/PostInstall.sh
 chmod +x PostInstall.sh
 sudo ./PostInstall.sh $FQDN
-
-http://www.jsondiff.com
 # -------==========-------
-# **** Quick Upgrade ****
+# **** Post Upgrade ****
 # -------==========-------
 su root
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/BigBlueButton/PostUpgrade.sh
@@ -96,7 +112,7 @@ ls -la /var/bigbluebutton/published/presentation/64c863ab0739360c689fc6d45bad5f9
 curl https://b1.vir-gol.ir/bigbluebutton/api/
 https://mconf.github.io/api-mate/#server=https://ib2.vir-gol.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 # Username:admin , Password: Metricpass.24
-export FQDN=b1.vir-gol.ir
+export FQDN=b2.vir-gol.ir
 # BBB Exporter
 curl -u admin:Metricpass.24 https://$FQDN/metrics/
 # Node Exporter

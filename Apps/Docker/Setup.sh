@@ -87,12 +87,12 @@ USER appuser
 # HTTP Proxy
 # -------==========-------
 sudo mkdir -p /etc/systemd/system/docker.service.d
-sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
+cat >>  /etc/systemd/system/docker.service.d/http-proxy.conf << EOF
 [Service]
 Environment="HTTP_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
 Environment="HTTPS_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
 Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
+EOF
 
 sudo systemctl daemon-reload
 sudo systemctl restart docker
-sudo systemctl show --property=Environment docker

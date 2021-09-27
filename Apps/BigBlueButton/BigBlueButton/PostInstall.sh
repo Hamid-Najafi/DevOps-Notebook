@@ -69,27 +69,24 @@ sed -i 's/NUMBER_OF_FRONTEND_NODEJS_PROCESSES=.*/NUMBER_OF_FRONTEND_NODEJS_PROCE
 
 echo "Increase number of recording workers"
 mkdir -p /etc/systemd/system/bbb-rap-resque-worker.service.d
-cat > n << EOF
+cat > /etc/systemd/system/bbb-rap-resque-worker.service.d/override.conf << EOF
 [Service]
-Environment=COUNT=16
+Environment=COUNT=3
 EOF
 
-echo "Change recorded sessions processing time"
-mkdir -p /etc/systemd/system/bbb-rap-starter.timer.d
-cat > /etc/systemd/system/bbb-rap-starter.timer.d/override.conf << EOF
-[Timer]
-OnActiveSec=
-OnUnitInactiveSec=
-OnCalendar=19,20,21,22,23,00,01:*:00
-Persistent=false
-EOF
-
-systemctl list-timers --all
+# systemctl list-timers --all
+systemctl daemon-reload
 systemctl enable bbb-rap-starter.service
 systemctl enable bbb-rap-resque-worker.service
-
-systemctl daemon-reload
 systemctl restart bbb-rap-resque-worker.service
+systemctl status bbb-rap-resque-worker.service
+
+echo "Change recorded sessions processing time"
+sudo timedatectl set-timezone Asia/Tehran 
+# Stop recording at 7 AM during week days
+echo "0 7 * * * systemctl stop bbb-rap-resque-worker" >> /etc/crontab
+# Start recording at 6 PM during week days; bbb-rap-resque-worker will automatically launch all workers required for processing
+echo "0 18 * * * systemctl start bbb-rap-resque-worker" >> /etc/crontab
 
 echo "Configuring secret"
 bbb-conf --setsecret 1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk

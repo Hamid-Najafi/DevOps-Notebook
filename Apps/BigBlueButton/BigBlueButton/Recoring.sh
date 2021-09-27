@@ -2,6 +2,7 @@
 # Move recordings to a different partition
 # -------==========-------
 # list disk
+lsblk -f
 fdisk -l
 export externalDisk=/dev/sdb
 # ReFormat externalDisk on every installation of bigbluebutton

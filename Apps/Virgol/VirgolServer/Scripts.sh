@@ -166,7 +166,7 @@ sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/saleh_prg/lms-with
 cd lms-with-moodle/
 git config --global user.email Hamid.Najafi@email.com
 git config --global user.name Hamid Najafi
-sudo bash build.sh 1.7.3
+sudo bash build.sh 1.7.4
 
 cd ~/docker/virgol/ && docker-compose pull && docker-compose up -d
 

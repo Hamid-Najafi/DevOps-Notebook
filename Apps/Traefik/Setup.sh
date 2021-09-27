@@ -13,5 +13,12 @@ docker-compose up -d
 # -------==========-------
 # Tips
 # -------==========-------
-Multi Host
+# Multi Host
       - "traefik.http.routers.virgol.rule=Host(`lms.legace.ir`, `lms.goldenstarc.ir`)"
+
+
+# Grafana
+docker exec -it grafana grafana-cli plugins install grafana-piechart-panel  
+docker restart grafana
+
+https://grafana.com/grafana/dashboards/12250

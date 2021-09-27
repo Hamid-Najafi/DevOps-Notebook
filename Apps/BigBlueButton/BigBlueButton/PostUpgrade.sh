@@ -76,4 +76,6 @@ nginx -t &&  nginx -s reload
 echo "Restarting BBB"
 bbb-conf --restart
 
+echo "Increase number of processes for nodejs"
+
 echo "Done!"

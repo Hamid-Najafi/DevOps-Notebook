@@ -51,9 +51,6 @@ sudo cp -r ~/DevOps-Notebook/Apps/Monitoring/Slave/* ~/docker/monitoring
 cd  ~/docker/monitoring
 # nano docker-compose.yml
 docker-compose up -d
-
-docker pull docker.io/goldenstarc/virgol:1.9 && cd ~/docker/virgol/ && docker-compose up -d
-
 # -------==========-------
 # Install Grafana Plugins
 # -------==========-------
@@ -71,3 +68,8 @@ http://localhost:9182/metrics
 
 # Full manual
 https://devconnected.com/windows-server-monitoring-using-prometheus-and-wmi-exporter/
+
+# -------==========-------
+# Dashboards
+# -------==========-------
+https://grafana.com/grafana/dashboards/11074
