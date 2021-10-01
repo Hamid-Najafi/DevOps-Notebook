@@ -43,7 +43,7 @@ service sshd restart
 # Add user
 # -------==========-------
 adduser ubuntu
-usermod -aG sudo parspack
+usermod -aG sudo dei
 
 adduser tiger
 usermod -aG sudo tiger

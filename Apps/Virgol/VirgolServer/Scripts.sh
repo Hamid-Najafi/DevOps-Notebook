@@ -15,7 +15,7 @@ sudo hostnamectl set-hostname virgol
 sudo reboot
 
 # Set Proxy
-echo -e "http_proxy=http://admin:Squidpass.24@185.235.41.48:3128/\nhttps_proxy=http://admin:Squidpass.24@185.235.41.48:3128/" | sudo tee -a /etc/environment
+echo -e "http_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/" | sudo tee -a /etc/environment
 source /etc/environment
 
 # -------==========-------
@@ -28,10 +28,10 @@ cat /root/.ssh/id_rsa.pub
 nano ~/.ssh/authorized_keys 
 # test ssh worling without password
 ssh username@server-ip
-ssh ubuntu@185.235.41.48 
+ssh ubuntu@hr.hamid-najafi.ir 
 # If worked, setup ssh proxy
 ssh username@server-ip -p 22 -D 5555 -C -q -N -f -g
-ssh ubuntu@185.235.41.48 -p 22 -D 5555 -C -q -N -f -g
+ssh ubuntu@hr.hamid-najafi.ir -p 22 -D 5555 -C -q -N -f -g
 sudo lsof -i -P -n | grep 5555
 apt install proxychains && tail -n 2 /etc/proxychains.conf | wc -c | xargs -I {} truncate /etc/proxychains.conf -s -{} && echo -e "socks5 127.0.0.1 5555" | tee -a /etc/proxychains.conf
 # -------==========-------
@@ -46,8 +46,8 @@ proxychains docker login
 sudo mkdir -p /etc/systemd/system/docker.service.d
 sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
 [Service]
-Environment="HTTP_PROXY=http://admin:Squidpass.24@185.235.41.48:3128"
-Environment="HTTPS_PROXY=http://admin:Squidpass.24@185.235.41.48:3128"
+Environment="HTTP_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
+Environment="HTTPS_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
 Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
 
 sudo systemctl daemon-reload

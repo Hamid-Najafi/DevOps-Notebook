@@ -39,7 +39,7 @@ echo "-----------------------------------------"
 echo "Use MP4 format for playback of recordings"
 echo "-----------------------------------------"
 sed -i 's/# - mp4/- mp4/g' /usr/local/bigbluebutton/core/scripts/presentation.yml
-sed -i 's/- webm/# - webm/g' /usr/local/bigbluebutton/core/scripts/presentation.yml
+# sed -i 's/- webm/# - webm/g' /usr/local/bigbluebutton/core/scripts/presentation.yml
 
 echo "-------------------------------------"
 echo "Optimize NodeJS (If 16GB RAM or more)"
@@ -180,6 +180,7 @@ ufw allow 9688
 echo "------------------------"
 echo "Configuring bbb-download"
 echo "------------------------"
+# Uses webm format
 chmod u+x /root/bbb-download/install.sh
 /root/bbb-download/install.sh 
 
@@ -195,7 +196,8 @@ docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@vir-gol.ir
 echo "---------------"
 echo "Disabling Proxy"
 echo "---------------"
-sed -e '/https_proxy/ s/^#*/#/' -i  /etc/environment && sed -e '/http_proxy/ s/^#*/#/' -i  /etc/environment
+sed -e '/http_proxy/ s/^#*/#/' -i  /etc/environment && sed -e '/https_proxy/ s/^#*/#/' -i  /etc/environment
+
 while true; do
     read -p "System Reboot is recommended.[Yy/Nn]" yn
     case $yn in
