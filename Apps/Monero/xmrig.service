@@ -1,0 +1,13 @@
+[Unit]
+Description=XMRig Daemon
+After=network.target
+
+[Service]
+Type=forking
+GuessMainPID=no
+ExecStart=/usr/local/bin/xmrig -c /home/monero/config.json -l /home/monero/xmrig.log -B
+Restart=always
+User=monero
+
+[Install]
+WantedBy=multi-user.target

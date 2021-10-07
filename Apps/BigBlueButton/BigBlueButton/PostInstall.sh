@@ -103,10 +103,11 @@ sed -i 's/NUMBER_OF_FRONTEND_NODEJS_PROCESSES=.*/NUMBER_OF_FRONTEND_NODEJS_PROCE
 echo "------------------------------------"
 echo "Increase number of recording workers"
 echo "------------------------------------"
+# Best value= CPUs / 2
 mkdir -p /etc/systemd/system/bbb-rap-resque-worker.service.d
 cat > /etc/systemd/system/bbb-rap-resque-worker.service.d/override.conf << EOF
 [Service]
-Environment=COUNT=3
+Environment=COUNT=28
 EOF
 
 # systemctl list-timers --all
