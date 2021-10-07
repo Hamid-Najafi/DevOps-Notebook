@@ -16,9 +16,10 @@ cp xmrig-6.15.2/xmrig .
 # Setup config
 # https://config.xmrig.com 
 # https://xmrig.com/wizard
+# nano /home/xmrig/config.json 
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Monero/config.json -O /home/xmrig/config.json
-nano /home/xmrig/config.json 
-PASTE CONFIG
+# Set Miner name
+sed -i 's/Tiger/new_name/g' /home/xmrig/config.json
 
 # Add service
 cat <<EOF > /usr/lib/systemd/system/xmrig.service
@@ -41,5 +42,11 @@ EOF
 
 systemctl enable xmrig
 service xmrig start
-systemctl
 sudo journalctl -u xmrig -f
+
+# Verify worker
+https://supportxmr.com
+432nLJ8DVK9FKEwiiXogB4X5M663u8qZbFqK5T31wwFaL5YwRHukPz8Tn2qvFsWf51TYezbuvzJVeFiHCHRVjUb7LwrLgWy
+
+systemctl daemon-reload 
+service xmrig restart
