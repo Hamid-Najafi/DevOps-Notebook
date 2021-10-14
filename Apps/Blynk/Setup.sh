@@ -5,15 +5,24 @@ mkdir -p ~/docker/blynk
 cd ~/docker/blynk
 wget https://raw.githubusercontent.com/Hamid-Najafi/blynk-server/master/server/core/src/main/resources/server.properties
 
+# admin.email=admin@blynk.cc
+# admin.pass=Blynkpass.24
+# http.port=8080
+# https.port=9443
+# hardware.mqtt.port=8440
+
 docker run \
     --name=blynk \
     --restart=always \
+    --network=host \
     -v blynk:/data \
-    -p 8080:8080 \
-    -p 9443:9443 \
     -v ~/docker/blynk/server.properties:/config/server.properties \
     -d mpherg/blynk-server
 
+    -p 8440:8440 \
+    -p 8080:8080 \
+    -p 9443:9443 \
+    
 # -------==========-------
 # Extended Blynk
 # -------==========-------
