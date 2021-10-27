@@ -3,6 +3,7 @@ sudo /bin/bash -c 'echo "0 7 * * * systemctl stop bbb-rap-resque-worker" >> /etc
 # -------==========-------
 # Apt Repository
 # -------==========-------
+# repos.um.ac.ir
 http://rpm.um.ac.ir
 
 sudo nano /etc/apt/sources.list
@@ -24,6 +25,24 @@ deb http://repos.um.ac.ir/ubuntu/ focal main restricted universe multiverse
 deb http://repos.um.ac.ir/ubuntu/ focal-updates main restricted universe multiverse 
 deb http://repos.um.ac.ir/ubuntu/ focal-security main restricted universe multiverse
 
+# 0-1.IR
+# Ubuntu 19.04 (Disco Xerus)
+deb http://mirror.0-1.cloud/ubuntu/ disco main restricted
+deb-src http://mirror.0-1.cloud/ubuntu/ disco main restricted
+
+# https://docker-registry.ir
+cp /etc/apt/sources.list /etc/apt/sources.list-back
+cat > /etc/apt/sources.list <<EOF
+deb http://a.docker-registry.ir/ubuntu/ $(lsb_release -cs) main restricted universe multiverse
+deb-src http://a.docker-registry.ir/ubuntu/ $(lsb_release -cs) main restricted  universe multiverse
+deb http://a.docker-registry.ir/ubuntu/ $(lsb_release -cs)-updates main restricted universe multiverse
+deb-src http://a.docker-registry.ir/ubuntu/ $(lsb_release -cs)-updates main restricted universe multiverse
+deb http://a.docker-registry.ir/ubuntu/ $(lsb_release -cs)-backports main restricted universe multiverse
+deb-src http://a.docker-registry.ir/ubuntu/ $(lsb_release -cs)-backports main restricted universe multiverse
+deb http://a.docker-registry.ir/ubuntu/ $(lsb_release -cs)-security main restricted universe multiverse
+deb-src http://a.docker-registry.ir/ubuntu/ $(lsb_release -cs)-security main restricted universe multiverse
+EOF
+
 sudo apt-get update
 # -------==========-------
 # System Benchmark
@@ -43,7 +62,7 @@ service sshd restart
 # Add user
 # -------==========-------
 adduser ubuntu
-usermod -aG sudo parspack
+usermod -aG sudo dei
 
 adduser tiger
 usermod -aG sudo tiger
@@ -64,6 +83,7 @@ vm.vfs_cache_pressure=50
 # SSH
 # -------==========-------
 ssh-keygen
+ssh-keygen -t rsa -b 4096 -C "server@identifier"
 ssh-copy-id username@remote_host
 ssh-copy-id root@185.234.14.99
 

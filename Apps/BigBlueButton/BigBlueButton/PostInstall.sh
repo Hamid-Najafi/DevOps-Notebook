@@ -28,7 +28,7 @@ sed -i 's/defaultWelcomeMessageFooter=.*/defaultWelcomeMessageFooter=\\u062c\\u0
 sed -i 's/defaultMaxUsers=.*/defaultMaxUsers=150/g' $BBB_WEB_CONFIG
 sed -i 's/meetingExpireIfNoUserJoinedInMinutes=.*/meetingExpireIfNoUserJoinedInMinutes=1440/g' $BBB_WEB_CONFIG
 sed -i 's/meetingExpireWhenLastUserLeftInMinutes=.*/meetingExpireWhenLastUserLeftInMinutes=1440/g' $BBB_WEB_CONFIG
-sed -i 's/breakoutRoomsEnabled=.*/breakoutRoomsEnabled=true/g' $BBB_WEB_CONFIG
+sed -i 's/breakoutRoomsEnabled=.*/breakoutRoomsEnabled=false/g' $BBB_WEB_CONFIG
 sed -i 's/lockSettingsDisableCam=.*/lockSettingsDisableCam=true/g' $BBB_WEB_CONFIG
 sed -i 's/lockSettingsDisableMic=.*/lockSettingsDisableMic=true/g' $BBB_WEB_CONFIG
 sed -i 's/lockSettingsDisablePrivateChat=.*/lockSettingsDisablePrivateChat=true/g' $BBB_WEB_CONFIG
@@ -42,7 +42,7 @@ echo "-----------------------------------------"
 echo "Use MP4 format for playback of recordings"
 echo "-----------------------------------------"
 sed -i 's/# - mp4/- mp4/g' /usr/local/bigbluebutton/core/scripts/presentation.yml
-sed -i 's/- webm/# - webm/g' /usr/local/bigbluebutton/core/scripts/presentation.yml
+# sed -i 's/- webm/# - webm/g' /usr/local/bigbluebutton/core/scripts/presentation.yml
 
 echo "-------------------------------------"
 echo "Optimize NodeJS (If 16GB RAM or more)"
@@ -106,10 +106,11 @@ sed -i 's/NUMBER_OF_FRONTEND_NODEJS_PROCESSES=.*/NUMBER_OF_FRONTEND_NODEJS_PROCE
 echo "------------------------------------"
 echo "Increase number of recording workers"
 echo "------------------------------------"
+# Best value= CPUs / 2
 mkdir -p /etc/systemd/system/bbb-rap-resque-worker.service.d
 cat > /etc/systemd/system/bbb-rap-resque-worker.service.d/override.conf << EOF
 [Service]
-Environment=COUNT=3
+Environment=COUNT=28
 EOF
 
 # systemctl list-timers --all
@@ -183,6 +184,7 @@ ufw allow 9688
 echo "------------------------"
 echo "Configuring bbb-download"
 echo "------------------------"
+# Uses webm format
 chmod u+x /root/bbb-download/install.sh
 /root/bbb-download/install.sh 
 
@@ -198,7 +200,8 @@ docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@vir-gol.ir
 echo "---------------"
 echo "Disabling Proxy"
 echo "---------------"
-sed -e '/https_proxy/ s/^#*/#/' -i  /etc/environment && sed -e '/http_proxy/ s/^#*/#/' -i  /etc/environment
+sed -e '/http_proxy/ s/^#*/#/' -i  /etc/environment && sed -e '/https_proxy/ s/^#*/#/' -i  /etc/environment
+
 while true; do
     read -p "System Reboot is recommended.[Yy/Nn]" yn
     case $yn in

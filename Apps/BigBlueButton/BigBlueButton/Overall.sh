@@ -78,10 +78,10 @@ docker-compose up -d --force-recreate --no-deps prometheus
 # To convert all of your current recordings to MP4 format use command:
 sudo bbb-record --rebuildall
 sudo bbb-record --list
-sudo bbb-record --rebuild 1a9127fcc0e42fd678ced2cb6dc7f0833d472cb4-1619591520731
-https://ib2.vir-gol.ir/download/presentation/{InternalmeetingID}/{InternalmeetingID}.mp4
-https://ib2.vir-gol.ir/download/presentation/134c0b3b267df918319e6ec823c789cf712888be-1617773562988/134c0b3b267df918319e6ec823c789cf712888be-1617773562988.mp4
-https://ib2.vir-gol.ir/playback/presentation/2.3/9c9e16629f9176df30ec52a7d57d46d4c6213274-1618199732033
+sudo bbb-record --rebuild 9fb761e020658b9cef1d263b6cc0f7a2f86a145d-1632889821115
+https://b2.vir-gol.ir/download/presentation/{InternalmeetingID}/{InternalmeetingID}.mp4
+https://b3.vir-gol.ir/download/presentation/9fb761e020658b9cef1d263b6cc0f7a2f86a145d-1632889821115/9fb761e020658b9cef1d263b6cc0f7a2f86a145d-1632889821115.mp4
+https://b2.vir-gol.ir/playback/presentation/2.3/9c9e16629f9176df30ec52a7d57d46d4c6213274-1618199732033
 # Run standalone
 /usr/bin/python /usr/local/bigbluebutton/core/scripts/post_publish/download.py 64c863ab0739360c689fc6d45bad5f97fa9c5c8f-1618186276307
 cd /usr/local/bigbluebutton/core/scripts/post_publish && ruby download_control.rb -m  64c863ab0739360c689fc6d45bad5f97fa9c5c8f-1618186276307

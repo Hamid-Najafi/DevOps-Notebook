@@ -19,7 +19,7 @@ sudo mount -t auto $externalDisk /mnt/hdd
 sudo bbb-conf --stop
 sudo mv /var/bigbluebutton/ /mnt/hdd
 # Do this to have backup if sommething goes wrong
-cp -R /mnt/hdd/bigbluebutton /mnt/hdd/bigbluebutton.backup
+# cp -R /mnt/hdd/bigbluebutton /mnt/hdd/bigbluebutton.backup
 sudo ln -s /mnt/hdd/bigbluebutton  /var/bigbluebutton
 chown -R bigbluebutton:bigbluebutton /var/bigbluebutton
 # Verify
@@ -32,7 +32,7 @@ sudo bbb-conf --start
 bbb-record --list
 # Run these commands on new server
 rsync -rP root@old-bbb-server.vir-gol.ir:/var/bigbluebutton/recording/raw/ /var/bigbluebutton/recording/raw/
-rsync -rP root@ib1.vir-gol.ir:/var/bigbluebutton/recording/raw/ /var/bigbluebutton/recording/raw/
+rsync -rP root@b2.vir-gol.ir:/var/bigbluebutton/recording/raw/ /var/bigbluebutton/recording/raw/
 rsync -rP --ignore-existing root@ib1.vir-gol.ir:/var/bigbluebutton/recording/raw/ /var/bigbluebutton/recording/raw/
 
 sudo bbb-record --rebuildall

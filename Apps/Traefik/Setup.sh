@@ -11,6 +11,12 @@ docker network create web
 docker-compose up -d
 
 # -------==========-------
+# Prometheus
+# -------==========-------
+export FQDN=hr.hamid-najafi.ir
+curl -u traefik:Traefikpass.24 http://$FQDN:9094/metrics/
+
+# -------==========-------
 # Tips
 # -------==========-------
 # Multi Host
@@ -18,7 +24,8 @@ docker-compose up -d
 
 
 # Grafana
+https://grafana.com/grafana/dashboards/12250
+
 docker exec -it grafana grafana-cli plugins install grafana-piechart-panel  
 docker restart grafana
 
-https://grafana.com/grafana/dashboards/12250
