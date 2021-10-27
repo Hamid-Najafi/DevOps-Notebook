@@ -145,7 +145,7 @@ cat /root/.ssh/id_rsa.pub
 nano ~/.ssh/authorized_keys 
 # test ssh worling without password
 ssh username@server-ip
-ssh ubuntu@185.235.41.48 
+ssh ubuntu@185.235.41.48
 # If worked, setup ssh proxy
 ssh username@server-ip -p 22 -D 5555 -C -q -N -f -g
 ssh ubuntu@185.235.41.48 -p 22 -D 5555 -C -q -N -f -g
