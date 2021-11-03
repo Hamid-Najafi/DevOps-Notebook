@@ -18,14 +18,13 @@ https://webqr.com
 # -------==========-------
 # Conf file
 # -------==========-------
-# Serverius
-[Interface]
-PrivateKey = cCpwBIm6fjRTOnvJj3Ds3HYnysPgXiZ+cR9O1dt4Z1c=
-ListenPort = 51820
-Address = 10.13.13.2/32
-DNS = 10.13.13.1
-
-[Peer]
-PublicKey = orB4xAXKo48oIV3MceQtROYKmroxMhz8EG9UCb2ulQc=
+# Herman
+[Interface] 
+Address = 10.13.13.2 
+PrivateKey = GDm0Y6qT8nc8U8H1go9/6DxoWHc5KQlRheEZlsGYI0k= 
+ListenPort = 51820 
+DNS = 10.13.13.1 
+[Peer] 
+PublicKey = HliPtQbC9DIk9bebsTfxR24IdZV5AJVGb08sGSbVM3s= 
+Endpoint = hr.hamid-najafi.ir:51820 
 AllowedIPs = 0.0.0.0/0
-Endpoint = su.legace.ir:51820
