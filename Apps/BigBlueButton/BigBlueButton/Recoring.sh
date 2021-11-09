@@ -4,7 +4,7 @@
 # list disk
 lsblk -f
 fdisk -l
-export externalDisk=/dev/sdb
+echo -e "externalDisk=/dev/sdb" | sudo tee -a /etc/environment
 # ReFormat externalDisk on every installation of bigbluebutton
 umount $externalDisk
 # Format HDD to ext4

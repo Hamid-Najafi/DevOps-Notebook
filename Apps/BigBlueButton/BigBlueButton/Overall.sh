@@ -97,9 +97,9 @@ ls -la /var/bigbluebutton/published/presentation/64c863ab0739360c689fc6d45bad5f9
 # Postman or Firefox:
 # BBB
 curl https://b1.vir-gol.ir/bigbluebutton/api/
-https://mconf.github.io/api-mate/#server=https://ib2.vir-gol.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
+https://mconf.github.io/api-mate/#server=https://b3.vir-gol.ir/bigbluebutton/&sharedSecret=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 # Username:admin , Password: Metricpass.24
-export FQDN=b2.vir-gol.ir
+export FQDN=b3.vir-gol.ir
 # BBB Exporter
 curl -u admin:Metricpass.24 https://$FQDN/metrics/
 # Node Exporter
