@@ -145,7 +145,7 @@ cat /root/.ssh/id_rsa.pub
 nano ~/.ssh/authorized_keys 
 # test ssh worling without password
 ssh username@server-ip
-ssh ubuntu@185.235.41.48 
+ssh ubuntu@185.235.41.48
 # If worked, setup ssh proxy
 ssh username@server-ip -p 22 -D 5555 -C -q -N -f -g
 ssh ubuntu@185.235.41.48 -p 22 -D 5555 -C -q -N -f -g
@@ -158,6 +158,8 @@ proxychains wget https://charts.gitlab.io
 # -------==========-------
 # Quick Install
 apt install resolvconf && echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head && service resolvconf restart
+apt install resolvconf && echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head && service resolvconf restart
+https://virgool.io/@mahdi.ft/dnsredirection-qxrl6fuqc7hv
 # Manuall Install
 sudo apt install resolvconf
 sudo nano /etc/resolvconf/resolv.conf.d/head
@@ -181,7 +183,7 @@ sudo service resolvconf restart
 sudo nano  /etc/environment
 echo -e "http_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/" | sudo tee -a /etc/environment
 source /etc/environment
-curl -x http://admin:Squidpass.24@su.legace.ir:3128/ -L http://panel.vir-gol.ir
+curl -x http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/ -L http://panel.vir-gol.ir
 wget https://charts.gitlab.io 
 # -------==========-------
 # speedtest:

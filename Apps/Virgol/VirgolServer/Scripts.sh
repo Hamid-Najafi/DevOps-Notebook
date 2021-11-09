@@ -37,11 +37,6 @@ apt install proxychains && tail -n 2 /etc/proxychains.conf | wc -c | xargs -I {}
 # -------==========-------
 # Install Docker
 # -------==========-------
-proxychains curl -sSL https://get.docker.com/ | sh
-usermod -aG docker $USER
-proxychains curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-compose/master/run.sh -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
-proxychains docker login
 # Docker HTTP Proxy
 sudo mkdir -p /etc/systemd/system/docker.service.d
 sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
@@ -49,6 +44,13 @@ sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
 Environment="HTTP_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
 Environment="HTTPS_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
 Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
+
+proxychains curl -sSL https://get.docker.com/ | sh
+usermod -aG docker $USER
+proxychains curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-compose/master/run.sh -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+proxychains docker login
+
 
 sudo systemctl daemon-reload
 sudo systemctl restart docker
@@ -183,7 +185,7 @@ sudo bash build.sh 1.1
 # -------==========-------
 # Top SQLs
 # -------==========-------
-SELECT * FROM "AspNetUsers" WHERE "UserName" = '09237890911'
+SELECT * FROM "AspNetUsers" WHERE "UserName" = '0888584628'
 UPDATE "AspNetUsers" SET "Moodle_Id" = 0
 SELECT * FROM "AspNetUsers" WHERE "Moodle_Id" != 0
 
