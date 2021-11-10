@@ -113,18 +113,27 @@ cat > /etc/systemd/system/bbb-rap-resque-worker.service.d/override.conf << EOF
 Environment=COUNT=28
 EOF
 
+echo "--------------------------------------------------"
+echo "Restart BBB Recording Services"
+echo "--------------------------------------------------"
 # systemctl list-timers --all
 systemctl daemon-reload
 systemctl enable bbb-rap-starter.service
 systemctl enable bbb-rap-resque-worker.service
+
+systemctl restart bbb-rap-starter.service
 systemctl restart bbb-rap-resque-worker.service
+
+systemctl status bbb-rap-starter.service
 systemctl status bbb-rap-resque-worker.service
 
 echo "--------------------------------------------------"
 echo "Set Cropnjob for recorded sessions processing task"
 echo "--------------------------------------------------"
 sudo timedatectl set-timezone Asia/Tehran 
+(crontab -l 2>/dev/null; echo "0 7 * * * systemctl stop bbb-rap-starter") | crontab -
 (crontab -l 2>/dev/null; echo "0 7 * * * systemctl stop bbb-rap-resque-worker") | crontab -
+(crontab -l 2>/dev/null; echo "0 18 * * * systemctl start bbb-rap-starter") | crontab -
 (crontab -l 2>/dev/null; echo "0 18 * * * systemctl start bbb-rap-resque-worker") | crontab -
 
 echo "------------------"
