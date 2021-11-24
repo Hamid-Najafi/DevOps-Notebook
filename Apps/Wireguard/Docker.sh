@@ -26,5 +26,16 @@ ListenPort = 51820
 DNS = 10.13.13.1 
 [Peer] 
 PublicKey = HliPtQbC9DIk9bebsTfxR24IdZV5AJVGb08sGSbVM3s= 
-Endpoint = hr.hamid-najafi.ir:51820 
+Endpoint = 185.235.41.48:51820 
+AllowedIPs = 0.0.0.0/0
+
+# SefroYek
+[Interface] 
+Address = 10.13.13.2 
+PrivateKey = aCtRVs2th8MvRbjYJ6r2/xT6aZ0+3kPwdheMNdB902c= 
+ListenPort = 51820 
+DNS = 10.13.13.1  
+[Peer] 
+PublicKey = xJW2y7UdiDsgijkzW0XkzcwGdaHRw/xDmRKjW0YeASw= 
+Endpoint = 185.234.14.99:51820 
 AllowedIPs = 0.0.0.0/0
