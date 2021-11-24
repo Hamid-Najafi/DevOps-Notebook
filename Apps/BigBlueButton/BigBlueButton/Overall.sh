@@ -1,36 +1,28 @@
 # -------==========-------
-# **** Quick Install ****
+# **** Pre Install ****
+su root
+wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/BigBlueButton/PreInstall.sh
+chmod +x PreInstall.sh
 # -------==========-------
-# Disable Ubuntu Automatic Update
-sed -i 's/Prompt=lts/Prompt=never/g' /etc/update-manager/release-upgrades
-# -------==========-------
-# "Configure proxy"
-echo -e "http_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/" | sudo tee -a /etc/environment
-sudo mkdir -p /etc/systemd/system/docker.service.d
-cat >>  /etc/systemd/system/docker.service.d/http-proxy.conf << EOF
-[Service]
-Environment="HTTP_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
-Environment="HTTPS_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
-Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
-EOF
-# -------==========-------
-# "Configure proxy"
+# "Configure FQDN"
 echo -e "FQDN=b1.vir-gol.ir" | sudo tee -a /etc/environment
-exit
+source /etc/environment
 # -------==========-------
 # BBB 2.3 + Coturn - Ubuntu 18.04
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-230 -s $FQDN -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
 
 # BBB 2.3 - Ubuntu 18.04
-wget -qO- http://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-23 -s $FQDN -e admin@vir-gol.ir -g -w
+# wget -qO- http://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-23 -s $FQDN -e admin@vir-gol.ir -g -w
 # -------==========-------
 # **** Post Install ****
-su root
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/BigBlueButton/PostInstall.sh
 chmod +x PostInstall.sh
 sudo ./PostInstall.sh $FQDN
+# **** Config Recording ****
+# -------==========-------
 # -------==========-------
 # **** Post Upgrade ****
+# -------==========-------
 # -------==========-------
 su root
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/BigBlueButton/PostUpgrade.sh
@@ -39,6 +31,9 @@ chmod +x PostUpgrade.sh
 # -------==========-------
 # Coturn Server - Ubuntu 20.04
 # DISABLE PROXY FOR certificate REQUEST
+su root
+wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/BigBlueButton/PreInstall.sh
+chmod +x PreInstall.sh
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.vir-gol.ir:1b6s1esK -e admin@vir-gol.ir
 # Verify Turn server is accessible
 sudo apt install stun-client
@@ -124,18 +119,19 @@ sudo nano /var/lib/tomcat8/webapps/demo/bbb_api_conf.jsp
 # * Backup all recorded meetings first!
 unlink /var/bigbluebutton
 # -------==========-------
-sudo apt-get purge nodejs mongodb-org  bigbluebutton bbb-* 
-# OR
-sudo apt-get purge bbb-apps bbb-apps-akka bbb-apps-screenshare bbb-apps-sip bbb-apps-video bbb-apps-video-broadcast bbb-client bbb-etherpad \
-bbb-freeswitch-core bbb-freeswitch-sounds bbb-fsesl-akka bbb-mkclean bbb-playback-presentation bbb-record-core bbb-red5 bbb-transcode-akka bbb-web
+# Remove BBB Packages - Version 2.3
+sudo apt-get purge -y bbb-apps-akka bbb-etherpad bbb-freeswitch-sounds bbb-html5 bbb-mkclean bbb-playback-presentation bbb-web \
+bbb-config bbb-freeswitch-core bbb-fsesl-akka bbb-libreoffice-docker bbb-playback bbb-record-core bbb-webrtc-sfu
 
-sudo apt-get purge nodejs mongodb-org bbb-apps-akka bbb-freeswitch-core bbb-html5 bbb-playback bbb-web bbb-config bbb-freeswitch-sounds \
-bbb-playback-presentation bbb-webrtc-sfu bbb-etherpad  bbb-fsesl-akka bbb-mkclean bbb-record-core bbb-libreoffice-docker
-apt --fix-broken install
-sudo apt-get purge bbb-record-core 
-#sudo apt-get purge apt-transport-https haveged build-essential yq
+sudo apt-get purge -y nodejs mongodb-org apt-transport-https haveged build-essential yq
+# clean out the local repository
+sudo apt-get clean
+# remove all the unnecessary packages that are no longer needed
 sudo apt autoremove
+
 sudo ufw disable
+
+sudo reboot
 # -------==========-------
 # BBB Livestreaming
 # -------==========-------

@@ -124,6 +124,7 @@ echo "--------------------------------------------------"
 echo "Set Cropnjob for recorded sessions processing task"
 echo "--------------------------------------------------"
 sudo timedatectl set-timezone Asia/Tehran 
+(crontab -l 2>/dev/null; echo "@reboot mount -t auto $externalDisk /mnt/hdd") | crontab -
 (crontab -l 2>/dev/null; echo "0 7 * * * systemctl stop bbb-rap-resque-worker") | crontab -
 (crontab -l 2>/dev/null; echo "0 18 * * * systemctl start bbb-rap-resque-worker") | crontab -
 

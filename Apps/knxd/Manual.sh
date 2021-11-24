@@ -1,16 +1,12 @@
-# Manual
-https://michlstechblog.info/blog/raspberry-pi-eibknx-ip-gateway-and-router-with-knxd/
-
-# Repo location
-/mnt/c/Users/golde/OneDrive/Documents/GitHub/knxd
-
 # ============================================================ #
 # Ubuntu APT
 sudo apt install knxd knxd-tools
-
 sudo apt remove knxd knxd-tools
 sudo apt autoclean && sudo apt autoremove
 # ============================================================ #
+# Manual
+https://michlstechblog.info/blog/raspberry-pi-eibknx-ip-gateway-and-router-with-knxd/
+
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/knxd/install_knxd_systemd.sh
 chmod +x install_knxd_systemd.sh
 sudo ./install_knxd_systemd.sh

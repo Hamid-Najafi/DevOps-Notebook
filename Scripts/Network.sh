@@ -158,7 +158,6 @@ proxychains wget https://charts.gitlab.io
 # -------==========-------
 # Quick Install
 apt install resolvconf && echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head && service resolvconf restart
-apt install resolvconf && echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head && service resolvconf restart
 https://virgool.io/@mahdi.ft/dnsredirection-qxrl6fuqc7hv
 # Manuall Install
 sudo apt install resolvconf
@@ -199,15 +198,17 @@ Password: sefr0yek@il0, eft0923789091
 
 
 IPMI/ILO:
-Username: D08-DS17
-Password: @epfl4739@
-http://172.28.249.20
-
+Network Address: 172.28.251.201
+Username: A01-DS16
+Password: A01-DS16
 
 OS Files
 http://185.141.105.194/
-
+http://185.141.105.194/Linux/ubuntu-18.04.4-server-amd64.iso
+http://185.141.105.194/Linux/ubuntu-18.04.5-live-server-amd64.iso
+# -------==========-------
 # Ubunut 16.04
+# -------==========-------
 # This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
 source /etc/network/interfaces.d/*
@@ -227,22 +228,25 @@ iface enp3s0f0 inet static
         pre-down route del 172.27.32.13 dev enp3s0f0
         pre-down route del default gw 172.27.32.13
 
+# -------==========-------
+# Ubunut 18.04 - 185.234.14.99
+# -------==========-------
+sudo nano /etc/netplan/01-netcfg.yaml 
 
-# Ubunut 18.04
 # This file describes the network interfaces available on your system
 # For more information, see netplan(5).
 network:
-  ethernets:
-          enp3s0f0:
-                  addresses:
-                          - 185.170.8.250/32
-                  nameservers:
-                          addresses:
-                                  - 185.51.200.2
-                                  - 8.8.8.8
-                          search: []
-                  routes:
-                     - to: 0.0.0.0/0
-                       via: 172.27.6.125
-                       on-link: true
-  version: 2
+        ethernets:
+        eno1:
+            addresses:
+                - 185.234.14.99/32
+            nameservers:
+                addresses:
+                    - 8.8.8.8
+                search: []
+            optional: true
+            routes:
+                - to: 0.0.0.0/0
+                  via: 172.27.12.101
+                  on-link: true
+    version: 2

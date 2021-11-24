@@ -3,7 +3,6 @@ sudo /bin/bash -c 'echo "0 7 * * * systemctl stop bbb-rap-resque-worker" >> /etc
 # -------==========-------
 # Apt Repository
 # -------==========-------
-
 # BEST WAY
 # https://docker-registry.ir
 sudo su
@@ -49,19 +48,31 @@ deb-src http://mirror.0-1.cloud/ubuntu/ disco main restricted
 
 sudo apt-get update
 # -------==========-------
+# SSH Configs
+# -------==========-------
+# Put Hamid@MacbookPro SSH PubKey 
+cat > /root/.ssh/authorized_keys  << EOF
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCm5HhH5maCzUQvNuf2mOgrCG3j16PfFiHIhhCXObZFVVCB2/L46/eYHKdvnVa03EeOw35y7PGLuDQimSi1IUbKP3fhkw30KDISIf7ARH5PZnJt6sXRUV1JZhabFbrjuJn3HVBQd0e2vqKSGbpEEg1Zz9yg1xLmLwiz0eVMh31J1PfAIX0DTaqpHhSijcKiB/93rE/AbaKwgoiDIbWHOR8VJaN6VfdvY+FtlmUsq70SpD5fwP/9C3AZX45KSQrGOAKwhd9vMFRrcTMnr/geyMpMAI+82L6yn3H7Mx0KZPgBoZafUbQ3FkC0g9dTg4N4jczxCTDRGy+DWqN22RNu3A2l hamid@MacbookPro
+EOF
+
+# Enable root Account Login
+sudo passwd root
+sudo nano /etc/ssh/sshd_config 
+PermitRootLogin yes
+PasswordAuthentication no
+
+service sshd restart
+# -------==========-------
+# SSH keygen 
+# -------==========-------
+ssh-keygen
+ssh-keygen -t rsa -b 4096 -C "server@identifier"
+ssh-copy-id username@remote_host
+ssh-copy-id root@185.234.14.99
+# -------==========-------
 # System Benchmark
 # -------==========-------
 wget -qO- bench.sh | bash
-# -------==========-------
-# SSH Configs
-# -------==========-------
-# Enable root Account
-# Connect to server via SSH 
-sudo passwd root
-sudo nano /etc/ssh/sshd_config 
-#PermitRootLogin prohibit-password
-PermitRootLogin yes
-service sshd restart
 # -------==========-------
 # Add user
 # -------==========-------
@@ -70,6 +81,11 @@ usermod -aG sudo dei
 
 adduser tiger
 usermod -aG sudo tiger
+# -------==========-------
+# NCDU - NCurses Disk Usage
+# -------==========-------
+sudo apt install ncdu -y
+cd / & sudo ncdu
 # -------==========-------
 # Add Swap
 # -------==========-------
@@ -83,27 +99,6 @@ echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 sudo nano /etc/sysctl.conf
 vm.swappiness=30
 vm.vfs_cache_pressure=50
-# -------==========-------
-# SSH
-# -------==========-------
-ssh-keygen
-ssh-keygen -t rsa -b 4096 -C "server@identifier"
-ssh-copy-id username@remote_host
-ssh-copy-id root@185.234.14.99
-
-sudo nano /etc/ssh/sshd_config 
-PasswordAuthentication no
-service sshd restart
-
-sudo nano /root/.ssh/authorized_keys 
-# Hamid@MacbookPro PubKey 
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCm5HhH5maCzUQvNuf2mOgrCG3j16PfFiHIhhCXObZFVVCB2/L46/eYHKdvnVa03EeOw35y7PGLuDQimSi1IUbKP3fhkw30KDISIf7ARH5PZnJt6sXRUV1JZhabFbrjuJn3HVBQd0e2vqKSGbpEEg1Zz9yg1xLmLwiz0eVMh31J1PfAIX0DTaqpHhSijcKiB/93rE/AbaKwgoiDIbWHOR8VJaN6VfdvY+FtlmUsq70SpD5fwP/9C3AZX45KSQrGOAKwhd9vMFRrcTMnr/geyMpMAI+82L6yn3H7Mx0KZPgBoZafUbQ3FkC0g9dTg4N4jczxCTDRGy+DWqN22RNu3A2l hamid@MacbookPro
-# -------==========-------
-# NCurses Disk Usage
-# -------==========-------
-sudo apt install ncdu -y
-cd /
-sudo ncdu
 # -------==========-------
 # Get port procces id
 # -------==========-------
