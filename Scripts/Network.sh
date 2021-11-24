@@ -159,6 +159,9 @@ proxychains wget https://charts.gitlab.io
 # Quick Install
 apt install resolvconf && echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head && service resolvconf restart
 https://virgool.io/@mahdi.ft/dnsredirection-qxrl6fuqc7hv
+# Check DNS Server
+systemd-resolve --status
+
 # Manuall Install
 sudo apt install resolvconf
 sudo nano /etc/resolvconf/resolv.conf.d/head
