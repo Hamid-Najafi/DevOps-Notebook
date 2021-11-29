@@ -25,7 +25,9 @@ allow_intrusive_scan = true
 # -------==========-------
 # Examples
 # -------==========-------
+# List NFC Device
 nfc-list
+# PollS Card UID
 nfc-poll
 # Mifare Tool Clone Card
 mfoc -O dump.img
