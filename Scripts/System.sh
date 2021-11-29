@@ -54,13 +54,8 @@ sudo apt-get update
 cat > /root/.ssh/authorized_keys  << EOF
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCm5HhH5maCzUQvNuf2mOgrCG3j16PfFiHIhhCXObZFVVCB2/L46/eYHKdvnVa03EeOw35y7PGLuDQimSi1IUbKP3fhkw30KDISIf7ARH5PZnJt6sXRUV1JZhabFbrjuJn3HVBQd0e2vqKSGbpEEg1Zz9yg1xLmLwiz0eVMh31J1PfAIX0DTaqpHhSijcKiB/93rE/AbaKwgoiDIbWHOR8VJaN6VfdvY+FtlmUsq70SpD5fwP/9C3AZX45KSQrGOAKwhd9vMFRrcTMnr/geyMpMAI+82L6yn3H7Mx0KZPgBoZafUbQ3FkC0g9dTg4N4jczxCTDRGy+DWqN22RNu3A2l hamid@MacbookPro
 EOF
-
-# Enable root Account Login
-sudo passwd root
-sudo nano /etc/ssh/sshd_config 
-PermitRootLogin yes
-PasswordAuthentication no
-
+echo -e "PermitRootLogin yes" | tee -a  /etc/ssh/sshd_config 
+echo -e "PasswordAuthentication no" | tee -a  /etc/ssh/sshd_config 
 service sshd restart
 # -------==========-------
 # SSH keygen 
@@ -70,10 +65,11 @@ ssh-keygen -t rsa -b 4096 -C "server@identifier"
 ssh-copy-id username@remote_host
 ssh-copy-id root@185.234.14.99
 # -------==========-------
-# SSH keygen 
+# Hostname
 # -------==========-------
-sudo hostnamectl set-hostname C1TechHMS
-echo -e "127.0.0.1 C1TechHMS" | tee -a /etc/hosts
+export newhostname=TigerRPI
+sudo hostnamectl set-hostname $newhostname
+echo -e "127.0.0.1 $newhostname" | tee -a /etc/hosts
 # -------==========-------
 # System Benchmark
 # -------==========-------
@@ -82,10 +78,7 @@ wget -qO- bench.sh | bash
 # Add user
 # -------==========-------
 adduser ubuntu
-usermod -aG sudo dei
-
-adduser tiger
-usermod -aG sudo tiger
+usermod -aG sudo ubuntu
 # -------==========-------
 # NCDU - NCurses Disk Usage
 # -------==========-------

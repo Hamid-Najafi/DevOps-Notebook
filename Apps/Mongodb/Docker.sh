@@ -11,4 +11,3 @@ docker run \
     -d mongo  
     # User : admin
 # ConnectionString
-c

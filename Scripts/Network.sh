@@ -1,4 +1,4 @@
-4https://itnext.io/automated-delivery-of-asp-net-core-apps-on-on-prem-kubernetes-1d6327ee1454
+https://itnext.io/automated-delivery-of-asp-net-core-apps-on-on-prem-kubernetes-1d6327ee1454
 # -------==========-------
 # Used ports
 # -------==========-------
@@ -78,20 +78,6 @@ TCP     10255       Read-Only Kubelet API
 TCP     10250       Kubelet API
 TCP     10255       Read-Only Kubelet API
 TCP     30000-32767 NodePort Services
-
-# -------==========-------
-# Set Hostname
-# -------==========-------
-sudo hostnamectl set-hostname Private-BBB-2
-# Usual Ubuntu
-sudo nano /etc/hosts  
-127.0.0.1  Private-BBB-2
-# Cloud-init Ubuntu
-sudo nano /etc/cloud/templates/hosts.debian.tmpl
-127.0.0.1 Private-BBB-2
-127.0.0.1 pb2.legace.ir
-
-sudo reboot
 # -------==========-------
 # Docker port check
 # -------==========-------
@@ -159,7 +145,7 @@ proxychains wget https://charts.gitlab.io
 # Quick Install
 apt install resolvconf && echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head && service resolvconf restart
 https://virgool.io/@mahdi.ft/dnsredirection-qxrl6fuqc7hv
-# Check DNS Server
+# Verify DNS Server
 systemd-resolve --status
 
 # Manuall Install
@@ -253,3 +239,21 @@ network:
                   via: 172.27.12.101
                   on-link: true
     version: 2
+
+
+# -------==========-------
+# Ubunut 20.04 - Wifi Config
+# -------==========-------
+network:
+    ethernets:
+        eth0:
+            dhcp4: true
+            optional: true
+    version: 2
+    wifis:
+        wlp3s0:
+            optional: true
+            access-points:
+                "ILMA 903":
+                    password: "Officepass.24"
+            dhcp4: true
