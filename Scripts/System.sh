@@ -70,6 +70,11 @@ ssh-keygen -t rsa -b 4096 -C "server@identifier"
 ssh-copy-id username@remote_host
 ssh-copy-id root@185.234.14.99
 # -------==========-------
+# SSH keygen 
+# -------==========-------
+sudo hostnamectl set-hostname C1TechHMS
+echo -e "127.0.0.1 C1TechHMS" | tee -a /etc/hosts
+# -------==========-------
 # System Benchmark
 # -------==========-------
 wget -qO- bench.sh | bash
