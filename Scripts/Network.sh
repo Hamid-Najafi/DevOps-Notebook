@@ -119,6 +119,7 @@ ssh-copy-id username@remote_host
 # -------==========-------
 # Get port procces id
 # -------==========-------
+sudo lsof -i -P -n | grep 3306
 sudo lsof -i -P -n | grep 9090
 sudo lsof -p 15014
 # -------==========-------
@@ -244,16 +245,20 @@ network:
 # -------==========-------
 # Ubunut 20.04 - Wifi Config
 # -------==========-------
-network:
-    ethernets:
-        eth0:
-            dhcp4: true
-            optional: true
-    version: 2
-    wifis:
-        wlp3s0:
-            optional: true
-            access-points:
-                "ILMA 903":
-                    password: "Officepass.24"
-            dhcp4: true
+# in system-boot partition: network-config
+sudo nano /etc/netplan/50-cloud-init.yaml
+
+version: 2
+ethernets:
+  eth0:
+    dhcp4: true
+    optional: true
+wifis:
+ wlan0:
+   dhcp4: true
+   optional: true
+   access-points:
+     "ILMA 903":
+       password: "Officepass.24"
+     "ZMI_MF885":
+       password: "51176915"

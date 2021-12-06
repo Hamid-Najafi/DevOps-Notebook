@@ -11,3 +11,6 @@ docker run \
     -d mongo  
     # User : admin
 # ConnectionString
+mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]
+mongodb://myDBReader:D1fficultP%40ssw0rd@mongodb0.example.com:27017/?authSource=admin
+mongodb://admin:Mongopass.24@192.168.100.13:27017

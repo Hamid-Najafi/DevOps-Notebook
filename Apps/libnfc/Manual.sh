@@ -12,16 +12,19 @@ dmesg
 # -------==========-------
 # 1. 
 /etc/nfc/libnfc.conf
-echo -e "device.connstring = \"pn532_uart:/dev/ttyUSB0\"" | tee -a /etc/nfc/libnfc.conf
+echo -e "device.connstring = \"pn532_uart:/dev/ttyUSB1\"" | tee -a /etc/nfc/libnfc.conf
 
 # 2. 
-nano /etc/nfc/devices.d/pn532_uart_on_rpi.conf
+mkdir -p /etc/nfc/devices.d
+cat >  /etc/nfc/devices.d/pn532_uart_on_rpi.conf  << EOF
 ## Typical configuration file for PN532 device on R-Pi connected using UART
 ## Note: to use UART port on R-Pi, you have to disable linux serial console:
 ##   http://learn.adafruit.com/adafruit-nfc-rfid-on-raspberry-pi/freeing-uart-on-the-pi
 name = "PN532 board via UART"
 connstring = pn532_uart:/dev/ttyUSB0
 allow_intrusive_scan = true
+EOF
+
 # -------==========-------
 # Examples
 # -------==========-------
