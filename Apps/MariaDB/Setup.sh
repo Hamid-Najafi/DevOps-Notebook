@@ -4,9 +4,8 @@
 sudo apt install mariadb-server -y
 sudo mysql_secure_installation
 
-# Configure MySQL to accept external connections to Raspberry Pi
-sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
-#bind-address = 127.0.0.1
+# Configure MariaDB to accept external connections
+sed -i '/bind-address/s/^/#/g' /etc/mysql/mariadb.conf.d/50-server.cnf
 /etc/init.d/mysql restart
 # -------==========-------
 # CLI Connection
@@ -35,13 +34,13 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
 SELECT user,host,password FROM mysql.user;
 
 # Create User
-CREATE USER 'C1TechHMS'@'%' IDENTIFIED BY 'mySQLpass.24';
+CREATE USER 'C1Tech'@'%' IDENTIFIED BY 'mySQLpass.24';
 
 # Create Database
 DROP DATABASE C1TechHMS;
 
-CREATE DATABASE C1TechHMS;
-GRANT ALL PRIVILEGES ON C1TechHMS.* TO 'C1TechHMS'@'%';
+CREATE DATABASE HospitalManagements;
+GRANT ALL PRIVILEGES ON HospitalManagements.* TO 'C1Tech'@'%';
 FLUSH PRIVILEGES;
 
 GRANT ALL PRIVILEGES ON * . * TO 'root'@'%';
