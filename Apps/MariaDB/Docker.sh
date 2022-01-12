@@ -8,6 +8,11 @@ docker run \
     -v MariaDb:/var/lib/mysql \
     --restart=always \
     -d mariadb
+
+
+
+PATH
+
 # PhpMyAdmin
 docker run \
     --name phpmyadmin \

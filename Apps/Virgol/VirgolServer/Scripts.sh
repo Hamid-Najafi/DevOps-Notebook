@@ -19,23 +19,7 @@ echo -e "http_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/\nhttps_pr
 source /etc/environment
 
 # -------==========-------
-# SSH Proxy (the best)
-# -------==========-------
-# In Iran Server
-ssh-keygen -t rsa -b 4096 -C "server@identifier"
-cat /root/.ssh/id_rsa.pub
-# copy id_rsa and paste here in foreign server
-nano ~/.ssh/authorized_keys 
-# test ssh worling without password
-ssh username@server-ip
-ssh ubuntu@hr.hamid-najafi.ir 
-# If worked, setup ssh proxy
-ssh username@server-ip -p 22 -D 5555 -C -q -N -f -g
-ssh ubuntu@hr.hamid-najafi.ir -p 22 -D 5555 -C -q -N -f -g
-sudo lsof -i -P -n | grep 5555
-apt install proxychains && tail -n 2 /etc/proxychains.conf | wc -c | xargs -I {} truncate /etc/proxychains.conf -s -{} && echo -e "socks5 127.0.0.1 5555" | tee -a /etc/proxychains.conf
-# -------==========-------
-# Install Docker
+# Docker
 # -------==========-------
 # Docker HTTP Proxy
 sudo mkdir -p /etc/systemd/system/docker.service.d
@@ -45,31 +29,28 @@ Environment="HTTP_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
 Environment="HTTPS_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
 Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
 
-proxychains curl -sSL https://get.docker.com/ | sh
-usermod -aG docker $USER
-proxychains curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-compose/master/run.sh -o /usr/local/bin/docker-compose
+# Install Docker
+curl -sSL https://get.docker.com/ | sh
+sudo usermod -aG docker $USER
+curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-compose/master/run.sh -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
-proxychains docker login
+docker login
 
-
-sudo systemctl daemon-reload
-sudo systemctl restart docker
-sudo systemctl show --property=Environment docker
 # Clone Repos
-proxychains git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@github.com/Hamid-Najafi/DevOps-Notebook.git
+git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@github.com/Hamid-Najafi/DevOps-Notebook.git
 # Docker images
-proxychains docker pull traefik:latest
-proxychains docker pull prom/prometheus:latest
-proxychains docker pull prom/alertmanager:latest
-proxychains docker pull prom/node-exporter:latest
-proxychains docker pull google/cadvisor:latest
-proxychains docker pull grafana/grafana:latest
-proxychains docker pull stefanprodan/caddy:latest
-proxychains docker pull goldenstarc/virgol:latest
-proxychains docker pull postgres
-proxychains docker pull goldenstarc/moodle:3.9.1-debian-10-r18
-proxychains docker pull docker.io/bitnami/mariadb:10.3-debian-10
-proxychains docker pull goldenstarc/extended-openldap
+docker pull traefik:latest
+docker pull prom/prometheus:latest
+docker pull prom/alertmanager:latest
+docker pull prom/node-exporter:latest
+docker pull google/cadvisor:latest
+docker pull grafana/grafana:latest
+docker pull stefanprodan/caddy:latest
+docker pull goldenstarc/virgol:latest
+docker pull postgres
+docker pull goldenstarc/moodle:3.9.1-debian-10-r18
+docker pull docker.io/bitnami/mariadb:10.3-debian-10
+docker pull goldenstarc/extended-openldap
 # dpage/pgadmin4
 # docker.io/bitnami/phpmyadmin:5-debian-10
 # osixia/phpldapadmin

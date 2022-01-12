@@ -8,9 +8,17 @@ docker run \
     -v postgresDb:/var/lib/postgresql/data \
     --restart=always \
     -d postgres
-
+    
     command: postgres -c 'max_connections=200'
     # User : postgres
+
+cd ..
+cp lf,PGADMIN_DEFAULT_EMAIL
+if(succeed)
+{
+exit 0
+}else
+exit 1
 
 # TEMP
 docker run \

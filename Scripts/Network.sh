@@ -243,7 +243,7 @@ network:
 
 
 # -------==========-------
-# Ubunut 20.04 - Wifi Config
+# Wifi Station
 # -------==========-------
 # in system-boot partition: network-config
 sudo nano /etc/netplan/50-cloud-init.yaml
@@ -262,3 +262,54 @@ wifis:
        password: "Officepass.24"
      "ZMI_MF885":
        password: "51176915"
+
+sudo netplan apply
+sudo netplan --debug apply
+# -------==========-------
+#  Wifi Access Point
+# -------==========-------
+# Disable "systemd-resolved"
+# 1
+sudo systemctl disable systemd-resolved
+# 2
+echo -e "DNSStubListener=no" | sudo tee -a /etc/systemd/resolved.conf
+# OR 
+# "systemd-resolved" & "dnsmasq" together mode
+# redirect the systemd-resolved to use the localhost as the primary nameserver. 
+# This will make sure that all queries are directed to dnsmasq for resolution before hitting the external DNS server
+sed -i '1s/^/nameserver 127.0.0.1\r\n/' /etc/resolv.conf 
+
+
+sudo apt-get -y install hostapd haveged dnsmasq
+sudo nano /etc/default/hostapd
+
+# Check if your wifi card support the AP mode:
+sudo iw list |grep -i "Supported interface modes:" -A10
+# It should print:
+# ...
+# * AP
+# ...
+
+# https://github.com/oblique/create_ap#internet-sharing-from-the-same-wifi-interface
+git clone https://github.com/oblique/create_ap
+cd create_ap
+sudo make install
+
+# HOT Launch
+# Internet sharing from the same WiFi interface:
+create_ap wlan0 wlan0 MyAccessPoint MyPassPhrase
+create_ap wlan0 wlan0 BCM4345 RPIpass.24
+# Ethernet connection through your Wifi interface:
+create_ap wlan0 eth0 MyAccessPoint MyPassPhrase
+create_ap wlan0 eth0 BCM4345 RPIpass.24
+
+# SYSTEMD
+# /lib/systemd/system/create_ap.service
+sudo nano /etc/create_ap.conf
+
+sudo systemctl enable create_ap
+sudo systemctl start create_ap
+
+# IF NAMERESOLUTION PROBLE:
+# REMOVE AND MAKE NEW resolv.conf
+sudo rm /etc/resolv.conf

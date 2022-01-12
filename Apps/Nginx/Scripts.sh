@@ -2,8 +2,8 @@
 # Nginx
 # -------==========------- 
 # Install Nginx
-sudo apt-get update
-sudo apt-get remove nginx -y 
+sudo apt update
+sudo apt install nginx -y 
 
 # Uninstall Nginx
 # Removes all but config files.
