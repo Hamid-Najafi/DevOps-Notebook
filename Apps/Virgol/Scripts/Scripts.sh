@@ -1,22 +1,7 @@
 # -------==========-------
 # Pre Install
 # -------==========-------
-sudo apt update 
-sudo apt upgrade -y
-
-sudo apt-get install ncdu dtrx bmon htop software-properties-common traceroute curl git
-
-# Set Server DNS FQDN 
-vir-gol.ir
-
-# Set Hostname
-sudo hostnamectl set-hostname herman
-sudo hostnamectl set-hostname virgol
-sudo reboot
-
-# Set Proxy
-echo -e "http_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/" | sudo tee -a /etc/environment
-source /etc/environment
+# Do everthing in Setup.sh script.
 
 # -------==========-------
 # Docker
@@ -36,24 +21,11 @@ curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-compo
 chmod +x /usr/local/bin/docker-compose
 docker login
 
+# -------==========-------
 # Clone Repos
-git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@github.com/Hamid-Najafi/DevOps-Notebook.git
-# Docker images
-docker pull traefik:latest
-docker pull prom/prometheus:latest
-docker pull prom/alertmanager:latest
-docker pull prom/node-exporter:latest
-docker pull google/cadvisor:latest
-docker pull grafana/grafana:latest
-docker pull stefanprodan/caddy:latest
-docker pull goldenstarc/virgol:latest
-docker pull postgres
-docker pull goldenstarc/moodle:3.9.1-debian-10-r18
-docker pull docker.io/bitnami/mariadb:10.3-debian-10
-docker pull goldenstarc/extended-openldap
-# dpage/pgadmin4
-# docker.io/bitnami/phpmyadmin:5-debian-10
-# osixia/phpldapadmin
+# -------==========-------
+sudo git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
+
 # -------==========-------
 # Setup Traefik
 # -------==========-------
@@ -87,6 +59,7 @@ docker-compose up -d
 # 2. Start Virgol Services
 mkdir -p ~/docker/virgol
 cp ~/DevOps-Notebook/Apps/Virgol/PaaS/docker-compose.yml ~/docker/virgol/
+# cp ~/DevOps-Notebook/Apps/Virgol/PaaS/DEI/docker-compose.yml ~/docker/virgol/
 cd ~/docker/virgol
 docker-compose up -d
 # -------==========-------
@@ -149,7 +122,7 @@ sudo git clone https://oauth2:uRiq-GRyEZrdyvaxEknZ@gitlab.com/saleh_prg/lms-with
 cd lms-with-moodle/
 git config --global user.email Hamid.Najafi@email.com
 git config --global user.name Hamid Najafi
-sudo bash build.sh 1.7.4
+sudo bash build.sh 1.8.0
 
 cd ~/docker/virgol/ && docker-compose pull && docker-compose up -d
 

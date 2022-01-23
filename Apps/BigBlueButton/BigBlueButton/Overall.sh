@@ -5,7 +5,7 @@ wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/
 chmod +x PreInstall.sh
 # -------==========-------
 # "Configure FQDN"
-echo -e "FQDN=b1.vir-gol.ir" | sudo tee -a /etc/environment
+echo -e "FQDN=b2.vir-gol.ir" | sudo tee -a /etc/environment
 source /etc/environment
 # -------==========-------
 # BBB 2.3 + Coturn - Ubuntu 18.04

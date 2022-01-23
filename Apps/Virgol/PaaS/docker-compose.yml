@@ -86,7 +86,7 @@ services:
   #     - virgol
   #     - web
   moodle:
-    image: 'goldenstarc/moodle:3.9.1-debian-10-r18'
+    image: 'goldenstarc/moodle:latest'
     container_name: virgol_moodle
     restart: always
     environment:
@@ -119,7 +119,7 @@ services:
       - web
       - virgol
   mariadb:
-    image: 'docker.io/bitnami/mariadb:10.3-debian-10'
+    image: 'docker.io/bitnami/mariadb:latest'
     container_name: virgol_moodle_db
     restart: always
     environment:
@@ -155,7 +155,6 @@ services:
   # Username: cn=admin,dc=legace,dc=ir, Password: OpenLDAPpass.24
   openldap:
     image: goldenstarc/extended-openldap
-    hostname: openldap.vir-gol.ir
     container_name: virgol_openldap
     ports:
       - '389:389'
@@ -169,7 +168,6 @@ services:
       - web
   # phpldapadmin:
   #   image: osixia/phpldapadmin
-  #   hostname: phpldapadmin.vir-gol.ir 
   #   container_name: virgol_phpldapadmin
   #   environment:
   #     - PHPLDAPADMIN_LDAP_HOSTS=openldap
