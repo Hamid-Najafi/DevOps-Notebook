@@ -74,11 +74,13 @@ echo "---------------"
 echo "Setting favicon"
 echo "---------------"
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Theme/Virgol/favicon.ico /var/www/bigbluebutton-default/favicon.ico
+# cp /root/DevOps-Notebook/Apps/BigBlueButton/Theme/Dei/favicon.ico /var/www/bigbluebutton-default/favicon.ico
 
 echo "-------------------------"
 echo "Copying presentation PDFs"
 echo "-------------------------"
 cp /root/DevOps-Notebook/Apps/BigBlueButton/Theme/Virgol/Whiteboard-Virgol.pdf /var/www/bigbluebutton-default/default.pdf
+# cp /root/DevOps-Notebook/Apps/BigBlueButton/Theme/Dei/Whiteboard-DEI.pdf /var/www/bigbluebutton-default/default.pdf
 # cp /root/DevOps-Notebook/Apps/BigBlueButton/Theme/Custom/Javaneha.pdf  /var/www/bigbluebutton-default/
 find /root/DevOps-Notebook/Apps/BigBlueButton/Theme -type f -name "*.pdf" | xargs cp -t /var/www/bigbluebutton-default/
 
