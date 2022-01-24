@@ -1,5 +1,6 @@
-# -------==========-------
+# ---------------------------------------------------==========---------------------------------------------------------------
 # **** Pre Install ****
+# -------==========-------
 su root
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/Installation/Scripts/PreInstall.sh
 chmod +x PreInstall.sh
@@ -10,26 +11,20 @@ source /etc/environment
 # -------==========-------
 # BBB 2.4 + Coturn - Ubuntu 18.04
 wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-24  -s $FQDN -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
-# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-230 -s $FQDN -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
-
-# BBB 2.3 - Ubuntu 18.04
-# wget -qO- http://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-23 -s $FQDN -e admin@vir-gol.ir -g -w
 # -------==========-------
 # **** Post Install ****
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/Installation/Scripts/PostInstall.sh
 chmod +x PostInstall.sh
 sudo ./PostInstall.sh $FQDN
-# **** Config Recording ****
-# -------==========-------
-# -------==========-------
+# **** Now Config Recording ****
+# ---------------------------------------------------==========---------------------------------------------------------------
 # **** Post Upgrade ****
-# -------==========-------
 # -------==========-------
 su root
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/Installation/Scripts/PostUpgrade.sh
 chmod +x PostUpgrade.sh
 ./PostUpgrade.sh $FQDN
-# -------==========-------
+# ---------------------------------------------------==========---------------------------------------------------------------
 # Coturn Server - Ubuntu 20.04
 # DISABLE PROXY FOR certificate REQUEST
 su root
@@ -40,6 +35,11 @@ wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.v
 sudo apt install stun-client
 stun turn.vir-gol.ir
 # -------==========-------
+# Deprecated Versions
+# -------==========-------
+# BBB 2.3 + Coturn - Ubuntu 18.04
+# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-230 -s $FQDN -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
+
 # BBB 2.2 - Ubuntu 16.04
 # wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s $FQDN -e admin@vir-gol.ir -g -w
 

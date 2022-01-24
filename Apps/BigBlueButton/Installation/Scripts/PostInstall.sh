@@ -60,10 +60,10 @@ git clone https://github.com/Hamid-Najafi/bbb-download.git /root/bbb-download ||
 echo "-------------------------------"
 echo "Installing Persian translations"
 echo "-------------------------------"
-cp /usr/share/meteor/bundle/programs/web.browser/app/locales/fa_IR.json{,.backup}
-cp /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/fa_IR.json{,.backup}
-cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser/app/locales/
-cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/
+# cp /usr/share/meteor/bundle/programs/web.browser/app/locales/fa_IR.json{,.backup}
+# cp /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/fa_IR.json{,.backup}
+# cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/Languages/fa_IR.json /usr/share/meteor/bundle/programs/web.browser/app/locales/
+# cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/Languages/fa_IR.json /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/
 
 echo "----------------------------------"
 echo "build font information cache files"
@@ -97,7 +97,7 @@ mv /opt/freeswitch/share/freeswitch/sounds/en/us/callie/conference /opt/freeswit
 echo "-------------------------------------------"
 echo "Delete recordings older than 12 days script"
 echo "-------------------------------------------"
-cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/bbb-recording-cleanup.sh /etc/cron.daily/bbb-recording-cleanup
+cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/Recording/bbb-recording-cleanup.sh /etc/cron.daily/bbb-recording-cleanup
 chmod +x /etc/cron.daily/bbb-recording-cleanup
 
 echo "---------------------------------------"
