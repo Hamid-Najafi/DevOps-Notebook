@@ -11,7 +11,7 @@ yq w -i $HTML5_CONFIG public.app.skipCheck true
 yq w -i $HTML5_CONFIG public.app.skipCheckOnJoin true
 yq w -i $HTML5_CONFIG public.app.clientTitle 'سامانه ویرگول'
 yq w -i $HTML5_CONFIG public.app.appName 'سامانه ویرگول'
-yq w -i $HTML5_CONFIG public.app.copyright '©2021 Virgol Inc. Powerd by BigBlueButton' 
+yq w -i $HTML5_CONFIG public.app.copyright '©2022 Virgol Inc. Powerd by BigBlueButton' 
 yq w -i $HTML5_CONFIG public.app.helpLink https://panel.vir-gol.ir/video/guide-pr
 yq w -i $HTML5_CONFIG public.app.remainingTimeAlertThreshold 10
 yq w -i $HTML5_CONFIG public.app.defaultSettings.application.chatPushAlerts true
@@ -50,10 +50,10 @@ cd /usr/share/fonts/FontPack && git pull
 echo "-------------------------------"
 echo "Installing Persian translations"
 echo "-------------------------------"
-cp /usr/share/meteor/bundle/programs/web.browser/app/locales/fa_IR.json{,.backup}
-cp /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/fa_IR.json{,.backup}
-cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser/app/locales/
-cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/
+# cp /usr/share/meteor/bundle/programs/web.browser/app/locales/fa_IR.json{,.backup}
+# cp /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/fa_IR.json{,.backup}
+# cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser/app/locales/
+# cp /root/DevOps-Notebook/Apps/BigBlueButton/Settings/fa_IR.json /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/
 
 echo "---------------"
 echo "Setting favicon"
