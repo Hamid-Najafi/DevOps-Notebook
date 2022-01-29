@@ -5,12 +5,12 @@ su root
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/Installation/Scripts/PreInstall.sh
 chmod +x PreInstall.sh
 # -------==========-------
-# "Configure FQDN"
-echo -e "FQDN=b2.vir-gol.ir" | sudo tee -a /etc/environment
-source /etc/environment
-# -------==========-------
 # BBB 2.4 + Coturn - Ubuntu 18.04
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-24  -s $FQDN -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
+export FQDN=b1.vir-gol.ir
+export version=bionic-24
+export email=admin@vir-gol.ir
+export turnServer=turn.vir-gol.ir:1b6s1esK
+wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v  $version -s $FQDN -e $email -g -w -c $turnServer
 # -------==========-------
 # **** Post Install ****
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/Installation/Scripts/PostInstall.sh
@@ -34,17 +34,6 @@ wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -c turn.v
 # Verify Turn server is accessible
 sudo apt install stun-client
 stun turn.vir-gol.ir
-# -------==========-------
-# Deprecated Versions
-# -------==========-------
-# BBB 2.3 + Coturn - Ubuntu 18.04
-# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-230 -s $FQDN -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
-
-# BBB 2.2 - Ubuntu 16.04
-# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-22 -s $FQDN -e admin@vir-gol.ir -g -w
-
-# BBB 2.2 specific version + Coturn - Ubuntu 16.04
-# wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -v xenial-220-2.2.29 -s $FQDN -e admin@vir-gol.ir -g -w -c turn.vir-gol.ir:1b6s1esK
 # -------==========-------
 # Prometheus Main Montoring
 # -------==========-------

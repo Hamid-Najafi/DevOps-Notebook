@@ -35,11 +35,24 @@ echo "--------------------------"
 echo "Setting Docker Proxy"
 echo "--------------------------"
 sudo mkdir -p /etc/systemd/system/docker.service.d
-cat >>  /etc/systemd/system/docker.service.d/http-proxy.conf << EOF
+cat >> /etc/systemd/system/docker.service.d/http-proxy.conf << EOF
 [Service]
 Environment="HTTP_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
 Environment="HTTPS_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
 Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
 EOF
+
+echo "--------------------------"
+echo "Setting APT Proxy"
+echo "--------------------------"
+cat >> /etc/apt/apt.conf.d/proxy.conf << EOF
+Acquire::http::Proxy "http://admin:Squidpass.24@hr.hamid-najafi.ir:3128";
+Acquire::https::Proxy "http://admin:Squidpass.24@hr.hamid-najafi.ir:3128";
+EOF
+
+echo "--------------------------"
+echo "Verify Proxy"
+echo "--------------------------"
+curl -x http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/ -L http://panel.vir-gol.ir
 
 echo "Done!"

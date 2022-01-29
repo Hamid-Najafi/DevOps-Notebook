@@ -207,7 +207,7 @@ rm /etc/bigbluebutton/nginx/greenlight-redirect.nginx
 sed -i 's/BIGBLUEBUTTON_SECRET=.*/BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk/g' /root/greenlight/.env
 docker run --rm --env-file /root/greenlight/.env bigbluebutton/greenlight:v2 bundle exec rake conf:check
 docker-compose -f /root/greenlight/docker-compose.yml up -d
-docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@vir-gol.ir","BBBpass.24","admin"]
+docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@vir-gol.ir","BBBpass.24!@#$","admin"]
 
 echo "---------------"
 echo "Disabling Proxy"
