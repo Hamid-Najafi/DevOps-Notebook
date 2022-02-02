@@ -2,18 +2,13 @@
 # Pre Install
 # -------==========-------
 # Do everthing in Setup.sh script.
+wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/Installation/Scripts/PreInstall.sh
+chmod +x PreInstall.sh
+sudo ./PreInstall.sh
 
 # -------==========-------
 # Docker
 # -------==========-------
-# Docker HTTP Proxy
-sudo mkdir -p /etc/systemd/system/docker.service.d
-sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
-[Service]
-Environment="HTTP_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
-Environment="HTTPS_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
-Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
-
 # Install Docker
 curl -sSL https://get.docker.com/ | sh
 sudo usermod -aG docker $USER

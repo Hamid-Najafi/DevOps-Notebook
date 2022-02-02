@@ -1,9 +1,10 @@
 # ---------------------------------------------------==========---------------------------------------------------------------
 # **** Pre Install ****
 # -------==========-------
-su root
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/Installation/Scripts/PreInstall.sh
 chmod +x PreInstall.sh
+sudo ./PreInstall.sh
+
 # -------==========-------
 # BBB 2.4 + Coturn - Ubuntu 18.04
 export FQDN=b1.vir-gol.ir
@@ -20,7 +21,6 @@ sudo ./PostInstall.sh $FQDN
 # ---------------------------------------------------==========---------------------------------------------------------------
 # **** Post Upgrade ****
 # -------==========-------
-su root
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/BigBlueButton/Installation/Scripts/PostUpgrade.sh
 chmod +x PostUpgrade.sh
 ./PostUpgrade.sh $FQDN

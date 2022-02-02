@@ -7,6 +7,10 @@
 # -------==========-------
 /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
 # -------==========-------
+#  virtual-backgrounds
+# -------==========-------
+/usr/share/meteor/bundle/programs/server/assets/app/resources/images/virtual-backgrounds
+# -------==========-------
 #  .Nginx
 # -------==========-------
 /etc/nginx/sites-available/bigbluebutton 
@@ -21,8 +25,6 @@
 (Both are same)
 /usr/share/meteor/bundle/programs/web.browser/app/locales/
 /usr/share/meteor/bundle/programs/web.browser.legacy/app/locales/
-# BBB-2.2
-ls /usr/share/meteor/bundle/programs/server/assets/app/locales/
 # -------==========-------
 #  .Flash (SWF) client
 # -------==========-------
