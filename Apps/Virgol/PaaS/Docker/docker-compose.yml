@@ -86,7 +86,7 @@ services:
   #     - virgol
   #     - web
   moodle:
-    image: 'goldenstarc/moodle:latest'
+    image: 'goldenstarc/moodle:3.9.1-debian-10-r18'
     container_name: virgol_moodle
     restart: always
     environment:
@@ -119,7 +119,7 @@ services:
       - web
       - virgol
   mariadb:
-    image: 'docker.io/bitnami/mariadb:latest'
+    image: 'docker.io/bitnami/mariadb:10.3-debian-10'
     container_name: virgol_moodle_db
     restart: always
     environment:
@@ -158,7 +158,7 @@ services:
     container_name: virgol_openldap
     ports:
       - '389:389'
-      - '637:636'
+      # - '636:636'
     restart: always
     volumes:
       - openldapDb:/var/lib/ldap

@@ -105,10 +105,6 @@ Authorize external service for webservice user
 # -------==========-------
 11 - Set token in Virgol Database || Docker-Compose
 # -------==========-------
-12 - (If there is any) Import LDAP user in moodle
-  docker exec -it virgol_moodle sh
-  php ./bitnami/moodle/auth/ldap/cli/sync_users.php
-# -------==========-------
 # Customize Moodle
 # -------==========-------
 # Admin page

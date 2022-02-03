@@ -53,24 +53,24 @@ docker-compose up -d
 # 1. Restore Database Using TablePlus App
 # 2. Start Virgol Services
 mkdir -p ~/docker/virgol
-cp ~/DevOps-Notebook/Apps/Virgol/PaaS/docker-compose.yml ~/docker/virgol/
-# cp ~/DevOps-Notebook/Apps/Virgol/PaaS/DEI/docker-compose.yml ~/docker/virgol/
+cp ~/DevOps-Notebook/Apps/Virgol/PaaS/Docker/docker-compose.yml ~/docker/virgol/
 cd ~/docker/virgol
 docker-compose up -d
 # -------==========-------
 # Setup Services
 # -------==========-------
-1. Config postgres settings
-2. Check Openldap is working
-3. Postman: Sync LDAP with Virgol
-4. Restore moodle settings as documented (PostInstall.sh)
-5. Restore moodle ldap users using this command: 
+1. Restore DB
+2. Config postgres settings
+3. Check Openldap is working
+4. Postman: Sync LDAP with Virgol
+5. Restore moodle settings as documented (PostInstall.sh)
+6. Restore moodle ldap users using this command: 
 docker exec -it virgol_moodle php ./bitnami/moodle/auth/ldap/cli/sync_users.php
-6. Database: Set moodle token (SiteSettings)
-7. Database: Set all moodleId => AdminDetails & Schools to -1, AspNetUsers to 0
-8. Postman: Sync Virgol Moodle ID
-9. Postman: Recreate School Moodle (if want to fix admin without school, leave desiredSchoolId with random number)
-0. Check
+7. Database: Set moodle token (SiteSettings)
+8. Database: Set all moodleId => AdminDetails & Schools to -1, AspNetUsers to 0
+9. Postman: Sync Virgol Moodle ID
+10. Postman: Recreate School Moodle (if want to fix admin without school, leave desiredSchoolId with random number)
+11. Check
     Users: https://moodle.vir-gol.ir/admin/user.php
     Courses & Categories: https://moodle.vir-gol.ir/course/management.php
 
