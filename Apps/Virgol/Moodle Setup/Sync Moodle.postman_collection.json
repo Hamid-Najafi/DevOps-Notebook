@@ -1,0 +1,378 @@
+{
+	"info": {
+		"_postman_id": "6b4b1f69-27d8-48df-987c-9550cd23ee4d",
+		"name": "Sync Moodle",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Moodle",
+			"item": [
+				{
+					"name": "Users Get",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://moodle.vir-gol.ir/webservice/rest/server.php?moodlewsrestformat=json&wstoken=4fd5ba74ec1df210f423a96737a0a341&wsfunction=core_user_get_users&criteria[0][key]=idnumber&criteria[0][value]=0819910254",
+							"protocol": "https",
+							"host": [
+								"moodle",
+								"vir-gol",
+								"ir"
+							],
+							"path": [
+								"webservice",
+								"rest",
+								"server.php"
+							],
+							"query": [
+								{
+									"key": "moodlewsrestformat",
+									"value": "json"
+								},
+								{
+									"key": "wstoken",
+									"value": "4fd5ba74ec1df210f423a96737a0a341"
+								},
+								{
+									"key": "wsfunction",
+									"value": "core_user_get_users"
+								},
+								{
+									"key": "criteria[0][key]",
+									"value": "idnumber"
+								},
+								{
+									"key": "criteria[0][value]",
+									"value": "0819910254",
+									"description": "Username = idnumber = Unique identifier in LDAP"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Users Create",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://moodle.vir-gol.ir/webservice/rest/server.php?moodlewsrestformat=json&wstoken=4fd5ba74ec1df210f423a96737a0a341&wsfunction=core_user_create_users&users[0][username]=123444444445&users[0][auth]=ldap&users[0][firstname]=hamid2&users[0][lastname]=najafi24&users[0][email]=hamid.najafi24@vir-gol.ir&users[0][idnumber]=123444444445",
+							"protocol": "http",
+							"host": [
+								"moodle",
+								"vir-gol",
+								"ir"
+							],
+							"path": [
+								"webservice",
+								"rest",
+								"server.php"
+							],
+							"query": [
+								{
+									"key": "moodlewsrestformat",
+									"value": "json"
+								},
+								{
+									"key": "wstoken",
+									"value": "4fd5ba74ec1df210f423a96737a0a341"
+								},
+								{
+									"key": "wsfunction",
+									"value": "core_user_create_users"
+								},
+								{
+									"key": "users[0][username]",
+									"value": "123444444445"
+								},
+								{
+									"key": "users[0][auth]",
+									"value": "ldap"
+								},
+								{
+									"key": "users[0][firstname]",
+									"value": "hamid2"
+								},
+								{
+									"key": "users[0][lastname]",
+									"value": "najafi24"
+								},
+								{
+									"key": "users[0][email]",
+									"value": "hamid.najafi24@vir-gol.ir"
+								},
+								{
+									"key": "users[0][idnumber]",
+									"value": "123444444445"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login Admin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"Username\":\"Admin\" , \"Password\" : \"wydta4-voqvAb-vadpaf\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://panel.vir-gol.ir/api/Users/LoginUser",
+					"protocol": "https",
+					"host": [
+						"panel",
+						"vir-gol",
+						"ir"
+					],
+					"path": [
+						"api",
+						"Users",
+						"LoginUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recreate School Moodle",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImdpdmVuX25hbWUiOiJhZG1pbiIsImp0aSI6ImM0N2Y2MmVjLWQxYWUtNGUwYi04MzY2LTU3MTdmMDIxZDRkYyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNjI5NjY4MzEwLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.6ZtEo-YJom-2HOxFzluBk5W1amdh0GxIqFvYyYOpf5A",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://panel.vir-gol.ir/api/Administrator/RecreateMoodle?schoolType=6&desiredSchoolId=151",
+					"protocol": "https",
+					"host": [
+						"panel",
+						"vir-gol",
+						"ir"
+					],
+					"path": [
+						"api",
+						"Administrator",
+						"RecreateMoodle"
+					],
+					"query": [
+						{
+							"key": "schoolType",
+							"value": "6",
+							"description": "SchoolType in School database"
+						},
+						{
+							"key": "desiredSchoolId",
+							"value": "151",
+							"description": "Id in School database"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sync LDAP with Virgol",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImdpdmVuX25hbWUiOiJhZG1pbiIsImp0aSI6ImZlZDFmZDQwLTA4ZWYtNDczYi04ZWIwLTAyOGQyYjE1Njg5YyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNjI5NjY3MTI0LCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.I9BQhqWLR9ZOQpmEOYdAr-a8qEf2aI5fiOknk3I_3j4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://panel.vir-gol.ir/api/Administrator/SyncMoodleLDAP",
+					"protocol": "https",
+					"host": [
+						"panel",
+						"vir-gol",
+						"ir"
+					],
+					"path": [
+						"api",
+						"Administrator",
+						"SyncMoodleLDAP"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sync Virgol Moodle ID",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImdpdmVuX25hbWUiOiJhZG1pbiIsImp0aSI6IjY3Y2Y3OTBjLTBiOWMtNGQ0Ni04MzhkLTliNWVkNDkwYzJiZiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNjI5NzExOTc2LCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.Ww7mdEADz9xKsSKXs9h8ZDvef7a9GzZPznzwyGaWzS4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://panel.vir-gol.ir/api/Administrator/SyncUsersWithMoodle",
+					"protocol": "https",
+					"host": [
+						"panel",
+						"vir-gol",
+						"ir"
+					],
+					"path": [
+						"api",
+						"Administrator",
+						"SyncUsersWithMoodle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sync Virgol Moodle ID (LOCAL)",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImdpdmVuX25hbWUiOiJhZG1pbiIsImp0aSI6IjY3Y2Y3OTBjLTBiOWMtNGQ0Ni04MzhkLTliNWVkNDkwYzJiZiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNjI5NzExOTc2LCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.Ww7mdEADz9xKsSKXs9h8ZDvef7a9GzZPznzwyGaWzS4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/api/Administrator/SyncUsersWithMoodle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"Administrator",
+						"SyncUsersWithMoodle"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

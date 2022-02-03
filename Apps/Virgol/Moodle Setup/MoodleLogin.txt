@@ -1,0 +1,27 @@
+# -------==========-------
+https://panel.vir-gol.ir/SSO/
+# -------==========-------
+
+<form classname="text-center" action="https://moodle.vir-gol.ir/login/index.php" method="POST">
+    <input name="username" type="text">
+    <input name="password" type="text">
+    <button type="submit">ورود</button>
+</form>
+
+# -------==========-------
+https://dei.razaviedu.ir/SSO/
+# -------==========-------
+
+<form classname="text-center" action="https://m-dei.vir-gol.ir/login/index.php" method="POST">
+    <input name="username" type="text">
+    <input name="password" type="text">
+    <button type="submit">ورود</button>
+</form>
+
+# -------==========-------
+admin
+wydta4-voqvAb-vadpaf
+# -------==========-------
+
+
+echo "" > $(docker inspect --format='{{.LogPath}}' virgol_main)

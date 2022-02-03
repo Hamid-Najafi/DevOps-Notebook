@@ -63,8 +63,8 @@ docker-compose up -d
 1. Config postgres settings
 2. Check Openldap is working
 3. Postman: Sync LDAP with Virgol
-4. Restore moodle settings as documented 
-5. Restore moodle ldap users
+4. Restore moodle settings as documented (PostInstall.sh)
+5. Restore moodle ldap users using this command: 
 docker exec -it virgol_moodle php ./bitnami/moodle/auth/ldap/cli/sync_users.php
 6. Database: Set moodle token (SiteSettings)
 7. Database: Set all moodleId => AdminDetails & Schools to -1, AspNetUsers to 0
