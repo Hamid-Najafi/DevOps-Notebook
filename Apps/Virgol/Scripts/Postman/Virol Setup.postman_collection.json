@@ -1,0 +1,409 @@
+{
+	"info": {
+		"_postman_id": "6b4b1f69-27d8-48df-987c-9550cd23ee4d",
+		"name": "Virol Setup",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Moodle API",
+			"item": [
+				{
+					"name": "Users Get",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://m-dei.vir-gol.ir/webservice/rest/server.php?moodlewsrestformat=json&wstoken=6b2d40dc140ba630aa05cba20ab5acc5&wsfunction=core_user_get_users&criteria[0][key]=idnumber&criteria[0][value]=123444444445",
+							"protocol": "https",
+							"host": [
+								"m-dei",
+								"vir-gol",
+								"ir"
+							],
+							"path": [
+								"webservice",
+								"rest",
+								"server.php"
+							],
+							"query": [
+								{
+									"key": "moodlewsrestformat",
+									"value": "json"
+								},
+								{
+									"key": "wstoken",
+									"value": "6b2d40dc140ba630aa05cba20ab5acc5"
+								},
+								{
+									"key": "wsfunction",
+									"value": "core_user_get_users"
+								},
+								{
+									"key": "criteria[0][key]",
+									"value": "idnumber"
+								},
+								{
+									"key": "criteria[0][value]",
+									"value": "123444444445",
+									"description": "Username = idnumber = Unique identifier in LDAP"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Users Create",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://m-dei.vir-gol.ir/webservice/rest/server.php?moodlewsrestformat=json&wstoken=6b2d40dc140ba630aa05cba20ab5acc5&wsfunction=core_user_create_users&users[0][username]=123444444445&users[0][auth]=ldap&users[0][firstname]=hamid&users[0][lastname]=najafi&users[0][email]=hamid.najafi24@vir-gol.ir&users[0][idnumber]=123444444445",
+							"protocol": "http",
+							"host": [
+								"m-dei",
+								"vir-gol",
+								"ir"
+							],
+							"path": [
+								"webservice",
+								"rest",
+								"server.php"
+							],
+							"query": [
+								{
+									"key": "moodlewsrestformat",
+									"value": "json"
+								},
+								{
+									"key": "wstoken",
+									"value": "6b2d40dc140ba630aa05cba20ab5acc5"
+								},
+								{
+									"key": "wsfunction",
+									"value": "core_user_create_users"
+								},
+								{
+									"key": "users[0][username]",
+									"value": "123444444445"
+								},
+								{
+									"key": "users[0][auth]",
+									"value": "ldap"
+								},
+								{
+									"key": "users[0][firstname]",
+									"value": "hamid"
+								},
+								{
+									"key": "users[0][lastname]",
+									"value": "najafi"
+								},
+								{
+									"key": "users[0][email]",
+									"value": "hamid.najafi24@vir-gol.ir"
+								},
+								{
+									"key": "users[0][idnumber]",
+									"value": "123444444445"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sync LDAP & Moodle",
+			"item": [
+				{
+					"name": "Sync School Moodle ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImdpdmVuX25hbWUiOiJhZG1pbiIsImp0aSI6ImRiZjhjZWU1LWMzMGItNGIzMS05ZjkxLWU5ZjMyOTZiZWMxNyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNjMwMzkyMTgyLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.6m4nl19-f-to8km096zBB2oBGd5Fhmfh2ZEVPENe6A8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://panel.vir-gol.ir/api/Administrator/RecreateMoodle?schoolType=6&desiredSchoolId=151",
+							"protocol": "https",
+							"host": [
+								"panel",
+								"vir-gol",
+								"ir"
+							],
+							"path": [
+								"api",
+								"Administrator",
+								"RecreateMoodle"
+							],
+							"query": [
+								{
+									"key": "schoolType",
+									"value": "6",
+									"description": "SchoolType in School database"
+								},
+								{
+									"key": "desiredSchoolId",
+									"value": "151",
+									"description": "Id in School database"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sync LDAP with Virgol",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImdpdmVuX25hbWUiOiJhZG1pbiIsImp0aSI6ImU4YTRkMTk2LTFlZTItNGMyZC1iMDkyLTQ4NTJmZDEzYTJlNSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluaXN0cmF0b3IiLCJleHAiOjE2NDM5NTYwMjUsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIn0.jb8GFHYPzmI3O9fkLG8bRcMsfAlTDeFW4uwgPkut-Kw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://dei.razaviedu.ir/api/Administrator/SyncMoodleLDAP",
+							"protocol": "https",
+							"host": [
+								"dei",
+								"razaviedu",
+								"ir"
+							],
+							"path": [
+								"api",
+								"Administrator",
+								"SyncMoodleLDAP"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sync Virgol Moodle ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImdpdmVuX25hbWUiOiJhZG1pbiIsImp0aSI6ImU4YTRkMTk2LTFlZTItNGMyZC1iMDkyLTQ4NTJmZDEzYTJlNSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluaXN0cmF0b3IiLCJleHAiOjE2NDM5NTYwMjUsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIn0.jb8GFHYPzmI3O9fkLG8bRcMsfAlTDeFW4uwgPkut-Kw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://dei.razaviedu.ir/api/Administrator/SyncUsersWithMoodle",
+							"protocol": "https",
+							"host": [
+								"dei",
+								"razaviedu",
+								"ir"
+							],
+							"path": [
+								"api",
+								"Administrator",
+								"SyncUsersWithMoodle"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create Master Admin",
+			"item": [
+				{
+					"name": "AddNewMasterAdmin",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImdpdmVuX25hbWUiOiJhZG1pbiIsImp0aSI6IjgxMGU5ZmM3LTNkNzUtNGVlNS1hODIyLTJlM2NhYzhhNDM5YSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluaXN0cmF0b3IiLCJleHAiOjE2NDM5OTM0NjEsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIn0.MNw6t7W2KvzPhnou8vBipTSb8C3awQ1yRc9OmP1_kng",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"schoolType\": 1,\n    \"schoolLimit\" : 100,\n    \"SchoolTypeName\": \"آموزش از راه دور\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://dei.hamid-najafi.ir/api/Administrator/AddAdmin?userName=Rd5008&password=Rd5008",
+							"protocol": "https",
+							"host": [
+								"dei",
+								"hamid-najafi",
+								"ir"
+							],
+							"path": [
+								"api",
+								"Administrator",
+								"AddAdmin"
+							],
+							"query": [
+								{
+									"key": "userName",
+									"value": "Rd5008"
+								},
+								{
+									"key": "password",
+									"value": "Rd5008"
+								}
+							]
+						},
+						"description": "Add and Assign manager to new school\r\n\r\nif User with that mellicode exist return bad request"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login Admin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"Username\":\"Admin\" , \"Password\" : \"wydta4-voqvAb-vadpaf\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://dei.hamid-najafi.ir/api/Users/LoginUser",
+					"protocol": "https",
+					"host": [
+						"dei",
+						"hamid-najafi",
+						"ir"
+					],
+					"path": [
+						"api",
+						"Users",
+						"LoginUser"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

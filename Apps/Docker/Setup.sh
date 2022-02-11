@@ -68,15 +68,14 @@ docker push goldenstarc/bigbluebutton-livestreaming
     # healthcheck:
     #   test: ["CMD-SHELL", "wget -q --spider --proxy=off localhost:4000/api/v1/streaming/health || exit 1"]
 # -------==========-------
-# Command-line completion
-# -------==========-------
-https://docs.docker.com/compose/completion/v
-# -------==========-------
 # Container bash
 # -------==========-------
 docker exec -t -i container_name /bin/bash
 docker exec -ti container_name /bin/bash
 zker exec -ti container_name sh
+
+echo "" > $(docker inspect --format='{{.LogPath}}' <container_name_or_id>)
+echo "" > $(docker inspect --format='{{.LogPath}}' virgol_main)
 # -------==========-------
 #Processes In Containers Should Not Run As Root
 # -------==========-------
