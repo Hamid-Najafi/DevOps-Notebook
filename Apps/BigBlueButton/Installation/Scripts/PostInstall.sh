@@ -19,6 +19,7 @@ yq w -i $HTML5_CONFIG public.app.defaultSettings.application.userJoinPushAlerts 
 yq w -i $HTML5_CONFIG public.app.defaultSettings.application.overrideLocale fa_IR
 yq w -i $HTML5_CONFIG public.caption.enabled false
 yq w -i $HTML5_CONFIG public.virtualBackgrounds:.enabled false
+
 echo "-----------------------"
 echo "Applying BBB_WEB_CONFIG"
 echo "-----------------------"
