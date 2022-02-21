@@ -135,7 +135,6 @@ echo "--------------------------------------------------"
 echo "Set Cropnjob for recorded sessions processing task"
 echo "--------------------------------------------------"
 sudo timedatectl set-timezone Asia/Tehran 
-(crontab -l 2>/dev/null; echo "@reboot mount -t auto $externalDisk /mnt/hdd") | crontab -
 (crontab -l 2>/dev/null; echo "0 7 * * * systemctl stop bbb-rap-resque-worker") | crontab -
 (crontab -l 2>/dev/null; echo "0 18 * * * systemctl start bbb-rap-starter") | crontab -
 (crontab -l 2>/dev/null; echo "0 18 * * * systemctl start bbb-rap-resque-worker") | crontab -
@@ -208,7 +207,7 @@ rm /etc/bigbluebutton/nginx/greenlight-redirect.nginx
 sed -i 's/BIGBLUEBUTTON_SECRET=.*/BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk/g' /root/greenlight/.env
 docker run --rm --env-file /root/greenlight/.env bigbluebutton/greenlight:v2 bundle exec rake conf:check
 docker-compose -f /root/greenlight/docker-compose.yml up -d
-docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@vir-gol.ir","BBBpass.24!@#$","admin"]
+docker exec greenlight-v2 bundle exec sh -c 'rake user:create["Admin","admin@vir-gol.ir","BBBpass.24!@#$","admin"]'
 
 echo "---------------"
 echo "Disabling Proxy"

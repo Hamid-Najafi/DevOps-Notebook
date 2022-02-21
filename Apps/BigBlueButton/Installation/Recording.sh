@@ -30,12 +30,14 @@ lsblk -f
 mkdir -p /mnt/hdd/bigbluebutton/
 chown -R bigbluebutton:bigbluebutton  /mnt/hdd/bigbluebutton/
 sudo mount -t auto $externalDisk /mnt/hdd
+sudo mount -t auto $externalDisk /mnt/hdd
 sudo bbb-conf --stop
 sudo mv /var/bigbluebutton/ /mnt/hdd
 # Do this to have backup if sommething goes wrong
 # cp -R /mnt/hdd/bigbluebutton /mnt/hdd/bigbluebutton.backup
 sudo ln -s /mnt/hdd/bigbluebutton  /var/bigbluebutton
 chown -R bigbluebutton:bigbluebutton /var/bigbluebutton
+(crontab -l 2>/dev/null; echo "@reboot mount -t auto $externalDisk /mnt/hdd2") | crontab -
 # Verify
 ls -la /var
 sudo bbb-conf --start
