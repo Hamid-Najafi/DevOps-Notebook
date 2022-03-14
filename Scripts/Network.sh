@@ -167,6 +167,15 @@ nameserver 185.55.225.26
 sudo service resolvconf restart
 
 # -------==========-------
+# Docker Registry
+# -------==========-------
+cat > /etc/docker/daemon.json <<EOF
+{
+  "registry-mirrors": ["https://registry.docker.ir"]
+}
+EOF
+sudo systemctl restart docker
+# -------==========-------
 # HTTP Proxy
 # -------==========-------
 sudo nano  /etc/environment

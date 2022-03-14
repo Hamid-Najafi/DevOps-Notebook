@@ -4,6 +4,7 @@ echo "--------------------------"
 echo "Disable Ubuntu Automatic Update"
 echo "--------------------------"
 sed -i 's/Prompt=lts/Prompt=never/g' /etc/update-manager/release-upgrades
+journalctl --vacuum-time=2d
 
 # echo "--------------------------"
 # echo "Setting HTTP Proxy"

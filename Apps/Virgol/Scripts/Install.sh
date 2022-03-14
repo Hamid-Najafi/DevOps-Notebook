@@ -154,7 +154,7 @@ cd lms-with-moodle/
 git config --global user.email Hamid.Najafi@email.com
 git config --global user.name Hamid Najafi
 sudo bash build.sh 1.8.0
-sudo bash build-dei.sh 1.8.0
+sudo bash build-dei.sh 1.8.3
 
 cd ~/docker/virgol/ && docker-compose pull && docker-compose up -d
 

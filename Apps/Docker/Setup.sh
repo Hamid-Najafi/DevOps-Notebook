@@ -95,3 +95,13 @@ EOF
 
 sudo systemctl daemon-reload
 sudo systemctl restart docker
+# -------==========-------
+# Docker Registry
+# -------==========-------
+cat > /etc/docker/daemon.json <<EOF
+{
+  "registry-mirrors": ["https://registry.docker.ir"]
+}
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart docker
