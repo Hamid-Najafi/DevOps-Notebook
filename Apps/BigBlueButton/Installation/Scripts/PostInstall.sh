@@ -138,6 +138,7 @@ sudo timedatectl set-timezone Asia/Tehran
 (crontab -l 2>/dev/null; echo "0 7 * * * systemctl stop bbb-rap-resque-worker") | crontab -
 (crontab -l 2>/dev/null; echo "0 18 * * * systemctl start bbb-rap-starter") | crontab -
 (crontab -l 2>/dev/null; echo "0 18 * * * systemctl start bbb-rap-resque-worker") | crontab -
+(crontab -l 2>/dev/null; echo "0 23 * * * docker rm -f bbb-exporter &&  cd ~/bbb-exporter/ && docker-compose up -d") | crontab -
 
 echo "------------------"
 echo "Configuring secret"

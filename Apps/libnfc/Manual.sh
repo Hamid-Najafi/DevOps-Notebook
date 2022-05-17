@@ -2,11 +2,10 @@
 # Binary Install
 # -------==========-------
 sudo apt-get update
-sudo apt install libnfc-bin libnfc-dev libnfc-examples  mfoc mfcuk
+sudo apt install libnfc-bin libnfc-dev libnfc-examples mfoc mfcuk
 
 # Check that the device is correctly recognized by system:
 dmesg
-
 # -------==========-------
 # Config Ways
 # -------==========-------
