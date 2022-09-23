@@ -1,5 +1,5 @@
 # -------==========-------
-# IPSec VPN
+# Socks5
 # -------==========-------
 # Start container with proxy
 docker run -d --name socks5 -p 1080:1080 -e PROXY_USER=<PROXY_USER> -e PROXY_PASSWORD=<PROXY_PASSWORD> serjs/go-socks5-proxy
@@ -33,3 +33,7 @@ docker run --rm curlimages/curl:7.65.3 -x socks5h://admin:Socks5pass.24@su.legac
  $ curl --socks5-hostname 127.0.0.1:9150 https://icanhazip.com
  $ curl --socks5-hostname 127.0.0.1:9150 https://ipecho.net/plain
  docker run -d --restart=always --name tor-socks-proxy -p 127.0.0.1:9150:9150/tcp peterdavehello/tor-socks-proxy:latest
+
+# -------==========-------
+# Socks5 Over TLS
+# -------==========-------

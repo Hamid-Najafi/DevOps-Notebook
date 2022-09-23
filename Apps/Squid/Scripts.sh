@@ -17,6 +17,7 @@ mkdir -p ~/docker/squid
 cp ~/DevOps-Notebook/Apps/Squid/* ~/docker/squid
 cd ~/docker/squid 
 # Add new user if needed
+# sudo apt install apache2-utils
 # sudo htpasswd -c passwords admin
 docker-compose up -d
 
@@ -36,7 +37,7 @@ echo -e "http_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/\nhttps_pr
 # OR
 echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
 # OR
-echo -e "http_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@eu.legace.ir:3128/" | sudo tee -a /etc/environment
+echo -e "http_proxy=http://admin:Squidpass.24@91.198.77.165:3128/\nhttps_proxy=http://admin:Squidpass.24@91.198.77.165:3128/\nftp_proxy=http://admin:Squidpass.24@91.198.77.165:3128/" | sudo tee -a /etc/environment
 source /etc/environment
 # -------==========-------
 
@@ -55,6 +56,8 @@ sudo nano /etc/environment
 # Check proxy
 # -------==========-------
 curl -x http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/ -L http://panel.vir-gol.ir
+curl -x http://admin:Squidpass.24@91.198.77.165:3128/ -L http://google.com
+
 # THIS will HANG on Irans IP & downloads index.html on others IP
 wget https://charts.gitlab.io 
 

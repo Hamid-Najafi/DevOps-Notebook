@@ -47,6 +47,7 @@ docker cp <containerId>:/file/path/within/container /host/path/target
 # -------==========-------
 curl -sSL https://get.docker.com/ | sh
 sudo usermod -aG docker $USER
+sudo chown $USER /var/run/docker.sock
 # The LinuxServer.io Method:
 sudo curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-compose/master/run.sh -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
@@ -88,8 +89,8 @@ USER appuser
 sudo mkdir -p /etc/systemd/system/docker.service.d
 cat >>  /etc/systemd/system/docker.service.d/http-proxy.conf << EOF
 [Service]
-Environment="HTTP_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
-Environment="HTTPS_PROXY=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128"
+Environment="HTTP_PROXY=http://admin:Squidpass.24@nl.hamid-najafi.ir:3128"
+Environment="HTTPS_PROXY=http://admin:Squidpass.24@nl.hamid-najafi.ir:3128"
 Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
 EOF
 
