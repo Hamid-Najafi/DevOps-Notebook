@@ -1,7 +1,6 @@
 # -------==========-------
 # OpenConnect Server
 # -------==========-------
-# https://dixmata.com/install-openconnect-ubuntu/
 # -------==========-------
 # Docker
 # -------==========-------
@@ -16,12 +15,26 @@ sudo certbot certonly --standalone --preferred-challenges http --agree-tos --ema
 mkdir -p ~/docker/ocserv
 cp ~/DevOps-Notebook/Apps/OpenConnect/* ~/docker/ocserv
 cd ~/docker/ocserv 
+# Set: server-cert, server-key & default-domain
+nano ocserv.conf
 docker-compose up -d
-
-# Add new user
+# Delete Test User
+docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -d test
+# Add User
 docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" admin
+ocservpass.24
+docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-hamid
+docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-parsa
+docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-danial
+docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" i2rlabs
+docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-100
+docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-101
+
+NOTE: image sometimes stops working!  docker restart ocserv 
 # -------==========-------
 # Native
+# -------==========-------
+# # https://dixmata.com/install-openconnect-ubuntu/
 # -------==========-------
 sudo nano /etc/sysctl.conf
 net.ipv4.ip_forward = 1
@@ -54,7 +67,7 @@ apt install ufw
 ufw allow 22/tcp
 ufw allow 80/tcp
 ufw allow 443/tcp
-### NOT COMPLETED... MUST DO THIS STEP
+### NOT COMPLETED... MUST DO THIS STEP FROM GUIDE
 
 
 # Create OpenConnect VPN Account

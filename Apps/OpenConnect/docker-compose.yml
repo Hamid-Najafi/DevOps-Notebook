@@ -4,9 +4,12 @@ services:
     image:  tommylau/ocserv
     container_name: ocserv
     restart: always
+    privileged: true
+    hostname: nl.hamid-najafi.ir
     ports:
-      - "443:443"
+      - 443:443/udp
+      - 443:443
     volumes:
+      # - ${PWD}/ocpasswd:/etc/ocserv/ocpasswd
       - ${PWD}/ocserv.conf:/etc/ocserv/ocserv.conf
-      - ${PWD}/ocpasswd:/etc/ocserv/ocpasswd
       - /etc/letsencrypt/:/etc/letsencrypt/
