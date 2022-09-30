@@ -1,6 +1,18 @@
 # -------==========-------
 # ShadowSocksR
 # -------==========-------
+# Docker-Compose
+# -------==========-------
+mkdir -p ~/docker/shadowsocks-r
+cp ~/DevOps-Notebook/Apps/ShadowSocksR/* ~/docker/shadowsocks-r
+cd ~/docker/shadowsocks-r
+# Config if needed
+nano config.json
+docker-compose up -d
+
+# -------==========-------
+# Docker
+# -------==========-------
 docker pull teddysun/shadowsocks-r
 mkdir -p /etc/shadowsocks-r
 cat > /etc/shadowsocks-r/config.json <<EOF

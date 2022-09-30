@@ -9,8 +9,8 @@
 # Docker-Compose
 # -------==========-------
 # Setup SSL Let’s Encrypt
-sudo apt install certbot
-sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d nl.hamid-najafi.ir
+sudo apt install certbot -y
+sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d hamid-najafi.ir
 
 mkdir -p ~/docker/ocserv
 cp ~/DevOps-Notebook/Apps/OpenConnect/* ~/docker/ocserv
@@ -30,6 +30,8 @@ docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-dania
 docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" i2rlabs
 docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-100
 docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-101
+docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-102
+docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-103
 
 NOTE: image sometimes stops working!  docker restart ocserv 
 # -------==========-------

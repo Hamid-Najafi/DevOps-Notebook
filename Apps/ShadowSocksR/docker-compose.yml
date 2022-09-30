@@ -1,0 +1,11 @@
+version: '3'
+services:
+  ocserv:
+    image:  teddysun/shadowsocks-r
+    container_name: shadowsocks-r
+    restart: always
+    ports:
+      - 8388:8388/udp
+      - 8388:8388
+    volumes:
+      - ${PWD}/:/etc/shadowsocks-r
