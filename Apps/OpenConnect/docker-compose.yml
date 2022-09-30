@@ -5,7 +5,7 @@ services:
     container_name: ocserv
     restart: always
     privileged: true
-    hostname: nl.hamid-najafi.ir
+    hostname: ir.hamid-najafi.ir
     ports:
       - 443:443/udp
       - 443:443
