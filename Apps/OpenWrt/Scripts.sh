@@ -9,5 +9,49 @@ root
 # -------==========-------
 # OpenVPN Client
 # -------==========-------
+# CLI & LuCI packages
 opkg update
 opkg install openvpn-openssl luci-app-openvpn 
+
+
+# -------==========-------
+# OpenConnect Client
+# -------==========-------
+https://behroozam.medium.com/raspberry-pi-openwrt-openconnect-lan-connection-91ce9a17568d
+# CLI & LuCI packages
+opkg update
+opkg install openconnect luci-proto-openconnect
+/etc/init.d/rpcd restart
+
+# getting SHA-1 from your openconnect server
+export OC_SERV="nl.hamid-najafi.ir"
+openssl s_client -connect nl.hamid-najafi.ir:443 -showcerts 2>/dev/null </dev/null | awk '/-----BEGIN/,/-----END/ { print $0 }' | openssl x509 -noout -fingerprint -sha1 | sed 's/Fingerprint=//' | sed 's/://g'
+# SHA1 68F35B75E37E8EBACDA916308F5B0B9A8A37EB61
+
+after booting up going to network > interface and setup a new interface and setup OpenConnect interface.
+# -------==========-------
+# OpenConnect Server
+# -------==========-------
+# Certificate hash
+# Install packages
+opkg update
+opkg install openssl-util
+ 
+# Generate certificate hash
+opkg update
+opkg install openssl-util
+OC_HASH="$(echo pin-sha256:\
+$(openssl x509 -in /etc/ocserv/server-cert.pem -pubkey -noout \
+| openssl pkey -pubin -outform der \
+| openssl dgst -sha256 -binary \
+| openssl enc -base64))"
+# Fetch certificate hash
+echo ${OC_HASH}
+
+# Configuration parameters
+OC_IF="NLOCServ"
+OC_SERV="nl.hamid-najafi.ir"
+OC_PORT="443"
+OC_USER="ocuser"
+OC_PASS="ocuser"
+OC_HASH="SERVER_CERT_HASH"

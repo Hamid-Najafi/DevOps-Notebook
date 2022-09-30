@@ -117,9 +117,10 @@ curl ipinfo.io/ip
 ssh-keygen
 ssh-copy-id username@remote_host
 # -------==========-------
-# Get port procces id
+# Get Port used by PID
 # -------==========-------
-sudo lsof -i -P -n | grep 3306
+sudo lsof -i -P -n | grep 80
+sudo lsof -i -P -n | grep 554
 sudo lsof -i -P -n | grep 9090
 sudo lsof -p 15014
 # -------==========-------

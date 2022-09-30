@@ -30,10 +30,10 @@ sudo certbot certonly --apache
 sudo certbot certonly --nginx
 
 sudo certbot certonly \
-    --email admin@vir-gol.ir \
+    --email admin@hamid-najafi.ir \
     --server https://acme-v02.api.letsencrypt.org/directory \
     --agree-tos \
-    --domains mail.vir-gol.ir
+    --domains ir.hamid-najafi.ir
 
 # DNS based _acme-challenge
 sudo certbot certonly \

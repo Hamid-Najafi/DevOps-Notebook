@@ -1,0 +1,11 @@
+version: '3'
+services:
+  ocserv:
+    image:  tommylau/ocserv
+    container_name: ocserv
+    restart: always
+    ports:
+      - "443:443"
+    volumes:
+      - ${PWD}/ocserv.conf:/etc/ocserv/ocserv.conf
+      - ${PWD}/ocpasswd:/etc/ocserv/ocpasswd

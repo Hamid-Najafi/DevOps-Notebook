@@ -24,7 +24,7 @@ cat > /etc/shadowsocks-r/config.json <<EOF
 }
 EOF
 
-docker run -d -p 443:8388 -p 443:8388/udp --name ssr --restart=always -v /etc/shadowsocks-r:/etc/shadowsocks-r teddysun/shadowsocks-r
+docker run -d -p 444:8388 -p 443:8388/udp --name ssr --restart=always -v /etc/shadowsocks-r:/etc/shadowsocks-r teddysun/shadowsocks-r
 
 method: 
 1) none
