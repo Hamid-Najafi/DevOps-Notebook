@@ -166,8 +166,28 @@ nameserver 178.22.122.100
 # Begzar (https://begzar.ir)
 nameserver 185.55.225.25
 nameserver 185.55.225.26
-sudo service resolvconf restart
 
+DNS Server1:
+199.85.126.20
+199.85.127.20
+
+DNS Server2:
+178.22.122.100
+94.232.174.194
+
+DNS Server3:
+209.244.0.3
+209.244.0.4
+
+DNS Server4:
+84.200.69.80
+84.200.70.40
+
+DNS Server5:
+8.26.56.26
+8.20.247.20
+
+sudo service resolvconf restart
 # -------==========-------
 # Docker Registry
 # -------==========-------
@@ -183,8 +203,7 @@ sudo systemctl restart docker
 sudo nano  /etc/environment
 echo -e "http_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/" | sudo tee -a /etc/environment
 source /etc/environment
-curl -x http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/ -L http://panel.vir-gol.ir
-wget https://charts.gitlab.io 
+curl -x http://admin:Squidpass.24@nl.hamid-najafi.ir:3128/ -L http://google.com
 # -------==========-------
 # speedtest:
 # -------==========-------
