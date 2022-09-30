@@ -20,16 +20,15 @@ for range in $(jq .[] ./iran_ip_range.json | sed 's/"//g' | xargs); do
   ip route add $range via 188.121.104.1;
 done;
 ip route del default via 188.121.104.1
-echo -e "alias ocn='sudo openconnect --background --user=ocuser --passwd-on-stdin  nl.hamid-najafi.ir:443 --http-auth=Basic <<< "ocuser"'" | sudo tee -a /etc/environment  > /dev/null
-source /etc/environment 
-ocn
+echo -e "alias ocn='sudo openconnect --background --user=admin --passwd-on-stdin  nl.hamid-najafi.ir:443 --http-auth=Basic <<< "ocservpass.24"'" | sudo tee -a ~/.bashrc  > /dev/null
+echo -e "alias ocf='sudo killall -SIGINT openconnect'" | sudo tee -a ~/.bashrc > /dev/null
+echo -e "alias ipinfo='curl ipinfo.io'" | sudo tee -a ~/.bashrc > /dev/null
 # Verify
 ip route | grep tun0
+ipnifo
 
 sysctl -w net.ipv4.ip_forward=1
 iptables -A FORWARD -j ACCEPT
 iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE
 
 # Europe Server
-
-

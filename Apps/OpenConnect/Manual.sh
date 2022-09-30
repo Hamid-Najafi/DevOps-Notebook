@@ -14,7 +14,7 @@ sudo certbot certonly --standalone --preferred-challenges http --agree-tos --ema
 
 mkdir -p ~/docker/ocserv
 cp ~/DevOps-Notebook/Apps/OpenConnect/* ~/docker/ocserv
-cd ~/docker/ocserv 
+cd ~/docker/ocserv
 # Set: server-cert, server-key & default-domain
 nano ocserv.conf
 docker-compose up -d
@@ -24,6 +24,7 @@ docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -d test
 docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" admin
 ocservpass.24
 docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-hamid
+docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-moh
 docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-parsa
 docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-danial
 docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" i2rlabs
@@ -81,10 +82,9 @@ sudo systemctl status ocserv
 # -------==========-------
 sudo apt update
 sudo apt install openconnect -y
-echo -e "alias ocn='sudo openconnect --background --user=hamidni --passwd-on-stdin  nl.hamid-najafi.ir:443 --http-auth=Basic --servercert pin-sha256:qgYrqhMY2F/Qai+SvtOZRquKqtCa5yaIZXdMQmV/7rY= <<< "641200"'" | sudo tee -a /etc/environment  > /dev/null
-echo -e "alias ocn='sudo openconnect --background --user=hamidni --passwd-on-stdin  nl.hamid-najafi.ir:443 --http-auth=Basic <<< "641200"'" | sudo tee -a /etc/environment  > /dev/null
-sudo openconnect --background --user=ocuser --passwd-on-stdin  nl.hamid-najafi.ir:443
-
-echo -e "alias ocf='sudo killall -SIGINT openconnect'" | sudo tee -a /etc/environment > /dev/null
-echo -e "alias ipinfo='curl ipinfo.io'" | sudo tee -a /etc/environment > /dev/null
-source /etc/environment
+echo -e "alias ocn='sudo openconnect --background --user=admin --passwd-on-stdin  nl.hamid-najafi.ir:443 --http-auth=Basic <<< "ocservpass.24"'" | sudo tee -a ~/.bashrc  > /dev/null
+echo -e "alias ocf='sudo killall -SIGINT openconnect'" | sudo tee -a ~/.bashrc > /dev/null
+echo -e "alias ipinfo='curl ipinfo.io'" | sudo tee -a ~/.bashrc > /dev/null
+# Verify
+ip route | grep tun0
+ipnifo

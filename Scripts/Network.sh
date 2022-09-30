@@ -201,7 +201,7 @@ sudo systemctl restart docker
 # HTTP Proxy
 # -------==========-------
 sudo nano  /etc/environment
-echo -e "http_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/" | sudo tee -a /etc/environment
+echo -e "http_proxy=http://admin:Squidpass.24@nl.hamid-najafi.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@nl.hamid-najafi.ir:3128/" | sudo tee -a /etc/environment
 source /etc/environment
 curl -x http://admin:Squidpass.24@nl.hamid-najafi.ir:3128/ -L http://google.com
 # -------==========-------
