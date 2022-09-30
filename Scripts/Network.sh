@@ -120,6 +120,7 @@ ssh-copy-id username@remote_host
 # Get Port used by PID
 # -------==========-------
 sudo lsof -i -P -n | grep 80
+sudo lsof -i -P -n | grep 443
 sudo lsof -i -P -n | grep 554
 sudo lsof -i -P -n | grep 9090
 sudo lsof -p 15014

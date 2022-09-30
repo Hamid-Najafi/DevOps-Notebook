@@ -5,10 +5,14 @@
 # -------==========-------
 # Docker
 # -------==========-------
- docker run --name ocserv --privileged -v $PWD/ocpasswd:/etc/ocserv/ocpasswd -p 8443:443 -p 8443:443/udp -d tommylau/ocserv
+ docker run --name ocserv --privileged -v $PWD/ocpasswd:/etc/ocserv/ocpasswd -p 443:443 -p 443:443/udp -d tommylau/ocserv
 # -------==========-------
 # Docker-Compose
 # -------==========-------
+# Setup SSL Let’s Encrypt
+sudo apt install certbot
+sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d nl.hamid-najafi.ir
+
 mkdir -p ~/docker/ocserv
 cp ~/DevOps-Notebook/Apps/OpenConnect/* ~/docker/ocserv
 cd ~/docker/ocserv 

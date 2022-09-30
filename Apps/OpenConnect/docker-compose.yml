@@ -9,3 +9,4 @@ services:
     volumes:
       - ${PWD}/ocserv.conf:/etc/ocserv/ocserv.conf
       - ${PWD}/ocpasswd:/etc/ocserv/ocpasswd
+      - /etc/letsencrypt/:/etc/letsencrypt/
