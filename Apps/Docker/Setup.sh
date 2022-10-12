@@ -89,15 +89,14 @@ USER appuser
 sudo mkdir -p /etc/systemd/system/docker.service.d
 cat >>  /etc/systemd/system/docker.service.d/http-proxy.conf << EOF
 [Service]
-Environment="HTTP_PROXY=http://admin:Squidpass.24@nl.hamid-najafi.ir:3128"
-Environment="HTTPS_PROXY=http://admin:Squidpass.24@nl.hamid-najafi.ir:3128"
+Environment="HTTP_PROXY=http://admin:Squidpass.24@nl.goldenstarc.ir:3128"
+Environment="HTTPS_PROXY=http://admin:Squidpass.24@nl.goldenstarc.ir:3128"
 Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
 EOF
-
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 # -------==========-------
-# Docker Registry
+# Docker Registry - BEST
 # -------==========-------
 cat > /etc/docker/daemon.json <<EOF
 {

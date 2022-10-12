@@ -10,3 +10,43 @@ echo -e "127.0.0.1 C1TechHMS" | tee -a /etc/hosts
 sudo reboot
 sudo apt-get update
 sudo apt-get upgrade -y
+
+sudo apt install avahi-daemon 
+
+# -------==========-------
+# PI Power Button
+# -------==========-------
+# https://github.com/Howchoo/pi-power-button
+# -------==========-------
+git clone https://github.com/Howchoo/pi-power-button.git
+./pi-power-button/script/install
+
+# -------==========-------
+# Setup Wifi AP
+# -------==========-------
+1. Install & Config hostapd (Configure the AP Hotspot)
+2. Install & Config dnsmasq (Configure the DHCP Server)
+3. Config dhcpcd (Configure a Static IP for the Wlan0 Interface)
+
+# -------==========-------
+# Customize the Raspberry Pi Splash Screen
+# -------==========-------
+
+# https://www.hackster.io/kamaluddinkhan/changing-the-splash-screen-on-your-raspberry-pi-7aee31
+ 
+sudo nano /etc/systemd/system/splashscreen.service
+
+[Unit]
+Description=Splash screen
+DefaultDependencies=no
+After=local-fs.target
+[Service]
+ExecStart=/usr/bin/fbi -d /dev/fb0 --noverbose -a /home/pi/c1-tech.png
+StandardInput=tty
+StandardOutput=tty
+[Install]
+WantedBy=sysinit.target
+
+systemctl daemon-reload
+sudo systemctl enable splashscreen.service
+sudo systemctl start splashscreen.service

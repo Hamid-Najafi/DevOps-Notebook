@@ -29,7 +29,7 @@ cp -R ~/DevOps-Notebook/Apps/Traefik ~/docker/traefik
 cd ~/docker/traefik 
 nano docker-compose.yml 
 # Set Host
-    #   - "traefik.http.routers.traefik.rule=Host(`traefik.goldenstarc.ir`)"
+    #   - "traefik.http.routers.traefik.rule=Host(`traefik.hamid-najafi.ir`)"
 docker network create web
 docker-compose up -d
 

@@ -8,7 +8,7 @@
 echo -e "OVPN_DATA="ovpn-data"" | sudo tee -a /etc/environment
 source /etc/environment
 docker volume create --name $OVPN_DATA
-docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_genconfig -u udp://185.235.42.50
+docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_genconfig -u udp://91.198.77.165
 
 # passphrase : 1234
 docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn ovpn_initpki
@@ -22,7 +22,7 @@ docker run -v $OVPN_DATA:/etc/openvpn --log-driver=none --rm kylemanna/openvpn o
 # Download client configuratio to host
 scp ubuntu@hamid-najafi.ir:~/OpenVPN/OpenVPNUser.ovpn /Users/hamid/Development/Software/DevOps-Notebook/Apps/OpenVPN/Serverius
 scp ubuntu@ir.hamid-najafi.ir:~/OpenVPN/OpenVPNUser.ovpn ./OpenVPNUser-ir.ovpn
-scp ubuntu@185.235.42.50:~/OpenVPN/OpenVPNUser.ovpn ./OpenVPNUser-HR.ovpn
+scp root@91.198.77.165:~/OpenVPN/OpenVPNUser.ovpn ./OpenVPNUser-NL.ovpn
 
 # -------==========-------
 # OpenVPN Ubuntu Client

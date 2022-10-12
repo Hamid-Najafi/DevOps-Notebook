@@ -13,12 +13,20 @@ sudo apt-get purge nginx nginx-common
 # remove dependencies used by nginx which are no longer required.
 sudo apt-get autoremove
 
-#  Enable Server Blocks and Restart Nginx
+# Create NGINX webserver's config files.
+sudo nano /etc/nginx/sites-enabled/config_file_name.conf
+sudo nano /etc/nginx/sites-enabled/hamid_resume.conf
+# Enable Server Blocks and Restart Nginx
 sudo ln -s /etc/nginx/sites-available/test.com /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
 # Test the configuration file
 nginx -t
+
+# Certbot
+sudo apt-get install certbot python3-certbot-nginx
+sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d hamid-najafi.ir
+
 # Start nginx in the background
 nginx
 # Start nginx in the foreground
@@ -27,9 +35,6 @@ nginx -g 'daemon off;'
 nginx -t && nginx -s reload
 # Kill nginx
 nginx -s stop
-
-
-
 # -------==========------- 
 # Nginx with RTMP & HLS & DASH
 # -------==========------- 

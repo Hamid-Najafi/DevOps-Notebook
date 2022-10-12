@@ -38,6 +38,28 @@ EOF
 
 docker run -d -p 8388:8388/tcp -p 8388:8388/udp --name ssr --restart=always -v /etc/shadowsocks-r:/etc/shadowsocks-r teddysun/shadowsocks-r
 
+# -------==========-------
+# Client
+# -------==========-------
+# https://github.com/shadowsocksrr/electron-ssr
+# https://github.com/TyrantLucifer/ssr-command-client
+sudo apt update
+sudo apt install python3 python3-pip python-is-python3 -y
+git clone https://github.com/TyrantLucifer/ssr-command-client.git
+cd ssr-command-client
+sudo python3 setup.py install
+sudo pip3 install shadowsocksr-cli
+shadowsocksr-cli --add-ssr ssr://URL
+shadowsocksr-cli --add-ssr ssr://OTEuMTk4Ljc3LjE2NTo4Mzg4Om9yaWdpbjphZXMtMjU2LWNmYjpodHRwX3Bvc3Q6VTJoaFpHOTNjR0Z6Y3k0eU5BLz9vYmZzcGFyYW09Jmdyb3VwPVJHVm1ZWFZzZENCSGNtOTFjQSZ1b3Q9MSZ1ZHBwb3J0PTgzODg
+shadowsocksr-cli --add-ssr ssr://OTEuMTk4Ljc3LjE2NTo4Mzg4Om9yaWdpbjphZXMtMjU2LWNmYjpodHRwX3Bvc3Q6VTJoaFpHOTNjR0Z6Y3k0eU5BLz8
+shadowsocksr-cli -l
+shadowsocksr-cli -s 3
+
+echo -e "alias setproxy=\"export ALL_PROXY=socks5://127.0.0.1:1080\"\nalias unsetproxy=\"unset ALL_PROXY\"\nalias ip=\"curl http://ip-api.com/json/?lang=zh-CN\"" | sudo tee -a ~/.bashrc
+source ~/.bashrc
+
+
+# -------==========-------
 method: 
 1) none
 2) aes-256-cfb

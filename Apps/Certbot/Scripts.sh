@@ -13,7 +13,6 @@ sudo docker run \
 # -------==========-------
 # Certbot Ubuntu
 # -------==========-------
-sudo add-apt-repository ppa:certbot/certbot
 sudo apt-get install certbot
 sudo apt-get install certbot python3-certbot-nginx
 sudo apt-get install certbot python3-certbot-apache 

@@ -20,14 +20,18 @@ opkg install openvpn-openssl luci-app-openvpn
 https://behroozam.medium.com/raspberry-pi-openwrt-openconnect-lan-connection-91ce9a17568d
 # CLI & LuCI packages
 opkg update
-opkg install openconnect luci-proto-openconnect
+opkg install openconnect luci-proto-openconnect openssl-util
 /etc/init.d/rpcd restart
 
+
+
+
 # getting SHA-1 from your openconnect server
-export OC_SERV="nl.hamid-najafi.ir"
-openssl s_client -connect nl.hamid-najafi.ir:443 -showcerts 2>/dev/null </dev/null | awk '/-----BEGIN/,/-----END/ { print $0 }' | openssl x509 -noout -fingerprint -sha1 | sed 's/Fingerprint=//' | sed 's/://g'
-# SHA1 68F35B75E37E8EBACDA916308F5B0B9A8A37EB61
-SHA1:2a3233f2219d8332ae99d3bb0329cd8fc8395194
+export OC_SERV="hamid-najafi.ir"
+openssl s_client -connect hamid-najafi.ir:443 -showcerts 2>/dev/null </dev/null | awk '/-----BEGIN/,/-----END/ { print $0 }' | openssl x509 -noout -fingerprint -sha1 | sed 's/Fingerprint=//' | sed 's/://g'
+# SHA1 1674F9295E11C382DF3B703C3602D137EC5BA5D7
+# admin
+# ocservpass.24
 after booting up going to network > interface and setup a new interface and setup OpenConnect interface.
 # -------==========-------
 # OpenConnect Server

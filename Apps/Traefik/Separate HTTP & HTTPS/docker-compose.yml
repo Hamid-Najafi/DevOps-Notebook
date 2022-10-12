@@ -19,12 +19,12 @@ services:
       # Docker labels for enabling Traefik dashboard   
       # HTTP
       - "traefik.http.routers.traefik.middlewares=dashboardauth"
-      - "traefik.http.routers.traefik.rule=Host(`traefik-dei.vir-gol.ir`)"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.hamid-najafi.ir`)"
       - "traefik.http.routers.traefik.entrypoints=insecure"
       - "traefik.http.routers.traefik.service=api@internal"
       # HTTPS
       - "traefik.http.routers.traefik2.middlewares=dashboardauth"
-      - "traefik.http.routers.traefik2.rule=Host(`traefik-dei.vir-gol.ir`)"
+      - "traefik.http.routers.traefik2.rule=Host(`traefik.hamid-najafi.ir`)"
       - "traefik.http.routers.traefik2.entrypoints=secure"
       - "traefik.http.routers.traefik2.service=api@internal"
       - "traefik.http.routers.traefik2.tls=true"

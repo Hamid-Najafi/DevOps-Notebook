@@ -45,7 +45,7 @@ dotnet run --urls=http://localhost:5001/
 # -------==========-------
 sudo su
 dotnet publish -c release -o /var/www/webHook
-cat <<EOF > /etc/systemd/system/kestrel-webHook.service
+cat > /etc/systemd/system/kestrel-webHook.service <<EOF
 [Unit]
 Description=.NET Web API for IoT Webhook
 

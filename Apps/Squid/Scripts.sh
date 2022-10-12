@@ -33,10 +33,6 @@ htpasswd stores the password hashed (various hashing algos are available)
 sudo htpasswd -c passwords admin 
 # -------==========-------
 # Set host to use proxy
-echo -e "http_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/\nftp_proxy=http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/" | sudo tee -a /etc/environment
-# OR
-echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
-# OR
 echo -e "http_proxy=http://admin:Squidpass.24@91.198.77.165:3128/\nhttps_proxy=http://admin:Squidpass.24@91.198.77.165:3128/\nftp_proxy=http://admin:Squidpass.24@91.198.77.165:3128/" | sudo tee -a /etc/environment
 source /etc/environment
 # -------==========-------
@@ -55,8 +51,7 @@ sudo nano /etc/environment
 # -------==========-------
 # Check proxy
 # -------==========-------
-curl -x http://admin:Squidpass.24@hr.hamid-najafi.ir:3128/ -L http://panel.vir-gol.ir
-curl -x http://admin:Squidpass.24@nl.hamid-najafi.ir:3128/ -L http://google.com
+curl -x http://admin:Squidpass.24@91.198.77.165:3128/ -L http://google.com
 
 # THIS will HANG on Irans IP & downloads index.html on others IP
 wget https://charts.gitlab.io 
@@ -67,23 +62,26 @@ wget https://charts.gitlab.io
 sudo mkdir -p /etc/systemd/system/gitlab-runner.service.d
 sudo nano /etc/systemd/system/gitlab-runner.service.d/http-proxy.conf
 [Service]
-Environment="HTTP_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
+Environment="HTTP_PROXY=http://admin:Squidpass.24@91.198.77.165:3128"
 systemctl daemon-reload
 sudo systemctl restart gitlab-runner
 # -------==========-------
 # Docker:
 # -------==========-------
 sudo mkdir -p /etc/systemd/system/docker.service.d
-sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
+cat >>  /etc/systemd/system/docker.service.d/http-proxy.conf << EOF
 [Service]
-Environment="HTTP_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
+Environment="HTTP_PROXY=http://admin:Squidpass.24@91.198.77.165:3128"
+Environment="HTTPS_PROXY=http://admin:Squidpass.24@91.198.77.165:3128"
+Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
+EOF
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 # -------==========-------
 # APT:
 # -------==========-------
 sudo nano /etc/apt/apt.conf
-Acquire::http::Proxy "http://admin:Squidpass.24@su.legace.ir:3128";
+Acquire::http::Proxy "http://admin:Squidpass.24@91.198.77.165:3128";
 # -------==========-------
 # Variables
 # -------==========-------
