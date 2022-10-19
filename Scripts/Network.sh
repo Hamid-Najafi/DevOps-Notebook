@@ -204,6 +204,8 @@ sudo nano  /etc/environment
 echo -e "http_proxy=http://admin:Squidpass.24@nl.hamid-najafi.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@nl.hamid-najafi.ir:3128/" | sudo tee -a /etc/environment
 source /etc/environment
 curl -x http://admin:Squidpass.24@nl.hamid-najafi.ir:3128/ -L http://google.com
+curl -x http://admin:Squidpass.24@91.198.77.165:3128/ -L http://google.com
+curl -x http://91.198.77.165:3128/ -L http://google.com
 # -------==========-------
 # speedtest:
 # -------==========-------

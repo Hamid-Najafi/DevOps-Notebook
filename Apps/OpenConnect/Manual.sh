@@ -36,6 +36,39 @@ docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-102
 docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-103
 
 NOTE: image sometimes stops working!  docker restart ocserv 
+
+# -------==========-------
+# Service
+# -------==========-------
+cat > /etc/systemd/system/ocvpn.service << "EOF"
+[Unit]
+Description=OpenconnectClient
+After=network.target
+[Service]
+Type=simple
+# ExecStart=/bin/sh -c 'echo 641200 | openconnect --user=hamidni --passwd-on-stdin  cuk.dnsfinde.com:1397 --http-auth=Basic --servercert pin-sha256:qgYrqhMY2F/Qai+SvtOZRquKqtCa5yaIZXdMQmV/7rY='
+ExecStart=/bin/sh -c 'echo ocservpass.24 | openconnect --user=admin --passwd-on-stdin  nl.goldenstarc.ir:443 --http-auth=Basic --servercert pin-sha256:o0VPSp4XQX06pfQqpj3xHyYSZZn2nvkTME9yWCH3tAc='
+Restart=on-failure
+User=root
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable ocvpn
+systemctl start ocvpn
+systemctl status ocvpn
+
+# -------==========-------
+# Service
+# -------==========-------
+cat > ~/addOCServUsr.sh << "EOF"
+echo -n "Enter Username: "
+read varname
+docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" $varname
+EOF
+chmod +x ~/addOCServUsr.sh
+./addOCServUsr.sh
 # -------==========-------
 # Native
 # -------==========-------
@@ -92,3 +125,7 @@ echo -e "alias ipinfo='curl ipinfo.io'" | sudo tee -a ~/.bashrc > /dev/null
 # Verify
 ip route | grep tun0
 ipnifo
+
+sudo openconnect --background --user=admin --passwd-on-stdin  nl.hamid-najafi.ir:443 --http-auth=Basic     --servercert pin-sha256:o0VPSp4XQX06pfQqpj3xHyYSZZn2nvkTME9yWCH3tAc=  <<< "ocservpass.24"
+sudo openconnect --background --user=km83576 --passwd-on-stdin c2.kmak.us:443 --http-auth=Basic <<< "14789633"
+echo 641200 | openconnect --user=hamidni --passwd-on-stdin  cde4.dnsfinde.com:1397 --http-auth=Basic

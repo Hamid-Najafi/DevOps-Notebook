@@ -17,42 +17,97 @@ docker-compose up -d
 # Add new connection
 # sudo add-apt-repository universe
 # sudo apt update
-sudo apt install network-manager-l2tp network-manager-l2tp-gnome
-sudo apt-get install -y network-manager-gnome
 
-sudo service network-manager start  
+sudo apt-get update
+sudo apt-get install strongswan xl2tpd net-tools
 
-        sudo nmcli connection add connection.id MerakiVPN \
-        con-name MerakiVPN type vpn vpn-type l2tp \
-        ifname -- connection.autoconnect no \
-        ipv4.method auto \
-        vpn.data "gateway = 194.5.206.170, ipsec-enabled = yes, ipsec-esp = aes128-sha1, ipsec-ike = 3des-sha1-modp1024,  ipsec-psk = 0s"$(base64 <<<'123456789' | rev | cut -c2- | rev)"= , password-flags = 0, user = Server1" \
-        vpn.secrets password=247600
+# Create VPN variables
+export VPN_SERVER_IP='91.198.77.165'
+export VPN_IPSEC_PSK='123456789'
+export VPN_USER='admin'
+export VPN_PASSWORD='admin'
 
-            sudo nmcli connection up MerakiVPN ifname ens160  --ask
+# Configure strongSwan
+cat > /etc/ipsec.conf <<EOF
+# ipsec.conf - strongSwan IPsec configuration file
 
-sudo nmcli connection add connection.id test3 con-name test3 type VPN vpn-type l2tp ifname -- connection.autoconnect no ipv4.method auto \
-vpn.data "gateway = 194.5.206.170, ipsec-enabled = yes, ipsec-psk = 0s"$(base64 <<<'123456789' | rev | cut -c2- | rev)"=, \
-mru = 1400, mtu = 1400, password-flags = 0, refuse-chap = yes, refuse-mschap = yes, refuse-pap = yes, require-mppe = yes, user = Server1" \
-vpn.secrets password=247600
-#
+conn myvpn
+  auto=add
+  keyexchange=ikev1
+  authby=secret
+  type=transport
+  left=%defaultroute
+  leftprotoport=17/1701
+  rightprotoport=17/1701
+  right=$VPN_SERVER_IP
+  ike=aes128-sha1-modp2048
+  esp=aes128-sha1
+EOF
 
-# fill with template below
-sudo nano /etc/NetworkManager/system-connections/serverius
+cat > /etc/ipsec.secrets <<EOF
+: PSK "$VPN_IPSEC_PSK"
+EOF
 
-sudo service network-manager restart  
-sudo touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
-sudo sed -i 's/^managed=false/managed=true/' /etc/NetworkManager/NetworkManager.conf       
-sudo nmcli device set ens160 managed yes
-# Fill Connection from tepmlate bellow
-# Set network interface metric to 10 (network/interfaces)
-auto ens160
-iface ens160 inet static
-        address 37.156.28.38
-        netmask 255.255.254.0
-        gateway 37.156.28.1
-        dns-nameservers 8.8.8.8
-        metric 10
+chmod 600 /etc/ipsec.secrets
+
+# Configure xl2tpd
+cat > /etc/xl2tpd/xl2tpd.conf <<EOF
+[lac myvpn]
+lns = $VPN_SERVER_IP
+ppp debug = yes
+pppoptfile = /etc/ppp/options.l2tpd.client
+length bit = yes
+EOF
+
+cat > /etc/ppp/options.l2tpd.client <<EOF
+ipcp-accept-local
+ipcp-accept-remote
+refuse-eap
+require-chap
+noccp
+noauth
+mtu 1280
+mru 1280
+noipdefault
+defaultroute
+usepeerdns
+connect-delay 5000
+name "$VPN_USER"
+password "$VPN_PASSWORD"
+EOF
+
+chmod 600 /etc/ppp/options.l2tpd.client
+
+# Create xl2tpd control file:
+mkdir -p /var/run/xl2tpd
+touch /var/run/xl2tpd/l2tp-control
+
+# Restart services:
+service strongswan restart
+# For Ubuntu 20.04, if strongswan service not found
+ipsec restart
+service xl2tpd restart
+
+# Start the IPsec connection:
+ipsec up myvpn
+
+# Start the L2TP connection:
+echo "c myvpn" > /var/run/xl2tpd/l2tp-control
+
+nmcli connection add connection.id NLVPN con-name NLVPN type VPN vpn-type l2tp ifname -- connection.autoconnect no ipv4.method auto vpn.data "gateway = 91.198.77.165, ipsec-enabled = yes, ipsec-psk = 0s"$(base64 <<<'[PSK]' | rev | cut -c2- | rev)"=, mru = 1400, mtu = 1400, password-flags = 0, refuse-chap = yes, refuse-mschap = yes, refuse-pap = yes, require-mppe = yes, user = admin" vpn.secrets password=admin
+nmcli connection add connection.id NLVPN con-name NLVPN type VPN vpn-type l2tp ifname -- connection.autoconnect no ipv4.method auto vpn.data "gateway = 91.198.77.165, ipsec-enabled = no, ipsec-psk = 0s"$(base64 <<<'[PSK]' | rev | cut -c2- | rev)"=, mru = 1400, mtu = 1400, password-flags = 0, refuse-chap = yes, refuse-mschap = yes, refuse-pap = yes, require-mppe = yes, user = admin" vpn.secrets password=admin
+
+nmcli connection add connection.id [vpnName] con-name [vpnName] type VPN vpn-type l2tp ifname -- connection.autoconnect no ipv4.method auto vpn.data "gateway = [ipv4], ipsec-enabled = yes, ipsec-psk = 0s"$(base64 <<<'[PSK]' | rev | cut -c2- | rev)"=, mru = 1400, mtu = 1400, password-flags = 0, refuse-chap = yes, refuse-mschap = yes, refuse-pap = yes, require-mppe = yes, user = [user]" vpn.secrets password=[user-password]
+- [vpnName] = The name of your connection
+- [ipv4] = ip of the l2tp/ipsec server
+- [PSK] = pre shared key from the l2tp/ipsec server
+- [user] = user name to connect to
+- [user-password] = password of the user to connect
+
+To show generated file: nmcli c show id [vpnName]
+To start the VPN from cli: nmcli c up [vpnName]
+To stop the VPN from cli: nmcli c down [vpnName]
+
 # Set VPN interface metric to 0 (network/interfaces)
 nmcli c # (for uuid)
 sudo nmcli connection modify uuid c50a4cf6-0ed5-4974-9cc2-224bc3beef49 ipv4.route-metric 0

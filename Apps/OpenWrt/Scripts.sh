@@ -28,8 +28,8 @@ opkg install openconnect luci-proto-openconnect openssl-util
 
 # getting SHA-1 from your openconnect server
 export OC_SERV="hamid-najafi.ir"
-openssl s_client -connect hamid-najafi.ir:443 -showcerts 2>/dev/null </dev/null | awk '/-----BEGIN/,/-----END/ { print $0 }' | openssl x509 -noout -fingerprint -sha1 | sed 's/Fingerprint=//' | sed 's/://g'
-# SHA1 1674F9295E11C382DF3B703C3602D137EC5BA5D7
+openssl s_client -connect goldenstarc.ir:443 -showcerts 2>/dev/null </dev/null | awk '/-----BEGIN/,/-----END/ { print $0 }' | openssl x509 -noout -fingerprint -sha1 | sed 's/Fingerprint=//' | sed 's/://g'
+# SHA1 70BD1F16B9136F679E2BE31D1E346E2B44CB1193
 # admin
 # ocservpass.24
 after booting up going to network > interface and setup a new interface and setup OpenConnect interface.
