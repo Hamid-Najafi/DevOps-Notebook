@@ -9,4 +9,7 @@ services:
       - 2308:2308
     volumes:
       - ${PWD}/config.json:/etc/v2ray/config.json
+      - ${PWD}/dat/iran.dat:/usr/local/share/v2ray/iran.dat
+      - ${PWD}/dat/geosite.dat:/usr/local/share/v2ray/geosite.dat
+      - ${PWD}/dat/geoip.dat:/usr/local/share/v2ray/geoip.dat
       - ${PWD}/log/:/var/log/v2ray/
