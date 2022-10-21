@@ -1,5 +1,4 @@
 # https://pilot.traefik.io/instances
-# docker network create web
 version: '3.7'
 services:
   traefik:

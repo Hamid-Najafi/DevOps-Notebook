@@ -1,10 +1,9 @@
 # -------==========-------
 # OpenConnect Server
 # -------==========-------
-# -------==========-------
-# Docker
-# -------==========-------
- docker run --name ocserv --privileged -v $PWD/ocpasswd:/etc/ocserv/ocpasswd -p 443:443 -p 443:443/udp -d tommylau/ocserv
+https://www.linuxbabe.com/ubuntu/openconnect-vpn-server-ocserv-ubuntu-20-04-lets-encrypt
+https://www.linuxbabe.com/ubuntu/certificate-authentication-openconnect-vpn-server-ocserv
+https://www.linuxbabe.com/linux-server/ocserv-vpn-server-apache-nginx-haproxy
 # -------==========-------
 # Docker-Compose
 # -------==========-------
@@ -12,7 +11,6 @@
 sudo apt install certbot -y
 sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d hamid-najafi.ir
 sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d goldenstarc.ir
-sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d nl.goldenstarc.ir
 
 mkdir -p ~/docker/ocserv
 cp ~/DevOps-Notebook/Apps/OpenConnect/* ~/docker/ocserv
@@ -30,10 +28,13 @@ docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-moh
 docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-parsa
 docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-danial
 docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" i2rlabs
-docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-100
+docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-rezad
+docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-abold
 docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-101
 docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-102
 docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-103
+docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-104
+docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" usr-105
 
 NOTE: image sometimes stops working!  docker restart ocserv 
 
@@ -42,12 +43,13 @@ NOTE: image sometimes stops working!  docker restart ocserv
 # -------==========-------
 cat > /etc/systemd/system/ocvpn.service << "EOF"
 [Unit]
-Description=OpenconnectClient
+Description=OpenConnect Client
 After=network.target
 [Service]
 Type=simple
-# ExecStart=/bin/sh -c 'echo 641200 | openconnect --user=hamidni --passwd-on-stdin  cuk.dnsfinde.com:1397 --http-auth=Basic --servercert pin-sha256:qgYrqhMY2F/Qai+SvtOZRquKqtCa5yaIZXdMQmV/7rY='
-ExecStart=/bin/sh -c 'echo ocservpass.24 | openconnect --user=admin --passwd-on-stdin  nl.goldenstarc.ir:443 --http-auth=Basic --servercert pin-sha256:o0VPSp4XQX06pfQqpj3xHyYSZZn2nvkTME9yWCH3tAc='
+# ExecStart=/bin/sh -c 'echo 641200 | openconnect --user=hamidni cuk.dnsfinde.com:1397 --http-auth=Basic  --passwd-on-stdin --servercert pin-sha256:qgYrqhMY2F/Qai+SvtOZRquKqtCa5yaIZXdMQmV/7rY='
+# ExecStart=/bin/sh -c 'echo ocservpass.24 | openconnect --user=admin nl.goldenstarc.ir:443 --http-auth=Basic  --passwd-on-stdin --servercert pin-sha256:o0VPSp4XQX06pfQqpj3xHyYSZZn2nvkTME9yWCH3tAc='
+ExecStart=/bin/sh -c 'echo 14789633 | openconnect --user=km83576 c2.kmak.us:443 --http-auth=Basic  --passwd-on-stdin'
 Restart=on-failure
 User=root
 [Install]
@@ -125,7 +127,3 @@ echo -e "alias ipinfo='curl ipinfo.io'" | sudo tee -a ~/.bashrc > /dev/null
 # Verify
 ip route | grep tun0
 ipnifo
-
-sudo openconnect --background --user=admin --passwd-on-stdin  nl.hamid-najafi.ir:443 --http-auth=Basic     --servercert pin-sha256:o0VPSp4XQX06pfQqpj3xHyYSZZn2nvkTME9yWCH3tAc=  <<< "ocservpass.24"
-sudo openconnect --background --user=km83576 --passwd-on-stdin c2.kmak.us:443 --http-auth=Basic <<< "14789633"
-echo 641200 | openconnect --user=hamidni --passwd-on-stdin  cde4.dnsfinde.com:1397 --http-auth=Basic

@@ -15,7 +15,6 @@ sudo apt-get autoremove
 
 # Create NGINX webserver's config files.
 sudo nano /etc/nginx/sites-enabled/config_file_name.conf
-sudo nano /etc/nginx/sites-enabled/hamid_resume.conf
 # Enable Server Blocks and Restart Nginx
 sudo ln -s /etc/nginx/sites-available/test.com /etc/nginx/sites-enabled/
 sudo nginx -t
@@ -24,8 +23,13 @@ sudo systemctl restart nginx
 nginx -t
 
 # Certbot
-sudo apt-get install certbot python3-certbot-nginx
-sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d hamid-najafi.ir
+sudo apt-get install certbot python3-certbot-nginx -y
+sudo certbot certonly \
+    --email admin@hamid-najafi.ir \
+    --server https://acme-v02.api.letsencrypt.org/directory \
+    --agree-tos \
+    --nginx \
+    --domains hamid-najafi.ir
 
 # Start nginx in the background
 nginx

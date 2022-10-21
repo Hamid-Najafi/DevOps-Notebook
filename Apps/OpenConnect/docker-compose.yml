@@ -5,20 +5,9 @@ services:
     container_name: ocserv
     restart: always
     privileged: true
-    hostname: ir.hamid-najafi.ir
-    ports:
-      - 443:443/udp
-      - 443:443
+    network_mode: "host"
+    hostname: hamid-najafi.ir
     volumes:
-      # - ${PWD}/ocpasswd:/etc/ocserv/ocpasswd
+      - ${PWD}/ocpasswd:/etc/ocserv/ocpasswd
       - ${PWD}/ocserv.conf:/etc/ocserv/ocserv.conf
       - /etc/letsencrypt/:/etc/letsencrypt/
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.ocserv.rule=Host(`goldenstarc.ir`)"
-      - "traefik.http.services.ocserv.loadbalancer.server.port=80"
-      - "traefik.http.routers.ocserv.entrypoints=secure"
-      - "traefik.http.routers.ocserv.tls.certresolver=letsencrypt"
-      - "traefik.docker.network=web"
-    networks:
-      - web
