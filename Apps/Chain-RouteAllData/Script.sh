@@ -29,7 +29,6 @@ cat > /home/ubuntu/configVPNChain.sh <<EOF
 for range in $(jq .[] /home/ubuntu/iran_ip_range.json | sed 's/"//g' | xargs); do
   ip route add $range via 37.32.20.1;
 done;
-openconnect --background --user=admin --passwd-on-stdin  nl.hamid-najafi.ir:443 --http-auth=Basic <<< "ocservpass.24"
 iptables -A FORWARD -j ACCEPT
 iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE
 EOF
