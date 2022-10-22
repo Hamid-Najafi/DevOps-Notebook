@@ -45,6 +45,11 @@ docker cp <containerId>:/file/path/within/container /host/path/target
 # -------==========-------
 # Docker
 # -------==========-------
+# for 403 Iran:
+sudo nano  /etc/resolv.conf
+nameserver 185.51.200.2
+nameserver 178.22.122.100
+
 curl -sSL https://get.docker.com/ | sh
 sudo usermod -aG docker $USER
 sudo chown $USER /var/run/docker.sock

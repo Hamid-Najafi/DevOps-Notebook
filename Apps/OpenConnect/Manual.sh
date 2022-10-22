@@ -10,7 +10,7 @@ https://www.linuxbabe.com/linux-server/ocserv-vpn-server-apache-nginx-haproxy
 # Setup SSL Let’s Encrypt
 sudo apt install certbot -y
 sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d hamid-najafi.ir
-sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d goldenstarc.ir
+sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d hr.goldenstarc.ir
 
 mkdir -p ~/docker/ocserv
 cp ~/DevOps-Notebook/Apps/OpenConnect/* ~/docker/ocserv
@@ -127,3 +127,6 @@ echo -e "alias ipinfo='curl ipinfo.io'" | sudo tee -a ~/.bashrc > /dev/null
 # Verify
 ip route | grep tun0
 ipnifo
+
+echo 14789633 | sudo openconnect --background --user=km83576 c2.kmak.us:443 --http-auth=Basic  --passwd-on-stdin
+echo ocservpass.24 | sudo openconnect --background --user=admin hr.goldenstarc.ir:443 --http-auth=Basic  --passwd-on-stdin

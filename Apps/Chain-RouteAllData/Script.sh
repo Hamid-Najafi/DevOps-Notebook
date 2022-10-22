@@ -33,6 +33,7 @@ iptables -A FORWARD -j ACCEPT
 iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE
 EOF
 chmod +x /home/ubuntu/configVPNChain.sh
+./configVPNChain.sh
 # Set Variables
 su ubuntu
 echo -e "alias ocn='sudo openconnect --background --user=admin --passwd-on-stdin  nl.hamid-najafi.ir:443 --http-auth=Basic <<< "ocservpass.24"'" | sudo tee -a ~/.bashrc  > /dev/null

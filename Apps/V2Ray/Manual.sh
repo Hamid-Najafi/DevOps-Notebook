@@ -13,10 +13,10 @@ echo $UUID
 # ef684640-68d0-4450-aa8f-796b3e5802c5
 
 mkdir -p ~/docker/v2ray
-cp ~/DevOps-Notebook/Apps/V2Ray/* ~/docker/v2ray
+cp -r ~/DevOps-Notebook/Apps/V2Ray/* ~/docker/v2ray
 cd ~/docker/v2ray
 # Set: UUID
-nano ocserv.conf
+nano config.json
 docker-compose up -d
 # -------==========-------
 # On Iran Server:
