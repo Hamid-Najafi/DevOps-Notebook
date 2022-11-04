@@ -3,28 +3,19 @@
 # -------==========-------
 # https://gist.github.com/mahmoud-eskandari/960899f3494a1bffa1a29631dbaf0aee?permalink_comment_id=4337815#
 # -------==========-------
-# On Europe Server:
-## Get an UUID
-UUID=$(cat /proc/sys/kernel/random/uuid)
-if [ $? -ne 0 ]
-  then 
-  UUID= $(curl -s "https://www.uuidgenerator.net/api/version4" )
-fi
-echo $UUID
-# ef684640-68d0-4450-aa8f-796b3e5802c5
-
+# On Europe Server
+# -------==========-------
 mkdir -p ~/docker/v2ray
 cp -r ~/DevOps-Notebook/Apps/V2Ray/* ~/docker/v2ray
 cd ~/docker/v2ray
-# Set: UUID
-nano config.json
 docker-compose up -d
 # -------==========-------
-# On Iran Server:
+# On Iran Server
 # -------==========-------
-sudo bash ~/DevOps-Notebook/Apps/V2Ray/AutoInstall/IranBridgeSetup.sh 91.198.77.165 2083 ef684640-68d0-4450-aa8f-796b3e5802c5
-# cp  ~/DevOps-Notebook/Apps/V2Ray/configIR.json /usr/local/etc/v2ray/config.json
-
+EU_IP=91.198.77.165
+EU_PORT=2083
+EU_UUID=ef684640-68d0-4450-aa8f-796b3e5802c5
+sudo bash ~/DevOps-Notebook/Apps/V2Ray/AutoInstall/IranBridgeSetup.sh $EU_IP $EU_PORT $EU_UUID
 # -------==========-------
 # V2ray vmess Connection
 # -------==========-------
