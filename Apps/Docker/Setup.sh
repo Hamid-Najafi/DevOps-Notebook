@@ -92,7 +92,7 @@ USER appuser
 # HTTP Proxy
 # -------==========-------
 sudo mkdir -p /etc/systemd/system/docker.service.d
-cat >>  /etc/systemd/system/docker.service.d/http-proxy.conf << EOF
+cat >> /etc/systemd/system/docker.service.d/http-proxy.conf << EOF
 [Service]
 Environment="HTTP_PROXY=http://admin:Squidpass.24@nl.goldenstarc.ir:3128"
 Environment="HTTPS_PROXY=http://admin:Squidpass.24@nl.goldenstarc.ir:3128"

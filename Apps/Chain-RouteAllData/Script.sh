@@ -14,8 +14,8 @@ DEFGATEWAY=$(ip route | grep default | awk '{print $3;exit}')
 for range in $(jq .[] /root/iran_ip_range.json | sed 's/"//g' | xargs); do
   ip route add $range via $DEFGATEWAY;
 done;
-iptables -A FORWARD -j ACCEPT
-iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE
+sudo iptables -A FORWARD -j ACCEPT
+sudo iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE
 EOF
 chmod +x /root/configVPNChain.sh
 bash /root/configVPNChain.sh

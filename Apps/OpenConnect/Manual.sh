@@ -56,16 +56,15 @@ Run Chain-RouteAllData Script
 # -------==========-------
 # Service Client
 # -------==========-------
-sudo apt update
-sudo apt install openconnect -y
-
+sudo apt update && sudo apt install openconnect -y
 cat > /etc/systemd/system/ocvpn.service << "EOF"
 [Unit]
 Description=OpenConnect Client
 After=network.target
 [Service]
 Type=simple
-ExecStart=/bin/sh -c 'echo ocservpass.24 | openconnect --user=admin nl.goldenstarc.ir:443 --http-auth=Basic  --passwd-on-stdin --servercert pin-sha256:o0VPSp4XQX06pfQqpj3xHyYSZZn2nvkTME9yWCH3tAc='
+# ExecStart=/bin/sh -c 'echo ocservpass.24 | openconnect --user=admin nl.goldenstarc.ir:443 --http-auth=Basic  --passwd-on-stdin --servercert pin-sha256:o0VPSp4XQX06pfQqpj3xHyYSZZn2nvkTME9yWCH3tAc='
+ExecStart=/bin/sh -c 'echo hamid | openconnect --user=usr-hamid goldenstarc.ir:443 --http-auth=Basic  --passwd-on-stdin'
 # ExecStart=/bin/sh -c 'echo 641200 | openconnect --user=hamidni cuk.dnsfinde.com:1397 --http-auth=Basic  --passwd-on-stdin --servercert pin-sha256:qgYrqhMY2F/Qai+SvtOZRquKqtCa5yaIZXdMQmV/7rY='
 # ExecStart=/bin/sh -c 'echo 14789633 | openconnect --user=km83576 c2.kmak.us:443 --http-auth=Basic  --passwd-on-stdin'
 Restart=always
@@ -85,12 +84,12 @@ echo -e "alias ipinfo='curl api.ipify.org && echo -e ""'" | sudo tee -a ~/.bashr
 # -------==========-------
 # Bash Client
 # -------==========-------
-sudo apt update
-sudo apt install openconnect -y
-echo -e "alias ocn='sudo openconnect --background --user=admin --passwd-on-stdin  nl.hamid-najafi.ir:443 --http-auth=Basic <<< "ocservpass.24"'" | sudo tee -a ~/.bashrc  > /dev/null
+sudo apt update && sudo apt install openconnect -y
+echo -e "alias ocn='sudo openconnect --background --user=usr-hamid --passwd-on-stdin  goldenstarc.ir:443 --http-auth=Basic <<< "hamid" > /dev/null'" | sudo tee -a ~/.bashrc  > /dev/null
 echo -e "alias ocf='sudo killall -SIGINT openconnect'" | sudo tee -a ~/.bashrc > /dev/null
 echo -e "alias ipinfo='curl api.ipify.org && echo -e ""'" | sudo tee -a ~/.bashrc > /dev/null
 
 echo 14789633 | sudo openconnect --background --user=km83576 c2.kmak.us:443 --http-auth=Basic  --passwd-on-stdin
 echo 14789633 | sudo openconnect --background --user=km83576 cp6.kmak.info:443 --http-auth=Basic  --passwd-on-stdin
 echo ocservpass.24 | sudo openconnect --background --user=admin nl.goldenstarc.ir:443 --http-auth=Basic  --passwd-on-stdin
+echo hamid | openconnect --user=usr-hamid goldenstarc.ir:443 --http-auth=Basic  --passwd-on-stdin
