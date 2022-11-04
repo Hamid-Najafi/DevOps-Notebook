@@ -21,6 +21,7 @@ EU_PORT=2083
 EU_UUID=ef684640-68d0-4450-aa8f-796b3e5802c5
 sudo bash ~/DevOps-Notebook/Apps/V2Ray/AutoInstall/IranBridgeSetup.sh $EU_IP $EU_PORT $EU_UUID
 
+wget -qO- https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/AutoInstall/IranClientSetup.sh | bash -s -- -w -a -v focal-250 -s bbb.example.com -e info@example.com
 # -------==========-------
 # V2ray vmess Connection
 # -------==========-------
