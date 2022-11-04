@@ -11,11 +11,11 @@ rm -rf ./v2ray && mkdir ./v2ray
 cd ./v2ray
 
 ## x86_64
-## Source: https://github.com/v2fly/v2ray-core/releases/tag/v4.31.0
+## Source: https://github.com/v2fly/v2ray-core/releases/tag/v5.1.0
 
-curl -L https://v2rayv2ray.s3.ir-thr-at1.arvanstorage.com/v2ray-$(uname -m).tar.gz -o v2ray.tar.gz
-v2rayv2ray.s3.ir-thr-at1.arvanstorage.com/v2ray-x86_64.tar.gz
-tar -xvf v2ray.tar.gz
+curl -L https://github.com/v2fly/v2ray-core/releases/download/v5.1.0/v2ray-linux-64.zip -o v2ray.zip
+# curl -L https://github.com/v2fly/v2ray-core/releases/download/v5.1.0/v2ray-linux-arm64-v8a.zip -o v2ray.zip
+unzip v2ray.zip
 
 ## make directories & files
 rm -rf /var/log/v2ray/ && mkdir -p /var/log/v2ray/
@@ -29,17 +29,6 @@ cp ./iran.dat /usr/local/share/v2ray/iran.dat
 cp ./geosite.dat /usr/local/share/v2ray/geosite.dat
 cp ./geoip.dat /usr/local/share/v2ray/geoip.dat
 chown -R nobody /usr/local/share/v2ray/
-
-## Get an UUID
-UUID=$(cat /proc/sys/kernel/random/uuid)
-if [ $? -ne 0 ]
-  then 
-  UUID= $(curl -s "https://www.uuidgenerator.net/api/version4" )
-fi
-
-SSPASS=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 )
-SOPASS=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 8 )
-MTPORTO=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 32 | md5sum | head -c 32)
 
 ## Write config file
 rm -rf /usr/local/etc/v2ray/ && mkdir -p /usr/local/etc/v2ray/
@@ -185,11 +174,12 @@ cp ./systemd/system/v2ray@.service /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable v2ray
 systemctl restart v2ray
+systemctl status v2ray
 
 cd /tmp/
 rm -rf ./v2ray
 
+# echo -e "all_proxy=http://127.0.0.1:10809" | sudo tee -a /etc/environment
+# source /etc/environment
 
-export all_proxy=http://127.0.0.1:10809
-echo "systemctl status v2ray"
 echo "Done"
