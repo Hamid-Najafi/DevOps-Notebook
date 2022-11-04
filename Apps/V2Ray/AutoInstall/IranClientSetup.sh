@@ -10,12 +10,14 @@ cd /tmp/
 rm -rf ./v2ray && mkdir ./v2ray
 cd ./v2ray
 
-## x86_64
 ## Source: https://github.com/v2fly/v2ray-core/releases/tag/v5.1.0
-
 curl -L https://github.com/v2fly/v2ray-core/releases/download/v5.1.0/v2ray-linux-64.zip -o v2ray.zip
 # curl -L https://github.com/v2fly/v2ray-core/releases/download/v5.1.0/v2ray-linux-arm64-v8a.zip -o v2ray.zip
 unzip v2ray.zip
+
+curl -L https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/DAT/geoip.dat -o geoip.dat 
+curl -L https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/DAT/geosite.dat -o geosite.dat 
+curl -L https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/DAT/iran.dat -o iran.dat 
 
 ## make directories & files
 rm -rf /var/log/v2ray/ && mkdir -p /var/log/v2ray/
@@ -122,40 +124,28 @@ cat <<EOF > /usr/local/etc/v2ray/config.json
   ],
   "routing": {
     "domainStrategy": "IPIfNonMatch",
-    "rules": [
-      {
-        "type": "field",
-        "inboundTag": [
-          "api"
-        ],
-        "outboundTag": "api",
-        "enabled": true
-      },
-      {
-        "type": "field",
-        "inboundTag": [],
-        "outboundTag": "direct",
-        "domain": [
-          "domain:example-example.com",
-          "domain:example-example2.com"
-        ],
-        "enabled": true
-      },
-      {
-        "type": "field",
-        "outboundTag": "block",
-        "domain": [
-          "geosite:category-ads-all"
-        ],
-        "enabled": true
-      },
-      {
-        "type": "field",
-        "port": "0-65535",
-        "outboundTag": "proxy",
-        "enabled": true
-      }
-    ]
+    "settings": {
+      "rules": [
+        {
+          "type": "field",
+          "outboundTag": "blackhole",
+          "ip": [
+            "geoip:private"
+          ]
+        },
+        {
+          "type": "field",
+          "outboundTag": "direct",
+          "ip": [
+            "geoip:ir"
+          ],
+          "domain": [
+            "regexp:^.+\\.ir$",
+            "ext:iran.dat:ir"
+          ]
+        }
+      ]
+    }
   }
 }
 EOF
@@ -179,7 +169,7 @@ systemctl status v2ray
 cd /tmp/
 rm -rf ./v2ray
 
-# echo -e "all_proxy=http://127.0.0.1:10809" | sudo tee -a /etc/environment
-# source /etc/environment
+echo -e "all_proxy=http://127.0.0.1:10809" | sudo tee -a /etc/environment
+source /etc/environment
 
 echo "Done"
