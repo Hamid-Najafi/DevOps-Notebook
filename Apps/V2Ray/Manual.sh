@@ -14,6 +14,11 @@ docker-compose up -d
 # -------==========-------
 # On Iran Server
 # -------==========-------
+mkdir -p ~/docker/v2ray
+cp -r ~/DevOps-Notebook/Apps/V2Ray/* ~/docker/v2ray
+cd ~/docker/v2ray
+cp configIRChain.json config.json
+docker-compose up -d
 # This script runs v2ray-core as a system app
 # TODO: dockerize it
 EU_IP=91.198.77.165
@@ -21,6 +26,7 @@ EU_PORT=2083
 EU_UUID=ef684640-68d0-4450-aa8f-796b3e5802c5
 sudo bash ~/DevOps-Notebook/Apps/V2Ray/AutoInstall/IranBridgeSetup.sh $EU_IP $EU_PORT $EU_UUID
 # OR
+wget -qO- https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/AutoInstall/IranBridgeSetup.sh | sudo bash -s
 wget -qO- https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/AutoInstall/IranClientSetup.sh | sudo bash -s
 # -------==========-------
 # V2ray vmess Connection

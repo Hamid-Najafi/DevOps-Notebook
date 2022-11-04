@@ -6,6 +6,7 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
+
 cd /tmp/
 rm -rf ./v2ray && mkdir ./v2ray
 cd ./v2ray
@@ -18,6 +19,11 @@ unzip v2ray.zip
 curl -L https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/DAT/geoip.dat -o geoip.dat 
 curl -L https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/DAT/geosite.dat -o geosite.dat 
 curl -L https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/DAT/iran.dat -o iran.dat 
+
+# stop previous installation
+sudo systemctl disable v2ray.service 
+sudo systemctl stop v2ray.service 
+sudo rm -rf /usr/local/bin/v2ray
 
 ## make directories & files
 rm -rf /var/log/v2ray/ && mkdir -p /var/log/v2ray/
@@ -173,7 +179,8 @@ cp ./systemd/system/v2ray@.service /etc/systemd/system/
 
 systemctl daemon-reload
 systemctl enable v2ray
-systemctl restart v2ray
+systemctl start v2ray
+systemctl status v2ray
 
 cd /tmp/
 rm -rf ./v2ray

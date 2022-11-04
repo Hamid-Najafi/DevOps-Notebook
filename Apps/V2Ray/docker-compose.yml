@@ -4,9 +4,11 @@ services:
     image: v2fly/v2fly-core:latest
     container_name: v2ray
     restart: always
-    hostname: hamid-najafi.ir
     ports:
       - 2308:2308
+      - 9006:9006
+      - 9007:9007
+      - 9009:9009
     volumes:
       - ${PWD}/config.json:/etc/v2ray/config.json
       - ${PWD}/dat/iran.dat:/usr/local/share/v2ray/iran.dat
