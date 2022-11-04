@@ -7,6 +7,33 @@ git clone https://github.com/Hamid-Najafi/hamid-najafi.ir.git
 
 cat <<EOF > /etc/nginx/sites-available/hamid_najafi_ir
 server {
+  listen 80 default_server;
+  listen [::]:80 default_server;
+  root /var/www/hamid-najafi.ir;
+  index index.html;
+  server_name hamid-najafi.ir www.hamid-najafi.ir;
+  location / {
+    try_files $uri $uri/ =404;
+  }
+}
+EOF
+
+ln -s /etc/nginx/sites-available/hamid_najafi_ir /etc/nginx/sites-enabled/hamid_najafi_ir
+nginx -t
+systemctl restart nginx
+
+# Certbot
+sudo apt-get install certbot python3-certbot-nginx -y
+sudo certbot certonly \
+    --email admin@hamid-najafi.ir \
+    --server https://acme-v02.api.letsencrypt.org/directory \
+    --agree-tos \
+    --nginx \
+    --domains hamid-najafi.ir
+
+ 
+cat <<EOF > /etc/nginx/sites-available/hamid_najafi_ir
+server {
   root /var/www/hamid-najafi.ir;
   index index.html index.htm;
   server_name hamid-najafi.ir;
@@ -30,10 +57,5 @@ server {
 }
 EOF
 
-ln -s /etc/nginx/sites-available/hamid_najafi_ir /etc/nginx/sites-enabled/hamid_najafi_ir
 nginx -t
 systemctl restart nginx
-
-# Certbot
-sudo apt-get install certbot python3-certbot-nginx -y
-sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d hamid-najafi.ir

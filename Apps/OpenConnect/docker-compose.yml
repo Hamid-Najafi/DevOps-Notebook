@@ -6,8 +6,7 @@ services:
     restart: always
     privileged: true
     network_mode: "host"
-    hostname: hamid-najafi.ir
     volumes:
-      - ${PWD}/ocpasswd:/etc/ocserv/ocpasswd
+#      - ${PWD}/ocpasswd:/etc/ocserv/ocpasswd
       - ${PWD}/ocserv.conf:/etc/ocserv/ocserv.conf
       - /etc/letsencrypt/:/etc/letsencrypt/

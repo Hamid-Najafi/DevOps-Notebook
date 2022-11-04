@@ -109,6 +109,7 @@ nc -u vir-gol.ir 636
 # -------==========-------
 # IP Information
 # -------==========-------
+echo -e "alias ipinfo='curl api.ipify.org && echo -e ""'" | sudo tee -a ~/.bashrc > /dev/null
 curl ipinfo.io
 curl ipinfo.io/ip
 # -------==========-------

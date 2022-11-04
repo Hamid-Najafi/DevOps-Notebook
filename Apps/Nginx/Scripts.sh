@@ -5,22 +5,17 @@
 sudo apt update
 sudo apt install nginx -y 
 
-# Uninstall Nginx
-# Removes all but config files.
-sudo apt-get remove nginx nginx-common
-# Removes everything.
-sudo apt-get purge nginx nginx-common
-# remove dependencies used by nginx which are no longer required.
-sudo apt-get autoremove
+# Remove Default site 
+rm /etc/nginx/sites-enabled/default
 
 # Create NGINX webserver's config files.
 sudo nano /etc/nginx/sites-enabled/config_file_name.conf
+# PUT CONFIG HERE
+
 # Enable Server Blocks and Restart Nginx
 sudo ln -s /etc/nginx/sites-available/test.com /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
-# Test the configuration file
-nginx -t
 
 # Certbot
 sudo apt-get install certbot python3-certbot-nginx -y
@@ -39,6 +34,17 @@ nginx -g 'daemon off;'
 nginx -t && nginx -s reload
 # Kill nginx
 nginx -s stop
+
+# -------==========------- 
+# Uninstall Nginx
+# -------==========------- 
+# Removes all but config files.
+sudo apt-get remove nginx nginx-common
+# Removes everything.
+sudo apt-get purge nginx nginx-common
+# remove dependencies used by nginx which are no longer required.
+sudo apt-get autoremove
+
 # -------==========------- 
 # Nginx with RTMP & HLS & DASH
 # -------==========------- 
