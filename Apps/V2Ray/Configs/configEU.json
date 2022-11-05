@@ -1,0 +1,48 @@
+{
+    "log": {
+      "access": "/var/log/v2ray/access.log",
+      "error": "/var/log/v2ray/error.log",
+      "loglevel": "warning"
+    },
+    "inbound": {
+      "listen": "0.0.0.0",
+      "port": 2083,
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "id": "ef684640-68d0-4450-aa8f-796b3e5802c5",
+            "alterId": 0,
+            "security": "chacha20-poly1305"
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws"
+      }
+    },
+    "outbound": {
+      "protocol": "freedom"
+    },
+    "inboundDetour": null,
+    "outboundDetour": [
+      {
+        "protocol": "blackhole",
+        "tag": "blackhole"
+      }
+    ],
+    "routing": {
+      "domainStrategy": "IPIfNonMatch",
+      "settings": {
+        "rules": [
+          {
+            "type": "field",
+            "outboundTag": "blackhole",
+            "ip": [
+              "geoip:private"
+            ]
+          }
+        ]
+      }
+    }
+  }

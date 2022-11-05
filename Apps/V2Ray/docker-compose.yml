@@ -5,13 +5,11 @@ services:
     container_name: v2ray
     restart: always
     ports:
-      - 2308:2308
-      - 9006:9006
+      - 2083:2083
       - 9007:9007
+      - 9008:9008
       - 9009:9009
     volumes:
       - ${PWD}/config.json:/etc/v2ray/config.json
-      - ${PWD}/dat/iran.dat:/usr/local/share/v2ray/iran.dat
-      - ${PWD}/dat/geosite.dat:/usr/local/share/v2ray/geosite.dat
-      - ${PWD}/dat/geoip.dat:/usr/local/share/v2ray/geoip.dat
+      - ${PWD}/DAT/:/usr/local/share/v2ray/
       - ${PWD}/log/:/var/log/v2ray/
