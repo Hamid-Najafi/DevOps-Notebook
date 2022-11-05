@@ -27,8 +27,9 @@ rm -rf /usr/local/share/v2ray/ && mkdir -p /usr/local/share/v2ray/
 rm -rf /usr/local/etc/v2ray/ && mkdir -p /usr/local/etc/v2ray/
 
 ## Config File
-sudo curl -L https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/Configs/configIRBridge.json -o /usr/local/etc/v2ray/config.json
-# sudo curl -L https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/Configs/configIRClient.json -o /usr/local/etc/v2ray/config.json
+sudo curl -L https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/Configs/configIRBridge.json -o config.json 
+# sudo curl -L https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/Configs/configIRClient.json -o config.json 
+cp ./config.json /usr/local/etc/v2ray/config.json
 
 
 ## Binary Files
