@@ -6,7 +6,7 @@
 # -------==========-------
 # V2Fly
 # -------==========-------
-wget -qO- https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/Scripts/AuroInstall.sh | sudo bash -s
+wget -qO- https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/Scripts/AutoInstall.sh | sudo bash -s
 # -------==========-------
 # On Europe Server
 # -------==========-------
