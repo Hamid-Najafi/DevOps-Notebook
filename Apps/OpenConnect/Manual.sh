@@ -17,6 +17,7 @@ cp ~/DevOps-Notebook/Apps/OpenConnect/* ~/docker/ocserv
 cd ~/docker/ocserv
 # Set: server-cert, server-key & default-domain
 nano ocserv.conf
+cp ocserv-haproxy.conf ocserv.conf
 docker-compose up -d
 # Delete Test User
 docker exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -d test
