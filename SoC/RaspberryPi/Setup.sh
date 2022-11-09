@@ -50,3 +50,13 @@ WantedBy=sysinit.target
 systemctl daemon-reload
 sudo systemctl enable splashscreen.service
 sudo systemctl start splashscreen.service
+
+
+# -------==========-------
+# NET 6.0 SDK (v6.0.402)
+# -------==========-------
+curl -sSL https://dot.net/v1/dotnet-install.sh | bash
+echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+echo 'export PATH=$PATH:$HOME/.dotnet' >> ~/.bashrc
+source ~/.bashrc
+dotnet --version
