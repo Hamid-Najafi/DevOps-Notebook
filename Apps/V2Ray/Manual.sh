@@ -4,12 +4,21 @@
 # https://gist.github.com/mahmoud-eskandari/960899f3494a1bffa1a29631dbaf0aee?permalink_comment_id=4337815#
 # https://www.v2fly.org/
 # -------==========-------
+# V2Fly
+# -------==========-------
+wget -qO- https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/Scripts/AuroInstall.sh | sudo bash -s
+# -------==========-------
 # On Europe Server
 # -------==========-------
 mkdir -p ~/docker/v2ray
 cp -r ~/DevOps-Notebook/Apps/V2Ray/* ~/docker/v2ray
 cd ~/docker/v2ray
 cp Configs/configEU.json config.json
+mkdir DAT || cd DAT
+curl -L https://github.com/SamadiPour/iran-hosted-domains/releases/download/202209210046/iran.dat -o iran.dat 
+curl -L https://github.com/v2fly/v2ray-core/releases/download/v5.1.0/v2ray-linux-64.zip -o ./DAT/v2ray.zip
+unzip ./DAT/v2ray.zip
+cd ..
 docker-compose up -d
 # -------==========-------
 # On Iran Server
@@ -19,8 +28,6 @@ cp -r ~/DevOps-Notebook/Apps/V2Ray/* ~/docker/v2ray
 cd ~/docker/v2ray
 cp configIRChain.json config.json
 docker-compose up -d
-# ------- OR -------
-wget -qO- https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/Scripts/IranSetup.sh | sudo bash -s
 # -------==========-------
 # x-ui 
 # -------==========-------

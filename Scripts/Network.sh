@@ -158,7 +158,7 @@ https://virgool.io/@mahdi.ft/dnsredirection-qxrl6fuqc7hv
 systemd-resolve --status
 
 # Manuall Install
-sudo apt install resolvconf
+sudo apt install resolvconf -y
 sudo nano /etc/resolvconf/resolv.conf.d/head
 # Cloudflare
 nameserver 1.1.1.1

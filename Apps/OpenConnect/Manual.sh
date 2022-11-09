@@ -9,14 +9,14 @@ https://www.linuxbabe.com/linux-server/ocserv-vpn-server-apache-nginx-haproxy
 # -------==========-------
 # Setup SSL Let’s Encrypt
 sudo apt install certbot -y
-sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d hamid-najafi.ir
 sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d goldenstarc.ir
 
 mkdir -p ~/docker/ocserv
 cp ~/DevOps-Notebook/Apps/OpenConnect/* ~/docker/ocserv
 cd ~/docker/ocserv
 # Set: server-cert, server-key & default-domain
-nano ocserv.conf
+# nano ocserv.conf
+# SETUP HAPROXY FIRST!
 cp ocserv-haproxy.conf ocserv.conf
 docker-compose up -d
 # Delete Test User

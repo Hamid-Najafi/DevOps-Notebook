@@ -4,33 +4,68 @@
       "error": "/var/log/v2ray/error.log",
       "loglevel": "warning"
     },
-    "inbound": {
-      "listen": "0.0.0.0",
-      "port": 2083,
-      "protocol": "vmess",
-      "settings": {
-        "clients": [
-          {
-            "id": "ef684640-68d0-4450-aa8f-796b3e5802c5",
-            "alterId": 0,
-            "security": "chacha20-poly1305"
-          }
-        ]
+    "inbounds": [
+      {
+        "listen": "0.0.0.0",
+        "port": 9007,
+        "protocol": "socks",
+        "settings": {
+          "auth": "password",
+          "accounts": [
+              {
+              "user": "user",
+              "pass": "w8BTHEhp"
+              }
+          ],
+          "udp": true
+        }
       },
-      "streamSettings": {
-        "network": "ws"
+      { 
+        "listen": "0.0.0.0",
+        "port": 9008,
+        "protocol": "shadowsocks",
+        "settings": { 
+          "password": "mlw8I8CcgIarD",
+          "timeout":60,
+          "method":"chacha20-ietf-poly1305"
+        }
+      },
+      {
+        "listen": "0.0.0.0",
+        "port": 9009,
+        "protocol": "vmess",
+        "settings": {
+          "clients": [
+            {
+              "id": "70c12e91-2faa-485b-a15e-906b1da76518",
+              "alterId": 0,
+              "security": "auto"
+            }
+          ]
+        }
       }
-    },
+    ],
     "outbound": {
       "protocol": "freedom"
     },
     "inboundDetour": null,
     "outboundDetour": [
       {
+        "protocol": "freedom",
+        "tag": "freedom"
+      },
+      {
         "protocol": "blackhole",
         "tag": "blackhole"
       }
     ],
+    "dns": {
+      "servers": [
+        "8.8.8.8",
+        "8.8.4.4",
+        "localhost"
+      ]
+    },
     "routing": {
       "domainStrategy": "IPIfNonMatch",
       "settings": {
@@ -40,6 +75,20 @@
             "outboundTag": "blackhole",
             "ip": [
               "geoip:private"
+            ]
+          },
+          {
+            "type": "field",
+            "outboundTag": "freedom",
+            "ip": [
+              "geoip:ir"
+            ],
+            "domain": [
+              "regexp:^*\\.ir$",
+              "iran:ir",
+              "ext:iran.dat:ir",
+              "ext:iran.dat:other",
+              "ext:iran.dat:ads"
             ]
           }
         ]

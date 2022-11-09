@@ -4,7 +4,8 @@
 sudo apt update
 sudo apt install haproxy -y
 sudo nano /etc/haproxy/haproxy.cfg
-# copy and paste the following lines to the end of the file. 
+# copy and paste the following lines to the end of the file.
+echo "
 frontend https
    bind 185.141.107.62:443
    mode tcp
@@ -27,6 +28,7 @@ backend nginx
    mode tcp
    option ssl-hello-chk
    server nginx 127.0.0.2:443 check
+   " >> /etc/haproxy/haproxy.cfg
 
 sudo systemctl restart haproxy
 sudo systemctl status haproxy
