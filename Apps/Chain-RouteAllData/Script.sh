@@ -4,7 +4,6 @@
 # https://medium.com/@blackrobot666/for-iranian-protests-how-to-setup-vpn-proxy-chains-to-bypass-internet-blockade-e8daa13844e2
 # -------==========-------
 # IranServer
-sudo su
 apt update && apt install jq -y
 sysctl -w net.ipv4.ip_forward=1
 wget https://raw.githubusercontent.com/Hamid-Najafi/iran_ip_ranges/master/iran_ip_range.json -O /root/iran_ip_range.json 

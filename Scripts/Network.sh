@@ -148,6 +148,8 @@ proxychains wget https://charts.gitlab.io
 # -------==========-------
 # Quick Install
 sudo nano  /etc/resolv.conf
+nameserver 194.104.158.182
+
 nameserver 185.51.200.2
 nameserver 178.22.122.100
 # OR
@@ -257,28 +259,26 @@ iface enp3s0f0 inet static
         pre-down route del default gw 172.27.32.13
 
 # -------==========-------
-# Ubunut 18.04 - 185.234.14.99
+# Ubunut 20.04 - 195.211.44.219
 # -------==========-------
 sudo nano /etc/netplan/01-netcfg.yaml 
 
 # This file describes the network interfaces available on your system
 # For more information, see netplan(5).
 network:
-        ethernets:
-        eno1:
-            addresses:
-                - 185.234.14.99/32
-            nameservers:
-                addresses:
-                    - 8.8.8.8
-                search: []
-            optional: true
-            routes:
-                - to: 0.0.0.0/0
-                  via: 172.27.12.101
-                  on-link: true
-    version: 2
-
+  version: 2
+  renderer: networkd
+  ethernets:
+    eno1:
+        addresses:
+            - 195.211.44.219/32
+        nameservers:
+             addresses:
+                 - 8.8.4.4
+        routes:
+            - to: 0.0.0.0/0
+              via: 172.27.7.57
+              on-link: true
 
 # -------==========-------
 # Wifi Station

@@ -6,7 +6,8 @@ sudo apt update
 sudo apt install nginx -y 
 
 # Remove Default site 
-rm /etc/nginx/sites-enabled/default
+rm /etc/nginx/sites-available/default
+rm /etc/nginx/sites-enabled/default 
 
 # Create NGINX webserver's config files.
 sudo nano /etc/nginx/sites-enabled/config_file_name.conf
@@ -19,7 +20,7 @@ sudo systemctl restart nginx
 
 # Certbot
 sudo apt-get install certbot python3-certbot-nginx -y
-sudo certbot certonly \
+sudo certbot \
     --email admin@hamid-najafi.ir \
     --server https://acme-v02.api.letsencrypt.org/directory \
     --agree-tos \

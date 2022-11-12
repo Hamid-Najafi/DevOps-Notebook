@@ -3,11 +3,11 @@
 # -------==========-------
 sudo apt update
 sudo apt install haproxy -y
-sudo nano /etc/haproxy/haproxy.cfg
+# sudo nano /etc/haproxy/haproxy.cfg
 # copy and paste the following lines to the end of the file.
 echo "
 frontend https
-   bind 185.141.107.62:443
+   bind 195.211.44.219:443
    mode tcp
    tcp-request inspect-delay 5s
    tcp-request content accept if { req_ssl_hello_type 1 }

@@ -46,9 +46,10 @@ docker cp <containerId>:/file/path/within/container /host/path/target
 # Docker
 # -------==========-------
 # for 403 Iran:
+sudo systemctl stop systemd-resolved.service
 sudo nano  /etc/resolv.conf
-nameserver 185.51.200.2
 nameserver 178.22.122.100
+nameserver 185.51.200.2
 
 curl -sSL https://get.docker.com/ | sh
 sudo usermod -aG docker $USER

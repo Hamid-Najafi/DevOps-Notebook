@@ -1,7 +1,6 @@
 # -------==========-------
 # Tips
 # -------==========-------
-sudo su
 cd /var/www/
 git clone https://github.com/Hamid-Najafi/hamid-najafi.ir.git
 
@@ -24,7 +23,7 @@ systemctl restart nginx
 
 # Certbot
 sudo apt-get install certbot python3-certbot-nginx -y
-sudo certbot certonly \
+sudo certbot \
     --email admin@hamid-najafi.ir \
     --server https://acme-v02.api.letsencrypt.org/directory \
     --agree-tos \

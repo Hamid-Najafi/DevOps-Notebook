@@ -8,25 +8,26 @@
 # -------==========-------
 wget -qO- https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/Scripts/AutoInstall.sh | sudo bash -s
 # -------==========-------
-# On Europe Server
+# On Direct Connection
 # -------==========-------
 mkdir -p ~/docker/v2ray
 cp -r ~/DevOps-Notebook/Apps/V2Ray/* ~/docker/v2ray
 cd ~/docker/v2ray
-cp Configs/configEU.json config.json
-mkdir DAT || cd DAT
+cp Configs/configDirect.json config.json
+mkdir DAT
+cd DAT
 curl -L https://github.com/SamadiPour/iran-hosted-domains/releases/download/202209210046/iran.dat -o iran.dat 
-curl -L https://github.com/v2fly/v2ray-core/releases/download/v5.1.0/v2ray-linux-64.zip -o ./DAT/v2ray.zip
-unzip ./DAT/v2ray.zip
+curl -L https://github.com/v2fly/v2ray-core/releases/download/v5.1.0/v2ray-linux-64.zip -o v2ray.zip
+unzip v2ray.zip
 cd ..
 docker-compose up -d
 # -------==========-------
-# On Iran Server
+# On Bridge Connection
 # -------==========-------
 mkdir -p ~/docker/v2ray
 cp -r ~/DevOps-Notebook/Apps/V2Ray/* ~/docker/v2ray
 cd ~/docker/v2ray
-cp configIRChain.json config.json
+cp configBridge.json config.json
 docker-compose up -d
 # -------==========-------
 # x-ui 
