@@ -1,10 +1,9 @@
 # -------==========-------
-# OpenVPN
+# OpenVPN Docker
 # -------==========-------
 # https://hub.docker.com/r/kylemanna/openvpn/
 # https://github.com/kylemanna/docker-openvpn
 # -------==========-------
-
 echo -e "OVPN_DATA="ovpn-data"" | sudo tee -a /etc/environment
 source /etc/environment
 docker volume create --name $OVPN_DATA
@@ -34,3 +33,12 @@ sudo apt install openvpn -y
 openvpn --config OpenVPNUser.ovpn
 # Verify Connection
 ip a show tun0
+
+
+# -------==========-------
+# OpenVPN
+# -------==========-------
+wget https://git.io/vpn -O openvpn-install.sh
+sudo chmod +x openvpn-install.sh
+sudo bash openvpn-install.sh
+scp root@nl.hamid-najafi.ir:/root/client.ovpn ./OpenVPNUser-NL.ovpn
