@@ -10,6 +10,10 @@ wget -qO- https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/
 # -------==========-------
 # On Direct Connection
 # -------==========-------
+# Setup SSL Let’s Encrypt for Trojan
+sudo apt install certbot -y
+sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d tr.goldenstarc.ir
+
 mkdir -p ~/docker/v2ray
 cp -r ~/DevOps-Notebook/Apps/V2Ray/* ~/docker/v2ray
 cd ~/docker/v2ray

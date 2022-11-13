@@ -13,6 +13,7 @@ frontend https
    tcp-request content accept if { req_ssl_hello_type 1 }
 
    use_backend ocserv if { req_ssl_sni -i goldenstarc.ir }
+   use_backend ocserv if { req_ssl_sni -i tr.goldenstarc.ir }
    use_backend nginx if { req_ssl_sni -i www.hamid-najafi.ir }
    use_backend nginx if { req_ssl_sni -i hamid-najafi.ir }
 
@@ -28,6 +29,12 @@ backend nginx
    mode tcp
    option ssl-hello-chk
    server nginx 127.0.0.2:443 check
+
+backend trojan
+   mode tcp
+   option ssl-hello-chk
+   server nginx 127.0.0.3:443 check
+   
    " >> /etc/haproxy/haproxy.cfg
 
 sudo systemctl restart haproxy
