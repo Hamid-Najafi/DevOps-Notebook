@@ -61,16 +61,35 @@ Run Chain-RouteAllData Script
 # Service Client
 # -------==========-------
 sudo apt update && sudo apt install openconnect -y
+
+cat >/root/OCScript.sh << "EOF"
+# THIS MUST BE HARD CODED
+ip route add default via 172.27.7.57 dev eno1 proto static onlink &> /dev/null
+
+vpnServer=cuk.dnsfinde.com
+vpnServerIP=$(dig +short $vpnServer -t a)
+DefaultGateway=$(ip route | grep default | awk '{print $3;exit}')
+Interface=$(ip route | grep default | awk '{print $5;exit}')
+# ip route add <VPN server IP address> via <Default Gateway>
+ip route add $vpnServerIP via $DefaultGateway dev $Interface onlink &> /dev/null
+
+echo 247600 | openconnect --user=hamidni cnl2.dnsfinde.com:1397 --http-auth=Basic  --passwd-on-stdin --servercert pin-sha256:qgYrqhMY2F/Qai+SvtOZRquKqtCa5yaIZXdMQmV/7rY=
+# echo 14789633 | openconnect --user=km83576 c2.kmak.us:443 --http-auth=Basic  --passwd-on-stdin
+# echo ocservpass.24 | openconnect --user=admin nl.goldenstarc.ir:443 --http-auth=Basic  --passwd-on-stdin --servercert pin-sha256:o0VPSp4XQX06pfQqpj3xHyYSZZn2nvkTME9yWCH3tAc=
+
+# Not-Needed
+# ip route delete default via $DefaultGateway &> /dev/null
+# ip route add default dev tun0 &> /dev/null
+EOF
+chmod +x /root/OCScript.sh
+
 cat > /etc/systemd/system/ocvpn.service << "EOF"
 [Unit]
 Description=OpenConnect Client
 After=network.target
 [Service]
 Type=simple
-ExecStartPre=/bin/sh -c '/root/preOCScript.sh'
-ExecStart=/bin/sh -c 'echo 247600 | openconnect --user=hamidni cuk.dnsfinde.com:1397 --http-auth=Basic  --passwd-on-stdin --servercert pin-sha256:qgYrqhMY2F/Qai+SvtOZRquKqtCa5yaIZXdMQmV/7rY='
-# ExecStart=/bin/sh -c 'echo 14789633 | openconnect --user=km83576 c2.kmak.us:443 --http-auth=Basic  --passwd-on-stdin'
-# ExecStart=/bin/sh -c 'echo ocservpass.24 | openconnect --user=admin nl.goldenstarc.ir:443 --http-auth=Basic  --passwd-on-stdin --servercert pin-sha256:o0VPSp4XQX06pfQqpj3xHyYSZZn2nvkTME9yWCH3tAc='
+ExecStart=/bin/sh -c '/root/OCScript.sh'
 Restart=always
 User=root
 [Install]
@@ -79,9 +98,7 @@ EOF
 
 sudo systemctl daemon-reload
 sudo systemctl enable ocvpn
-sudo systemctl start ocvpn
-sudo systemctl status ocvpn
-
+sudo systemctl restart ocvpn
 sudo journalctl -u ocvpn.service -f
 
 echo -e "alias ocf='sudo killall -SIGINT openconnect ""'" | sudo tee -a ~/.bashrc > /dev/null
@@ -89,23 +106,44 @@ echo -e "alias ipinfo='curl api.ipify.org && echo -e ""'" | sudo tee -a ~/.bashr
 
 journalctl --vacuum-time=1d
 
-# ==== Directly Connected Gateway ONLY ====
-cat >/root/preOCScript.sh << "EOF"
-# THIS MUST BE HARD CODED
-ip route add default via 172.27.7.57 dev eno1 proto static onlink
-
-vpnServer=cuk.dnsfinde.com
-vpnServerIP=$(dig +short $vpnServer -t a)
-DefaultGateway=$(ip route | grep default | awk '{print $3;exit}')
-Interface=$(ip route | grep default | awk '{print $5;exit}')
-# ip route add <VPN server IP address> via <Default Gateway>
-ip route add $vpnServerIP via $DefaultGateway dev $Interface onlink
-
-# Not-Needed
-# ip route delete default via $DefaultGateway
-# ip route add default dev tun0
+cat > /etc/systemd/system/ocvpnHealth.service << "EOF"
+[Unit]
+Description=OpenConnect Client Health Checker
+After=network.target
+[Service]
+Type=simple
+ExecStart=/bin/sh -c '/root/ocvpnHealth.sh'
+Restart=always
+User=root
+[Install]
+WantedBy=multi-user.target
 EOF
-chmod +x /root/preOCScript.sh
+
+cat > /root/ocvpnHealth.sh << "EOF"
+#vpnOutgoingIP="206.189.24.172"
+vpnOutgoingIP="62.233.65.102"
+while true
+do
+ip=$(curl -s api.ipify.org)
+now=$(date)
+if [ "$ip" = "$vpnOutgoingIP" ]
+then
+    echo "$now, IP: $ip, Status: VPN Success"
+    sleep 10;
+else
+    echo "$now, IP: $ip, Status: VPN Error, Restating Service"
+    sudo systemctl restart ocvpn
+    sleep 40;
+fi
+done
+EOF
+chmod +x /root/ocvpnHealth.sh
+
+sudo systemctl daemon-reload
+sudo systemctl enable ocvpnHealth
+sudo systemctl restart ocvpnHealth
+sudo journalctl -u ocvpnHealth -f
+
 # -------==========-------
 # Bash Client
 # -------==========-------

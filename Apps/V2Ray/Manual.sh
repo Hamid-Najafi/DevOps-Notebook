@@ -25,6 +25,9 @@ curl -L https://github.com/v2fly/v2ray-core/releases/download/v5.1.0/v2ray-linux
 unzip v2ray.zip
 cd ..
 docker-compose up -d
+
+# Verify
+sudo lsof -i -P -n | grep 443
 # -------==========-------
 # On Bridge Connection
 # -------==========-------
