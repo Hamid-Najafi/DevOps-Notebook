@@ -5,15 +5,17 @@ sudo apt update
 sudo apt install haproxy -y
 # sudo nano /etc/haproxy/haproxy.cfg
 # copy and paste the following lines to the end of the file.
+
+# SET IP SERVER ADDRESS
 echo "
 frontend https
-   bind 195.211.44.219:443
+   bind 185.206.92.94:443
    mode tcp
    tcp-request inspect-delay 5s
    tcp-request content accept if { req_ssl_hello_type 1 }
 
-   use_backend ocserv if { req_ssl_sni -i goldenstarc.ir }
-   use_backend trojan if { req_ssl_sni -i tr.goldenstarc.ir }
+   use_backend ocserv if { req_ssl_sni -i ir3.goldenstarc.ir }
+   use_backend trojan if { req_ssl_sni -i tr2.goldenstarc.ir }
    use_backend nginx if { req_ssl_sni -i www.hamid-najafi.ir }
    use_backend nginx if { req_ssl_sni -i hamid-najafi.ir }
 

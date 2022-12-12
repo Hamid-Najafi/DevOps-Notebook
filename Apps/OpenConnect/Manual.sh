@@ -5,20 +5,29 @@ https://www.linuxbabe.com/ubuntu/openconnect-vpn-server-ocserv-ubuntu-20-04-lets
 https://www.linuxbabe.com/ubuntu/certificate-authentication-openconnect-vpn-server-ocserv
 https://www.linuxbabe.com/linux-server/ocserv-vpn-server-apache-nginx-haproxy
 # -------==========-------
+# Native
+# -------==========-------
+sudo apt update && sudo apt install ocserv -y
+wget 
+# Set: server-cert, server-key & default-domain
+sudo nano /etc/ocserv/ocserv.conf
+sudo systemctl restart ocserv
+
+# -------==========-------
 # Docker-Compose
 # -------==========-------
 # Setup SSL Let’s Encrypt
 sudo apt install certbot -y
-sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d ir1.goldenstarc.ir
+sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d ir3.goldenstarc.ir
 # sudo git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
 
 mkdir -p ~/docker/ocserv
 cp ~/DevOps-Notebook/Apps/OpenConnect/* ~/docker/ocserv
 cd ~/docker/ocserv
-# Set: server-cert, server-key & default-domain
-# nano ocserv.conf
 # SETUP HAPROXY FIRST!
 cp ocserv-haproxy.conf ocserv.conf
+# Set: server-cert, server-key & default-domain
+# nano ocserv.conf
 docker-compose up -d
 
 # List Users

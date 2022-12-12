@@ -137,7 +137,8 @@ nano ~/.ssh/authorized_keys
 ssh username@server-ip
 ssh ubuntu@185.235.41.48
 # If worked, setup ssh proxy
-ssh username@server-ip -p 22 -D 5555 -C -q -N -f -g
+ssh username@server-ip -p 22 -D 5555 -C -q -N -f -gsudo systemctl restart ocserv
+
 ssh ubuntu@185.235.41.48 -p 22 -D 5555 -C -q -N -f -g
 sudo lsof -i -P -n | grep 5555
 apt install proxychains && tail -n 2 /etc/proxychains.conf | wc -c | xargs -I {} truncate /etc/proxychains.conf -s -{} && echo -e "socks5 127.0.0.1 5555" | tee -a /etc/proxychains.conf
@@ -155,7 +156,6 @@ nameserver 178.22.122.100
 # OR
 sudo apt install resolvconf && echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head && service resolvconf restart
 https://virgool.io/@mahdi.ft/dnsredirection-qxrl6fuqc7hv
-
 # Verify DNS Server
 systemd-resolve --status
 
