@@ -7,18 +7,34 @@ https://www.linuxbabe.com/linux-server/ocserv-vpn-server-apache-nginx-haproxy
 # -------==========-------
 # Native
 # -------==========-------
+sudo apt install certbot -y
+sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d fr1.goldenstarc.ir
+
 sudo apt update && sudo apt install ocserv -y
-wget 
+wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/OpenConnect/ocserv-native.conf  -O /etc/ocserv/ocserv.conf 
 # Set: server-cert, server-key & default-domain
 sudo nano /etc/ocserv/ocserv.conf
 sudo systemctl restart ocserv
+
+echo "net.ipv4.ip_forward = 1" | sudo tee /etc/sysctl.d/60-custom.conf
+echo "net.core.default_qdisc=fq" | sudo tee -a /etc/sysctl.d/60-custom.conf
+echo "net.ipv4.tcp_congestion_control=bbr" | sudo tee -a /etc/sysctl.d/60-custom.conf
+sudo sysctl -p /etc/sysctl.d/60-custom.conf
+
+sudo apt install ufw -y
+sudo ufw allow 22/tcp
+sudo ufw allow 2280/tcp
+sudo ufw allow 443/tcp
+sudo ufw allow 443/udp
+
+sudo nano /etc/ufw/before.rules
 
 # -------==========-------
 # Docker-Compose
 # -------==========-------
 # Setup SSL Let’s Encrypt
 sudo apt install certbot -y
-sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d ir3.goldenstarc.ir
+sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d fr1.goldenstarc.ir
 # sudo git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
 
 mkdir -p ~/docker/ocserv
@@ -73,7 +89,8 @@ sudo apt update && sudo apt install openconnect -y
 
 cat >/root/OCScript.sh << "EOF"
 # THIS MUST BE HARD CODED
-ip route add default via 172.27.7.57 dev eno1 proto static onlink &> /dev/null
+# ip route add default via 172.27.7.57 dev eno1 proto static onlink &> /dev/null
+ip route add default via 152.89.44.1 dev eth0 &> /dev/null
 
 vpnServer=cuk.dnsfinde.com
 vpnServerIP=$(dig +short $vpnServer -t a)
@@ -85,10 +102,6 @@ ip route add $vpnServerIP via $DefaultGateway dev $Interface onlink &> /dev/null
 echo 247600 | openconnect --user=hamidni cnl2.dnsfinde.com:1397 --http-auth=Basic  --passwd-on-stdin --servercert pin-sha256:qgYrqhMY2F/Qai+SvtOZRquKqtCa5yaIZXdMQmV/7rY=
 # echo 14789633 | openconnect --user=km83576 c2.kmak.us:443 --http-auth=Basic  --passwd-on-stdin
 # echo ocservpass.24 | openconnect --user=admin nl.goldenstarc.ir:443 --http-auth=Basic  --passwd-on-stdin --servercert pin-sha256:o0VPSp4XQX06pfQqpj3xHyYSZZn2nvkTME9yWCH3tAc=
-
-# Not-Needed
-# ip route delete default via $DefaultGateway &> /dev/null
-# ip route add default dev tun0 &> /dev/null
 EOF
 chmod +x /root/OCScript.sh
 
