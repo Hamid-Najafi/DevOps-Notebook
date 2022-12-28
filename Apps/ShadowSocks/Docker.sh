@@ -6,6 +6,11 @@ docker run -e PASSWORD=<password> -p<server-port>:8388 -p<server-port>:8388/udp 
 docker run -e PASSWORD=Shadowpass.24 -e encrypt_method=aes-256-gcm -e --fast-open -p8388:8388 -p8388:8388/udp -d shadowsocks/shadowsocks-libev
 
 
+# -------==========-------
+# ShadowSocks Client
+# -------==========-------
+sudo snap install shadowsocks-libev
+
 ss-[local|redir|server|tunnel|manager]
 
    -s <server_host>           Host name or IP address of your remote server.

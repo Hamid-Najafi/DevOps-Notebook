@@ -34,7 +34,7 @@ sudo nano /etc/ufw/before.rules
 # -------==========-------
 # Setup SSL Let’s Encrypt
 sudo apt install certbot -y
-sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d fr1.goldenstarc.ir
+sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d fr.goldenstarc.ir
 # sudo git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
 
 mkdir -p ~/docker/ocserv
