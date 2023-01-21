@@ -172,8 +172,8 @@ nameserver 4.2.2.4
 nameserver 185.51.200.2
 nameserver 178.22.122.100
 # Begzar (https://begzar.ir)
+nameserver 185.55.226.26
 nameserver 185.55.225.25
-nameserver 185.55.225.26
 
 DNS Server1:
 199.85.126.20

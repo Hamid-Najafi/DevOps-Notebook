@@ -5,6 +5,7 @@ docker pull shadowsocks/shadowsocks-libev
 docker run -e PASSWORD=<password> -p<server-port>:8388 -p<server-port>:8388/udp -d shadowsocks/shadowsocks-libev
 docker run -e PASSWORD=Shadowpass.24 -e encrypt_method=aes-256-gcm -e --fast-open -p8388:8388 -p8388:8388/udp -d shadowsocks/shadowsocks-libev
 
+docker run -e PASSWORD=Shadowpass.24 -e encrypt_method=aes-256-gcm -e --fast-open -p8288:8388 -p8288:8388/udp -d shadowsocks/shadowsocks-libev
 
 # -------==========-------
 # ShadowSocks Client

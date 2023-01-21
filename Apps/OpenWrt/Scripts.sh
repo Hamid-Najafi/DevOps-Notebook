@@ -7,6 +7,12 @@ Password: MikroTikpass.24
 ssh root@192.168.1.1
 root
 # -------==========-------
+# SSR Client
+# -------==========-------
+opkg install shadowsocks-libev-ss-local shadowsocks-libev-ss-redir shadowsocks-libev-ss-rules shadowsocks-libev-ss-tunnel
+opkg install luci-app-shadowsocks-libev
+
+# -------==========-------
 # OpenVPN Client
 # -------==========-------
 # CLI & LuCI packages

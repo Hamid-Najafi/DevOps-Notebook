@@ -52,6 +52,7 @@ sudo nano /etc/environment
 # Check proxy
 # -------==========-------
 curl -x http://admin:Squidpass.24@nl.goldenstarc.ir:3128/ -L http://google.com
+curl -x http://admin:Squidpass.24@85.239.63.247:3128/ -L http://google.com
 
 # THIS will HANG on Irans IP & downloads index.html on others IP
 wget https://charts.gitlab.io 

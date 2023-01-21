@@ -45,7 +45,7 @@ docker cp <containerId>:/file/path/within/container /host/path/target
 # -------==========-------
 # Docker
 # -------==========-------
-# for 403 Iran:
+# for Iran 403:
 sudo systemctl stop systemd-resolved.service
 sudo nano  /etc/resolv.conf
 nameserver 178.22.122.100
@@ -60,6 +60,8 @@ sudo chmod +x /usr/local/bin/docker-compose
 # Traditional Method:
 sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
+# Bring DNS back and set Docker Registry - BEST
+
 # Logout & Login
 docker run hello-world
 # -------==========-------

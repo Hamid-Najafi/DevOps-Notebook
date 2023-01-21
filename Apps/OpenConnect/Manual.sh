@@ -8,7 +8,7 @@ https://www.linuxbabe.com/linux-server/ocserv-vpn-server-apache-nginx-haproxy
 # Native
 # -------==========-------
 sudo apt install certbot -y
-sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d fr1.goldenstarc.ir
+sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d gr.goldenstarc.ir
 
 sudo apt update && sudo apt install ocserv -y
 wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/OpenConnect/ocserv-native.conf  -O /etc/ocserv/ocserv.conf 
@@ -174,7 +174,7 @@ echo -e "alias ocn='sudo openconnect --background --user=usr-hamid --passwd-on-s
 echo -e "alias ocf='sudo killall -SIGINT openconnect'" | sudo tee -a ~/.bashrc > /dev/null
 echo -e "alias ipinfo='curl api.ipify.org && echo -e ""'" | sudo tee -a ~/.bashrc > /dev/null
 
-echo 14789633 | sudo openconnect --background --user=km83576 c2.kmak.us:443 --http-auth=Basic  --passwd-on-stdin
+echo 11447788996633 | sudo openconnect --background --user=km83576 c2.kmak.us:443 --http-auth=Basic  --passwd-on-stdin
 echo 14789633 | sudo openconnect --background --user=km83576 cp6.kmak.info:443 --http-auth=Basic  --passwd-on-stdin
 echo 247600 | sudo openconnect --background --user=hamidni cuk.dnsfinde.com:1397 --http-auth=Basic  --passwd-on-stdin --servercert pin-sha256:qgYrqhMY2F/Qai+SvtOZRquKqtCa5yaIZXdMQmV/7rY=
 echo hamid | sudo openconnect --background --user=usr-hamid goldenstarc.ir:443 --http-auth=Basic  --passwd-on-stdin

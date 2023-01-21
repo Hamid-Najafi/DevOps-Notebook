@@ -1,5 +1,6 @@
 # -------==========-------
 # ShadowSocksR
+# https://hub.docker.com/r/teddysun/shadowsocks-r
 # -------==========-------
 # Docker-Compose
 # -------==========-------
@@ -32,7 +33,7 @@ cat > /etc/shadowsocks-r/config.json <<EOF
     "redirect":"",
     "dns_ipv6":true,
     "fast_open":true,
-    "workers":4
+    "workers":12
 }
 EOF
 
@@ -51,6 +52,7 @@ sudo apt install python3 python3-pip python-is-python3 -y
 sudo pip3 install shadowsocksr-cli
 shadowsocksr-cli --add-ssr ssr://URL
 shadowsocksr-cli --add-ssr ssr://ZnIuZ29sZGVuc3RhcmMuaXI6ODM4ODpvcmlnaW46YWVzLTI1Ni1jZmI6aHR0cF9wb3N0OlUyaGhaRzkzY0dGemN5NHlOQS8_cmVtYXJrcz0mcHJvdG9wYXJhbT0mb2Jmc3BhcmFtPQ
+shadowsocksr-cli --add-ssr ssr://MTU5LjY5LjE4LjE5ODo4Mzg4Om9yaWdpbjphZXMtMjU2LWNmYjpodHRwX3Bvc3Q6VTJoaFpHOTNjR0Z6Y3k0eU5BLz9yZW1hcmtzPSZwcm90b3BhcmFtPSZvYmZzcGFyYW09
 shadowsocksr-cli -l
 shadowsocksr-cli -s 2
 # ALWAYS-ON

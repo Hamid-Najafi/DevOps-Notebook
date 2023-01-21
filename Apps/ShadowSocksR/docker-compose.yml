@@ -1,6 +1,6 @@
 version: '3'
 services:
-  ocserv:
+  shadowsocksr:
     image:  teddysun/shadowsocks-r
     container_name: shadowsocks-r
     restart: always
