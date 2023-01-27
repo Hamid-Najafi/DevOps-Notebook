@@ -2,13 +2,20 @@
 # ShadowSocksR
 # https://hub.docker.com/r/teddysun/shadowsocks-r
 # -------==========-------
+# Pre Requirements
+# -------==========-------
+apt update && apt upgrade
+curl -sSL https://get.docker.com/ | sh
+sudo usermod -aG docker $USER
+sudo chown $USER /var/run/docker.sock
+sudo curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-compose/master/run.sh -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+# -------==========-------
 # Docker-Compose
 # -------==========-------
 mkdir -p ~/docker/shadowsocks-r
 cp ~/DevOps-Notebook/Apps/ShadowSocksR/* ~/docker/shadowsocks-r
 cd ~/docker/shadowsocks-r
-# Config if needed
-nano config.json
 docker-compose up -d
 
 # -------==========-------
@@ -54,6 +61,7 @@ shadowsocksr-cli --add-ssr ssr://URL
 shadowsocksr-cli --add-ssr ssr://ZnIuZ29sZGVuc3RhcmMuaXI6ODM4ODpvcmlnaW46YWVzLTI1Ni1jZmI6aHR0cF9wb3N0OlUyaGhaRzkzY0dGemN5NHlOQS8_cmVtYXJrcz0mcHJvdG9wYXJhbT0mb2Jmc3BhcmFtPQ
 shadowsocksr-cli --add-ssr ssr://MTU5LjY5LjE4LjE5ODo4Mzg4Om9yaWdpbjphZXMtMjU2LWNmYjpodHRwX3Bvc3Q6VTJoaFpHOTNjR0Z6Y3k0eU5BLz9yZW1hcmtzPSZwcm90b3BhcmFtPSZvYmZzcGFyYW09
 shadowsocksr-cli --add-ssr ssr://ODUuMjM5LjYzLjI0Nzo4Mzg4Om9yaWdpbjphZXMtMjU2LWNmYjpodHRwX3Bvc3Q6VTJoaFpHOTNjR0Z6Y3k0eU5BLz9ncm91cD1aR1ZtWVhWc2RB
+shadowsocksr-cli --add-ssr ssr://MTU5LjY5LjE4LjE5ODo4Mzg4Om9yaWdpbjphZXMtMjU2LWNmYjpodHRwX3Bvc3Q6VTJoaFpHOTNjR0Z6Y3k0eU5BLz9ncm91cD1aR1ZtWVhWc2RB
 shadowsocksr-cli -l
 shadowsocksr-cli -s 2
 # ALWAYS-ON
