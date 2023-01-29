@@ -27,11 +27,11 @@ export DEBIAN_FRONTEND=noninteractive
 
 sudo apt install -y -q screen atop htop build-essential ninja-build  python-is-python3 python3 \
 libdbus-1-dev libicu-dev libinput-dev libpng-dev libjpeg-dev libglib2.0-dev libopengl-dev libmd4c* \
-libosmesa6  mesa-utils libegl1-mesa-dev libglu1-mesa-dev libgl1-mesa-dev  \
+libosmesa6 mesa-utils libegl1-mesa-dev libglu1-mesa-dev libgl1-mesa-dev  \
 pkg-config openssl libssl-dev libts-dev libglapi-mesa libhunspell-dev \
 libudev-dev freeglut3 freeglut3-dev mesa-common-dev libglew-dev libglfw3-dev libglm-dev libao-dev libmpg123-dev \
-libboost-all-dev  libmtdev-dev  libsrtp2-dev libsnappy-dev  ruby libbz2-dev libatkmm-1.6-dev libxi6 libxcomposite1 \
-libavcodec-dev libavformat-dev libswscale-dev  freetds-dev  libiodbc2-dev firebird-dev libgst-dev
+libboost-all-dev libmtdev-dev  libsrtp2-dev libsnappy-dev ruby libbz2-dev libatkmm-1.6-dev libxi6 libxcomposite1 \
+libavcodec-dev libavformat-dev libswscale-dev freetds-dev libiodbc2-dev firebird-dev libgst-dev
 
 # Graphics driver options
 # Use VC4 driver instead of Broadcom EGL binary-blobs. Mandatory on Raspberry Pi 4
