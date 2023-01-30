@@ -1,0 +1,79 @@
+
+https://wiki.qt.io/Building_Qt_5_from_Git
+
+sudo apt-get install qt5*-dev
+
+LIBS ######################################
+
+Defaults $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+ first => sudo nano /etc/apt/sources.list => for src list
+then =>
+sudo apt-get build-dep qt5-default
+sudo apt-get install libxcb-xinerama0-dev 
+
+
+Webkit $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4
+sudo apt-add-repository ppa:u-szeged/sedkit &&\
+sudo apt-get update &&\
+sudo apt-get install sedkit-env-qtwebkit
+sudo apt-get install flex bison gperf libicu-dev libxslt-dev ruby
+
+Build essentials $$$$$$$$$$$$$$$$$$$$$$$$$$$$
+sudo apt-get install build-essential perl python git
+
+Libxcb $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+sudo apt-get install '^libxcb.*-dev' libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev 
+
+web Engine $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+sudo apt-get install libxcursor-dev libxcomposite-dev libxdamage-dev libxrandr-dev libxtst-dev libxss-dev libdbus-1-dev libevent-dev libfontconfig1-dev libcap-dev libpulse-dev libudev-dev libpci-dev libnss3-dev libasound2-dev libegl1-mesa-dev gperf bison nodejs
+
+Multimedia $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+sudo apt-get install libasound2-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-good1.0-dev libgstreamer-plugins-bad1.0-dev
+
+EGL $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+D
+sudo apt-get install freeglut3 freeglut3-dev mesa-common-dev 
+sudo apt-get install libglut3-dev
+sudo apt-get install libglapi-mesa && sudo apt-get install libosmesa6
+sudo apt-get install mesa-utils
+
+
+startx###############################################
+sudo apt install xinit
+
+
+multimedia &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+sudo apt-get install qtmultimedia5-dev libqt5multimediawidgets5 libqt5multimedia5-plugins libqt5multimedia5
+
+serial port serial bus &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+sudo apt-get install libqt5serialport5 libqt5serialport5-dev libqt5serialbus5 libqt5serialbus5-dev
+
+fPIC ####################################
+Translation: you are trying to link non--fPIC compiled object file (mpa.o from libm.a) into a shared library. You can't do that.
+
+You need to either find/install libm.so for your target, or configure qt5 to not build shared library (possibly with --disable-shared option).
+
+
+opetios #################################
+https://retifrav.github.io/blog/2018/02/17/build-qt-statically/
+
+gcc #######################################
+$ sudo apt-get install gcc-arm-linux-gnueabi
+$ sudo apt-get install g++-arm-linux-gnueabi
+$ sudo apt-get install gcc-arm-linux-gnueabihf
+$ sudo apt-get install g++-arm-linux-gnueabihf
+
+links ###################################
+
+https://web.archive.org/web/20160404051128/https://blog.guh.guru/tech/crosscompile-qt-5-2-1-for-bbb/
+https://github.com/salco/crosscompile-qt-for-arm/blob/master/crosscompile-Qt_5.2.1-beaglebone-black.sh
+https://sites.google.com/site/timpicuc/Downhome/beaglebone-black/setting-up-qt-for-bbb-with-debian
+https://docs.google.com/spreadsheets/d/16ycob0pe97H0Bz70WWXgx1-wNp6cVr1OcdQFaf5N7s8/edit#gid=0
+
+
+CREATE IMAGE ###############################################
+sudo dd if=/dev/sdb of=/home/reza/beagle/imageBeagle16G.img bs=1M
+sudo mount -o loop,offset=4194304 /home/reza/qtNew/image105.img /mnt/bbb-rootfs/
+
+./configure -L /mnt/bbb-rootfs/usr/lib/arm-linux-gnueabihf -I /mnt/bbb-rootfs/usr/include/arm-linux-gnueabihf -opengl es2 -opensource -confirm-license -sysroot /mnt/bbb-rootfs -prefix /opt/qt5-arm -platform linux-g++-64 -device linux-beagleboard-g++ -device-option CROSS_COMPILE=arm-linux-gnueabihf- -nomake tests -nomake examples -v -skip qtwebengine

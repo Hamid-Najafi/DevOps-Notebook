@@ -1,0 +1,5 @@
+sudo apt-get install qtconnectivity5-dev qtbase5-dev qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5opengl5-dev qtpositioning5-dev qtdeclarative5-dev qtscript5-dev libqt5sensors5-dev libqt5serialport5-dev libqt5svg5-dev libqt5webkit5-dev libqt5websockets5-dev libqt5x11extras5-dev libqt5xmlpatterns5-dev libqt5bluetooth5 libqt5concurrent5 libqt5core5a libqt5dbus5 libqt5designer5 libqt5designercomponents5 libqt5gui5 libqt5help5 qttools5-dev-tools libqt5location5 libqt5multimedia5 libqt5network5 libqt5opengl5 libqt5positioning5 libqt5printsupport5 libqt5qml5 libqt5quick5 libqt5quickparticles5 libqt5quicktest5 libqt5quickwidgets5 libqt5script5 libqt5scripttools5 libqt5sensors5 libqt5serialport5 libqt5sql5 libqt5svg5 libqt5test5 qttools5-dev libqt5webkit5 libqt5websockets5 libqt5widgets5 libqt5x11extras5 libqt5xml5 libqt5xmlpatterns5
+
+
+
+./configure -opengl es2 -v -opensource -confirm-license -sysroot /media/reza/rootfs -prefix /opt/qt5-arm -platform linux-g++-64 -device linux-beagleboard-g++ -device-option CROSS_COMPILE=arm-linux-gnueabihf- -nomake tests -nomake examples

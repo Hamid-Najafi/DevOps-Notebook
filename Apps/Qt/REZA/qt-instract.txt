@@ -1,0 +1,68 @@
+sudo apt-get install -y build-essential libgl1-mesa-dev libxrender* libxcb-render* libxcb-shape* libxcb-randr* libxcb-xfixes* libxcb-xkb* libxcb-sync* libxcb-shm* libxcb-icccm* libxcb-keysyms* libxcb-image* libxcb-util* libxkbcommon* libfontconfig* libfreetype* libxext* libx11*      x11-*  libxcb* libsm6 libsm-dev libice6 libice-dev libglib* libpthread* libxfixes* libxi-dev libxi6 libboost1.7* libts-dev libmtdev-dev libjpeg-dev libfontconfig1-dev libssl-dev libdbus-1-dev libegl1-mesa-dev libgbm-dev libgles2-mesa-dev mesa-common-dev libasound2-dev libpulse-dev gstreamer1.0-omx libgstreamer1.0-dev gstreamer1.0-alsa libvpx-dev libsrtp2-dev libsnappy-dev libnss3-dev flex bison libxslt-dev ruby gperf libbz2-dev libcups2-dev libatkmm-1.6-dev libxcomposite1 libicu-dev libsqlite3-dev libxslt1-dev libavcodec-dev libavformat-dev libswscale-dev  freetds-dev libpq-dev libiodbc2-dev firebird-dev libgst-dev libdrm-dev libatspi2.0-dev libxcursor-dev libxcomposite-dev libxdamage-dev libxss-dev libxtst-dev libcap-dev libxrandr-dev libdirectfb-dev libaudio-dev
+
+sudo apt install -y libavutil-dev libavcodec-dev libavformat-dev libavdevice-dev libavfilter-dev libswscale-dev libswresample-dev libpostproc-dev libxshmfence* libxkbfile* libnss3 libnss3-* bison flex build-essential libgl1-mesa-dev libglu1-mesa-dev nodejs python3-pip
+
+sudo apt install libgstreamer-plugins-ba*
+
+sudo apt install libavcodec-extra ttf-mscorefonts-installer unrar chromium-codecs-ffmpeg-extra gstreamer1.0-libav gstreamer1.0-plugins-ugly gstreamer1.0-vaapi
+
+pip3 install html5lib
+
+sudo add-apt-repository multiverse
+sudo apt update
+sudo apt install ubuntu-restricted-extras
+
+sudo apt-get install --reinstall xserver-xorg-video-all xserver-xorg-core
+sudo dpkg-reconfigure xserver-xorg
+
+
+rsync -avz --rsync-path="sudo rsync" --delete pi@192.168.100.3:/lib sysroot
+rsync -avz --rsync-path="sudo rsync" --delete pi@192.168.100.3:/usr/include sysroot/usr
+rsync -avz --rsync-path="sudo rsync" --delete pi@192.168.100.3:/usr/lib sysroot/usr
+rsync -avz --rsync-path="sudo rsync" --delete pi@192.168.100.3:/usr/share sysroot/usr
+
+symlinks -rc rpi-sysroot
+#######
+edit the chromium pkg-confing.py add  libdir += ':' + sysroot + '/usr/lib/aarch64-linux-gnu/pkgconfig' to libdir 
+
+
+goto /boot/firmware/config.txt add => dtoverlay=vc4-fkms-v3d
+
+The Rpi4 with eglfs using default card for card0, and this is not work. Need to force using card1 for eglfs.
+create a json file with  the content
+{ "device": "/dev/dri/card1" }
+export QT_QPA_EGLFS_KMS_CONFIG=/wherever/is/the/file/eglfs.json
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/qt6/lib/
+
+
+
+../qt641/configure -release -opengl es2 -nomake examples -nomake tests -qt-host-path $HOME/qtrasp/qt-host -extprefix $HOME/qtrasp/qt-raspi -prefix /usr/local/qt6 -device linux-rasp-pi4-aarch64 -device-option CROSS_COMPILE=aarch64-linux-gnu- -- -DCMAKE_TOOLCHAIN_FILE=$HOME/qtrasp/toolchain.cmake -DQT_FEATURE_xcb=ON -DFEATURE_xcb_xlib=ON -DQT_FEATURE_xlib=ON
+
+cmake ../qt641/ -GNinja -DCMAKE_BUILD_TYPE=Release -DINPUT_opengl=es2 -DQT_BUILD_EXAMPLES=OFF -DQT_BUILD_TESTS=OFF -DQT_HOST_PATH=$HOME/qtrasp/qt-host -DCMAKE_STAGING_PREFIX=$HOME/qtrasp/qt-raspi -DCMAKE_INSTALL_PREFIX=/usr/local/qt6 -DCMAKE_TOOLCHAIN_FILE=$HOME/qtrasp/toolchain.cmake -DQT_QMAKE_TARGET_MKSPEC=devices/linux-rasp-pi4-aarch64 -DQT_FEATURE_xcb=ON -DFEATURE_xcb_xlib=ON -DQT_FEATURE_xlib=ON
+
+
+rsync -avz --rsync-path="sudo rsync" $HOME/qtrasp/qt-raspi/* ubuntu@192.168.100.3:/usr/local/qt6
+
+-DCMAKE_TOOLCHAIN_FILE:UNINITIALIZED=/home/reza/qtrasp/qt-raspi/lib/cmake/Qt6/qt.toolchain.cmake
+
+
+
+
+
+
+
+
+
+
+cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DQT_FEATURE_eglfs_egldevice=ON -DQT_FEATURE_eglfs_gbm=ON -DQT_BUILD_TOOLS_WHEN_CROSSCOMPILING=ON  -DQT_BUILD_EXAMPLES=OFF -DQT_BUILD_TESTS=OFF -DQT_HOST_PATH=$HOME/qtrasp/qt-host -DCMAKE_STAGING_PREFIX=$HOME/qtrasp/qt-raspi-rasp -DCMAKE_INSTALL_PREFIX=/usr/loca/qt641 -DCMAKE_PREFIX_PATH=$HOME/qtrasp/sysroot/usr/lib/  -DBUILD_qtwayland=OFF -DCMAKE_TOOLCHAIN_FILE=$HOME/qtrasp/toolchain-rasp.cmake $HOME/qtrasp/qt641/
+
+
+
+
+
+
+
+
+
+
+
