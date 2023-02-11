@@ -1,0 +1,163 @@
+qt3d5-dev                           qtcurve                             qtremoteobjects5-examples
+qt3d5-dev-tools                     qtcurve-l10n                        qtscript5-dev
+qt3d5-doc                           qtdatavisualization5-doc            qtscript5-doc
+qt3d5-doc-html                      qtdatavisualization5-doc-html       qtscript5-doc-html
+qt3d5-examples                      qtdatavisualization5-examples       qtscript5-examples
+qt3d-assimpsceneimport-plugin       qtdbustest-runner                   qtscrob
+qt3d-defaultgeometryloader-plugin   qtdeclarative5-dev                  qtscxml5-doc
+qt3d-gltfsceneio-plugin             qtdeclarative5-dev-tools            qtscxml5-doc-html
+qt3d-scene2d-plugin                 qtdeclarative5-doc                  qtscxml5-examples
+qt5-assistant                       qtdeclarative5-doc-dev              qtsensors5-doc
+qt5ct                               qtdeclarative5-doc-html             qtsensors5-doc-html
+qt5ct-dbgsym                        qtdeclarative5-examples             qtsensors5-examples
+qt5-doc                             qtdeclarative5-private-dev          qtserialbus5-doc
+qt5-doc-html                        qtel                                qtserialbus5-doc-html
+qt5dxcb-plugin                      qtel-icons                          qtserialbus5-examples
+qt5-flatpak-platformtheme           qterm                               qtserialport5-doc
+qt5-gtk2-platformtheme              qterminal                           qtserialport5-doc-html
+qt5-gtk2-platformtheme-dbgsym       qterminal-l10n                      qtspeech5-doc
+qt5-gtk-platformtheme               qtermwidget5-data                   qtspeech5-doc-html
+qt5-image-formats-plugins           qtfeedback5-dev                     qtspeech5-examples
+qt5keychain-dev                     qtfeedback5-examples                qtspeech5-flite-plugin
+qt5qevercloud-dev                   qtgamepad5-examples                 qtspeech5-speechd-plugin
+qt5-qmake                           qtgraphicaleffects5-doc             qtsvg5-doc
+qt5-qmake-bin                       qtgraphicaleffects5-doc-html        qtsvg5-doc-html
+qt5-qmltooling-plugins              qtgstreamer-doc                     qtsvg5-examples
+qt5-quick-demos                     qtgstreamer-plugins-qt5             qtsystems5-dev
+qt5serialport-examples              qthid-fcd-controller                qtsystems5-examples
+qt5-style-kvantum                   qtikz                               qtsystems5-private-dev
+qt5-style-kvantum-l10n              qtlocation5-dev                     qtsystems5-tools
+qt5-style-kvantum-themes            qtlocation5-doc                     qttools5-dev
+qt5-style-plugin-cleanlooks         qtlocation5-doc-dev                 qttools5-dev-tools
+qt5-style-plugin-cleanlooks-dbgsym  qtlocation5-doc-html                qttools5-doc
+qt5-style-plugin-motif              qtlocation5-examples                qttools5-doc-html
+qt5-style-plugin-motif-dbgsym       qtltools                            qttools5-examples
+qt5-style-plugin-plastique          qtltools-example                    qttools5-private-dev
+qt5-style-plugin-plastique-dbgsym   qtmultimedia5-dev                   qttranslations5-l10n
+qt5-style-plugins                   qtmultimedia5-doc                   qtvirtualkeyboard5-doc
+qt5-styles-ukui                     qtmultimedia5-doc-html              qtvirtualkeyboard5-doc-html
+qt5-ukui-platformtheme              qtmultimedia5-examples              qtvirtualkeyboard5-examples
+qt5-xdgdesktopportal-platformtheme  qtnetworkauth5-doc                  qtvirtualkeyboard-plugin
+qtnetworkauth5-doc-html             qtwayland5
+qtattributionsscanner-qt5           qtnetworkauth5-examples             qtwayland5-dev-tools
+qtwayland5-doc
+qtbase5-dev                                                         qtwayland5-doc-html
+qtbase5-dev-tools                                                 qtwayland5-examples
+qtbase5-doc                         qtpdf5-doc                          qtwayland5-private-dev
+qtbase5-doc-dev                     qtpdf5-doc-html                     qtwebchannel5-doc
+qtbase5-doc-html                    qtpim5-dev                          qtwebchannel5-doc-html
+qtbase5-examples                    qtpim5-doc                          qtwebchannel5-examples
+qtbase5-gles-dev                    qtpim5-doc-html                     qtwebengine5-doc
+qtbase5-private-dev                 qtpim5-examples                     qtwebengine5-doc-html
+qtbase5-private-gles-dev            qtpositioning5-dev                  qtwebsockets5-doc
+qtcharts5-doc                                                       qtwebsockets5-doc-html
+qtcharts5-doc-html                  qtquickcontrols2-5-dev              qtwebsockets5-examples
+qtcharts5-examples                  qtquickcontrols2-5-doc              qtwebview5-doc
+                           qtquickcontrols2-5-doc-html         qtwebview5-doc-html
+qtconnectivity5-dev                 qtquickcontrols2-5-examples         qtx11extras5-doc
+qtconnectivity5-doc                 qtquickcontrols5-doc                qtx11extras5-doc-html
+qtconnectivity5-doc-html            qtquickcontrols5-doc-html           qtxdg-dev-tools
+qtconnectivity5-examples            qtquickcontrols5-examples           qtxmlpatterns5-dev-tools
+qtcreator                           qtractor                            qtxmlpatterns5-doc
+qtcreator-data                      qtremoteobjects5-doc                qtxmlpatterns5-doc-html
+qtcreator-doc                       qtremoteobjects5-doc-html           qtxmlpatterns5-examples
+
+
+libqt53danimation5               libqt5opengl5                    libqt5systeminfo5
+libqt53dcore5                    libqt5opengl5-dev                libqt5test5
+libqt53dextras5                  libqt5organizer5                 libqt5texttospeech5
+libqt53dinput5                   libqt5pas1                       libqt5texttospeech5-dev
+libqt53dlogic5                   libqt5pas-dev                    libqt5-ukui-style1
+libqt53dquick5                   libqt5positioning5               libqt5-ukui-style-dev
+libqt53dquickanimation5          libqt5positioning5-plugins       libqt5versit5
+libqt53dquickextras5             libqt5positioningquick5          libqt5versitorganizer5
+libqt53dquickinput5              libqt5printsupport5              libqt5virtualkeyboard5
+libqt53dquickrender5             libqt5publishsubscribe5          libqt5virtualkeyboard5-dev
+libqt53dquickscene2d5            libqt5qevercloud3                libqt5waylandclient5
+libqt53drender5                  libqt5qml5                       libqt5waylandclient5-dev
+libqt5bluetooth5                 libqt5qmlmodels5                 libqt5waylandcompositor5
+libqt5bluetooth5-bin             libqt5qmlworkerscript5           libqt5waylandcompositor5-dev
+libqt5charts5                    libqt5quick5                     libqt5webchannel5
+libqt5charts5-dev                libqt5quick5-gles                libqt5webchannel5-dev
+libqt5concurrent5                libqt5quickcontrols2-5           libqt5webengine-data
+libqt5contacts5                  libqt5quickparticles5            libqt5webkit5
+libqt5core5a                     libqt5quickparticles5-gles       libqt5webkit5-dev
+libqt5datavisualization5         libqt5quickshapes5               libqt5websockets5
+libqt5datavisualization5-dev     libqt5quicktemplates2-5          libqt5websockets5-dev
+libqt5dbus5                      libqt5quicktest5                 libqt5widgets5
+libqt5designer5                  libqt5quickwidgets5              libqt5x11extras5
+libqt5designercomponents5        libqt5remoteobjects5             libqt5x11extras5-dev
+libqt5feedback5                  libqt5remoteobjects5-bin         libqt5xdg3
+libqt5gamepad5                   libqt5remoteobjects5-dev         libqt5xdg-dev
+libqt5gamepad5-dev               libqt5script5                    libqt5xdgiconloader3
+libqt5glib-2.0-0                 libqt5scripttools5               libqt5xdgiconloader-dev
+libqt5gstreamer-1.0-0            libqt5scxml5                     libqt5xml5
+libqt5gstreamer-dev              libqt5scxml5-bin                 libqt5xmlpatterns5
+libqt5gstreamerquick-1.0-0       libqt5scxml5-dev                 libqt5xmlpatterns5-dev
+libqt5gstreamerui-1.0-0          libqt5scxml5-private-dev         libqtav1
+libqt5gstreamerutils-1.0-0       libqt5sensors5                   libqtav-dev
+libqt5gui5                       libqt5sensors5-dev               libqtav-private-dev
+libqt5gui5-gles                  libqt5serialbus5                 libqtavwidgets1
+libqt5help5                      libqt5serialbus5-bin             libqtcurve-utils2
+libqt5hunspellinputmethod5       libqt5serialbus5-dev             libqtdbusmock1
+libqt5keychain1                  libqt5serialbus5-plugins         libqtdbusmock1-common
+libqt5location5                  libqt5serialport5                libqtdbusmock1-dev
+libqt5location5-plugin-mapboxgl  libqt5serialport5-dev            libqtdbustest1
+libqt5location5-plugins          libqt5serviceframework5          libqtdbustest1-dev
+libqt5multimedia5                libqt5sql5                       libqtermwidget5-0
+libqt5multimedia5-plugins        libqt5sql5-ibase                 libqtermwidget5-0-dev
+libqt5multimediagsttools5        libqt5sql5-mysql                 libqtest-ocaml
+libqt5multimediaquick5           libqt5sql5-odbc                  libqtest-ocaml-dev
+libqt5multimediawidgets5         libqt5sql5-psql                  libqtest-ocaml-doc
+libqt5network5                   libqt5sql5-sqlite                libqtspell-qt5-0
+libqt5networkauth5               libqt5sql5-tds                   libqtspell-qt5-dev
+libqt5networkauth5-dev           libqt5svg5                       libqtspell-qt5-html
+libqt5nfc5                       libqt5svg5-dev
+
+qml-module-gsettings1.0                     qml-module-qt-labs-folderlistmodel
+qml-module-io-thp-pyotherside               qml-module-qt-labs-location
+qml-module-lomiri-downloadmanager           qml-module-qt-labs-platform
+qml-module-lomiri-downloadmanager-doc       qml-module-qt-labs-qmlmodels
+qml-module-org-kde-activities               qml-module-qt-labs-settings
+qml-module-org-kde-analitza                 qml-module-qt-labs-sharedimage
+qml-module-org-kde-bluezqt                  qml-module-qt-labs-wavefrontmesh
+qml-module-org-kde-charts                   qml-module-qtlocation
+qml-module-org-kde-draganddrop              qml-module-qtmultimedia
+qml-module-org-kde-games-core               qml-module-qtnfc
+qml-module-org-kde-kaccounts                qml-module-qtorganizer
+qml-module-org-kde-kcm                      qml-module-qtpositioning
+qml-module-org-kde-kconfig                  qml-module-qtpublishsubscribe
+qml-module-org-kde-kcoreaddons              qml-module-qtqml
+qml-module-org-kde-kholidays                qml-module-qtqml-models2
+qml-module-org-kde-kio                      qml-module-qtqml-statemachine
+qml-module-org-kde-kirigami2                qml-module-qtqml-workerscript2
+qml-module-org-kde-kitemmodels              qml-module-qtquick2
+qml-module-org-kde-kquickcontrols           qml-module-qtquick-controls
+qml-module-org-kde-kquickcontrolsaddons     qml-module-qtquick-controls2
+qml-module-org-kde-ksysguard                qml-module-qtquick-dialogs
+qml-module-org-kde-kwindowsystem            qml-module-qtquick-extras
+qml-module-org-kde-newstuff                 qml-module-qtquick-layouts
+qml-module-org-kde-okular                   qml-module-qtquick-localstorage
+qml-module-org-kde-people                   qml-module-qtquick-particles2
+qml-module-org-kde-prison                   qml-module-qtquick-privatewidgets
+qml-module-org-kde-purpose                  qml-module-qtquick-scene2d
+qml-module-org-kde-qqc2desktopstyle         qml-module-qtquick-scene3d
+qml-module-org-kde-quickcharts              qml-module-qtquick-shapes
+qml-module-org-kde-runnermodel              qml-module-qtquick-templates2
+qml-module-org-kde-solid                    qml-module-qtquick-virtualkeyboard
+qml-module-org-kde-telepathy                qml-module-qtquick-window2
+qml-module-org-kde-userfeedback             qml-module-qtquick-xmllistmodel
+qml-module-org-nemomobile-mpris             qml-module-qtremoteobjects
+qml-module-qmltermwidget                    qml-module-qtscxml
+qml-module-qt3d                             qml-module-qtsensors
+qml-module-qtaudioengine                    qml-module-qtserviceframework
+qml-module-qtav                             qml-module-qtsysteminfo
+qml-module-qtbluetooth                      qml-module-qttest
+qml-module-qtcharts                         qml-module-qtwayland-client-texturesharing
+qml-module-qtcontacts                       qml-module-qtwayland-compositor
+qml-module-qtdatavisualization              qml-module-qtwebchannel
+qml-module-qtfeedback                       qml-module-qtwebkit
+qml-module-qtgraphicaleffects               qml-module-qt-websockets
+qml-module-qtgstreamer                      qml-module-qtwebsockets
+qml-module-qt-labs-animation                qml-module-snapd
+qml-module-qt-labs-calendar
