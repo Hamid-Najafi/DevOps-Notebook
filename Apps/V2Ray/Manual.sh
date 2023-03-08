@@ -12,7 +12,9 @@ wget -qO- https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/
 # -------==========-------
 # Setup SSL Let’s Encrypt for Trojan
 sudo apt install certbot -y
-sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d tr.goldenstarc.ir
+sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@goldenstarc.ir -d tr.goldenstarc.ir
+# /etc/letsencrypt/live/tr.goldenstarc.ir/fullchain.pem
+# /etc/letsencrypt/live/tr.goldenstarc.ir/privkey.pem
 
 mkdir -p ~/docker/v2ray
 cp -r ~/DevOps-Notebook/Apps/V2Ray/* ~/docker/v2ray
@@ -21,7 +23,8 @@ cp Configs/configDirect.json config.json
 mkdir DAT
 cd DAT
 curl -L https://github.com/SamadiPour/iran-hosted-domains/releases/download/202209210046/iran.dat -o iran.dat 
-curl -L https://github.com/v2fly/v2ray-core/releases/download/v5.1.0/v2ray-linux-64.zip -o v2ray.zip
+
+curl -L https://github.com/v2fly/v2ray-core/releases/download/v5.3.0/v2ray-linux-64.zip -o v2ray.zip
 unzip v2ray.zip
 cd ..
 docker-compose up -d
@@ -46,8 +49,17 @@ docker run -itd --network=host \
     --name x-ui --restart=unless-stopped \
     enwaiax/x-ui:latest
 
-185.141.107.62:54321
+http://$SERVERIP:54321
+http://45.86.231.83:54321
 admin:admin
+
+
+mkdir x-ui && cd x-ui
+docker run -itd --network=host \
+    -v $PWD/db/:/etc/x-ui/ \
+    -v $PWD/cert/:/root/cert/ \
+    --name x-ui --restart=unless-stopped \
+    enwaiax/x-ui:latest
 # -------==========-------
 # V2ray vmess Connection
 # -------==========-------

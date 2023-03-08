@@ -1,16 +1,22 @@
-#!/bin/bash
+#!/bin/bash -e
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root user or run with sudo"
-  exit
-fi
+# Copyleft (c) 2022.
+# -------==========-------
+# Ubuntu Server 22.04.01
+# -------==========-------
+# To Run This Script
+# wget -qO- https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/Scripts/AutoInstall.sh | sudo bash -s
 
 cd /tmp/
 rm -rf ./v2ray && mkdir ./v2ray
 cd ./v2ray
 
-## Source: https://github.com/v2fly/v2ray-core/releases/tag/v5.1.0
-# curl -L https://github.com/v2fly/v2ray-core/releases/download/v5.1.0/v2ray-linux-64.zip -o v2ray.zip
+export DEBIAN_FRONTEND=noninteractive
+apt update 
+apt install -y zip unzip
+
+## Source: https://github.com/v2fly/v2ray-core
+# curl -L https://github.com/v2fly/v2ray-core/releases/download/v5.3.0/v2ray-linux-64.zip -o v2ray.zip
 # curl -L https://github.com/v2fly/v2ray-core/releases/download/v4.45.2/v2ray-linux-64.zip -o v2ray.zip
 curl -L https://github.com/v2fly/v2ray-core/releases/download/v4.31.0/v2ray-linux-64.zip -o v2ray.zip
 # curl -L https://github.com/v2fly/v2ray-core/releases/download/v5.1.0/v2ray-linux-arm64-v8a.zip -o v2ray.zip
@@ -20,16 +26,16 @@ unzip v2ray.zip
 curl -L https://github.com/SamadiPour/iran-hosted-domains/releases/download/202209210046/iran.dat -o iran.dat 
 
 # Remove Previous Files
-sudo systemctl disable v2ray.service 
-sudo systemctl stop v2ray.service 
-rm -rf /var/log/v2ray/ && mkdir -p /var/log/v2ray/
-rm -rf /usr/local/share/v2ray/ && mkdir -p /usr/local/share/v2ray/
-rm -rf /usr/local/etc/v2ray/ && mkdir -p /usr/local/etc/v2ray/
+systemctl disable v2ray.service > /dev/null 2>&1
+systemctl stop v2ray.service > /dev/null 2>&1
+rm -rf /var/log/v2ray/ && mkdir -p /var/log/v2ray/ > /dev/null 2>&1
+rm -rf /usr/local/share/v2ray/ && mkdir -p /usr/local/share/v2ray/ > /dev/null 2>&1
+rm -rf /usr/local/etc/v2ray/ && mkdir -p /usr/local/etc/v2ray/ > /dev/null 2>&1
 
 ## Config File
-sudo curl -L https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/Configs/configEU.json -o config.json 
-# sudo curl -L https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/Configs/configIRBridge.json -o config.json 
-# sudo curl -L https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/Configs/configIRClient.json -o config.json 
+curl -L https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/Configs/configDirect.json -o config.json 
+# curl -L https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/Configs/configIRBridge.json -o config.json 
+# curl -L https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/V2Ray/Configs/configIRClient.json -o config.json 
 cp ./config.json /usr/local/etc/v2ray/config.json
 
 
@@ -56,15 +62,15 @@ cp ./systemd/system/v2ray@.service /etc/systemd/system/
 
 systemctl daemon-reload
 systemctl enable v2ray
-systemctl start v2ray
+systemctl restart v2ray
 sleep 10
 systemctl status v2ray
-
+journalctl --unit v2ray --follow
 # Clean Up
 cd /tmp/
 rm -rf ./v2ray
 
-# echo -e "all_proxy=http://127.0.0.1:10809" | sudo tee -a /etc/environment
+# echo -e "all_proxy=http://127.0.0.1:10809" | tee -a /etc/environment
 # source /etc/environment
 
 echo "Done"

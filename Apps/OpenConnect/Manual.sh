@@ -28,21 +28,23 @@ sudo ufw allow 443/tcp
 sudo ufw allow 443/udp
 
 sudo nano /etc/ufw/before.rules
-
 # -------==========-------
 # Docker-Compose
 # -------==========-------
 # Setup SSL Let’s Encrypt
 sudo apt install certbot -y
-sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d fr.goldenstarc.ir
+sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d goldenstarc.ir
 # sudo git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
 
 mkdir -p ~/docker/ocserv
 cp ~/DevOps-Notebook/Apps/OpenConnect/* ~/docker/ocserv
 cd ~/docker/ocserv
-# SETUP HAPROXY FIRST!
+##* Native
+# DO NOTHING
+##* HAProxy
 cp ocserv-haproxy.conf ocserv.conf
-# Set: server-cert, server-key & default-domain
+
+##* Set: server-cert, server-key & default-domain
 # nano ocserv.conf
 docker-compose up -d
 
@@ -177,5 +179,5 @@ echo -e "alias ipinfo='curl api.ipify.org && echo -e ""'" | sudo tee -a ~/.bashr
 echo 11447788996633 | sudo openconnect --background --user=km83576 c2.kmak.us:443 --http-auth=Basic  --passwd-on-stdin
 echo 14789633 | sudo openconnect --background --user=km83576 cp6.kmak.info:443 --http-auth=Basic  --passwd-on-stdin
 echo 247600 | sudo openconnect --background --user=hamidni cuk.dnsfinde.com:1397 --http-auth=Basic  --passwd-on-stdin --servercert pin-sha256:qgYrqhMY2F/Qai+SvtOZRquKqtCa5yaIZXdMQmV/7rY=
-echo hamid | sudo openconnect --background --user=usr-hamid goldenstarc.ir:443 --http-auth=Basic  --passwd-on-stdin
+echo 41602 | sudo openconnect --background --user=3msabtee24349 141.95.184.55:443 --http-auth=Basic  --passwd-on-stdin
 

@@ -2,6 +2,21 @@
 
 # Copyleft (c) 2022.
 # -------==========-------
+# QT5 from APT
+# -------==========-------
+apt install -q -y build-essential gcc
+apt install -q -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-dev 
+apt install -q -y qt5* qttools5* qtmultimedia5* qtwebengine5* qtvirtualkeyboard* qtdeclarative* qt3d*
+apt install -q -y qtbase5* 
+apt install -q -y libqt5*
+apt install -q -y qml-module*
+# -------==========-------
+# QT6 from APT
+# -------==========-------
+apt install -q -y build-essential gcc g++ gdb cmake
+apt install -q -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-dev 
+apt install -q -y qt6* libqt6* qml6*
+# -------==========-------
 # Image: Ubuntu Bare: https://github.com/Qengineering/Jetson-Nano-Ubuntu-20-image
 # Hostname: nano
 # Username: jetson
@@ -47,10 +62,11 @@ sudo apt install -y -q libasound2-dev
 # WebEngine (Also Install X11 support)
 sudo apt install -y -q flex bison gperf ubuntu-restricted-extras libre2-dev libnss3 libnss3-dev libdrm-dev  libxml2-dev libxslt-dev libxslt1-dev libminizip-dev libjsoncpp-dev liblcms2-dev libevent-dev libprotobuf-dev protobuf-compiler libopus-dev libvpx-dev libxcomposite-dev libxshmfence-dev libxshmfence1
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-nano ~/.profile
+cat << EOF | tee -a  ~/.profile
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+EOF
 source ~/.profile
 nvm install --lts
 nvm use v18.13.0
