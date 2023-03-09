@@ -6,9 +6,7 @@ sudo apt upgrade -y
 
 # Set Hostname
 sudo hostnamectl set-hostname live
-# Set Hosts
-sudo nano /etc/hosts
-127.0.0.1 live
+echo -e "127.0.0.1 live" | tee -a /etc/hosts
 
 # HTTP Proxy
 sudo mkdir -p /etc/systemd/system/docker.service.d

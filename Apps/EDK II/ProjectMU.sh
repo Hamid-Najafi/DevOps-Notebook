@@ -3,31 +3,36 @@
 # Copyleft (c) 2022.
 # -------==========-------
 # OS: Ferdora 36
-# Hostname: 
-# Username: 
-# Password: 
-# CPU: 
-# Memory: 
+# Systemm Setup
 # -------==========-------
+# System Config
+sudo timedatectl set-timezone Asia/Tehran 
+sudo hostnamectl set-hostname EDK2-TU
+echo -e "127.0.0.1 EDK2-TU" | sudo tee -a /etc/hosts
 # https://www.linuxfedora.ir/tutorials/other/things_to_do_after_installing_fedora
 sudo echo "fastestmirror=true" >> /etc/dnf/dnf.conf
 sudo echo "max_parallel_downloads=20" >> /etc/dnf/dnf.conf
 sudo echo "deltarpm=1" >> /etc/dnf/dnf.conf
 sudo echo "ip_resolve=4" >> /etc/dnf/dnf.conf
-# -------==========-------
-# Systemm Setup
-# -------==========-------
+
 # Install Necessary Apps & Packages
-sudo dnf group install  "C Development Tools and Libraries" 
-sudo dnf group install -y "X Software Development"
+sudo dnf update -y
+sudo dnf group install -y "C Development Tools and Libraries" 
 sudo dnf install -y xorg-x11-server-Xorg xorg-x11-xauth xclock
-sudo dnf group install -y --with-optional virtualization
-sudo dnf group install -y qemu
-sudo dnf install -y openssl-devel
-# Windows Resource Compiler for Linux & Code Coverage Tools
+# sudo dnf group install --with-optional virtualization
+sudo dnf group install -y qemu 
+sudo dnf install -y mono-devel nuget
 sudo dnf install -y mingw64-gcc lcov
-sudo dnf install -y python3-pip nuget libuuid-devel htop bmon nano zip unzip
+sudo dnf install -y python3-pip ninja-build openssl-devel libuuid-devel pixman-devel.x86_64 wget htop bmon nano zip unzip avahi
 pip install --upgrade pip setuptools wheel lcov_cobertura pycobertura
+
+# rpm --import "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF"
+# su -c 'curl https://download.mono-project.com/repo/centos8-stable.repo | tee /etc/yum.repos.d/mono-centos8-stable.repo'
+# dnf update
+# dnf install mono-devel
+# sudo curl -o /usr/local/bin/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+# alias nuget="mono /usr/local/bin/nuget.exe"
+
 # Install NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
@@ -35,6 +40,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 nvm install lts/fermium
 nvm use lts/fermium
+
 # Install NPM Packages
 npm install -g cspell@5.20.0 markdownlint-cli@0.31.1
 # -------==========-------
@@ -47,12 +53,17 @@ git init
 # -------==========-------
 Targets: DEBUG,RELEASE,NO-TARGET,NOOPT
 Archs: IA32,X64,ARM,AARCH64 
-stuart_ci_setup Clones MU_BASECORE
+# Staurt Manual:
+# https://github.com/tianocore/edk2-pytool-extensions/blob/master/docs/user/index.md
+# stuart_setup: Initialize & Update Submodules - only when submodules updated
+# stuart_update: Initialize & Update Dependencies - only as needed when ext_deps change
+# stuart_build: Compile Firmware
+# stuart_setup -c .pytool/CISettings.py -h: see additional options
 # -------==========-------
 # MU_BASECORE
 # This is the core section of TianoCore. Contains the guts of UEFI, forked from TianoCore, as well as the BaseTools needed to build. You will need this to continue.
 git submodule add https://github.com/Microsoft/mu_basecore.git MU_BASECORE
-cd MU_BASECORE
+cd /home/fedora/ProjectMU/MU_BASECORE
 pip install --upgrade -r pip-requirements.txt
 # TARGET_MDEMODULE: MdeModulePkg
 stuart_setup -c .pytool/CISettings.py -p MdeModulePkg -t DEBUG -a X64 TOOL_CHAIN_TAG=GCC5
@@ -76,8 +87,8 @@ pip install --upgrade -r pip-requirements.txt
 # -------==========-------
 # MU_TIANO_PLUS
 # Additional, optional libraries and tools forked from TianoCore.
-git submodule add https://github.com/Microsoft/mu_tiano_plus.git Common/TIANO
-cd /home/fedora/ProjectMU/Common/TIANO
+git submodule add https://github.com/Microsoft/mu_tiano_plus.git Common/MU_TIANO
+cd /home/fedora/ProjectMU/Common/MU_TIANO
 pip install --upgrade -r pip-requirements.txt
 # TARGET_OTHER: EmbeddedPkg,PrmPkg,SourceLevelDebugPkg
 # TARGET_FMP_FAT: FmpDevicePkg,FatPkg
@@ -96,8 +107,9 @@ stuart_ci_build -c .pytool/CISettings.py -p OemPkg -t DEBUG -a X64 TOOL_CHAIN_TA
 # -------==========-------
 # MU_SILICON_ARM_TIANO
 # Silicon code from TianoCore has been broken out into individual submodules. This is the ARM specific submodule.
-git submodule add https://github.com/Microsoft/mu_silicon_arm_tiano.git Silicon/ARM/TIANO
-cd /home/fedora/ProjectMU/Silicon/ARM/TIANO
+git submodule add https://github.com/Microsoft/mu_silicon_arm_tiano.git Silicon/ARM/MU_TIANO
+git submodule add https://github.com/ARM-software/arm-trusted-firmware.git Silicon/ARM/TFA # Commit: 35f4c7295bafeb32c8bcbdfb6a3f2e74a57e732b
+cd /home/fedora/ProjectMU/Silicon/ARM/MU_TIANO
 pip install --upgrade -r pip-requirements.txt
 # TARGET_ARMPKG: ArmPkg 
 # TARGET_ARMPLATFORMPKG: ArmPlatformPkg 
@@ -105,16 +117,20 @@ pip install --upgrade -r pip-requirements.txt
 # -------==========-------
 # MU_SILICON_INTEL_TIANO
 # Silicon code from TianoCore has been broken out into individual submodules. This is the Intel specific submodule.
-git submodule add https://github.com/Microsoft/mu_silicon_intel_tiano.git Silicon/INTEL/TIANO
-cd /home/fedora/ProjectMU/Silicon/INTEL/TIANO
+git submodule add https://github.com/Microsoft/mu_silicon_intel_tiano.git Silicon/INTEL/MU_TIANO
+cd /home/fedora/ProjectMU/Silicon/INTEL/MU_TIANO
 pip install --upgrade -r pip-requirements.txt
 # TARGET_INTEL_SILICON: IntelSiliconPkg 
+stuart_ci_setup -c .pytool/CISettings.py -p IntelSiliconPkg -t DEBUG -a X64 TOOL_CHAIN_TAG=GCC5
+stuart_setup -c .pytool/CISettings.py -p IntelSiliconPkg -t DEBUG -a X64 TOOL_CHAIN_TAG=GCC5
+stuart_update -c .pytool/CISettings.py -p IntelSiliconPkg -t DEBUG -a X64 TOOL_CHAIN_TAG=GCC5
+stuart_ci_build -c .pytool/CISettings.py -p IntelSiliconPkg -t DEBUG -a X64 TOOL_CHAIN_TAG=GCC5
 # TARGET_INTEL_FSP2: IntelFsp2Pkg,IntelFsp2WrapperPkg
 # -------==========-------
 # MU_COMMON_INTEL_MIN_PLATFORM
 # Project Mu Minimum Platform
-git submodule add https://github.com/microsoft/mu_common_intel_min_platform.git PlatformGroup/INTEL_MIN_PLATFORM
-cd /home/fedora/ProjectMU/PlatformGroup/INTEL_MIN_PLATFORM
+git submodule add https://github.com/microsoft/mu_common_intel_min_platform.git PlatformGroup/INTEL/MU_MIN
+cd /home/fedora/ProjectMU/PlatformGroup/INTEL/MU_MIN
 pip install --upgrade -r pip-requirements.txt
 # TARGET_MinPlatform: MinPlatformPkg
 stuart_ci_setup -c .pytool/CISettings.py -p MinPlatformPkg --force-git -t DEBUG,RELEASE,NO-TARGET,NOOPT -a IA32,X64,ARM,AARCH64 TOOL_CHAIN_TAG=GCC5
@@ -122,27 +138,58 @@ stuart_setup -c .pytool/CISettings.py -p MinPlatformPkg -t DEBUG,RELEASE,NO-TARG
 stuart_update -c .pytool/CISettings.py -p MinPlatformPkg -t DEBUG,RELEASE,NO-TARGET,NOOPT -a IA32,X64,ARM,AARCH64 TOOL_CHAIN_TAG=GCC5
 stuart_ci_build -c .pytool/CISettings.py -p MinPlatformPkg -t DEBUG,RELEASE,NO-TARGET,NOOPT -a IA32,X64,ARM,AARCH64 TOOL_CHAIN_TAG=GCC5 CODE_COVERAGE=TRUE CC_HTML=TRUE
 # -------==========-------
-# MU_TIANO_PLATFORMS
-# Project Mu Virtual Platform Firmware
-git submodule add https://github.com/microsoft/mu_tiano_platforms.git PlatformGroup/INTEL_TIANO
-cd /home/fedora/ProjectMU/PlatformGroup/INTEL_TIANO
-pip install --upgrade -r pip-requirements.txt
-# Build Non-Platform Package(s) NO-TARGET: QemuQ35Pkg,QemuSbsaPkg
-stuart_setup -c .pytool/CISettings.py -p QemuQ35Pkg,QemuSbsaPkg -t NO-TARGET -a IA32,X64,AARCH64 TOOL_CHAIN_TAG=GCC5
-stuart_update -c .pytool/CISettings.py -p QemuQ35Pkg,QemuSbsaPkg -t NO-TARGET -a IA32,X64,AARCH64 TOOL_CHAIN_TAG=GCC5
-stuart_ci_build -c .pytool/CISettings.py -p QemuQ35Pkg,QemuSbsaPkg -t NO-TARGET -a IA32,X64,AARCH64 TOOL_CHAIN_TAG=GCC5
-# QemuQ35Pkg GCC QemuQ35_DEBUG
-stuart_setup -c Platforms/QemuQ35Pkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 -t DEBUG -a IA32,X64
-stuart_update -c Platforms/QemuQ35Pkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 -t DEBUG -a IA32,X64
-stuart_build -c Platforms/QemuQ35Pkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 TARGET=DEBUG -a IA32,X64
-# QemuSbsaPkg GCC QemuSbsa_DEBUG
-stuart_setup -c Platforms/QemuSbsaPkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 -t DEBUG -a IA32,X64
-stuart_update -c Platforms/QemuSbsaPkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 -t DEBUG -a IA32,X64
-stuart_build -c Platforms/QemuSbsaPkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 TARGET=DEBUG -a IA32,X64
-# Run Emulator
-stuart_build -c Platforms/QemuQ35Pkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 --FlashOnly
-stuart_build -c Platforms/QemuQ35Pkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 --FlashRom
+# mu_feature_config
+git submodule add https://github.com/microsoft/mu_feature_config.git Features/CONFIG
+# mu_feature_dfci
+git submodule add https://github.com/microsoft/mu_feature_dfci.git Features/DFCI
+# mu_feature_ipmi
+git submodule add https://github.com/microsoft/mu_feature_ipmi.git Features/IPMI
+# mu_feature_mm_supv
+git submodule add https://github.com/microsoft/mu_feature_mm_supv.git Features/MM_SUPV
+# mu_feature_uefi_variable
+git submodule add https://github.com/microsoft/mu_feature_uefi_variable.git Features/UEFI_VARIABLE
+# -------==========-------
+# Run to make sure all the submodules are set up.
+git submodule update --init --recursive
 
+# -------==========-------
+# Example on QEMU
+# -------==========-------
+# MU_TIANO_PLATFORMS
+# Mu Tiano Platform is a public repository of Project Mu based firmware that targets the open-source QEMU processor emulator.
+cd ~
+git clone https://github.com/microsoft/mu_tiano_platforms.git
+cd mu_tiano_platforms
+pip install --upgrade -r pip-requirements.txt
+
+# Flags
+# QEMU_HEADLESS=FALSE 
+# SHUTDOWN_AFTER_RUN=TRUE
+# MEMORY_PROTECTION=FALSE
+# --codeql
+# QemuQ35Pkg GCC QemuQ35_DEBUG
+stuart_setup -c Platforms/QemuQ35Pkg/PlatformBuild.py -t DEBUG -a IA32,X64 TOOL_CHAIN_TAG=GCC5
+stuart_update -c Platforms/QemuQ35Pkg/PlatformBuild.py -t DEBUG -a IA32,X64 TOOL_CHAIN_TAG=GCC5 
+stuart_build -c Platforms/QemuQ35Pkg/PlatformBuild.py -t DEBUG -a IA32,X64 TOOL_CHAIN_TAG=GCC5
+# QemuSbsaPkg GCC QemuSbsa_DEBUG
+stuart_setup -c Platforms/QemuSbsaPkg/PlatformBuild.py -t DEBUG -a AARCH64 TOOL_CHAIN_TAG=GCC5
+stuart_update -c Platforms/QemuSbsaPkg/PlatformBuild.py -t DEBUG -a AARCH64 TOOL_CHAIN_TAG=GCC5
+stuart_build -c Platforms/QemuSbsaPkg/PlatformBuild.py -t DEBUG -a AARCH64 TOOL_CHAIN_TAG=GCC5
+# Build Non-Platform Package(s) NO-TARGET: QemuQ35Pkg,QemuSbsaPkg
+# ONLY FOR CI
+# stuart_setup -c .pytool/CISettings.py -p QemuQ35Pkg,QemuSbsaPkg -t NO-TARGET -a IA32,X64,AARCH64 TOOL_CHAIN_TAG=GCC5
+# stuart_update -c .pytool/CISettings.py -p QemuQ35Pkg,QemuSbsaPkg -t NO-TARGET -a IA32,X64,AARCH64 TOOL_CHAIN_TAG=GCC5
+# stuart_ci_build -c .pytool/CISettings.py -p QemuQ35Pkg,QemuSbsaPkg -t NO-TARGET -a IA32,X64,AARCH64 TOOL_CHAIN_TAG=GCC5
+
+# Run Emulator
+export DISPLAY=localhost:11.0
+# FlashOnly : Run Last Build, FlashRom: Build & Run
+python Platforms/QemuQ35Pkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5  --FlashRom
+python Platforms/QemuSbsaPkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5  --FlashRom
+# QemuQ35Pkg
+stuart_build -c Platforms/QemuQ35Pkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 --FlashOnly 
+stuart_build -c Platforms/QemuQ35Pkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 --FlashRom
+# QemuSbsaPkg
 stuart_build -c Platforms/QemuSbsaPkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 --FlashOnly
 stuart_build -c Platforms/QemuSbsaPkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 --FlashRom
 # OR 
@@ -152,7 +199,7 @@ qemu-system-x86_64 \
 -global isa-debugcon.iobase=0x402 \
 -global ICH9-LPC.disable_s3=1 \
 -net none \
--drive file=fat:rw:/home/fedora/ProjectMU/PlatformGroup/INTEL_TIANO/Build/QemuQ35Pkg/DEBUG_GCC5/VirtualDrive,format=raw,media=disk \
+-drive file=fat:rw:/home/fedora/ProjectMU/PlatformGroup/INTEL/MU_QEMU/Build/QemuQ35Pkg/DEBUG_GCC5/VirtualDrive/,format=raw,media=disk \
 -machine q35,smm=on \
 -m 2048 \
 -cpu qemu64,+rdrand,umip,+smep \
@@ -165,82 +212,5 @@ qemu-system-x86_64 \
 -smbios type=0,vendor=Palindrome,uefi=on \
 -smbios type=1,manufacturer=Palindrome,product=MuQemuQ35,serial=42-42-42-42 \
 -vga cirrus
-# OR
-python Platforms/QemuQ35Pkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5  --FlashOnly
-# -------==========-------
-# mu_feature_config
-https://github.com/microsoft/mu_feature_config.git
-# mu_feature_dfci
-https://github.com/microsoft/mu_feature_dfci.git
-# mu_feature_ipmi
-https://github.com/microsoft/mu_feature_ipmi.git
-# mu_feature_mm_supv
-https://github.com/microsoft/mu_feature_mm_supv.git
-# mu_feature_uefi_variable
-https://github.com/microsoft/mu_feature_uefi_variable.git
-# -------==========-------
-# Run to make sure all the submodules are set up.
-git submodule update --init
-# -------==========-------
-# EDK2
-# -------==========-------
-# Clone Repo
-mkdir ~/src
-cd ~/src
-git clone https://github.com/tianocore/edk2.git
-cd edk2
-git submodule update --init --recursive
-pip install -r pip-requirements.txt --upgrade
 
-# Build OvmfPkg
-stuart_setup -c  OvmfPkg/PlatformCI/PlatformBuild.py  -t DEBUG -a X64 TOOL_CHAIN_TAG=GCC5
-stuart_update -c  OvmfPkg/PlatformCI/PlatformBuild.py -t DEBUG -a X64 TOOL_CHAIN_TAG=GCC5
-python BaseTools/Edk2ToolsBuild.py -t GCC5
-stuart_build -c  OvmfPkg/PlatformCI/PlatformBuild.py -t DEBUG -a X64 TOOL_CHAIN_TAG=GCC5
-# Run
-stuart_build -c OvmfPkg/PlatformCI/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 -a X64 --FlashOnly
-# OR
-mkdir -p /home/fedora/src/edk2/Build/OvmfX64/DEBUG_GCC5/VirtualDrive
-export FIRMWARE=/home/fedora/src/edk2/Build/OvmfX64/DEBUG_GCC5/FV/OVMF.fd
-export VIRTDRIVE=/home/fedora/src/edk2/Build/OvmfX64/DEBUG_GCC5/VirtualDrive
-qemu-system-x86_64 -debugcon stdio -global isa-debugcon.iobase=0x402 -net none -drive file=fat:rw:$VIRTDRIVE,format=raw,media=disk -pflash $FIRMWARE -fw_cfg name=opt/org.tianocore/X-Cpuhp-Bugcheck-Override,string=yes
-# -------==========-------
-# QEMU
-# -------==========-------
-sudo dnf install -y ninja-build
-cd /home/fedora/
-wget https://download.qemu.org/qemu-7.2.0.tar.xz
-tar xvJf qemu-7.2.0.tar.xz
-cd qemu-7.2.0
-./configure
-make -j4
-/home/fedora/qemu-7.2.0/build/qemu-system-x86_64 --version
-# -------==========-------
-# TEEEMP
-# -------==========-------
-# Install Essential Packages
-sudo apt update
-sudo apt-get install virt-manager libvirt-daemon ovmf
-sudo apt install -y libpixman-1-dev libcairo2-dev libpango1.0-dev libjpeg8-dev libgif-dev ninja-build
-sudo apt-get install xorg openbox xauth xdg-utils
-sudo apt install -y qemu qemu-system qemu-system-gui qemu-system-x86 qemu-block-extra qemu-utils
-
-wget https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-live-server-amd64.iso
-qemu-img create ubuntu.img 10G
-qemu-img create -f qcow2 ubuntu.qcow 10G
-qemu-system-x86_64 -hda ubuntu.img -boot d -cdrom ubuntu-22.04.2-live-server-amd64.iso -m 640
-qemu -hda ubuntu.img -m 640
-
-/etc/ssh/sshd_config
-X11Forwarding yes
-X11DisplayOffset 10
-X11UseLocalHost no
-PrintMotd no
-
-unzip memtest86-usb.zip
-
-sudo qemu-system-x86_64 \
-    -enable-kvm -m 2G \
-    -bios /usr/share/edk2-ovmf/OVMF_CODE.fd \
-    -drive file=memtest86-usb.img,format=raw
-qemu-system-x86_64
+/home/fedora/ProjectMU/PlatformGroup/INTEL/MU_QEMU/Build/QemuQ35Pkg/DEBUG_GCC5/VirtualDrive/

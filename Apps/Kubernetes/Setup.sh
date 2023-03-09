@@ -27,6 +27,7 @@ kubeadm version
 # Config Master
 # -------==========-------
 sudo hostnamectl set-hostname ED-Master
+echo -e "127.0.0.1 ED-Master" | sudo tee -a /etc/hosts
 # Usual Ubuntu
 sudo nano /etc/hosts  
 127.0.0.1    ED-Master
@@ -52,9 +53,9 @@ chown $USER:$USER /home/$USER/.kube/config
 # Config Worker
 # -------==========-------
 sudo hostnamectl set-hostname ED-Worker01
-sudo nano /etc/hosts  
-127.0.0.1    ED-Worker01
-37.156.28.38    ED-Master
+echo -e "37.156.28.38 ED-Master" | sudo tee -a /etc/hosts
+echo -e "127.0.0.1 ED-Worker01" | sudo tee -a /etc/hosts
+
 sudo reboot
 # -------==========-------
 sudo kubeadm join 37.156.28.38:6443 --token zwduop.wh43ecfog4axbl7n \

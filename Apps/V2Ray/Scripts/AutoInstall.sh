@@ -70,7 +70,7 @@ journalctl --unit v2ray --follow
 cd /tmp/
 rm -rf ./v2ray
 
-# echo -e "all_proxy=http://127.0.0.1:10809" | tee -a /etc/environment
+# echo -e "all_proxy=http://127.0.0.1:10809" | sudo tee -a /etc/environment
 # source /etc/environment
 
 echo "Done"
