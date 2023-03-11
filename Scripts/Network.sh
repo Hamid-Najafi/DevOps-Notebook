@@ -177,6 +177,9 @@ nameserver 1.0.0.1
 # Google
 nameserver 8.8.8.8
 nameserver 4.2.2.4
+# 403.online
+nameserver 10.202.10.102
+nameserver 10.202.10.202
 # Shecan (https://shecan.ir)
 nameserver 185.51.200.2
 nameserver 178.22.122.100

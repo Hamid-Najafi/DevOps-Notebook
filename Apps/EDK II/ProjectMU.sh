@@ -17,7 +17,7 @@ sudo echo "ip_resolve=4" >> /etc/dnf/dnf.conf
 
 # Install Necessary Apps & Packages
 sudo dnf update -y
-sudo dnf group install -y "C Development Tools and Libraries" 
+# sudo dnf group install -y "C Development Tools and Libraries" 
 sudo dnf install -y xorg-x11-server-Xorg xorg-x11-xauth xclock
 # sudo dnf group install --with-optional virtualization
 sudo dnf group install -y qemu 
@@ -153,8 +153,9 @@ git submodule add https://github.com/microsoft/mu_feature_uefi_variable.git Feat
 git submodule update --init --recursive
 
 # -------==========-------
-# Example on QEMU
+# Q35 on QEMU (Fedora 36)
 # -------==========-------
+# Disk Space: 5GB
 # MU_TIANO_PLATFORMS
 # Mu Tiano Platform is a public repository of Project Mu based firmware that targets the open-source QEMU processor emulator.
 cd ~
@@ -180,12 +181,33 @@ stuart_build -c Platforms/QemuSbsaPkg/PlatformBuild.py -t DEBUG -a AARCH64 TOOL_
 # stuart_setup -c .pytool/CISettings.py -p QemuQ35Pkg,QemuSbsaPkg -t NO-TARGET -a IA32,X64,AARCH64 TOOL_CHAIN_TAG=GCC5
 # stuart_update -c .pytool/CISettings.py -p QemuQ35Pkg,QemuSbsaPkg -t NO-TARGET -a IA32,X64,AARCH64 TOOL_CHAIN_TAG=GCC5
 # stuart_ci_build -c .pytool/CISettings.py -p QemuQ35Pkg,QemuSbsaPkg -t NO-TARGET -a IA32,X64,AARCH64 TOOL_CHAIN_TAG=GCC5
+build \
+-p QemuQ35Pkg/QemuQ35Pkg.dsc \
+-b DEBUG \
+-t GCC5 \
+-a IA32 \
+-a X64 \
+-y /home/fedora/mu_tiano_platforms/Build/QemuQ35Pkg/DEBUG_GCC5/BUILD_REPORT.TXT \
+-Y PCD \
+-Y DEPEX \
+-Y FLASH \
+-Y BUILD_FLAGS \
+-Y LIBRARY \
+-Y FIXED_ADDRESS \
+-Y HASH \
+-D BUILDID_STRING=Unknown \
+-D QEMU_CORE_NUM=2 \
+-D MEMORY_PROTECTION=TRUE \
+-D SHIP_MODE=FALSE \
+-D POLICY_BIN_PATH=/home/fedora/mu_tiano_platforms/Build/QemuQ35Pkg/DEBUG_GCC5/Policy/secure_policy.bin
 
 # Run Emulator
 export DISPLAY=localhost:11.0
 # FlashOnly : Run Last Build, FlashRom: Build & Run
-python Platforms/QemuQ35Pkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5  --FlashRom
-python Platforms/QemuSbsaPkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5  --FlashRom
+python Platforms/QemuQ35Pkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 --FlashOnly
+python Platforms/QemuQ35Pkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 --FlashRom
+python Platforms/QemuSbsaPkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 --FlashOnly
+python Platforms/QemuSbsaPkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 --FlashRom
 # QemuQ35Pkg
 stuart_build -c Platforms/QemuQ35Pkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 --FlashOnly 
 stuart_build -c Platforms/QemuQ35Pkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 --FlashRom
@@ -193,24 +215,139 @@ stuart_build -c Platforms/QemuQ35Pkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 --Flas
 stuart_build -c Platforms/QemuSbsaPkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 --FlashOnly
 stuart_build -c Platforms/QemuSbsaPkg/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 --FlashRom
 # OR 
+export VirtualDrive=/home/fedora/mu_tiano_platforms/Build/QemuQ35Pkg/DEBUG_GCC5/VirtualDrive
+export QEMUQ35_CODE=/home/fedora/mu_tiano_platforms/Build/QemuQ35Pkg/DEBUG_GCC5/FV/QEMUQ35_CODE.fd
+export QEMUQ35_VARS=/home/fedora/mu_tiano_platforms/Build/QemuQ35Pkg/DEBUG_GCC5/FV/QEMUQ35_VARS.fd
 qemu-system-x86_64 \
-/home/fedora/qemu-7.2.0/build/qemu-system-x86_64 \
--debugcon stdio \
--global isa-debugcon.iobase=0x402 \
--global ICH9-LPC.disable_s3=1 \
--net none \
--drive file=fat:rw:/home/fedora/ProjectMU/PlatformGroup/INTEL/MU_QEMU/Build/QemuQ35Pkg/DEBUG_GCC5/VirtualDrive/,format=raw,media=disk \
--machine q35,smm=on \
--m 2048 \
--cpu qemu64,+rdrand,umip,+smep \
--smp 2 \
--global driver=cfi.pflash01,property=secure,value=on \
--drive if=pflash,format=raw,unit=0,file=/home/fedora/ProjectMU/PlatformGroup/INTEL_TIANO/Build/QemuQ35Pkg/DEBUG_GCC5/FV/QEMUQ35_CODE.fd,readonly=on \
--drive if=pflash,format=raw,unit=1,file=/home/fedora/ProjectMU/PlatformGroup/INTEL_TIANO/Build/QemuQ35Pkg/DEBUG_GCC5/FV/QEMUQ35_VARS.fd \
--device qemu-xhci,id=usb \
--device usb-mouse,id=input0,bus=usb.0,port=1 \
--smbios type=0,vendor=Palindrome,uefi=on \
--smbios type=1,manufacturer=Palindrome,product=MuQemuQ35,serial=42-42-42-42 \
--vga cirrus
+ -debugcon stdio \
+ -global isa-debugcon.iobase=0x402 \
+ -global ICH9-LPC.disable_s3=1 \
+ -net none \
+ -drive file=fat:rw:$VirtualDrive,format=raw,media=disk \
+ -machine q35,smm=on \
+ -m 2048 \
+ -cpu qemu64,+rdrand,umip,+smep \
+ -smp 2 \
+ -global driver=cfi.pflash01,property=secure,value=on \
+ -drive if=pflash,format=raw,unit=0,file=$QEMUQ35_CODE,readonly=on \
+ -drive if=pflash,format=raw,unit=1,file=$QEMUQ35_VARS \
+ -device qemu-xhci,id=usb \
+ -device usb-mouse,id=input0,bus=usb.0,port=1 \
+ -smbios type=0,vendor=Palindrome,uefi=on \
+ -smbios type=1,manufacturer=Palindrome,product=MuQemuQ35,serial=42-42-42-42 \
+ -vga cirrus
 
-/home/fedora/ProjectMU/PlatformGroup/INTEL/MU_QEMU/Build/QemuQ35Pkg/DEBUG_GCC5/VirtualDrive/
+export VirtualDrive=/home/fedora/mu_tiano_platforms/Build/QemuSbsaPkg/DEBUG_GCC5/VirtualDrive
+export SECURE_FLASH0=/home/fedora/mu_tiano_platforms/Build/QemuSbsaPkg/DEBUG_GCC5/FV/SECURE_FLASH0.fd
+export QEMU_EFI=/home/fedora/mu_tiano_platforms/Build/QemuSbsaPkg/DEBUG_GCC5/FV/QEMU_EFI.fd
+ qemu-system-aarch64 \
+ -net none \
+ -drive file=fat:rw:$VirtualDrive,format=raw,media=disk \
+ -m 2048 \
+ -machine sbsa-ref \
+ -cpu max \
+ -smp 4 \
+ -global driver=cfi.pflash01,property=secure,value=on \
+ -drive if=pflash,format=raw,unit=0,file=$SECURE_FLASH0 \
+ -drive if=pflash,format=raw,unit=1,file=$QEMU_EFI,readonly=on \
+ -device qemu-xhci,id=usb \
+ -device usb-mouse,id=input0,bus=usb.0,port=1 
+ -device usb-kbd,id=input1,bus=usb.0,port=2 
+ -smbios type=0,vendor=Palindrome,uefi=on 
+ -smbios type=1,manufacturer=Palindrome,product=MuQemuQ35,serial=42-42-42-42 
+ -serial stdio
+
+# -------==========-------
+Cant run using fedora-qemu
+https://github.com/microsoft/mu_tiano_platforms/issues/240
+INFO - MM IPL closed SMRAM window index 0
+INFO - MM IPL closed SMRAM window index 1
+INFO - MM IPL locked SMRAM window index 0
+INFO - MM IPL locked SMRAM window index 1
+INFO - SecurityLock::LockType: HARDWARE_LOCK, Module: E6D1F588-F107-41DE-9832-CEA334B33C1F, Function: MmIplPeiEntry, Output: Lock MMRAM
+INFO - SMM IPL locked SMRAM window
+# -------==========-------
+
+
+# -------==========-------
+# Q35 on QEMU (Windows 10)
+# -------==========-------
+# Install Chocolatey
+# Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+# choco install python --pre 
+# choco install git
+
+0.1- Download latest TrafficMonitor
+https://github.com/zhongyang219/TrafficMonitor/releases
+
+0.2- Microsoft Visual C++ Redistributable (Updated March 2023)
+https://cdna.p30download.ir/p30dl-software/Microsoft.Visual.C.Plus.Plus.Redistributable.Package.v0.67.0_p30download.com.exe
+
+0.3- Disable Windows Security (Speed-UP)
+
+0.4- Install Cygwin
+http://cygwin.com/setup-x86_64.exe
+https://x.cygwin.com/docs/ug/setup.html
+https://gist.github.com/roxlu/5038729
+Cygwin Packages: xorg-server, xinit, xorg-docs, xlaunch, openssh
+Cygwin:  ssh-host-config
+Windows: Create a new account with administrator rights
+Windows: Open Firewall Port
+Cygwin:  /bin/mkpasswd.exe -l -u [new_username] >> /etc/passwd
+
+0.5- Create Script in C:/FlashRomMUQemu.sh Which Contains:
+cd /cygdrive/c/mu_tiano_platforms
+export DISPLAY=localhost:10.0
+python Platforms/QemuQ35Pkg/PlatformBuild.py TARGET=DEBUG -a IA32,X64 TOOL_CHAIN_TAG=VS2022 TEST_REGEX=FrontPage.efi RUN_TESTS=TRUE --FlashOnly
+
+# OR
+# 0.4- Windows Native OpenSSH Server
+# Open Settings, then go to Apps > Apps & Features.
+# Go to Optional Features.
+# In the list, select OpenSSH Client or OpenSSH Server.
+# Select Install.
+# Start, type services.msc
+# In the details pane, double-click OpenSSH SSH Server.
+# On the General tab, from the Startup type drop-down menu, select Automatic
+# To start the service, select Start
+
+1- Download latest Python
+https://www.python.org/downloads
+
+2- Download latest Git For Windows
+https://git-scm.com/download/win
+
+3.1- Download latest Qemu For Windows
+https://qemu.weilnetz.de/w64/
+3.2- Add Qemu to Path Variables
+setx /M path "%path%;C:\Program Files\qemu"
+
+4.1- Download latest version of VS build Tools
+https://aka.ms/vs/17/release/vs_buildtools.exe (2022)
+https://aka.ms/vs/16/release/vs_buildtools.exe (2019)
+4.2- Install from cmd line with required features (this set will change over time).
+.\vs_buildtools.exe --wait --norestart --nocache --installPath C:\BuildTools --add Microsoft.VisualStudio.Component.VC.CoreBuildTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows11SDK.22000 --add Microsoft.VisualStudio.Component.VC.Tools.ARM --add Microsoft.VisualStudio.Component.VC.Tools.ARM64
+.\vs_buildtools.exe --wait --norestart --nocache --installPath C:\BuildTools2019 --add Microsoft.VisualStudio.Component.VC.CoreBuildTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows10SDK.19041 --add Microsoft.VisualStudio.Component.VC.Tools.ARM --add Microsoft.VisualStudio.Component.VC.Tools.ARM64
+
+5.1- Download the WDK installer
+https://go.microsoft.com/fwlink/?linkid=2085767
+5.2- Install from cmd line with required features (this set will change over time).
+.\wdksetup.exe /features OptionId.WindowsDriverKitComplete
+
+6- https://github.com/tianocore/edk2-pytool-extensions/blob/master/docs/user/features/using_linux.md
+
+7- Clone Repo
+# Common Error (Compiler #1076 from NMAKE : fatal name too long)
+git clone https://github.com/microsoft/mu_tiano_platforms.git C:\mu_tiano_platforms
+cd C:\mu_tiano_platforms
+python -m pip install --upgrade pip setuptools wheel
+pip install --upgrade -r pip-requirements.txt
+
+8- Build & Run
+stuart_setup -c Platforms/QemuQ35Pkg/PlatformBuild.py -t DEBUG -a IA32,X64 TOOL_CHAIN_TAG=VS2022 
+stuart_update -c Platforms/QemuQ35Pkg/PlatformBuild.py -t DEBUG -a IA32,X64 TOOL_CHAIN_TAG=VS2022  
+stuart_build -c Platforms/QemuQ35Pkg/PlatformBuild.py -t DEBUG -a IA32,X64 TOOL_CHAIN_TAG=VS2022
+# Test Build and Shutdown (Using *TestApp.efi files)
+stuart_build -c Platforms/QemuQ35Pkg/PlatformBuild.py TOOL_CHAIN_TAG=VS2022 TARGET=DEBUG -a IA32,X64  SHUTDOWN_AFTER_RUN=TRUE QEMU_HEADLESS=TRUE EMPTY_DRIVE=TRUE TEST_REGEX=*TestApp.efi RUN_TESTS=TRUE --FlashOnly
+# On HostOS using X11 Forwading
+C:\cygwin64\bin\bash.exe /cygdrive/c/FlashRomMUQemu.sh

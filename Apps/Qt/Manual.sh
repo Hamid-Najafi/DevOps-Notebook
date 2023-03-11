@@ -17,12 +17,14 @@ apt install -q -y build-essential gcc g++ gdb cmake
 apt install -q -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-dev 
 apt install -q -y qt6* libqt6* qml6*
 # -------==========-------
+# Build from Source
+# -------==========-------
 # Image: Ubuntu Bare: https://github.com/Qengineering/Jetson-Nano-Ubuntu-20-image
 # Hostname: nano
 # Username: jetson
 # Password: jetson
 # -------==========-------
-# Allocate free space to ext4 pations (with display)
+# Allocate free space to ext4 pations
 # -------==========-------
 sudo apt install -y -q gparted
 sudo gparted
@@ -94,7 +96,7 @@ echo export PATH=/home/jetson/cmake-3.25.1-linux-aarch64/bin:$PATH >> ~/.profile
 echo export PATH=/opt/Qt/6.4.2-armv8l/bin/:$PATH >> ~/.profile
 source ~/.profile
 # -------==========-------
-# QT6
+# Build QT6
 # https://www.tal.org/tutorials/building-qt-62-raspberry-pi-raspberry-pi-os
 # -------==========-------
 # Graphics driver options
@@ -168,7 +170,7 @@ cmake --build . --parallel 2
 # Install the module in the correct location 
 cmake --install . --verbose
 # -------==========-------
-# QT5
+# Build QT5
 # https://www.tal.org/tutorials/building-qt-512-lts-raspberry-pi-raspberry-pi-os
 # -------==========-------
 screen
