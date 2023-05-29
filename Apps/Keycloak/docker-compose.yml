@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:13.2
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRESQL_DB}
+      POSTGRES_USER: ${POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASS}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  keycloak:
+    depends_on:
+      - postgres
+    container_name: keycloak
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: postgres
+      DB_DATABASE: ${POSTGRESQL_DB}
+      DB_USER: ${POSTGRESQL_USER}
+      DB_PASSWORD: ${POSTGRESQL_PASS}
+      VIRTUAL_HOST: ${VIRTUAL_HOST}
+      LETSENCRYPT_HOST: ${LETSENCRYPT_HOST}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+      VIRTUAL_PORT: "8080"
+      HTTPS_METHOD: redirect
+      PROXY_ADDRESS_FORWARDING: "true" # <==== very important if you use reverse proxy
+    image: jboss/keycloak:${KEYCLOAK_VERSION}
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
