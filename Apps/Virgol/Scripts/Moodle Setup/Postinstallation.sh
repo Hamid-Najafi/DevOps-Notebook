@@ -96,10 +96,10 @@ Assign Service (apiservice) to Webservice User (webapiuser)
     Host URL : ldap://ldap.vir-gol.ir:390/
     Host URL : ldap://virgol_openldap/
   Bind settings
-    Distinguished name : cn=admin,dc=legace,dc=ir
+    Distinguished name : cn=admin,dc=hamid-najafi,dc=ir
     Password : OpenLDAPpass.24
   User lookup settings
-    Context : ou=people,dc=legace,dc=ir
+    Context : ou=people,dc=hamid-najafi,dc=ir
     User attribute : uniqueidentifier
   Data mapping
     Data mapping (First name) : cn
@@ -163,11 +163,11 @@ https://m-dei.vir-gol.ir/admin/settings.php?section=frontpagesettings
 # -------==========-------
 # 8- https://m-dei.vir-gol.ir/admin/category.php?category=email
 # -- SMTP Auth Type : PLAIN
-# - SMTP Hosts = mail.legace.ir:587
-# - SMTP username = noreply@legace.ir
+# - SMTP Hosts = mail.hamid-najafi.ir:587
+# - SMTP username = noreply@hamid-najafi.ir
 # - SMTP password = Mailpass.24
 # - SMTP security = tls
-# - No-reply address = noreply@legace.ir
+# - No-reply address = noreply@hamid-najafi.ir
 # -------==========-------
 9 - https://m-dei.vir-gol.ir/admin/settings.php?section=optionalsubsystems
 Enable web services 

@@ -2,14 +2,14 @@
 # Pre-install
 # -------==========-------
 # Set host to use proxy
-echo -e "http_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.legace.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.legace.ir:3128/" | sudo tee -a /etc/environment
+echo -e "http_proxy=http://admin:Squidpass.24@su.hamid-najafi.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@su.hamid-najafi.ir:3128/\nftp_proxy=http://admin:Squidpass.24@su.hamid-najafi.ir:3128/" | sudo tee -a /etc/environment
 source /etc/environment
 
 # Set Hostname
 # sudo nano /etc/cloud/templates/hosts.debian.tmpl
 sudo nano /etc/hosts  
 127.0.0.1 scalelite
-127.0.0.1 scalelite.legace.ir
+127.0.0.1 scalelite.hamid-najafi.ir
 # Ubuntu Automatic Update
 sudo nano /etc/update-manager/release-upgrades
 
@@ -73,9 +73,9 @@ docker exec -i scalelite-api bundle exec rake status
 # Pulling server list:
 docker exec -i scalelite-api bundle exec rake servers
 # Add bbb server:
-docker exec -i scalelite-api bundle exec rake servers:add[https://fb1.legace.ir/bigbluebutton/api/,1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk]
-docker exec -i scalelite-api bundle exec rake servers:add[https://fb2.legace.ir/bigbluebutton/api/,1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk]
-docker exec -i scalelite-api bundle exec rake servers:add[https://fb3.legace.ir/bigbluebutton/api/,1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk]
+docker exec -i scalelite-api bundle exec rake servers:add[https://fb1.hamid-najafi.ir/bigbluebutton/api/,1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk]
+docker exec -i scalelite-api bundle exec rake servers:add[https://fb2.hamid-najafi.ir/bigbluebutton/api/,1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk]
+docker exec -i scalelite-api bundle exec rake servers:add[https://fb3.hamid-najafi.ir/bigbluebutton/api/,1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk]
 # Use the server ID for enabling the server
 docker exec -i scalelite-api bundle exec rake servers:enable[7f438106-76fe-4dd1-b1c3-e67971306988]
 docker exec -i scalelite-api bundle exec rake servers:enable[05e18aaf-9bee-4324-9d38-ac35b3a62eb7]
@@ -103,9 +103,9 @@ docker run --rm bigbluebutton/greenlight:v2 bundle exec rake secret
 # set .env variables: 1-SECRET_KEY_BASE, 2-BIGBLUEBUTTON_ENDPOINT, 3-BIGBLUEBUTTON_SECRET, 4-SAFE_HOSTS & ....
 nano .env
 SECRET_KEY_BASE=a4b2ba2347c0375cf078e054b13975cf3f3985a77d3866a57e2f8d11788023db0aa6ba3d358bd60a87c5c80d5da29f6954de7efe51663b847dbbaa6a01d8b398
-BIGBLUEBUTTON_ENDPOINT=https://scalelite.legace.ir/bigbluebutton/
+BIGBLUEBUTTON_ENDPOINT=https://scalelite.hamid-najafi.ir/bigbluebutton/
 BIGBLUEBUTTON_SECRET=c610cce92a32f399a171963d45a93bdbb33a18ab6ec7c439
-SAFE_HOSTS=scalelite.legace.ir
+SAFE_HOSTS=scalelite.hamid-najafi.ir
 # Verifying Configuration
 docker run --rm --env-file .env bigbluebutton/greenlight:v2 bundle exec rake conf:check
 #  Configure Nginx
@@ -128,4 +128,4 @@ sudo nano .env
 BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 sudo docker run --rm --env-file .env bigbluebutton/greenlight:v2 bundle exec rake conf:check
 sudo docker-compose up -d
-sudo docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@legace.ir","BBBpass.24","admin"]
+sudo docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@hamid-najafi.ir","BBBpass.24","admin"]

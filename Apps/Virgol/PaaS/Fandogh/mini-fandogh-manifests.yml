@@ -57,7 +57,7 @@ spec:
     - name: VIRGOL_LDAP_PORT
       value: 390
     - name: VIRGOL_LDAP_USER_ADMIN
-      value: cn=admin,dc=legace,dc=ir
+      value: cn=admin,dc=hamid-najafi,dc=ir
     - name: VIRGOL_LDAP_PASSWORD
       value: OpenLDAPpass.24
     - name: VIRGOL_NTP_SERVER_URL
@@ -111,7 +111,7 @@ spec:
       memory: 200Mi
     # This makes Container crash, its coded inside container image
     # - name: LDAP_BASE_DN
-    #   value: cn=admin,dc=legace,dc=ir
+    #   value: cn=admin,dc=hamid-najafi,dc=ir
 
 ---    
 

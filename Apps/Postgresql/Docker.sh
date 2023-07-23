@@ -1,5 +1,5 @@
 # -------==========-------
-# Postgres
+# Docker
 # -------==========-------
 docker run \
     --name postgres \
@@ -8,39 +8,29 @@ docker run \
     -v postgresDb:/var/lib/postgresql/data \
     --restart=always \
     -d postgres
-    
     command: postgres -c 'max_connections=200'
     # User : postgres
-
-cd ..
-cp lf,PGADMIN_DEFAULT_EMAIL
-if(succeed)
-{
-exit 0
-}else
-exit 1
-
-# TEMP
-docker run \
-    --name postgres \
-    -e "POSTGRES_PASSWORD=JonSn0w" \
-    -p 5433:5432 \
-    -v postgresDb_Temp:/var/lib/postgresql/data \
-    --restart=always \
-    -d postgres
 
 # PGAdmin 4
 docker run \
     --name pgadmin4 \
-    -p 8081:80 \
-    -e "PGADMIN_DEFAULT_EMAIL=admin@legace.ir" \
+    -p 8082:80 \
+    -e "PGADMIN_DEFAULT_EMAIL=admin@hamid-najafi.ir" \
     -e "PGADMIN_DEFAULT_PASSWORD=pgAdminpass.24" \
     --restart=always \
     -d dpage/pgadmin4
 
-User ID=root;Password=myPassword;Host=localhost;Port=5432;Database=myDataBase;Pooling=true;Min Pool Size=0;Max Pool Size=100;Connection Lifetime=0;
-User ID=postgres;Password=SugucSkY3k;Host=db.legace.ir;Port=5431;
 
+# -------==========-------
+# Docker Compose
+# -------==========-------
+mkdir -p ~/docker/postgres
+cp -R ~/DevOps-Notebook/Apps/Postgresql/*  ~/docker/postgres
+cd  ~/docker/postgres
+
+# nano docker-compose.yml
+docker-compose up -d
+# Add New Server -> Connection -> Hostname/Address = postgres, Username = postgres, Password = PostgreSQLpass.24
 # -------==========-------
 # Optimize Postgres
 # -------==========-------
@@ -64,14 +54,14 @@ cat <<EOF > /var/lib/postgresql/data/postgresql.conf
 EOF
 exit
 docker restart virgol_db
+# -------==========-------
+# Connection Strings   
+# -------==========-------
+User ID=root;Password=myPassword;Host=localhost;Port=5432;Database=myDataBase;Pooling=true;Min Pool Size=0;Max Pool Size=100;Connection Lifetime=0;
+User ID=postgres;Password=SugucSkY3k;Host=db.hamid-najafi.ir;Port=5431;
+SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:PostgreSQLpass.24@hpthinclient.local:8081/fastapidb"
 
-# -------==========-------
-# Upgrade Postgres Version   
-# -------==========-------
-1) Backup database
-2) Shutdown postgres 12 container
-3) Run new postgres 13 container
-4) Restore backup
 # -------==========-------
 # Backup PostgreSQL CLI
 # -------==========-------

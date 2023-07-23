@@ -15,11 +15,11 @@ services:
       - MOODLE_DATABASE_NAME=bitnami_moodle
       - MOODLE_USERNAME=admin
       - MOODLE_PASSWORD=wydta4-voqvAb-vadpaf
-      - MOODLE_EMAIL=admin@legace.ir
+      - MOODLE_EMAIL=admin@hamid-najafi.ir
       - MOODLE_SITE_NAME=Virgol
-      - MOODLE_SMTP_HOST=mail.legace.ir
+      - MOODLE_SMTP_HOST=mail.hamid-najafi.ir
       - MOODLE_SMTP_PORT=587
-      - MOODLE_SMTP_USER=noreply@legace.ir
+      - MOODLE_SMTP_USER=noreply@hamid-najafi.ir
       - MOODLE_SMTP_PASSWORD=Mailpass.24
       - MOODLE_SMTP_PROTOCOL=tls
     labels:
@@ -60,7 +60,7 @@ services:
     image: 'docker.io/bitnami/phpmyadmin:5-debian-10'
     restart: always
     environment:
-      - PMA_ABSOLUTE_URI=https://phpmyadmin.legace.ir/
+      - PMA_ABSOLUTE_URI=https://phpmyadmin.hamid-najafi.ir/
       - PMA_HOST=mariadb
       # - PMA_ARBITRARY=1
     ports:
@@ -68,7 +68,7 @@ services:
 #      - '443:8443'
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.legace.ir`)"
+      - "traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.hamid-najafi.ir`)"
       - "traefik.http.services.phpmyadmin.loadbalancer.server.port=8080"
       - "traefik.http.routers.phpmyadmin.entrypoints=secure"
       - "traefik.http.routers.phpmyadmin.tls.certresolver=letsencrypt"

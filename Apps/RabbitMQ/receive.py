@@ -2,7 +2,7 @@
 import pika, sys, os
 
 def main():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='su.legace.ir'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host='su.hamid-najafi.ir'))
     channel = connection.channel()
 
     channel.queue_declare(queue='hello')

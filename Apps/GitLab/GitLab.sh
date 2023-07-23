@@ -2,7 +2,7 @@
 # GitLab
 # -------==========-------
 sudo docker run --detach \
-  --hostname gitlab.legace.ir \
+  --hostname gitlab.hamid-najafi.ir \
   --publish 8087:80 --publish 2222:22 \
   --name gitlab \
   --restart always \
@@ -23,17 +23,17 @@ helm repo update
 
 helm upgrade --install gitlab gitlab/gitlab --debug \
   --namespace gitlab \
-  --set global.hosts.domain=legace.ir \
+  --set global.hosts.domain=hamid-najafi.ir \
   --set global.hosts.externalIP=37.156.28.38 \
   --set certmanager.install=false \
   --set global.ingress.configureCertmanager=false
 
 helm install --debug gitlab gitlab/gitlab \
-  --set global.hosts.domain=legace.ir \
-  --set certmanager-issuer.email=admin@legace.ir
+  --set global.hosts.domain=hamid-najafi.ir \
+  --set certmanager-issuer.email=admin@hamid-najafi.ir
 
 
-  --set certmanager-issuer.email=info@legace.ir \
+  --set certmanager-issuer.email=info@hamid-najafi.ir \
   --set certmanager.createCustomResource=false 
 
 
@@ -96,7 +96,7 @@ sudo service gitlab-runner restart
 sudo mkdir -p /etc/systemd/system/gitlab-runner.service.d
 sudo nano /etc/systemd/system/gitlab-runner.service.d/http-proxy.conf
 [Service]
-Environment="HTTP_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
+Environment="HTTP_PROXY=http://admin:Squidpass.24@su.hamid-najafi.ir:3128"
 systemctl daemon-reload
 sudo systemctl restart gitlab-runner
 
@@ -104,10 +104,10 @@ sudo systemctl restart gitlab-runner
 sudo mkdir -p /etc/systemd/system/docker.service.d
 sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
 [Service]
-Environment="HTTP_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
+Environment="HTTP_PROXY=http://admin:Squidpass.24@su.hamid-najafi.ir:3128"
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 
 # APT
 sudo nano /etc/apt/apt.conf
-Acquire::http::Proxy "http://admin:Squidpass.24@su.legace.ir:3128";
+Acquire::http::Proxy "http://admin:Squidpass.24@su.hamid-najafi.ir:3128";

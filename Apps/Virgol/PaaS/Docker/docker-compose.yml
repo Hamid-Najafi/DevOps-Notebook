@@ -23,7 +23,7 @@ services:
       - VIRGOL_JWT_SECRET=Saleh Secret Key
       - VIRGOL_LDAP_SERVER=virgol_openldap
       - VIRGOL_LDAP_PORT=389
-      - VIRGOL_LDAP_USER_ADMIN=cn=admin,dc=legace,dc=ir
+      - VIRGOL_LDAP_USER_ADMIN=cn=admin,dc=hamid-najafi,dc=ir
       - VIRGOL_LDAP_PASSWORD=OpenLDAPpass.24
       - VIRGOL_TZ=Asia/Tehran
       # - VIRGOL_SMTP_HOST
@@ -146,7 +146,7 @@ services:
   #   networks:
   #     - virgol
   #     - web
-  # Username: cn=admin,dc=legace,dc=ir, Password: OpenLDAPpass.24
+  # Username: cn=admin,dc=hamid-najafi,dc=ir, Password: OpenLDAPpass.24
   openldap:
     image: goldenstarc/extended-openldap
     container_name: virgol_openldap

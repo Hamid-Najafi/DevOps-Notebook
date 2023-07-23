@@ -11,11 +11,26 @@ apt install -q -y qtbase5*
 apt install -q -y libqt5*
 apt install -q -y qml-module*
 # -------==========-------
+# QT5 Compile Source
+# -------==========-------
+make distclean
+touch -r *.*
+qmake
+make -j2
+
+# -------==========-------
 # QT6 from APT
 # -------==========-------
-apt install -q -y build-essential gcc g++ gdb cmake
+apt install -q -y build-essential gcc g++ gdb cmake ninja-build 
 apt install -q -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-dev 
 apt install -q -y qt6* libqt6* qml6*
+# -------==========-------
+# QT6 Compile Source
+# -------==========-------
+cmake --build . --target clean
+cmake -G Ninja .
+cmake --build . --parallel 2
+
 # -------==========-------
 # Build from Source
 # -------==========-------

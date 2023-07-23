@@ -12,7 +12,7 @@ public:
     bbbServerVersion: 2.2
     copyright: "©2020 Virgol Inc.\n Powerd by BigBlueButton"
     html5ClientBuild: 1095
-    helpLink: https://lms.legace.ir
+    helpLink: https://lms.hamid-najafi.ir
     lockOnJoin: true
     cdn: ""
     basename: "/html5client"
@@ -94,7 +94,7 @@ public:
     enableNetworkMonitoring: false
     packetLostThreshold: 10
   kurento:
-    wsUrl: wss://ib2.legace.ir/bbb-webrtc-sfu
+    wsUrl: wss://ib2.hamid-najafi.ir/bbb-webrtc-sfu
     # Valid for video-provider. Time (ms) before its WS connection times out
     # and tries to reconnect.
     wsConnectionTimeout: 4000
@@ -264,7 +264,7 @@ public:
       enabled: true
   note:
     enabled: true
-    url: https://ib2.legace.ir/pad
+    url: https://ib2.hamid-najafi.ir/pad
     config:
       showLineNumbers: false
       showChat: false

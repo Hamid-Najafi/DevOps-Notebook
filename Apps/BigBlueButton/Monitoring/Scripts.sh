@@ -43,4 +43,4 @@ sudo systemctl reload nginx
   - targets: ['example.com']
 
 # Check metrics on:
-https://bbb.legace.ir/metrics/
+https://bbb.hamid-najafi.ir/metrics/

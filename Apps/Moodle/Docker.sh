@@ -46,7 +46,7 @@ docker run -d --name mariadb \
 
   docker run \
     --name phpmyadmin \
-    -e PMA_ABSOLUTE_URI=https://phpmyadmin.legace.ir/ \
+    -e PMA_ABSOLUTE_URI=https://phpmyadmin.hamid-najafi.ir/ \
     --link mariadb:db \
     -p 8082:80 \
     --restart=always \
@@ -65,7 +65,7 @@ docker run -d --name moodle \
   --env MOODLE_DATABASE_NAME=bitnami_moodle \
   --env MOODLE_USERNAME=admin \
   --env MOODLE_PASSWORD=wydta4-voqvAb-vadpaf \
-  --env MOODLE_EMAIL=admin@legace.ir \
+  --env MOODLE_EMAIL=admin@hamid-najafi.ir \
   --env MOODLE_SITE_NAME=Virgol \
   --volume moodle_data:/bitnami/moodle \
   --env PHP_MEMORY_LIMIT=256M \

@@ -171,6 +171,6 @@ fi
 # grep file content location
 # -------==========-------
 grep -rl --include="*.js" "searchString" ${PWD}
-grep -rl "lms.legace.ir" .
+grep -rl "lms.hamid-najafi.ir" .
 grep -rl "REACT_APP_VERSION" .
 grep -rl "IMAGE_TAG" .

@@ -25,7 +25,7 @@ spec:
       memory: 200Mi
   env:
     - name: PGADMIN_DEFAULT_EMAIL
-      value: admin@legace.ir
+      value: admin@hamid-najafi.ir
     - name: PGADMIN_DEFAULT_PASSWORD
       value: pgAdminpass.24
 

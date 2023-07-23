@@ -8,15 +8,15 @@ sudo apt-get install -y apache2 apache2-doc apache2-utils
 # -------==========-------
 # Confs
 # -------==========-------
-sudo nano /etc/apache2/sites-available/legace.conf
-sudo nano /etc/apache2/sites-available/legace-le-ssl.conf
+sudo nano /etc/apache2/sites-available/hamid-najafi.conf
+sudo nano /etc/apache2/sites-available/hamid-najafi-le-ssl.conf
 sudo nano /etc/apache2/sites-available/reverse-Proxy.conf 
 sudo nano /etc/apache2/sites-available/reverse-Proxy-le-ssl.conf
 
 sudo a2ensite reverse-Proxy-le-ssl.conf 
 sudo a2ensite reverse-Proxy.conf 
-sudo a2ensite legace.conf
-sudo a2ensite legace-le-ssl.conf
+sudo a2ensite hamid-najafi.conf
+sudo a2ensite hamid-najafi-le-ssl.conf
 # -------==========-------
 # Modes
 # -------==========-------

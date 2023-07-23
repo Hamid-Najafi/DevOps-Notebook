@@ -16,7 +16,7 @@ PATH
 # PhpMyAdmin
 docker run \
     --name phpmyadmin \
-    -e PMA_ABSOLUTE_URI=https://phpmyadmin.legace.ir/ \
+    -e PMA_ABSOLUTE_URI=https://phpmyadmin.hamid-najafi.ir/ \
     --link mariadb:db \
     -p 8082:80 \
     --restart=always \

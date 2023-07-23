@@ -13,11 +13,11 @@ docker run \
     -d mysql:5.7
     # User : root
 # ConnectionString
-Server=legace.ir;Database=nopCommerce;Uid=root;Pwd=mySQLpass.24;
+Server=hamid-najafi.ir;Database=nopCommerce;Uid=root;Pwd=mySQLpass.24;
 # PhpMyAdmin
 docker run \
     --name phpmyadmin \
-    -e PMA_ABSOLUTE_URI=https://phpmyadmin.legace.ir/ \
+    -e PMA_ABSOLUTE_URI=https://phpmyadmin.hamid-najafi.ir/ \
     -p 8082:80 \
     --link mysql5.7:db \
     --restart=always \

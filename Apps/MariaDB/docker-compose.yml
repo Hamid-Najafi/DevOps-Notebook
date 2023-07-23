@@ -2,7 +2,7 @@ version: "3.5"
 services:
   mariadb:
     image: mariadb
-    hostname: mariadb.legace.ir 
+    hostname: mariadb.hamid-najafi.ir 
     # container_name: mariadb
     restart: always
     volumes:
@@ -16,10 +16,10 @@ services:
       - db
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    hostname: phpmyadmin.legace.ir
+    hostname: phpmyadmin.hamid-najafi.ir
     # container_name: phpmyadmin
     environment:
-      - PMA_ABSOLUTE_URI=https://phpmyadmin.legace.ir/
+      - PMA_ABSOLUTE_URI=https://phpmyadmin.hamid-najafi.ir/
       - PMA_HOST=mysql5.7
       # - PMA_ARBITRARY=1
     restart: always
@@ -30,7 +30,7 @@ services:
       # - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.legace.ir`)"
+      - "traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.hamid-najafi.ir`)"
       - "traefik.http.services.phpmyadmin.loadbalancer.server.port=8080"
       - "traefik.http.routers.phpmyadmin.entrypoints=secure"
       - "traefik.http.routers.phpmyadmin.tls.certresolver=letsencrypt"
@@ -47,4 +47,4 @@ volumes:
   mariaDb:
 
 # ConnectionString
-# Server=legace.ir;Database=nopCommerce;Uid=root;Pwd=mySQLpass.24;
+# Server=hamid-najafi.ir;Database=nopCommerce;Uid=root;Pwd=mySQLpass.24;

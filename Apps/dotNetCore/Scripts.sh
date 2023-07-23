@@ -98,9 +98,9 @@ docker run \
     --name=virgol \
     -e "ASPNETCORE_URLS=http://+" \
     -e "ASPNETCORE_ENVIRONMENT=Production" \
-    -e "VIRGOL_SERVER_ROOT_URL=http://lms.legace.ir" \
+    -e "VIRGOL_SERVER_ROOT_URL=http://lms.hamid-najafi.ir" \
     -e "VIRGOL_DATABASE_TYPE=postgres" \
-    -e "VIRGOL_DATABASE_HOST=db.legace.ir" \
+    -e "VIRGOL_DATABASE_HOST=db.hamid-najafi.ir" \
     -e "VIRGOL_DATABASE_NAME=LMS" \
     -e "VIRGOL_DATABASE_USER=postgres" \
     -e "VIRGOL_DATABASE_PASSWORD=PostgreSQLpass.24" \
@@ -112,13 +112,13 @@ docker run \
     -e "VIRGOL_FARAZAPI_USERNAME=goldenstarc" \
     -e "VIRGOL_FARAZAPI_PASSWORD=hektug-fakbAm-0vypje" \
     -e "VIRGOL_FARAZAPI_API_KEY=qcP4IQp3PPRV3ppvkG9ScHJcwvUPL3iOJrV9n7QiqDA=" \
-    -e "VIRGOL_BBB_BASE_URL=https://b1.legace.ir/bigbluebutton/api/" \
+    -e "VIRGOL_BBB_BASE_URL=https://b1.hamid-najafi.ir/bigbluebutton/api/" \
     -e "VIRGOL_BBB_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk" \
     -e "VIRGOL_BBB_CALLBACK_URL=/meetingResponse/" \
     -e "VIRGOL_JWT_SECRET=Saleh Secret Key" \
-    -e "VIRGOL_LDAP_SERVER=ldap.legace.ir" \
+    -e "VIRGOL_LDAP_SERVER=ldap.hamid-najafi.ir" \
     -e "VIRGOL_LDAP_PORT=389" \
-    -e "VIRGOL_LDAP_USER_ADMIN=cn=admin,dc=legace,dc=ir" \
+    -e "VIRGOL_LDAP_USER_ADMIN=cn=admin,dc=hamid-najafi,dc=ir" \
     -e "VIRGOL_LDAP_PASSWORD=OpenLDAPpass.24" \
     -d goldenstarc/virgol:1.3.5
 # -------==========-------

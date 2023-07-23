@@ -12,8 +12,8 @@ echo -e "127.0.0.1 live" | tee -a /etc/hosts
 sudo mkdir -p /etc/systemd/system/docker.service.d
 sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
 [Service]
-Environment="HTTP_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
-Environment="HTTPS_PROXY=http://admin:Squidpass.24@su.legace.ir:3128"
+Environment="HTTP_PROXY=http://admin:Squidpass.24@su.hamid-najafi.ir:3128"
+Environment="HTTPS_PROXY=http://admin:Squidpass.24@su.hamid-najafi.ir:3128"
 Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
 
 sudo systemctl daemon-reload

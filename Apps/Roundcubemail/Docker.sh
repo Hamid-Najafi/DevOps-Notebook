@@ -42,8 +42,8 @@ docker-compose up -d
     docker run --rm \
         --name roundcubemail \
         -p 8084:80 \
-        -e ROUNDCUBEMAIL_DEFAULT_HOST=tls://mail.legace.ir \
-        -e ROUNDCUBEMAIL_SMTP_SERVER=tls://mail.legace.ir \
+        -e ROUNDCUBEMAIL_DEFAULT_HOST=tls://mail.hamid-najafi.ir \
+        -e ROUNDCUBEMAIL_SMTP_SERVER=tls://mail.hamid-najafi.ir \
         -e ROUNDCUBEMAIL_DB_TYPE=mysql \
         -e ROUNDCUBEMAIL_DB_HOST=mysql5.7 \
         -e ROUNDCUBEMAIL_DB_USER=roundcube \

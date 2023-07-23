@@ -10,7 +10,7 @@ registration_shared_secret: "tobvogqZWk0wtk73VpWIcDtCxOB20CU3"
 # -------==========-------
 docker run -it --rm \
     --mount type=volume,src=synapse-data,dst=/data \
-    -e SYNAPSE_SERVER_NAME=matrix.legace.ir \
+    -e SYNAPSE_SERVER_NAME=matrix.hamid-najafi.ir \
     -e SYNAPSE_REPORT_STATS=yes \
     matrixdotorg/synapse:latest generate
 
@@ -35,10 +35,10 @@ docker run \
     -p 8008:8008 \
     -d matrixdotorg/synapse:latest
 
-https://matrix.legace.ir
+https://matrix.hamid-najafi.ir
 
 docker run --rm \
--e MATRIX_DOMAIN=matrix.legace.ir \
+-e MATRIX_DOMAIN=matrix.hamid-najafi.ir \
 -v /data/ma1sd/etc:/etc/ma1sd \
 -v /data/ma1sd/var:/var/ma1sd \
 -p 8090:8090 \

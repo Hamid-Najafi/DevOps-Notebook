@@ -121,10 +121,10 @@ sudo nmcli c down serverius ifname ens160
 alias vpnon="sudo nmcli c up a ifname ens160 --ask"
 alias vpnoff="sudo nmcli c off a ifname ens160"
 # -------==========-------
-# Template Legace VPN Con.
+# Template hamid-najafi VPN Con.
 # -------==========-------
 [connection]
-id=legace
+id=hamid-najafi
 uuid=41347005-0cbe-4227-bf4a-21c94fa9df2b
 type=vpn
 autoconnect=true
@@ -132,7 +132,7 @@ permissions=user:ubuntu:;
 timestamp=1596564820
 
 [vpn]
-gateway=su.legace.ir
+gateway=su.hamid-najafi.ir
 ipsec-enabled=yes
 ipsec-psk=0sMTIzNDU2Nzg5
 password-flags=1
@@ -150,7 +150,7 @@ method=auto
 
 [proxy]
 # -------==========-------
-# Template Legace VPN Con.
+# Template hamid-najafi VPN Con.
 # -------==========-------
 
 [connection]
@@ -162,7 +162,7 @@ interface-name=--ens160
 permissions=
 
 [vpn]
-gateway=su.legace.ir
+gateway=su.hamid-najafi.ir
 ipsec-enabled=yes
 ipsec-psk=0sMTIzNDU2Nzg5Cg==
 mru=1400

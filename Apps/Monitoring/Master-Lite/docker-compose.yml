@@ -59,10 +59,10 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=Grafanapass.24
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_SMTP_ENABLED=true
-      - GF_SMTP_HOST=mail.legace.ir:587
-      - GF_SMTP_USER=grafana@legace.ir
+      - GF_SMTP_HOST=mail.hamid-najafi.ir:587
+      - GF_SMTP_USER=grafana@hamid-najafi.ir
       - GF_SMTP_PASSWORD=Mailpass.24
-      - GF_SMTP_FROM_ADDRESS=grafana@legace.ir
+      - GF_SMTP_FROM_ADDRESS=grafana@hamid-najafi.ir
       - GF_EMAILS_WELCOME_EMAIL_ON_SIGN_UP=true
     restart: unless-stopped
     expose:

@@ -20,7 +20,7 @@ curl -u traefik:Traefikpass.24 http://$FQDN:9094/metrics/
 # Tips
 # -------==========-------
 # Multi Host
-      - "traefik.http.routers.virgol.rule=Host(`lms.legace.ir`, `lms.goldenstarc.ir`)"
+      - "traefik.http.routers.virgol.rule=Host(`lms.hamid-najafi.ir`, `lms.goldenstarc.ir`)"
 
 
 # Grafana

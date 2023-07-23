@@ -12,13 +12,13 @@ spec:
       memory: 200Mi
   env:
     - name: LDAP_ORGANISATION
-      value: Legace Inc.
+      value: hamid-najafi Inc.
     - name: LDAP_TLS
       value: false
     - name: LDAP_ADMIN_PASSWORD
       value: nWzQK5nULRAP6r6j
     - name: LDAP_BASE_DN
-      value: cn=admin,dc=legace,dc=ir
+      value: cn=admin,dc=hamid-najafi,dc=ir
 --- 
 kind: ExternalService
 name: phpldapadmin

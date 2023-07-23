@@ -52,7 +52,7 @@ spec:
     - name: VIRGOL_LDAP_PORT
       value: 390
     - name: VIRGOL_LDAP_USER_ADMIN
-      value: cn=admin,dc=legace,dc=ir
+      value: cn=admin,dc=hamid-najafi,dc=ir
     - name: VIRGOL_LDAP_PASSWORD
       value: OpenLDAPpass.24
     - name: VIRGOL_NTP_SERVER_URL

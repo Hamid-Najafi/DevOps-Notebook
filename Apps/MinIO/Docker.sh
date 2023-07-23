@@ -1,7 +1,6 @@
 # -------==========-------
 # MinIO Docker-Compose
 # -------==========-------
-# Setup traefik
 mkdir -p ~/docker/minio
 cp -R ~/DevOps-Notebook/Apps/MinIO/*  ~/docker/minio
 cd  ~/docker/minio

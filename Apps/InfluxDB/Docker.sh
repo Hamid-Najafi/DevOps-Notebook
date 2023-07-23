@@ -12,9 +12,9 @@ docker run \
     -e INFLUXDB_ADMIN_PASSWORD=InfluxDBpass.24 \
     -d influxdb
     
-http://influxdb.legace.ir:8086  -u influxdb:InfluxDBpass.24
+http://influxdb.hamid-najafi.ir:8086  -u influxdb:InfluxDBpass.24
 
 # Creating a DB named mydb:
-curl -i -XPOST http://influxdb.legace.ir:8086/query --data-urlencode "q=CREATE DATABASE mydb"
+curl -i -XPOST http://influxdb.hamid-najafi.ir:8086/query --data-urlencode "q=CREATE DATABASE mydb"
 # Inserting into the DB:
 curl -i -XPOST 'http://localhost:8086/write?db=mydb' --data-binary 'cpu_load_short,host=server01,region=us-west value=0.64 1434055562000000000'

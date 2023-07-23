@@ -35,7 +35,7 @@ sudo nano /etc/hosts
 # Cloud-init Ubuntu
 sudo nano /etc/cloud/templates/hosts.debian.tmpl
 127.0.0.1 ibWorker1
-127.0.0.1 pb1.legace.ir
+127.0.0.1 pb1.hamid-najafi.ir
 
 sudo reboot
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all --apiserver-advertise-address=37.156.28.38

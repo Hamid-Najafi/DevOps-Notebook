@@ -84,6 +84,6 @@ spec:
 #       memory: 100Mi
 #   env:
 #     # - name: PMA_ABSOLUTE_URI
-#     #   value: https://phpmyadmin.legace.ir/
+#     #   value: https://phpmyadmin.hamid-najafi.ir/
 #     - name: PMA_HOST
 #       value: mysql

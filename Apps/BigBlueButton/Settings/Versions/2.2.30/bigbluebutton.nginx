@@ -3,7 +3,7 @@ server_tokens off;
 server {
   listen 80;
   listen [::]:80;
-  server_name ib2.legace.ir;
+  server_name ib2.hamid-najafi.ir;
   
   return 301 https://$server_name$request_uri; #redirect HTTP to HTTPS
 
@@ -11,10 +11,10 @@ server {
 server {
   listen 443 ssl;
   listen [::]:443 ssl;
-  server_name ib2.legace.ir;
+  server_name ib2.hamid-najafi.ir;
 
-    ssl_certificate /etc/letsencrypt/live/ib2.legace.ir/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/ib2.legace.ir/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/ib2.hamid-najafi.ir/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/ib2.hamid-najafi.ir/privkey.pem;
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
     ssl_protocols TLSv1.2;

@@ -13,7 +13,7 @@ SQL Server Database Password
 Serverpass24!@#$
 
 Adobe Connect Administrator User
-admin@legace.ir
+admin@hamid-najafi.ir
 Connectpass.24
 
 # Console Settings
@@ -71,7 +71,7 @@ Copy and paste the shortcut to the app from the file location to the Startup fol
 # -------==========-------
 # LDAP
 # -------==========-------
-https://c1.legace.ir/
+https://c1.hamid-najafi.ir/
 
 Administration -> Users andd Groups -> Edit Login and Password Policies -> Login Policy -> Use e-mail address as the login: No
 
@@ -79,7 +79,7 @@ http://localhost:8510/console/directory-service-settings/directory-service-setti
 
 URL:ldap://ldap.vir-gol.ir:390
 Authentication mechanism:Simple
-UserName:cn=admin,dc=legace,dc=ir
+UserName:cn=admin,dc=hamid-najafi,dc=ir
 Password:password123
 Query timeout:120
 Query page size:100
@@ -91,7 +91,7 @@ LastName:sn
 Email:mail 
 
 <!-- NetworkLogin:mail -->
-ou=people,dc=legace,dc=ir
+ou=people,dc=hamid-najafi,dc=ir
 # FILTER 1
 Filter:(objectClass=person) 
 # OR FILTER 2 (WITH POSTFIX BOOKMAIL)

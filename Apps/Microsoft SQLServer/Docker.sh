@@ -13,6 +13,6 @@ docker run \
     -d mcr.microsoft.com/mssql/server:2019-latest
     # User : sa
 # ConnectionString
-Data Source=bbb.legace.ir;Initial Catalog=nopCommerce;Persist Security Info=True;User ID=sa;Password=SQLServerpass.24 
+Data Source=bbb.hamid-najafi.ir;Initial Catalog=nopCommerce;Persist Security Info=True;User ID=sa;Password=SQLServerpass.24 
 # Restore SQL Server (Backup using SSMS)
 docker cp /tmp/mydb.bak d6b75213ef80:/var/opt/mssql/data

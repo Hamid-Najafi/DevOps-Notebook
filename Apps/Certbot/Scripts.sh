@@ -49,7 +49,7 @@ sudo certbot certonly \
     --email admin@vir-gol.ir \
     --server https://acme-v02.api.letsencrypt.org/directory \
     --agree-tos \
-    --domains "*.legace.ir"
+    --domains "*.hamid-najafi.ir"
 # -------==========-------
 # TIPs
 # -------==========-------

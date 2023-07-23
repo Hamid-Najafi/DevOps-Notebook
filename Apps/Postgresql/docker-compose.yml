@@ -14,8 +14,7 @@ services:
       - postgresDb:/var/lib/postgresql/data
     networks:
       - db
-      # - web
-# Add New Server -> Connection -> Hostname/Address = postgres, Username = postgres, Password = PostgreSQLpass.24
+      - web
   pgadmin4:
     image: dpage/pgadmin4
     hostname: pgadmin.legace.ir 

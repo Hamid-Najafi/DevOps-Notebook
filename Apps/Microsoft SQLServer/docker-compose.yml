@@ -6,7 +6,7 @@ services:
 
   mssql:
     image: mcr.microsoft.com/mssql/server
-    hostname: mssql.legace.ir
+    hostname: mssql.hamid-najafi.ir
     restart: always
     environment:
       - ACCEPT_EULA=Y

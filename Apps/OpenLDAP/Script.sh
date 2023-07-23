@@ -19,7 +19,7 @@ sudo snap install --classic certbot
 sudo certbot certonly \
     --manual \
     --preferred-challenges dns \
-    --email admin@legace.ir \
+    --email admin@hamid-najafi.ir \
     --agree-tos \
     --domains $DOMAIN
 sudo cp -RL /etc/letsencrypt/live/$DOMAIN/. ~/dev/extended-docker-openldap/certs/
@@ -35,7 +35,7 @@ git push
 # -------==========-------
 # 1.B:Extended LDAP
 # -------==========-------
-# Username: cn=admin,dc=legace,dc=ir , Password: OpenLDAPpass.24
+# Username: cn=admin,dc=hamid-najafi,dc=ir , Password: OpenLDAPpass.24
 
 # 1.Run with docker
 docker run \
@@ -76,7 +76,7 @@ docker run \
 cd ~/virgol/
 docker-compose up -d
 # Test
-ldapsearch -x -h "ldap.legace.ir" -b "dc=legace,dc=ir" -D "cn=admin,dc=legace,dc=ir" -w "OpenLDAPpass.24"
+ldapsearch -x -h "ldap.hamid-najafi.ir" -b "dc=hamid-najafi,dc=ir" -D "cn=admin,dc=hamid-najafi,dc=ir" -w "OpenLDAPpass.24"
 # -------==========-------
 # 2.osixia/openldap
 # -------==========-------
@@ -113,11 +113,11 @@ docker run \
 # -------==========-------
 # osixia/phpldapadmin
 # -------==========-------
-# Username: cn=admin,dc=legace,dc=ir
+# Username: cn=admin,dc=hamid-najafi,dc=ir
 # Password: OpenLDAPpass.24
 docker run \
 --name phpldapadmin \
---hostname phpldapadmin.legace.ir \
+--hostname phpldapadmin.hamid-najafi.ir \
 -p 8083:80 \
 --link ldap-service:ldap-host \
 --env PHPLDAPADMIN_LDAP_HOSTS=ldap-host \
@@ -145,7 +145,7 @@ https://www.openldap.org/devel/admin/index.html
 # LDAP Commands
 # -------==========-------
 # Search
-ldapsearch -x -h "su.legace.ir:389" -b "dc=example,dc=org " -D "cn=admin,dc=example,dc=org" -w "admin"
-ldapsearch -x -h "conf.legace.ir:390" -b "dc=example,dc=org " -D "cn=admin,dc=example,dc=org" -w "admin"
+ldapsearch -x -h "su.hamid-najafi.ir:389" -b "dc=example,dc=org " -D "cn=admin,dc=example,dc=org" -w "admin"
+ldapsearch -x -h "conf.hamid-najafi.ir:390" -b "dc=example,dc=org " -D "cn=admin,dc=example,dc=org" -w "admin"
 # Add Users & Groups : 
-ldapadd -D "cn=admin,dc=legace,dc=ir" -f userimport-*.ldif -h ldap://ldap.legace.ir/ -W OpenLDAPpass.24
+ldapadd -D "cn=admin,dc=hamid-najafi,dc=ir" -f userimport-*.ldif -h ldap://ldap.hamid-najafi.ir/ -W OpenLDAPpass.24
