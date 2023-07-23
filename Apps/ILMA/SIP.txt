@@ -1,0 +1,17 @@
+IP: 172.21.171.1
+Mask: 255.255.255.128
+DG: 172.21.171.126
+VLAN: 1946
+802.1p: 0
+
+Registration User Name:	+985136140079
+Authentication User Name: +985136140079@r-khorasan.tci.ir
+Password: $1d'd{/Qq^cHW*qd~Bh[~($&&!$
+
+
+SIP Proxy: 
+46.100.142.67:5065
+
+SIP Server:
+r-khorasan.tci.ir
+2.180.242.206
