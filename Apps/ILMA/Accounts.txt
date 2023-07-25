@@ -7,7 +7,6 @@ Password: 144685
 (
     Owner National Number: 0779707941
     Owner Phone Number: 09158030495
-    Support: 05138550022
 )
 =================
 1.VoIP Config
@@ -17,7 +16,6 @@ Mask: 255.255.255.128
 DG: 172.21.171.126
 VLAN: 1946
 802.1p: 0
-
 Registration User Name (Extention):	+985136140079
 Authentication User Name (ID): +985136140079@r-khorasan.tci.ir
 Password: F1h6G9y0

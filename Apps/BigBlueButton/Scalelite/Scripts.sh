@@ -24,11 +24,13 @@ apt-get update
 apt-get dist-upgrade
 
 # Adding swap memory
-fallocate -l 1G /swapfile
-dd if=/dev/zero of=/swapfile bs=1024 count=1048576
+fallocate -l 4G /swapfile
+dd if=/dev/zero of=/swapfile bs=1024 count=$((1024 * 1024 * 4))
+chown root:root /swapfile
 chmod 600 /swapfile
 mkswap /swapfile
 swapon /swapfile
+echo "/swapfile none swap sw 0 0" >> /etc/fstab
 
 # make the change permanent add the line
 sudo nano /etc/fstab
