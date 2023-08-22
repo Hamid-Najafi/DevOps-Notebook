@@ -1,5 +1,5 @@
 =================
-Line Config
+0.Line Config
 =================
 adsl.tci.ir
 Username: 5199994860
@@ -34,3 +34,46 @@ Username: 5199994860
 Password: Officepass.24
 VLAN: 1942
 MRU: 1492
+=================
+3.Trunk Config
+=================
+host=r-khorasan.tci.ir
+port=5065
+username=+985136140079
+outboundproxy=46.100.142.67:5065
+secret=F1h6G9y0
+type=peer
+context=from-trunk
+nat=yes
+qualify=yes
+
+1235@mysipprovider.com:password:1235@proxyof.mysipprovider.com
+
++985136140079@r-khorasan.tci.ir:F1h6G9y0:12157944@46.100.142.67:5065
+Register String:
++985136140079\@r-khorasan.tci.ir:F1h6G9y0@r-khorasan.tci.ir:5065/+985136140079
+
+
+sip notify                     -- Send a notify packet to a SIP peer
+sip prune realtime [peer|all]  -- Prune cached Realtime users/peers
+sip qualify peer               -- Send an OPTIONS packet to a peer
+sip reload                     -- Reload SIP configuration
+sip set debug {on|off|ip|peer} -- Enable/Disable SIP debugging
+sip set history {on|off}       -- Enable/Disable SIP history
+sip show {channels|subscriptions} -- List active SIP channels or subscriptions
+sip show channelstats          -- List statistics for active SIP channels
+sip show channel               -- Show detailed SIP channel info
+sip show domains               -- List our local SIP domains
+sip show history               -- Show SIP dialog history
+sip show inuse [all]           -- List all inuse/limits
+sip show mwi                   -- Show MWI subscriptions
+sip show objects               -- List all SIP object allocations
+sip show peers [like]          -- List defined SIP peers
+sip show peer                  -- Show details on specific SIP peer
+sip show registry              -- List SIP registration status
+sip show sched                 -- Present a report on the status of the scheduler queue
+sip show settings              -- Show SIP global settings
+sip show tcp                   -- List TCP Connections
+sip show users [like]          -- List defined SIP users
+sip show user                  -- Show details on specific SIP user
+sip unregister                 -- Unregister (force expiration) a SIP peer from the registry
