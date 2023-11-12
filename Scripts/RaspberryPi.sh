@@ -14,6 +14,12 @@ sudo apt-get upgrade -y
 sudo apt install avahi-daemon 
 
 # -------==========-------
+# Compute Module 4
+# -------==========-------
+https://www.raspberrypi.com/documentation/computers/getting-started.html#setting-up-your-raspberry-pi
+https://www.waveshare.com/wiki/Compute-Module-4
+https://jamesachambers.com/full-compute-module-4-raspberry-pi-setup-imaging-guide/
+# -------==========-------
 # PI Power Button
 # -------==========-------
 # https://github.com/Howchoo/pi-power-button

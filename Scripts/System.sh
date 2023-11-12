@@ -48,6 +48,16 @@ deb-src http://mirror.0-1.cloud/ubuntu/ disco main restricted
 
 sudo apt-get update
 # -------==========-------
+# RemoteDesktop/VNC
+# -------==========-------
+# 1. Firstly, open system settings (Gnome Control Center) from the system tray menu.
+# 2. Then navigate to ‘Sharing’ from left, and turn on the toggle icon on right-corner of app header. You can finally click “Remote Desktop” to enable the function and configure user, password, etc.
+systemctl --user restart gnome-remote-desktop.service
+# -------==========-------
+# SSH
+# -------==========-------
+
+# -------==========-------
 # SSH Key Configs
 # -------==========-------
 ssh-keygen
@@ -75,6 +85,35 @@ echo -e "127.0.0.1 $newhostname" | tee -a /etc/hosts
 # -------==========-------
 wget -qO- bench.sh | bash
 # -------==========-------
+# Mount New Partition
+# -------==========-------
+sudo apt install gparted
+# Format Disk
+gparted
+# Create mount dir
+sudo mkdir -p /home/c1tech/Drive/HDD
+# Get UUID
+blkid
+# Mount-Test
+sudo mount UUID=a9b13a14-50a4-443a-b6be-7d127b66fc8c /home/c1tech/Drive/HDD
+# UnMount-Test
+sudo umount  /home/c1tech/Drive/HDD
+# add Auto Mount
+sudo nano /etc/fstab
+# UUID="a9b13a14-50a4-443a-b6be-7d127b66fc8c" /home/c1tech/Drive/HDD    ext4    defaults    0    1
+sudo chown -R c1tech:c1tech /home/c1tech/Drive/HDD
+# Mount Again or reboot
+sudo mount UUID=a9b13a14-50a4-443a-b6be-7d127b66fc8c /home/c1tech/Drive/HDD
+
+sudo su
+fdisk -l
+mkdir /mnt/hdd
+mkdir  ~/data
+ln -s /mnt/hdd/  ~/data
+echo -e "externalDisk=/dev/sdb" | sudo tee -a /etc/environment 
+echo -e "mount -t auto /dev/sdb /mnt/hdd" | sudo tee -a /etc/environment 
+source /etc/environment
+# -------==========-------
 # Add user
 # -------==========-------
 adduser ubuntu
@@ -82,8 +121,9 @@ usermod -aG sudo ubuntu
 # -------==========-------
 # NCDU - NCurses Disk Usage
 # -------==========-------
-sudo apt install ncdu -y
-cd / & sudo ncdu
+sudo apt install -y ncdu
+sudo su
+ncdu /
 # -------==========-------
 # Add Swap
 # -------==========-------

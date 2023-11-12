@@ -1,0 +1,99 @@
+# -------==========-------
+# YOCTO
+# -------==========-------
+# Preparation
+# Install the necessary Linux Operating system packages.
+sudo apt-get update
+sudo apt-get -y -q install gawk wget git-core diffstat unzip texinfo gcc-multilib liblz4-tool
+sudo apt-get -y -q install build-essential chrpath socat cpio python3 tree screen
+sudo apt-get -y -q install python3-pip python3-pexpect libsdl1.2-dev xterm
+
+# Clone the poky repository
+git clone git://git.yoctoproject.org/poky.git
+cd poky/
+
+# Check all available tags inside Poky repository
+# These shows all the version of Yocto Project, available through Poky.
+git tag 
+# Version 3.1
+git checkout dunfell
+# OR Version 4.0
+git checkout kirkstone 
+
+# Check  version of Poky
+more ./meta-poky/conf/distro/poky.conf
+
+# Download the necessary meta-layers to build the meta-toolchain
+git clone https://git.yoctoproject.org/meta-raspberrypi
+cd meta-raspberrypi
+git checkout dunfell 
+git checkout kirkstone 
+
+git clone https://git.openembedded.org/meta-openembedded
+cd meta-openembedded
+git checkout dunfell 
+git checkout kirkstone 
+
+git clone https://github.com/openembedded/openembedded-core.git
+cd openembedded-core
+git checkout 2022-04.13-kirkstone
+git checkout dunfell
+
+git clone https://code.qt.io/yocto/meta-qt5.git
+git clone https://code.qt.io/yocto/meta-qt6.git
+git clone https://github.com/meta-qt5/meta-qt5.git
+
+
+# Source the poky building environment
+# All of the configuration, intermediate, and target image files will be placed in the ‘build-armv7l’ directory.
+# You must source this script each time you want to work again on the same project.
+source ./oe-init-build-env build-armv7l/
+cd build-armv7l/
+
+# Edit the conf/bblayers.conf file
+nano ./conf/bblayers.conf
+
+# Edit the conf/local.conf file
+nano ./conf/local.conf
+
+# Build Image
+# To actully perform a build, you need to actually run BitBake and tell it which root filesystem image to create.
+# For example here are some common examples of images, as Yocto offers more than like these:
+# core-image-minimal This is a small console-based system which is useful for tests and as a basis for other custom images. Minimal images allow devices to boot, useful for BSP development . BSP stands for Board Support Package
+# core-image-full-cmdline Console only image with full support of target device hardware
+# core-image-x11 This is a basic image with support for graphics through a X11 server and the xTerminal terminal app.
+# core-image-sato This is a complete graphical system based on Sato which is a mobile graphical environment built on X11 and GNOME. This image includes several apps like: a Terminal , a text editor and a file manager
+# core-image-sato-sdk This is a core-image-sato added with complete standalone Software Development Kit (SDK)
+# BitBake executes a number of defined tasks such as :
+#     downloads all source files,
+#     unpacks them,
+#     patches them
+#     configures them,
+#     compiles and
+#     installs these files.
+screen 
+time bitbake core-image-minimal
+
+# Verify the structure of the build directory after the image is completed
+tree -L 2 build-armv7l/tmp/deploy/
+
+# Run/verify first Linux image
+runqemu qemuarm nographic slirp
+# Yocto defaults to “root” without any password
+uname -a
+poweroff
+
+# -------==========-------
+# Using the Toaster web interface
+# -------==========-------
+sudo apt install -y python3-pip
+cd /opt/yocto/poky
+pip3 install --user -r ./bitbake/toaster-requirements.txt
+source oe-init-build-env
+source toaster start
+
+git clone --branch latest https://github.com/jsamr/bootiso.git
+cd bootiso
+sudo make install
+sudo apt install -y jq wimlib
+bootiso ./build-armv7l/tmp/deploy/images/beaglebone-yocto/core-image-minimal-beaglebone-yocto-20231111131527.rootfs.wic of=/dev/sdd bs=1M

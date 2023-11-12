@@ -1,19 +1,18 @@
 # -------==========-------
 # X11
 # -------==========-------
-# Install X server (On Host)
+# Install X Server (On Host)
 Windows: https://sourceforge.net/projects/xming/
 macOS: https://www.xquartz.org/
-Ubuntu: apt -y install xorg
+Debian: 
+sudo apt install -y xorg
 # -------==========-------
-# Install X client (On Remote)
+# Install X Client (On Remote)
 sudo apt install -y xauth
 # Install X Utils (On Remote)
 sudo apt install -y xdg-utils
 # Install X Apps (On Remote)
 sudo apt install -y x11-apps
-# Install X Server
-sudo apt install -y xorg
 # -------==========-------
 # X11 SSH Config
 # -------==========-------

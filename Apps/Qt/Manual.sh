@@ -2,6 +2,15 @@
 
 # Copyleft (c) 2022.
 # -------==========-------
+# QT from Online Installer
+# -------==========-------
+# https://wiki.qt.io/Online_Installer_4.x#Selecting_a_mirror_for_opensource
+# Using third-party mirror
+installer(.run/exe) --mirror https://mirrors.ocf.berkeley.edu/qt # (best)
+installer(.run/exe) --mirror http://www.nic.funet.fi/pub/mirrors/download.qt-project.org
+installer(.run/exe) --mirror http://ftp2.nluug.nl/languages/qt
+maintenancetool(.run/exe)  --mirror http://qt.mirror.constant.com
+# -------==========-------
 # QT5 from APT
 # -------==========-------
 apt install -q -y build-essential gcc
