@@ -23,7 +23,9 @@ git checkout kirkstone
 # Check  version of Poky
 more ./meta-poky/conf/distro/poky.conf
 
-# Download the necessary meta-layers to build the meta-toolchain
+# -------==========-------
+# Download the Necessary Meta-Layers
+# -------==========-------
 git clone https://git.yoctoproject.org/meta-raspberrypi
 cd meta-raspberrypi
 git checkout dunfell 
@@ -43,18 +45,26 @@ git clone https://code.qt.io/yocto/meta-qt5.git
 git clone https://code.qt.io/yocto/meta-qt6.git
 git clone https://github.com/meta-qt5/meta-qt5.git
 
+# Clone C1Tech Custom Layer
+git clone https://github.com/Hamid-Najafi/meta-c1tech.git
 
+# -------==========-------
 # Source the poky building environment
 # All of the configuration, intermediate, and target image files will be placed in the ‘build-armv7l’ directory.
 # You must source this script each time you want to work again on the same project.
+source ./oe-init-build-env build-rpi4/
 source ./oe-init-build-env build-armv7l/
-cd build-armv7l/
 
 # Edit the conf/bblayers.conf file
 nano ./conf/bblayers.conf
 
 # Edit the conf/local.conf file
 nano ./conf/local.conf
+
+MACHINE ??= "raspberrypi4-64"
+# The file specified above is a configuration file that is provided in the meta-raspberrypi layer. 
+# That file is located in the meta-raspberrypi/conf/machine directory, 
+# along with the configuration files for all the other possible Raspberry Pi boards available.
 
 # Build Image
 # To actully perform a build, you need to actually run BitBake and tell it which root filesystem image to create.
@@ -71,8 +81,9 @@ nano ./conf/local.conf
 #     configures them,
 #     compiles and
 #     installs these files.
-screen 
-time bitbake core-image-minimal
+screen -S bitbake
+bitbake core-image-minimal
+bitbake c1tech-image
 
 # Verify the structure of the build directory after the image is completed
 tree -L 2 build-armv7l/tmp/deploy/

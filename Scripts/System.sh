@@ -48,6 +48,11 @@ deb-src http://mirror.0-1.cloud/ubuntu/ disco main restricted
 
 sudo apt-get update
 # -------==========-------
+# Glances an Eye on your system. A top/htop alternative
+# -------==========-------
+# https://github.com/nicolargo/glances
+curl -L https://bit.ly/glances | /bin/bash
+# -------==========-------
 # RemoteDesktop/VNC
 # -------==========-------
 # 1. Firstly, open system settings (Gnome Control Center) from the system tray menu.
