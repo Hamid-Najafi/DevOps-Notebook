@@ -1,11 +1,11 @@
 # -------==========-------
-# MQTT Docker-Compose
+# EMQX Docker-Compose
 # -------==========-------
-mkdir -p ~/docker/minio
+mkdir -p ~/docker/emqx
 cp -R ~/DevOps-Notebook/Apps/EMQX/*  ~/docker/emqx
 cd  ~/docker/emqx
 # Set Host
     #   - "traefik.http.routers.traefik.rule=Host(`minio.hamid-najafi.ir`)"
-nano docker-compose.yml
+# nano docker-compose.yml
 docker-compose up -d
 # -------==========-------

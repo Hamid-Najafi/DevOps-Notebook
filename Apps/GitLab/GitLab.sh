@@ -1,5 +1,12 @@
 # -------==========-------
-# GitLab
+# GitLab Docker Compose
+# -------==========-------
+mkdir -p ~/docker/gitlab
+cp -R ~/DevOps-Notebook/Apps/GitLab/*  ~/docker/gitlab
+cd  ~/docker/gitlab
+docker-compose up -d
+# -------==========-------
+# Docker
 # -------==========-------
 sudo docker run --detach \
   --hostname gitlab.hamid-najafi.ir \
