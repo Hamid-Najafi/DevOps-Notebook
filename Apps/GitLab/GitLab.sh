@@ -4,6 +4,9 @@
 mkdir -p ~/docker/gitlab
 cp -R ~/DevOps-Notebook/Apps/GitLab/*  ~/docker/gitlab
 cd  ~/docker/gitlab
+# Set up the volumes location (its also in .env file)
+mkdir -p /data/gitlab
+docker network create gateway
 docker-compose up -d
 # -------==========-------
 # Docker

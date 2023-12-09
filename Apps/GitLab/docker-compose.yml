@@ -1,6 +1,3 @@
-# Set up the volumes location
-# export GITLAB_HOME=/srv/gitlab
-
 version: "3.5"
 services:
   web:
@@ -24,13 +21,15 @@ services:
         gitlab_rails['gitlab_email_reply_to'] = 'noreply@c1tech.group'
         # Add any other gitlab.rb configuration here, each on its own line
     ports:
+      - '80:80'
+      - '443:443'
       - '2222:22'
-      - '8087:80'
-    # - '443:443'
+      - '587:587'
     volumes:
       - '$GITLAB_HOME/config:/etc/gitlab'
       - '$GITLAB_HOME/logs:/var/log/gitlab'
       - '$GITLAB_HOME/data:/var/opt/gitlab'
+    shm_size: '256m'
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.gitlab.rule=Host(`gitlab.c1tech.group`)"

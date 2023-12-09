@@ -3,6 +3,7 @@ version: "3.5"
 services:
   emqx:
     image: emqx/emqx:latest
+    hostname: 'emqx.c1tech.group'
     restart: always
     environment:
       - EMQX_LOADED_PLUGINS="emqx_bridge_mqtt,emqx_recon,emqx_retainer,emqx_management,emqx_dashboard"
@@ -12,8 +13,20 @@ services:
     ports:
       - 18083:18083
       - 1883:1883
-      # - 8883:8883
+      - 8883:8883
     volumes:
-      - ./mqtt/vol-emqx-data:/opt/emqx/data
-      # - ./mqtt/vol-emqx-etc:/opt/emqx/etc
-      - ./mqtt/vol-emqx-log:/opt/emqx/log
+      - '$EMQX_HOME/data:/opt/emqx/data'
+      # - '$EMQX_HOME/etc:/opt/emqx/etc'
+      - '$EMQX_HOME/log:/opt/emqx/log'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.emqx.rule=Host(`emqx.c1tech.group`)"
+      - "traefik.http.services.emqx.loadbalancer.server.port=80"
+      - "traefik.http.routers.emqx.entrypoints=secure"
+      - "traefik.http.routers.emqx.tls.certresolver=letsencrypt"
+    networks:
+      - default
+networks:
+  default:
+    external:
+      name: gateway

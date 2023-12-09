@@ -4,8 +4,7 @@
 mkdir -p ~/docker/emqx
 cp -R ~/DevOps-Notebook/Apps/EMQX/*  ~/docker/emqx
 cd  ~/docker/emqx
-# Set Host
-    #   - "traefik.http.routers.traefik.rule=Host(`minio.hamid-najafi.ir`)"
-# nano docker-compose.yml
+# Set up the volumes location (its also in .env file)
+mkdir -p /data/emqx
 docker-compose up -d
 # -------==========-------
