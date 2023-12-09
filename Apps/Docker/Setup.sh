@@ -48,10 +48,15 @@ docker cp <containerId>:/file/path/within/container /host/path/target
 # for Iran 403:
 sudo systemctl stop systemd-resolved.service
 sudo nano  /etc/resolv.conf
-nameserver 178.22.122.100
 nameserver 185.51.200.2
+nameserver 178.22.122.100
+nameserver 185.51.200.1
+nameserver 178.22.122.101
 
-curl -sSL https://get.docker.com/ | sh
+# export http_proxy=http://172.25.10.21:10809
+
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
 sudo usermod -aG docker $USER
 sudo chown $USER /var/run/docker.sock
 # The LinuxServer.io Method:

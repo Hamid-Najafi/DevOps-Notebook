@@ -160,9 +160,11 @@ fi
 sudo nano  /etc/resolv.conf
 nameserver 194.104.158.182
 
+# Shecan Premium Account
 nameserver 185.51.200.1
 nameserver 178.22.122.101
 
+# Shecan Free Account
 nameserver 185.51.200.2
 nameserver 178.22.122.100
 # OR

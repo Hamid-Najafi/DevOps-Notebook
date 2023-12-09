@@ -28,9 +28,13 @@ docker run -p 9000:9000 \
 # Edge
 docker run -p 9000:9000 \
   --name minioEdge \
-  -v /mnt/data:/data
-  -e "MINIO_ACCESS_KEY=minio" \
-  -e "MINIO_SECRET_KEY=MinIOpass.24" \
+  -v /mnt/data:/data \
+  -e "MINIO_ROOT_USER=minio" \
+  -e "MINIO_ROOT_PASSWORD=MinIOpass.24" \
   -e "MINIO_PROMETHEUS_AUTH_TYPE=public" \
   --restart=always \
 minio/minio:edge server /data
+
+
+# User & Password: minioadmin
+docker run -p 9000:9000 -p 9001:9001 minio/minio server /data --console-address ":9001"
