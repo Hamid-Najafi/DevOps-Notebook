@@ -2,8 +2,8 @@ version: "3.5"
 services:
   postgres:
     image: postgres
-    hostname: postgres.legace.ir
-    restart: always
+    hostname: postgres.c1tech.group
+    restart: unless-stopped
     ports:
       - "5432:5432"
     environment:
@@ -15,13 +15,13 @@ services:
     networks:
       - db
       - web
-  pgadmin4:
+  pgadmin:
     image: dpage/pgadmin4
-    hostname: pgadmin.legace.ir 
+    hostname: pgadmin.c1tech.group 
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@legace.ir
+      - PGADMIN_DEFAULT_EMAIL=admin@c1tech.group
       - PGADMIN_DEFAULT_PASSWORD=pgAdminpass.24
-    restart: always
+    restart: unless-stopped
     ports:
       - "8081:80"
     depends_on:
@@ -29,11 +29,13 @@ services:
       # - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.legace.ir`)"
+      - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.c1tech.group`)"
       - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
       - "traefik.http.routers.pgadmin.entrypoints=secure"
       - "traefik.http.routers.pgadmin.tls.certresolver=letsencrypt"
       - "traefik.docker.network=web"
+    volumes:
+       - pgadmin:/var/lib/pgadmin
     networks:
       - db
       - web
@@ -44,3 +46,4 @@ networks:
     external: true
 volumes:
   postgresDb:
+  pgadmin:

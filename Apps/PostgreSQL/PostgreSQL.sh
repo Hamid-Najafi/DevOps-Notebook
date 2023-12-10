@@ -1,4 +1,12 @@
 # -------==========-------
+# Docker Compose
+# -------==========-------
+mkdir -p ~/docker/postgres
+cp -R ~/DevOps-Notebook/Apps/PostgreSQL/*  ~/docker/postgres
+cd  ~/docker/postgres
+docker-compose up -d
+# Add New Server -> Connection -> Hostname/Address = postgres, Username = postgres, Password = PostgreSQLpass.24
+# -------==========-------
 # Docker
 # -------==========-------
 docker run \
@@ -19,18 +27,6 @@ docker run \
     -e "PGADMIN_DEFAULT_PASSWORD=pgAdminpass.24" \
     --restart=always \
     -d dpage/pgadmin4
-
-
-# -------==========-------
-# Docker Compose
-# -------==========-------
-mkdir -p ~/docker/postgres
-cp -R ~/DevOps-Notebook/Apps/Postgresql/*  ~/docker/postgres
-cd  ~/docker/postgres
-
-# nano docker-compose.yml
-docker-compose up -d
-# Add New Server -> Connection -> Hostname/Address = postgres, Username = postgres, Password = PostgreSQLpass.24
 # -------==========-------
 # Optimize Postgres
 # -------==========-------

@@ -1,83 +1,3 @@
-https://itnext.io/automated-delivery-of-asp-net-core-apps-on-on-prem-kubernetes-1d6327ee1454
-# -------==========-------
-# Used ports
-# -------==========-------
-# Make sure all servers are reachable in internal network
-FTP: 21
-SSH: 22
-HTTP/HTTPS: 80,443
-HTTP Proxy: 8080
-Squid-HTTP: 3128
-LDAP: 389,636
-Mail: 25 (SMTP),110,143,587 (SMTP),465 (SMTP),995 (POP3),993 (IMAP),4190
-BigBlueButton: 80, 443, 16384 - 32768 (UDP)
-CoTurn server: 3478, 49152-65535 (UDP)
-Mysql: 3306
-Postgres: 5432
-SQLServer: 1433
-MongoDB: 27017
-Outline: 9090 (prometheus), 9091 (exporter), 11471, 53931 (TCP & UDP)
-payanak: 5000
-lms: 5001
-matrix: 8008
-adminer: 8080
-pgadmin4: 8081
-phpmyadmin: 8082
-phpldapadmin: 8083
-roundcubemail: 8084
-riot: 8085 
-moodle: 8086
-gitlab: 8087, 2222
-prometheus: 9090
-Grafana:3000
-MinIO: 9000
-
-
-Usual Services:
-TCP     21          FTP
-TCP     22          SSH
-TCP     80          HTTP
-TCP     443         HTTPS
-TCP     8080        HTTP Proxy
-TCP     3128        Squid-HTTP
-LDAP:
-TCP     389         LDAP
-TCP     636         LDAPS
-Mail Provider:
-TCP     25          SMTP
-TCP     110         SSH
-TCP     143         SSH
-TCP     587         SMTP
-TCP     465         SMTP
-TCP     995         POP3
-TCP     993         IMAP
-TCP     4190        SSH
-BigBlueButton:
-TCP     80          HTTP
-TCP     443         HTTPS
-UDP     16384-32768 FreeSWITCH/HTML5 RTP
-TCP     49152-65535 coturn to connect
-CoTurn server:
-TCP     3478        Coturn listening
-TCP     443        	TLS listening
-UDP     49152-65535 Relay ports 
-Databases:
-TCP     1433        SQLServer
-TCP     3478        Mysql
-TCP     5432        Postgres
-TCP     27017        MongoDB
-Kubernetes cluster:
-- Master node(s):
-TCP     6443*       Kubernetes API Server
-TCP     2379-2380   etcd server client API
-TCP     10250       Kubelet API
-TCP     10251       kube-scheduler
-TCP     10252       kube-controller-manager
-TCP     10255       Read-Only Kubelet API
-- Worker nodes (minions):
-TCP     10250       Kubelet API
-TCP     10255       Read-Only Kubelet API
-TCP     30000-32767 NodePort Services
 # -------==========-------
 # Docker port check
 # -------==========-------
@@ -126,7 +46,7 @@ sudo lsof -i -P -n | grep 554
 sudo lsof -i -P -n | grep 9090
 sudo lsof -p 15014
 # -------==========-------
-# SSH Proxy (the best)
+# SSH Proxy
 # -------==========-------
 # In Iran Server
 ssh-keygen -t rsa -b 4096 -C "server@identifier"
@@ -147,112 +67,48 @@ proxychains wget https://charts.gitlab.io
 # -------==========-------
 # DNS Proxy
 # -------==========-------
-iranrepo.ir
-mkdir /home/c1tech/.pip
-chown c1tech:c1tech /home/c1tech/.pip
-cat >> /home/c1tech/.pip/pip.conf << EOF
-[global]
-index-url = https://pypi.iranrepo.ir/simple
-EOF
-fi
-
-# Quick Install
-sudo nano  /etc/resolv.conf
-nameserver 194.104.158.182
-
-# Shecan Premium Account
+sudo nano /etc/resolv.conf
+# OR
+sudo apt install resolvconf -y
+sudo nano /etc/resolvconf/resolv.conf.d/base
+# 403.online
+nameserver 10.202.10.202
+nameserver 10.202.10.102
+# Shecan Premium Account (https://shecan.ir)
 nameserver 185.51.200.1
 nameserver 178.22.122.101
-
 # Shecan Free Account
-nameserver 185.51.200.2
-nameserver 178.22.122.100
-# OR
-sudo apt install resolvconf && echo -e "nameserver 185.51.200.2\nnameserver 178.22.122.100" | tee -a /etc/resolvconf/resolv.conf.d/head && service resolvconf restart
-https://virgool.io/@mahdi.ft/dnsredirection-qxrl6fuqc7hv
-# Verify DNS Server
-systemd-resolve --status
-
-# Manuall Install
-sudo apt install resolvconf -y
-sudo nano /etc/resolvconf/resolv.conf.d/head
-# Cloudflare
-nameserver 1.1.1.1
-nameserver 1.0.0.1
-# Google
-nameserver 8.8.8.8
-nameserver 4.2.2.4
-# 403.online
-nameserver 10.202.10.102
-nameserver 10.202.10.202
-# Shecan (https://shecan.ir)
 nameserver 185.51.200.2
 nameserver 178.22.122.100
 # Begzar (https://begzar.ir)
 nameserver 185.55.226.26
 nameserver 185.55.225.25
 
-DNS Server1:
-199.85.126.20
-199.85.127.20
+nameserver 78.157.42.100
+nameserver 78.157.42.101
 
-DNS Server2:
-178.22.122.100
-94.232.174.194
-
-DNS Server3:
-209.244.0.3
-209.244.0.4
-
-DNS Server4:
-84.200.69.80
-84.200.70.40
-
-DNS Server5:
-8.26.56.26
-8.20.247.20
-
-sudo service resolvconf restart
-# -------==========-------
-# Docker Registry
-# -------==========-------
-cat > /etc/docker/daemon.json <<EOF
-{
-  "registry-mirrors": ["https://registry.docker.ir"]
-}
-EOF
-sudo systemctl restart docker
+nameserver 85.15.1.14
+nameserver 85.15.1.15
+# Test!
+ping google.com
+# Update resolvconf
+sudo resolvconf -u
+# Verify DNS Server
+resolvectl status
+systemd-resolve --status
 # -------==========-------
 # HTTP Proxy
 # -------==========-------
 sudo nano  /etc/environment
-echo -e "http_proxy=http://admin:Squidpass.24@nl.hamid-najafi.ir:3128/\nhttps_proxy=http://admin:Squidpass.24@nl.hamid-najafi.ir:3128/" | sudo tee -a /etc/environment
+echo -e "http_proxy=http://172.25.10.21:10809/\nhttps_proxy=http://172.25.10.21:10809/" | sudo tee -a /etc/environment
 source /etc/environment
-curl -x http://admin:Squidpass.24@nl.hamid-najafi.ir:3128/ -L http://google.com
+curl -x http://172.25.10.21:10809/ -L http://google.com
 curl -x http://admin:Squidpass.24@91.198.77.165:3128/ -L http://google.com
 curl -x http://91.198.77.165:3128/ -L http://google.com
 # -------==========-------
 # speedtest:
 # -------==========-------
 curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -
-# -------==========-------
-# 0-1 Network Config
-# -------==========-------
-PPTP VPN:
-Address: 10.30.70.35
-Username: ilo-01, 0923789091
-Password: sefr0yek@il0, eft0923789091
-
-
-IPMI/ILO:
-Network Address: 172.28.251.201
-Username: A01-DS16
-Password: A01-DS16
-
-OS Files
-http://185.141.105.194/
-http://185.141.105.194/Linux/ubuntu-18.04.4-server-amd64.iso
-http://185.141.105.194/Linux/ubuntu-18.04.5-live-server-amd64.iso
 # -------==========-------
 # Ubunut 16.04
 # -------==========-------
@@ -296,7 +152,6 @@ network:
             - to: 0.0.0.0/0
               via: 172.27.7.57
               on-link: true
-
 # -------==========-------
 # Wifi Station
 # -------==========-------
@@ -368,3 +223,16 @@ sudo systemctl start create_ap
 # IF NAMERESOLUTION PROBLE:
 # REMOVE AND MAKE NEW resolv.conf
 sudo rm /etc/resolv.conf
+# -------==========-------
+# 0-1 Network Config
+# -------==========-------
+PPTP VPN:
+Address: 10.30.70.35
+Username:
+Password:
+IPMI/ILO:
+
+OS Files
+http://185.141.105.194/
+http://185.141.105.194/Linux/ubuntu-18.04.4-server-amd64.iso
+http://185.141.105.194/Linux/ubuntu-18.04.5-live-server-amd64.iso

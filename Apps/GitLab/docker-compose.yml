@@ -21,10 +21,11 @@ services:
         gitlab_rails['gitlab_email_reply_to'] = 'noreply@c1tech.group'
         # Add any other gitlab.rb configuration here, each on its own line
     ports:
-      - '80:80'
-      - '443:443'
-      - '2222:22'
+    # Handeled by Traefik
+    # - '8087:80'
+    # - '443:443'
       - '587:587'
+      - '2222:22'
     volumes:
       - '$GITLAB_HOME/config:/etc/gitlab'
       - '$GITLAB_HOME/logs:/var/log/gitlab'
@@ -37,9 +38,7 @@ services:
       - "traefik.http.routers.gitlab.entrypoints=secure"
       - "traefik.http.routers.gitlab.tls.certresolver=letsencrypt"
     networks:
-      - default
-
+      - web
 networks:
-  default:
-    external:
-      name: gateway
+  web:
+    external: true

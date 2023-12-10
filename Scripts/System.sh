@@ -1,55 +1,5 @@
-# We’re using sudo /bin/bash before echo because the user needs root access to both echo and redirect as the root user. Otherwise, we’ll get a permission denied error because just echo will run by root and the redirection will be made with the current user’s permission. The -c option tells bash to get the command in single quotes as a string and run it in a shell.
-sudo /bin/bash -c 'echo "0 7 * * * systemctl stop bbb-rap-resque-worker" >> /etc/crontab'
-# -------==========-------
-# Apt Repository
-# -------==========-------
-# BEST WAY
-# https://docker-registry.ir
-sudo su
-mv /etc/apt/sources.list /etc/apt/sources.list-back
-cat > /etc/apt/sources.list <<EOF
-deb http://a.docker-registry.ir/ubuntu/ $(lsb_release -cs) main restricted universe multiverse
-deb-src http://a.docker-registry.ir/ubuntu/ $(lsb_release -cs) main restricted  universe multiverse
-deb http://a.docker-registry.ir/ubuntu/ $(lsb_release -cs)-updates main restricted universe multiverse
-deb-src http://a.docker-registry.ir/ubuntu/ $(lsb_release -cs)-updates main restricted universe multiverse
-deb http://a.docker-registry.ir/ubuntu/ $(lsb_release -cs)-backports main restricted universe multiverse
-deb-src http://a.docker-registry.ir/ubuntu/ $(lsb_release -cs)-backports main restricted universe multiverse
-deb http://a.docker-registry.ir/ubuntu/ $(lsb_release -cs)-security main restricted universe multiverse
-deb-src http://a.docker-registry.ir/ubuntu/ $(lsb_release -cs)-security main restricted universe multiverse
-EOF
-# -------==========-------
-# repos.um.ac.ir
-http://rpm.um.ac.ir
-
-sudo nano /etc/apt/sources.list
-# Ubuntu 16.04 (Xenial Xerus) 
-# support until April 2021
-deb http://repos.um.ac.ir/ubuntu/ xenial main restricted universe multiverse 
-deb http://repos.um.ac.ir/ubuntu/ xenial-updates main restricted universe multiverse 
-deb http://repos.um.ac.ir/ubuntu/ xenial-security main restricted universe multiverse
-
-# Ubuntu 18.04 (Bionic Beaver) 
-# support until April 2023
-deb http://repos.um.ac.ir/ubuntu/ bionic main restricted universe multiverse 
-deb http://repos.um.ac.ir/ubuntu/ bionic-updates main restricted universe multiverse 
-deb http://repos.um.ac.ir/ubuntu/ bionic-security main restricted universe multiverse
-
-# Ubuntu 20.04 (Focal Fossa) 
-# support until April 2025
-deb http://repos.um.ac.ir/ubuntu/ focal main restricted universe multiverse 
-deb http://repos.um.ac.ir/ubuntu/ focal-updates main restricted universe multiverse 
-deb http://repos.um.ac.ir/ubuntu/ focal-security main restricted universe multiverse
-
-# 0-1.IR
-# Ubuntu 19.04 (Disco Xerus)
-deb http://mirror.0-1.cloud/ubuntu/ disco main restricted
-deb-src http://mirror.0-1.cloud/ubuntu/ disco main restricted
-
-
-sudo apt-get update
 # -------==========-------
 # Glances an Eye on your system. A top/htop alternative
-# -------==========-------
 # https://github.com/nicolargo/glances
 curl -L https://bit.ly/glances | /bin/bash
 # -------==========-------
@@ -59,25 +9,23 @@ curl -L https://bit.ly/glances | /bin/bash
 # 2. Then navigate to ‘Sharing’ from left, and turn on the toggle icon on right-corner of app header. You can finally click “Remote Desktop” to enable the function and configure user, password, etc.
 systemctl --user restart gnome-remote-desktop.service
 # -------==========-------
-# SSH
+# SSH (Key Configs)
 # -------==========-------
-
-# -------==========-------
-# SSH Key Configs
-# -------==========-------
+# Unix/Linux
 ssh-keygen
 ssh-keygen -t rsa -b 4096 -C "server@identifier"
 ssh-copy-id username@remote_host
 ssh-copy-id root@185.234.14.99
 echo -e "PasswordAuthentication no" | tee -a  /etc/ssh/sshd_config 
 service sshd restart
-# ====== OR ======
-# Put Hamid@MacbookPro SSH PubKey 
-cat > /root/.ssh/authorized_keys  << EOF
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCm5HhH5maCzUQvNuf2mOgrCG3j16PfFiHIhhCXObZFVVCB2/L46/eYHKdvnVa03EeOw35y7PGLuDQimSi1IUbKP3fhkw30KDISIf7ARH5PZnJt6sXRUV1JZhabFbrjuJn3HVBQd0e2vqKSGbpEEg1Zz9yg1xLmLwiz0eVMh31J1PfAIX0DTaqpHhSijcKiB/93rE/AbaKwgoiDIbWHOR8VJaN6VfdvY+FtlmUsq70SpD5fwP/9C3AZX45KSQrGOAKwhd9vMFRrcTMnr/geyMpMAI+82L6yn3H7Mx0KZPgBoZafUbQ3FkC0g9dTg4N4jczxCTDRGy+DWqN22RNu3A2l hamid@MacbookPro
+# ---======---
+# Windows
+cat > /home/$USER/.ssh/authorized_keys  << EOF
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDONzsZ5JURqzE9ASv2gVGcs1fJ1zozsKbmmLliu6jiZ5DcCH405r+/nHUBGUEpshNju7Ky/lqKbtSi4VGaSRylC7nFEk5TVl0i+qm7FbXJjd9KzyJXYRLdkFpb5JvTcsVDI0NJpprPErhU4d2BqG7foIED0JIfuNlMC2OhaQXLmG1R2YXrVAi93Cjv4DH188BjaYG4nd0/VQ3NffYH0sOJIElrDhqlVj/HUhNdTh4IlO/1SQ9XNBoG32vRAS+CG0vOsDXlldrg4r4RqK0sXZVY4uGnnTeZ9lacRJ6yfVl5d6yyG6gr610502I77BA+UqJj05h+YBwIykC9uDr8TrZj1unAvTeN3bybPNJjZKkS4i+KKp2ElMBtbEJ/kK2FYzryANeFrkGbYSRvFKnDI/+ZP/6mKSFxMYXMo6nA8s/Z+AjErMeiaWFcta45Jwq0tGpaxl8HZxJKmt22RbfahXBMlO94TxhgTZxJuUBJwSWkCvDtkUOh+YH9kKZnRld+ezMAaRlsoMyqDxPWu4OQ4K9uxyalvrMq7Ule5QB5OBFhhbsnQ+V7byqYVLnlHXwh1UYQ2ooi0gtfDBTpctaUryMqfLZR0/P1boS+WL8iEDiU72uxTkbq2Pdb1EGy/P33GBXVwKlRmEG22RmTWx+B1UWhncYlXz6p162YbxWduZ68Jw== Hamid_NI@PubKey
 EOF
 echo -e "PermitRootLogin yes" | tee -a  /etc/ssh/sshd_config 
 echo -e "PasswordAuthentication no" | tee -a  /etc/ssh/sshd_config 
+echo -e "PasswordAuthentication no" | tee -a  /etc/ssh/sshd_config.d/50-cloud-init.conf
 service sshd restart
 # -------==========-------
 # Hostname

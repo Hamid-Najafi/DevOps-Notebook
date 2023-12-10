@@ -1,57 +1,35 @@
 version: "3.5"
 services:
-
   openldap:
-    image: goldenstarc/extended-openldap
-    hostname: ldap.hamid-najafi.ir
-    restart: always
+    container_name: "openldap"
+    image: docker.io/bitnami/openldap:2.6
+    hostname: ldap.c1tech.group
     ports:
-    - "389:389"
-    - "636:636"
-    # These are hard-coded inside docker image 
-    # environment:
-    # - LDAP_ORGANISATION=hamid-najafi Inc.
-    # - LDAP_DOMAIN=hamid-najafi.ir
-    # - LDAP_ADMIN_PASSWORD=OpenLDAPpass.24
-    # - LDAP_CONFIG_PASSWORD=c0nfig
-    # - LDAP_BASE_DN: "cn=admin,dc=hamid-najafi,dc=ir"
-    volumes:
-      - openldapDb:/var/lib/ldap
-      - openldapConf:/etc/ldap/slapd.d
-    networks:
-      - ldap
-# Username: cn=admin,dc=hamid-najafi,dc=ir
-# Password: OpenLDAPpass.24
-  phpldapadmin:
-    image: osixia/phpldapadmin
-    hostname: phpldapadmin.hamid-najafi.ir 
+      - '389:389'
+      - '636:636'
     environment:
-      - PHPLDAPADMIN_LDAP_HOSTS=openldap
-      - PHPLDAPADMIN_HTTPS=false
-      - PHPLDAPADMIN_LDAP_CLIENT_TLS=false
-    restart: always
-    ports:
-      - "8083:8080"
-    depends_on:
-      - openldap
-      # - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.phpldapadmin.rule=Host(`phpldapadmin.hamid-najafi.ir`)"
-      - "traefik.http.services.phpldapadmin.loadbalancer.server.port=80"
-      - "traefik.http.routers.phpldapadmin.entrypoints=secure"
-      - "traefik.http.routers.phpldapadmin.tls.certresolver=letsencrypt"
-      - "traefik.docker.network=web"
+      - LDAP_PORT_NUMBER=389
+      - LDAP_ROOT=dc=c1tech,dc=co
+      - LDAP_ADMIN_DN=cn=admin,dc=c1tech,dc=co
+      - LDAP_ADMIN_USERNAME=admin
+      - LDAP_ADMIN_PASSWORD=OpenLDAPpass.24
+      - LDAP_CONFIG_ADMIN_PASSWORD=adminconfig
+      - LDAP_CONFIG_ADMIN_PASSWORD=OpenLDAPconfig.24
+      - LDAP_USERS=user01,user02
+      - LDAP_PASSWORDS=password1,password2
+      - LDAP_LDAPS_PORT_NUMBER=636
+      - LDAP_ENABLE_TLS=yes
+      - LDAP_TLS_CERT_FILE=/opt/bitnami/openldap/certs/cert.pem
+      - LDAP_TLS_KEY_FILE=/opt/bitnami/openldap/certs/privkey.pem
+      - LDAP_TLS_CA_FILE=/opt/bitnami/openldap/certs/chain.pem
+    volumes:
+      - /home/c1tech/dev/openldap/certs:/opt/bitnami/openldap/certs
+      - openldap_data:/bitnami/openldap/
+      # - /data2/openldap:/bitnami/openldap/
     networks:
       - web
-      - ldap
-
-networks:
-  db:
-    internal: true
+volumes:
+  openldap_data:
+    driver: local
   web:
     external: true
-
-volumes:
-  openldapDb:
-  openldapConf:

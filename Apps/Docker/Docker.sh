@@ -1,4 +1,20 @@
 # -------==========-------
+# Docker Installation
+# -------==========-------
+#*# Firstly Setup HTTP//DNS Proxy (Network.sh)
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker $USER
+sudo chown $USER /var/run/docker.sock
+# The LinuxServer.io Method:
+sudo curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-compose/master/run.sh -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+# Traditional Method:
+sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+# Logout & Login
+docker run hello-world
+# -------==========-------
 # Tips
 # -------==========-------
 # Turns docker run commands into docker-compose files!
@@ -43,33 +59,6 @@ docker rm helper
 # -------===== OR =====-------
 docker cp <containerId>:/file/path/within/container /host/path/target
 # -------==========-------
-# Docker
-# -------==========-------
-# for Iran 403:
-sudo systemctl stop systemd-resolved.service
-sudo nano  /etc/resolv.conf
-nameserver 185.51.200.2
-nameserver 178.22.122.100
-nameserver 185.51.200.1
-nameserver 178.22.122.101
-
-# export http_proxy=http://172.25.10.21:10809
-
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-sudo usermod -aG docker $USER
-sudo chown $USER /var/run/docker.sock
-# The LinuxServer.io Method:
-sudo curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-compose/master/run.sh -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-# Traditional Method:
-sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-# Bring DNS back and set Docker Registry - BEST
-
-# Logout & Login
-docker run hello-world
-# -------==========-------
 # Docker Build & Push
 # -------==========-------
 docker login
@@ -84,9 +73,8 @@ docker push goldenstarc/bigbluebutton-livestreaming
 # -------==========-------
 # Container bash
 # -------==========-------
-docker exec -t -i container_name /bin/bash
 docker exec -ti container_name /bin/bash
-zker exec -ti container_name sh
+docker exec -ti container_name sh
 
 echo "" > $(docker inspect --format='{{.LogPath}}' <container_name_or_id>)
 echo "" > $(docker inspect --format='{{.LogPath}}' virgol_main)
@@ -109,9 +97,9 @@ EOF
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 # -------==========-------
-# Docker Registry - BEST
+# Docker Registry
 # -------==========-------
-cat > /etc/docker/daemon.json <<EOF
+cat > /etc/docker/daemon.json << EOF
 {
   "registry-mirrors": ["https://registry.docker.ir"]
 }
