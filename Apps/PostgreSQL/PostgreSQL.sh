@@ -78,3 +78,13 @@ cat dump.sqlc
 # Filebrowser
 # -------==========-------
 docker run -d --name filebrowser -v postgresDb:/srv -p 8090:80 filebrowser/filebrowser
+# -------==========-------
+# CLI Connection
+# -------==========-------
+sudo -i -u postgres
+psql
+# -------==========-------
+# SQL Commands
+# -------==========-------
+# Set postgres password
+ALTER USER postgres PASSWORD 'PostgreSQLpass.24';
