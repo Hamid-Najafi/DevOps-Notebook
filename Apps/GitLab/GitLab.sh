@@ -8,6 +8,7 @@ cd  ~/docker/gitlab
 mkdir -p /data/gitlab
 docker network create gateway
 docker-compose up -d
+sudo cat /data/gitlab/config/initial_root_password
 # -------==========-------
 # Docker
 # -------==========-------

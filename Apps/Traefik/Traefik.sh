@@ -1,5 +1,5 @@
 # -------==========-------
-# Setup
+# Traefik Docker Compose
 # -------==========-------
 mkdir -p ~/docker
 cp -R ~/DevOps-Notebook/Apps/Traefik ~/docker/traefik
@@ -20,7 +20,7 @@ curl -u traefik:Traefikpass.24 http://$FQDN:9094/metrics/
 # Tips
 # -------==========-------
 # Multi Host
-      - "traefik.http.routers.virgol.rule=Host(`lms.hamid-najafi.ir`, `lms.goldenstarc.ir`)"
+      - "traefik.http.routers.virgol.rule=Host(`s1.hamid-najafi.ir`, `s2.c1tech.group`)"
 
 
 # Grafana

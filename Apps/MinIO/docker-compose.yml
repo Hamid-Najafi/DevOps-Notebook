@@ -3,6 +3,7 @@ services:
   minio:
     image: minio/minio:latest
     restart: always
+    hostname: 'minio.c1tech.group'
     volumes:
       - /mnt/data:/data
     ports:
@@ -20,12 +21,12 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.s3.rule=Host(`s3.hamid-najafi.ir`)"
+      - "traefik.http.routers.s3.rule=Host(`s3.c1tech.group`)"
       - "traefik.http.routers.s3.service=s3"
       - "traefik.http.services.s3.loadbalancer.server.port=9000"
       - "traefik.http.routers.s3.entrypoints=secure"
       - "traefik.http.routers.s3.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.minio.rule=Host(`minio.hamid-najafi.ir`)"
+      - "traefik.http.routers.minio.rule=Host(`minio.c1tech.group`)"
       - "traefik.http.routers.minio.service=minio"
       - "traefik.http.services.minio.loadbalancer.server.port=9001"
       - "traefik.http.routers.minio.entrypoints=secure"
