@@ -22,8 +22,9 @@ services:
       - PGADMIN_DEFAULT_EMAIL=admin@c1tech.group
       - PGADMIN_DEFAULT_PASSWORD=pgAdminpass.24
     restart: unless-stopped
-    ports:
-      - "8081:80"
+    # Handeled by traefik
+    # ports:
+    # - "8081:80"
     depends_on:
       - postgres
       # - traefik
