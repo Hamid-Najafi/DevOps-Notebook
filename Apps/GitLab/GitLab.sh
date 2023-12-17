@@ -8,6 +8,8 @@ cd  ~/docker/gitlab
 mkdir -p /data/gitlab
 docker-compose up -d
 sudo cat /data/gitlab/config/initial_root_password
+docker exec -ti 7e69091ccad4 'cat /data/gitlab/config/initial_root_password'
+
 # -------==========-------
 # Docker
 # -------==========-------

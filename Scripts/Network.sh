@@ -99,6 +99,8 @@ systemd-resolve --status
 # -------==========-------
 # HTTP Proxy
 # -------==========-------
+export http_proxy=http://172.25.10.21:10809/
+export https_proxy=http://172.25.10.21:10809/
 sudo nano  /etc/environment
 echo -e "http_proxy=http://172.25.10.21:10809/\nhttps_proxy=http://172.25.10.21:10809/" | sudo tee -a /etc/environment
 source /etc/environment
