@@ -2,7 +2,7 @@
 # Docker Compose
 # -------==========-------
 mkdir -p ~/docker/postgres
-cp -R ~/DevOps-Notebook/Apps/PostgreSQL/*  ~/docker/postgres
+cp -R ~/DevOps-Notebook/Apps/Postgres/*  ~/docker/postgres
 cd  ~/docker/postgres
 docker-compose up -d
 # Add New Server -> Connection -> Hostname/Address = postgres, Username = postgres, Password = PostgreSQLpass.24

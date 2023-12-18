@@ -30,7 +30,6 @@ nc -u vir-gol.ir 636
 # IP Information
 # -------==========-------
 echo -e "alias ipinfo='curl api.ipify.org && echo -e ""'" | sudo tee -a ~/.bashrc > /dev/null
-curl ipinfo.io
 curl ipinfo.io/ip
 # -------==========-------
 # SSH
@@ -45,25 +44,6 @@ sudo lsof -i -P -n | grep 443
 sudo lsof -i -P -n | grep 554
 sudo lsof -i -P -n | grep 9090
 sudo lsof -p 15014
-# -------==========-------
-# SSH Proxy
-# -------==========-------
-# In Iran Server
-ssh-keygen -t rsa -b 4096 -C "server@identifier"
-cat /root/.ssh/id_rsa.pub
-# copy id_rsa and paste here in foreign server
-nano ~/.ssh/authorized_keys 
-# test ssh worling without password
-ssh username@server-ip
-ssh ubuntu@185.235.41.48
-# If worked, setup ssh proxy
-ssh username@server-ip -p 22 -D 5555 -C -q -N -f -gsudo systemctl restart ocserv
-
-ssh ubuntu@185.235.41.48 -p 22 -D 5555 -C -q -N -f -g
-sudo lsof -i -P -n | grep 5555
-apt install proxychains && tail -n 2 /etc/proxychains.conf | wc -c | xargs -I {} truncate /etc/proxychains.conf -s -{} && echo -e "socks5 127.0.0.1 5555" | tee -a /etc/proxychains.conf
-# Done
-proxychains wget https://charts.gitlab.io 
 # -------==========-------
 # DNS Proxy
 # -------==========-------
@@ -99,61 +79,33 @@ systemd-resolve --status
 # -------==========-------
 # HTTP Proxy
 # -------==========-------
-export http_proxy=http://172.25.10.21:10809/
-export https_proxy=http://172.25.10.21:10809/
-sudo nano  /etc/environment
-echo -e "http_proxy=http://172.25.10.21:10809/\nhttps_proxy=http://172.25.10.21:10809/" | sudo tee -a /etc/environment
-source /etc/environment
-curl -x http://172.25.10.21:10809/ -L http://google.com
-curl -x http://admin:Squidpass.24@91.198.77.165:3128/ -L http://google.com
-curl -x http://91.198.77.165:3128/ -L http://google.com
+export http_proxy=http://172.25.10.8:20172/
+echo -e "http_proxy=http://172.25.10.8:20172/" | sudo tee -a /etc/environment && source /etc/environment
+curl -x $http_proxy -L http://google.com
+curl -x http://admin:Squidpass.24@IPAddr:3128/ -L http://google.com
 # -------==========-------
-# speedtest:
+# SSH Proxy
+# -------==========-------
+# In Iran Server
+ssh-keygen -t rsa -b 4096 -C "server@identifier"
+cat /root/.ssh/id_rsa.pub
+# copy id_rsa and paste here in foreign server
+nano ~/.ssh/authorized_keys 
+# test ssh worling without password
+ssh username@server-ip
+ssh ubuntu@185.235.41.48
+# If worked, setup ssh proxy
+ssh username@server-ip -p 22 -D 5555 -C -q -N -f -gsudo systemctl restart ocserv
+
+ssh ubuntu@185.235.41.48 -p 22 -D 5555 -C -q -N -f -g
+sudo lsof -i -P -n | grep 5555
+apt install proxychains && tail -n 2 /etc/proxychains.conf | wc -c | xargs -I {} truncate /etc/proxychains.conf -s -{} && echo -e "socks5 127.0.0.1 5555" | tee -a /etc/proxychains.conf
+# Done
+proxychains wget https://charts.gitlab.io 
+# -------==========-------
+# SpeedTest
 # -------==========-------
 curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -
-# -------==========-------
-# Ubunut 16.04
-# -------==========-------
-# This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
-source /etc/network/interfaces.d/*
-
-# The loopback network interface
-auto lo
-iface lo inet loopback
-
-# The primary network interface
-auto enp3s0f0
-iface enp3s0f0 inet static
-        address 185.141.106.36
-        netmask 255.255.255.255
-        broadcast 185.141.106.36
-        post-up route add 172.27.32.13 dev enp3s0f0
-        post-up route add default gw 172.27.32.13
-        pre-down route del 172.27.32.13 dev enp3s0f0
-        pre-down route del default gw 172.27.32.13
-
-# -------==========-------
-# Ubunut 20.04 - 195.211.44.219
-# -------==========-------
-sudo nano /etc/netplan/01-netcfg.yaml 
-
-# This file describes the network interfaces available on your system
-# For more information, see netplan(5).
-network:
-  version: 2
-  renderer: networkd
-  ethernets:
-    eno1:
-        addresses:
-            - 195.211.44.219/32
-        nameservers:
-             addresses:
-                 - 8.8.4.4
-        routes:
-            - to: 0.0.0.0/0
-              via: 172.27.7.57
-              on-link: true
 # -------==========-------
 # Wifi Station
 # -------==========-------
