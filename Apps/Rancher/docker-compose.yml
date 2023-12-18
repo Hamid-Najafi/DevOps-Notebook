@@ -4,12 +4,12 @@ services:
   rancher:
     image: rancher/rancher:latest
     hostname: rancher.c1tech.group 
+    privileged: true
     restart: always
+    container_name: rancher
     # ports:
     # - "80:80/tcp"
     # - "443:443/tcp"
-    volumes:
-    - "rancher-data:/var/lib/rancher"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.rancher.rule=Host(`rancher.c1tech.group`)"
@@ -17,10 +17,17 @@ services:
       - "traefik.http.routers.rancher.entrypoints=secure"
       - "traefik.http.routers.rancher.tls.certresolver=letsencrypt"
       - "traefik.docker.network=web"
+  - "traefik.http.middlewares.rancher-behind-proxy.headers.customrequestheaders.X-Forwarded-Proto=https"
+  - "traefik.http.routers.rancher.service=rancher"
+  - "traefik.http.routers.rancher.middlewares=rancher-behind-proxy"
+
     volumes:
-    privileged: true
+    - "rancher-data:/var/lib/rancher"
     networks:
       - web
+
+volumes:
+  rancher-data:
 networks:
   web:
     external: true
