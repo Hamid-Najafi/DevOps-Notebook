@@ -11,7 +11,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=PostgreSQLpass.24
     volumes:
-      - postgresDb:/var/lib/postgresql/data
+      - postgresql-data:/var/lib/postgresql/data
     networks:
       - db
       - web
@@ -27,7 +27,6 @@ services:
     # - "8081:80"
     depends_on:
       - postgres
-      # - traefik
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.c1tech.group`)"
@@ -36,7 +35,7 @@ services:
       - "traefik.http.routers.pgadmin.tls.certresolver=letsencrypt"
       - "traefik.docker.network=web"
     volumes:
-       - pgadmin:/var/lib/pgadmin
+       - pgadmin-data:/var/lib/pgadmin
     networks:
       - db
       - web
@@ -46,5 +45,6 @@ networks:
   web:
     external: true
 volumes:
-  postgresDb:
-  pgadmin:
+  postgresql-data:
+    external: true
+  pgadmin-data:

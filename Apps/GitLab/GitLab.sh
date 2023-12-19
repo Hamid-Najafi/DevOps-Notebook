@@ -4,12 +4,57 @@
 mkdir -p ~/docker/gitlab
 cp -R ~/DevOps-Notebook/Apps/GitLab/*  ~/docker/gitlab
 cd  ~/docker/gitlab
-# Set up the volumes location (its also in .env file)
-mkdir -p /data/gitlab
-docker-compose up -d
-sudo cat /data/gitlab/config/initial_root_password
-docker exec -ti 7e69091ccad4 'cat /data/gitlab/config/initial_root_password'
 
+# 1. Using Official Gitlab image
+cp -f gitlab-docker-compose.yml docker-compose.yml
+docker-compose up -d
+docker exec -ti CONTAINDERID 'cat /data/gitlab/config/initial_root_password'
+
+# 2. Download sameersbn docker-compose.yml and modify it
+# https://github.com/sameersbn/docker-gitlab
+wget https://raw.githubusercontent.com/sameersbn/docker-gitlab/master/docker-compose.yml
+
+# 3. Use modified one
+# https://github.com/sameersbn/docker-gitlab
+# Configure Persistent Volumes (using another HardDisk for docker volumes)
+lsblk
+sudo mkdir -p /mnt/data
+sudo mount /dev/sdb1 /mnt/data
+# Verify
+sudo mount | grep /dev/sdb1
+# Make Directories
+sudo mkdir -p /mnt/data/gitlab/redis
+sudo mkdir -p /mnt/data/gitlab/postgresql
+sudo mkdir -p /mnt/data/gitlab/gitlab
+# Set Permissions
+sudo chmod 775 -R /mnt/data
+sudo chown -R $USER:docker /mnt/data
+
+# Create the docker volumes for the containers.
+# Redis
+docker volume create --driver local \
+     --opt type=none \
+     --opt device=/mnt/data/gitlab/redis \
+     --opt o=bind gitlab-redis-data
+# PostgreSQL
+docker volume create --driver local \
+     --opt type=none \
+     --opt device=/mnt/data/gitlab/postgresql \
+     --opt o=bind gitlab-postgresql-data
+# GitLab
+docker volume create --driver local \
+     --opt type=none \
+     --opt device=/mnt/data/gitlab/gitlab \
+     --opt o=bind gitlab-gitlab-data
+# Verify
+docker volume list
+
+sudo apt install -y pwgen
+pwgen -Bsv1 64
+docker-compose up -d
+
+# Set root password
+https://gitlab.c1tech.group/
 # -------==========-------
 # Docker
 # -------==========-------

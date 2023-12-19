@@ -1,7 +1,7 @@
 # -------==========-------
 # Glances an Eye on your system. A top/htop alternative
 # https://github.com/nicolargo/glances
-curl -L https://bit.ly/glances | /bin/bash
+curl -x http://172.25.10.8:20172 -L https://bit.ly/glances | /bin/bash
 # -------==========-------
 # RemoteDesktop/VNC
 # -------==========-------

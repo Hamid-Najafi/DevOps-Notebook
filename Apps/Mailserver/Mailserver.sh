@@ -2,40 +2,45 @@
 # Where to put POP3/SMTP/IMAP certificate?
 # -------==========-------
 1- inside docker image
+(Recommended with Traefik)
 2- In reverse proxy 
+(Recommended with NGINX/APACHE)
 https://docs.nginx.com/nginx/admin-guide/mail-proxy/mail-proxy/
 # -------==========-------
 # Docker Mailserver
 # -------==========-------
 # Generate Certificate
-export fqdnHost=mail.vir-gol.ir
-
-sudo add-apt-repository ppa:certbot/certbot
-sudo apt-get install certbot
+export DOMAIN=mail.c1tech.group
+sudo snap install --classic certbot
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+# standalone
 sudo certbot certonly \
-    --email admin@vir-gol.ir \
-    --server https://acme-v02.api.letsencrypt.org/directory \
+    --standalone \
+    --email admin@c1tech.group \
     --agree-tos \
-    --domains $fqdnHost
-chmod -R ugo+rw /etc/letsencrypt/live/$fqdnHost/
+    --domains $DOMAIN
+# dns challenges
+sudo certbot certonly \
+    --manual \
+    --preferred-challenges dns \
+    --email admin@c1tech.group \
+    --agree-tos \
+    --domains $DOMAIN
+chmod -R ugo+rw /etc/letsencrypt/live/$DOMAIN/
 
 mkdir -p ~/docker/mailserver
 cd ~/docker/mailserver 
-# Download docker-compose.yml, compose.env, mailserver.env
-wget -O .env https://raw.githubusercontent.com/docker-mailserver/docker-mailserver/master/compose.env
-wget https://raw.githubusercontent.com/docker-mailserver/docker-mailserver/master/docker-compose.yml
-wget https://raw.githubusercontent.com/docker-mailserver/docker-mailserver/master/mailserver.env
-# and the setup.sh in the correct version
-wget https://raw.githubusercontent.com/docker-mailserver/docker-mailserver/master/setup.sh
-chmod a+x ./setup.sh
-# and make yourself familiar with the script
-./setup.sh help
+DMS_GITHUB_URL="https://raw.githubusercontent.com/docker-mailserver/docker-mailserver/master"
+wget "${DMS_GITHUB_URL}/compose.yaml"
+wget "${DMS_GITHUB_URL}/mailserver.env"
+
+
 # Edit the files .env and mailserver.env to your liking:
 # .env contains the configuration for Docker Compose
 # mailserver.env contains the configuration for the mailserver container
 nano .env
-HOSTNAME=mail.vir-gol.ir
-DOMAINNAME=vir-gol.ir
+HOSTNAME=mail.c1tech.group
+DOMAINNAME=c1tech.group
 CONTAINER_NAME=mailserver
 TZ=Asia/Tehran
 
@@ -43,8 +48,7 @@ nano mailserver.env
 
 nano docker-compose.yml
     environment:
-      OVERRIDE_HOSTNAME: "mail.vir-gol.ir"
-      TLS_LEVEL: "modern"
+      OVERRIDE_HOSTNAME: "mail.c1tech.group"
       SPOOF_PROTECTION: 1
       ENABLE_CLAMAV: 1
       ENABLE_MANAGESIEVE: 1
@@ -57,7 +61,7 @@ nano docker-compose.yml
       - /etc/letsencrypt/:/etc/letsencrypt/
 
 # Unless using LDAP, you need at least 1 email account to start Dovecot.
-./setup.sh email add admin@vir-gol.ir
+./setup.sh email add admin@c1tech.group
 # Mailpass.2476
 # Get up and running
 docker-compose up -d mailserver
@@ -75,7 +79,7 @@ domain.com. IN  MX 1 mail.domain.com.
 Type: MX
 Name: @
 Priority: 1
-Value: mail.vir-gol.ir.
+Value: mail.c1tech.group.
 # -------==========-------
 # SPF 
 domain.com. IN TXT "v=spf1 mx ~all" 
@@ -88,16 +92,16 @@ Value: v=spf1 mx ~all
 # https://mxtoolbox.com/dmarc/dkim/setup/how-to-setup-dkim
 # Configure DKIM to Generate the Key Pair
 ./setup.sh config dkim keysize 1024 selector mail
-./setup.sh config dkim domain mail.vir-gol.ir keysize 1024
+./setup.sh config dkim domain mail.c1tech.group keysize 1024
 # Setup DNS
 Type: TXT
 Name: mail._domainkey
 Value:
-cat ./config/opendkim/keys/mail.vir-gol.ir/mail.txt 
+cat ./config/opendkim/keys/mail.c1tech.group/mail.txt 
 v=DKIM1; h=sha256; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDNBmUNL/HMKOqjar8X/HZttwxuq/wvmPqEdxY1iBVzlEmuMu6RBeZw9ql+UYokO2lewrZUVfwoYFDwzRXguFqn6o6dKsupCGv+tIct7Dz4HyrLZESfynial5DB5H+QmsNGzBLQNPiWkYIrR7pyh7BLqZG0i3dccaUB5UX4ZIioIwIDAQAB
 # Check DKIM
 dig mail._domainkey.domain.tld TXT
-dig mail._domainkey.vir-gol.ir TXT
+dig mail._domainkey.c1tech.group TXT
 # -------==========-------
 # DMARC
 _dmarc.domain.com. IN TXT "v=DMARC1; p=none; rua=mailto:dmarc.report@domain.com; ruf=mailto:dmarc.report@domain.com; sp=none; ri=86400"
@@ -105,8 +109,8 @@ _dmarc IN TXT "v=DMARC1; p=quarantine; rua=mailto:dmarc.report@domain.com; ruf=m
 Type: TXT
 Name: _dmarc
 Value:
-v=DMARC1; p=none; rua=mailto:dmarc.report@vir-gol.ir; ruf=mailto:dmarc.report@vir-gol.ir; sp=none; ri=86400
-v=DMARC1; p=quarantine; rua=mailto:dmarc.report@vir-gol.ir; ruf=mailto:dmarc.report@vir-gol.ir; fo=0; adkim=r; aspf=r; pct=100; rf=afrf; ri=86400; sp=quarantine
+v=DMARC1; p=none; rua=mailto:dmarc.report@c1tech.group; ruf=mailto:dmarc.report@c1tech.group; sp=none; ri=86400
+v=DMARC1; p=quarantine; rua=mailto:dmarc.report@c1tech.group; ruf=mailto:dmarc.report@c1tech.group; fo=0; adkim=r; aspf=r; pct=100; rf=afrf; ri=86400; sp=quarantine
 # -------==========-------
 # User Managment
 # -------==========-------
@@ -114,12 +118,12 @@ cd ~/docker/mailserver
 ./setup.sh help
 ./setup.sh email list
 # Any domain routed to server will work
-# temp@vir-gol.ir, temp1@mail.vir-gol.ir, temp2@mailserver.vir-gol.ir
-./setup.sh email del admin@vir-gol.ir 
-./setup.sh email add admin@mail.vir-gol.ir
-./setup.sh email add admin@vir-gol.ir
-./setup.sh email add sales@vir-gol.ir
-./setup.sh email add support@vir-gol.ir
+# temp@c1tech.group, temp1@mail.c1tech.group, temp2@mailserver.c1tech.group
+./setup.sh email del admin@c1tech.group 
+./setup.sh email add admin@mail.c1tech.group
+./setup.sh email add admin@c1tech.group
+./setup.sh email add sales@c1tech.group
+./setup.sh email add support@c1tech.group
 Mailpass.2476
 # -------==========-------
 # Testing a Certificate is Valid
@@ -151,7 +155,7 @@ exit
 # -------==========-------
 # DNS Records
 # -------==========-------
-export fqdnHost=mail.vir-gol.ir
+export fqdnHost=mail.c1tech.group
 $fqdnHost.ir.		120	IN	MX	1 $fqdnHost.ir.
 #$fqdnHost.ir.		120	IN	TXT	"v=spf1 mx ~all"
 # DMARK (_dmarc)

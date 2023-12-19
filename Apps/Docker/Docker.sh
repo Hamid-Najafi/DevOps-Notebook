@@ -1,19 +1,45 @@
 # -------==========-------
-# Docker Installation
+# Docker (Compose, Engine and CLI) Installation
 # -------==========-------
 #*# Firstly Setup HTTP//DNS Proxy (Network.sh)
-curl -fsSL https://get.docker.com -o get-docker.sh
+sudo apt update && sudo apt install -y curl uidmap
+curl -fsSL get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 sudo usermod -aG docker $USER
 sudo chown $USER /var/run/docker.sock
-# The LinuxServer.io Method:
-sudo curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-compose/master/run.sh -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-# Traditional Method:
-sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+
+# DONT Use RootLees Docker Context
+# dockerd-rootless-setuptool.sh install
+
 # Logout & Login
 docker run hello-world
+# -------==========-------
+# Docker Presistent Volume
+# -------==========-------
+# Use Another DiskDrive
+lsblk
+# Create new partition
+sudo fdisk /dev/sdb -> n -> p -> 1 -> p
+# Format as it EXT4
+sudo mkfs.ext4 /dev/sdb1
+# Create and mount data directory
+sudo mkdir -p /mnt/data
+sudo mount /dev/sdb1 /mnt/data
+# Verify
+sudo mount | grep /dev/sdb1
+# Create container volume directory
+sudo mkdir -p /mnt/data/CONTAINER_NAME
+# Set Permissions
+sudo chmod 775 -R /mnt/data
+sudo chown -R $USER:docker /mnt/data
+docker volume create --driver local \
+     --opt type=none \
+     --opt device=/mnt/data/CONTAINER_NAME \
+     --opt o=bind CONTAINER_VOLUME_NAME
+# docker-compose file:
+volumes:
+  CONTAINER_VOLUME_NAME:
+    external: true
 # -------==========-------
 # Tips
 # -------==========-------
@@ -65,12 +91,6 @@ docker login
 docker build -t goldenstarc/bigbluebutton-livestreaming .
 docker push goldenstarc/bigbluebutton-livestreaming
 # -------==========-------
-# Docker-Compose
-# -------==========-------
-# NOTE: ADD HEALTH CHECK TO YAML FILE:
-    # healthcheck:
-    #   test: ["CMD-SHELL", "wget -q --spider --proxy=off localhost:4000/api/v1/streaming/health || exit 1"]
-# -------==========-------
 # Container bash
 # -------==========-------
 docker exec -ti container_name /bin/bash
@@ -79,19 +99,13 @@ docker exec -ti container_name sh
 echo "" > $(docker inspect --format='{{.LogPath}}' <container_name_or_id>)
 echo "" > $(docker inspect --format='{{.LogPath}}' virgol_main)
 # -------==========-------
-#Processes In Containers Should Not Run As Root
-# -------==========-------
-RUN addgroup -g 999 appuser && \
-    adduser -r -u 999 -g appuser appuser
-USER appuser
-# -------==========-------
 # HTTP Proxy
 # -------==========-------
 sudo mkdir -p /etc/systemd/system/docker.service.d
 cat >> /etc/systemd/system/docker.service.d/http-proxy.conf << EOF
 [Service]
-Environment="HTTP_PROXY=http://172.25.10.21:10809"
-Environment="HTTPS_PROXY=http://172.25.10.21:10809"
+Environment="HTTP_PROXY=http://172.25.10.8:20172"
+Environment="HTTPS_PROXY=http://172.25.10.8:20172"
 Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
 EOF
 sudo systemctl daemon-reload

@@ -1,36 +1,120 @@
-version: "3.5"
+version: '2.3'
+
 services:
-  web:
-    image: 'gitlab/gitlab-ce:latest'
+  redis:
     restart: always
-    hostname: 'gitlab.c1tech.group'
-    environment:
-      GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://gitlab.c1tech.group:80'
-        gitlab_rails['time_zone'] = 'Asia/Tehran'
-        gitlab_rails['smtp_enable'] = true
-        gitlab_rails['smtp_address'] = "mail.c1tech.group"
-        gitlab_rails['smtp_port'] = 587
-        gitlab_rails['smtp_user_name'] = "admin@c1tech.group"
-        gitlab_rails['smtp_password'] = "Mailpass.24"
-        gitlab_rails['smtp_domain'] = "mail.c1tech.group"
-        gitlab_rails['smtp_authentication'] = "login"
-        gitlab_rails['smtp_enable_starttls_auto'] = true
-        gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
-        gitlab_rails['gitlab_email_from'] = 'gitlab@c1tech.group'
-        gitlab_rails['gitlab_email_reply_to'] = 'noreply@c1tech.group'
-        # Add any other gitlab.rb configuration here, each on its own line
-    ports:
-    # Handeled by Traefik
-    # - '8087:80'
-    # - '443:443'
-      - '587:587'
-      - '2222:22'
+    image: redis:6.2.6
+    container_name: gitlab-redis
+    command:
+    - --loglevel warning
     volumes:
-      - '$GITLAB_HOME/config:/etc/gitlab'
-      - '$GITLAB_HOME/logs:/var/log/gitlab'
-      - '$GITLAB_HOME/data:/var/opt/gitlab'
-    shm_size: '256m'
+    - gitlab-redis-data:/data:Z
+    networks:
+      - db
+
+  postgresql:
+    restart: always
+    container_name: gitlab-postgresql
+    image: sameersbn/postgresql:14-20230628
+    volumes:
+    - gitlab-postgresql-data:/var/lib/postgresql:Z
+    environment:
+    - DB_USER=gitlab
+    - DB_PASS=PostgreSQLpass.24
+    - DB_NAME=gitlabhq_production
+    - DB_EXTENSION=pg_trgm,btree_gist
+    networks:
+      - db
+
+  gitlab:
+    restart: always
+    image: sameersbn/gitlab:16.6.2
+    container_name: gitlab
+    depends_on:
+    - redis
+    - postgresql
+    # Handeled By Traefik
+    # ports:
+    # - "10080:80"
+    # - "10022:22"
+    volumes:
+    - gitlab-gitlab-data:/home/git/data:Z
+    healthcheck:
+      test: ["CMD", "/usr/local/sbin/healthcheck"]
+      interval: 5m
+      timeout: 10s
+      retries: 3
+      start_period: 5m
+    environment:
+    - DEBUG=false
+
+    - DB_ADAPTER=postgresql
+    - DB_HOST=postgresql
+    - DB_PORT=5432
+    - DB_USER=gitlab
+    - DB_PASS=PostgreSQLpass.24
+    - DB_NAME=gitlabhq_production
+
+    - REDIS_HOST=redis
+    - REDIS_PORT=6379
+
+    - TZ=Asia/Tehran
+    - GITLAB_TIMEZONE=Asia/Tehran
+
+    - GITLAB_HTTPS=false
+    - SSL_SELF_SIGNED=false
+
+    - GITLAB_HOST=localhost
+    - GITLAB_PORT=10080
+    - GITLAB_SSH_PORT=10022
+    - GITLAB_RELATIVE_URL_ROOT=
+    - GITLAB_SECRETS_DB_KEY_BASE=PXpHn4wW3JzdkpHkg4XXRHjsFnNHgnwwtkVMbpJTbKR7wFwN49CmqJKNrbPxXqsM
+    - GITLAB_SECRETS_SECRET_KEY_BASE=mP9KrFkw4JkLNPmn9FxgFKgWR9bRm9RPqsbh77nvxrFFvtxgJ9hsNhsnmgndFhsJ
+    - GITLAB_SECRETS_OTP_KEY_BASE=NRdfn3PPWThrjtmkvc3nwVrRkNKPzw93sgFFjr73XfhsPMmFwgmrFk33JRtT9jzt
+
+    - GITLAB_ROOT_PASSWORD=5iveL!fe
+    - GITLAB_ROOT_EMAIL=admin@c1tech.group
+
+    - GITLAB_NOTIFY_ON_BROKEN_BUILDS=true
+    - GITLAB_NOTIFY_PUSHER=false
+
+    - GITLAB_EMAIL=notifications@c1tech.group
+    - GITLAB_EMAIL_REPLY_TO=noreply@c1tech.group
+    - GITLAB_INCOMING_EMAIL_ADDRESS=reply@c1tech.group
+
+    - GITLAB_BACKUP_SCHEDULE=daily
+    - GITLAB_BACKUP_TIME=01:00
+
+    - SMTP_ENABLED=false
+    - SMTP_DOMAIN=www.example.com
+    - SMTP_HOST=smtp.gmail.com
+    - SMTP_PORT=587
+    - SMTP_USER=mailer@c1tech.group
+    - SMTP_PASS=password
+    - SMTP_STARTTLS=true
+    - SMTP_AUTHENTICATION=login
+
+    - IMAP_ENABLED=false
+    - IMAP_HOST=imap.gmail.com
+    - IMAP_PORT=993
+    - IMAP_USER=mailer@c1tech.group
+    - IMAP_PASS=password
+    - IMAP_SSL=true
+    - IMAP_STARTTLS=false
+
+    - LDAP_ENABLED=true
+    - LDAP_LABEL=C1TechLDAP
+    - LDAP_HOST=172.25.10.5
+    - LDAP_PORT=389
+    - LDAP_UID=sAMAccountName
+    - LDAP_METHOD=plain
+    - LDAP_VERIFY_SSL=false
+    - LDAP_BIND_DN=CN=Administrator,CN=Users,DC=C1Tech,DC=local
+    - LDAP_PASS=C1Techpass.DC
+    - LDAP_ACTIVE_DIRECTORY=true
+    - LDAP_ALLOW_USERNAME_OR_EMAIL_LOGIN=true
+    - LDAP_BLOCK_AUTO_CREATED_USERS=false
+    - LDAP_BASE=OU=Users,OU=C1Tech,DC=C1Tech,DC=local
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.gitlab.rule=Host(`gitlab.c1tech.group`)"
@@ -38,7 +122,18 @@ services:
       - "traefik.http.routers.gitlab.entrypoints=secure"
       - "traefik.http.routers.gitlab.tls.certresolver=letsencrypt"
     networks:
+      - db
       - web
+
 networks:
+  db:
+    internal: true
   web:
     external: true
+volumes:
+  gitlab-redis-data:
+      external: true
+  gitlab-postgresql-data:
+      external: true
+  gitlab-gitlab-data:
+      external: true

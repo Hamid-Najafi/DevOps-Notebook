@@ -22,9 +22,9 @@ services:
       - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
       - "traefik.http.routers.traefik.middlewares=dashboardauth"
       # Generate Password using following command, Username: admin, Password: Traefikpass.24
-      # sudo apt-get install apache2-utils
+      # sudo apt install -y apache2-utils
       # echo $(htpasswd -nbB admin "Traefikpass.24") | sed -e s/\\$/\\$\\$/g
-      - "traefik.http.middlewares.dashboardauth.basicauth.users=admin:$$2y$$05$$vSakkQt0wevdRaBJF9fe3Oz0PADs2dW1OsA5Tlr209/rGxfIB86sW"
+      - "traefik.http.middlewares.dashboardauth.basicauth.users=admin:$$2y$$05$$cJuRlFjIz/CLnfil21boZ.fOa64AL4y3n0KjYdQX9FapOOcIdb2fa"
       # HTTP to HTTPS redirection
       - "traefik.http.routers.http_catchall.rule=HostRegexp(`{any:.+}`)"
       - "traefik.http.routers.http_catchall.entrypoints=insecure"
