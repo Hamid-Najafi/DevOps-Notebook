@@ -33,7 +33,7 @@ services:
 
   redis:
     image: ${NEXTCLOUD_REDIS_IMAGE_TAG}
-    command: ["redis-server", "--requirepass", "$NEXTCLOUD_REDIS_PASSWORD"]
+    command: ["redis-server", "--requirepass", "${NEXTCLOUD_REDIS_PASSWORD}"]
     volumes:
       - nextcloud-redis:/data
     networks:

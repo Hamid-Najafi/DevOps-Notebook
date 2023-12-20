@@ -1,6 +1,4 @@
 networks:
-  dashy-network:
-    external: true
   traefik-network:
     external: true
 
@@ -11,12 +9,13 @@ volumes:
 services:
   dashy:
     image: ${DASHY_IMAGE_TAG}
+    container_name: dashy
     volumes:
       - dashy-data:/app/public
     environment:
       NODE_ENV: production
     networks:
-      - dashy-network
+      - traefik-network
     healthcheck:
       test: ['CMD', 'node', '/app/services/healthcheck']
       interval: 1m30s
@@ -39,3 +38,16 @@ services:
       - "traefik.http.middlewares.testheader.headers.accesscontrolmaxage=100"
       - "traefik.http.middlewares.testheader.headers.addvaryheader=true"
       - "traefik.docker.network=traefik-network"
+
+
+      - "traefik.http.middlewares.testheader.headers.accesscontrolallowmethods=GET,OPTIONS,PUT"
+      - "traefik.http.middlewares.testheader.headers.accesscontrolallowheaders=*"
+      - "traefik.http.middlewares.testheader.headers.accesscontrolalloworiginlist=${DASHY_URL}"
+      - "traefik.http.middlewares.testheader.headers.accesscontrolmaxage=100"
+      - "traefik.http.middlewares.testheader.headers.addvaryheader=true"
+
+      - "traefik.http.middlewares.sslHeader.headers.customRequestHeaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.testHeader.headers.accessControlAllowMethods=GET,OPTIONS,PUT"
+      - "traefik.http.middlewares.testHeader.headers.accessControlAllowOriginList=https://dashy.c1tech.group"
+      - "traefik.http.middlewares.testHeader.headers.accessControlMaxAge=100"
+      - "traefik.http.middlewares.testHeader.headers.addVaryHeader=true"
