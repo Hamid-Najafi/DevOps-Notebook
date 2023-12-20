@@ -4,6 +4,7 @@ networks:
 
 volumes:
   traefik-certificates:
+    external: true
 
 services:
   traefik:
@@ -13,6 +14,7 @@ services:
       - TZ=${TRAEFIK_TIMEZONE}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.yml:/traefik.yml:ro
       - traefik-certificates:/etc/traefik/acme
     networks:
       - traefik-network
@@ -32,17 +34,31 @@ services:
       start_period: 5s
     labels:
       - "traefik.enable=true"
+      # Docker labels for enabling Traefik dashboard
       - "traefik.http.routers.dashboard.rule=Host(`${TRAEFIK_HOSTNAME}`)"
       - "traefik.http.routers.dashboard.service=api@internal"
-      - "traefik.http.routers.dashboard.entrypoints=websecure"
-      - "traefik.http.services.dashboard.loadbalancer.server.port=8080"
+      - "traefik.http.routers.dashboard.entrypoints=secure"
+      # - "traefik.http.services.dashboard.loadbalancer.server.port=8080"
       - "traefik.http.routers.dashboard.tls=true"
       - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
       - "traefik.http.services.dashboard.loadbalancer.passhostheader=true"
       - "traefik.http.routers.dashboard.middlewares=authtraefik"
       - "traefik.http.middlewares.authtraefik.basicauth.users=${TRAEFIK_BASIC_AUTH}"
       - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"
-      - "traefik.http.routers.http-catchall.entrypoints=web"
+      - "traefik.http.routers.http-catchall.entrypoints=insecure"
       - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.https_redirect.redirectscheme.permanent=true"
+      # Monitoring Traefik With Prometheus
+      # - traefik.http.services.prometheus.loadbalancer.server.port=9092
+      - "traefik.http.routers.prometheus.rule=PathPrefix(`/metrics`)"
+      - "traefik.http.routers.prometheus.entrypoints=metrics"
+      - "traefik.http.routers.prometheus.service=prometheus@internal"
+      - "traefik.http.routers.prometheus.middlewares=prometheusauth"
+      - "traefik.http.middlewares.prometheusauth.basicauth.users=${TRAEFIK_BASIC_AUTH}"
+      # Compressing the Response before Sending it to the Client
+      - "traefik.http.routers.traefik.middlewares=traefik-compress"
+      - "traefik.http.middlewares.traefik-compress.compress=true"
     restart: unless-stopped
+
+

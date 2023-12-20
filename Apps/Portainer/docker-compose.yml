@@ -1,0 +1,42 @@
+networks:
+  portainer-network:
+    external: true
+  traefik-network:
+    external: true
+
+volumes:
+  portainer-data:
+    external: true
+
+services:
+  portainer:
+    image: ${PORTAINER_IMAGE_TAG}
+    command: -H unix:///var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data:/data
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - portainer-network
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer-frontend.rule=Host(`${PORTAINER_FRONTEND_HOSTNAME}`)"
+      - "traefik.http.routers.portainer-frontend.service=portainer-frontend"
+      - "traefik.http.routers.portainer-frontend.entrypoints=websecure"
+      - "traefik.http.services.portainer-frontend.loadbalancer.server.port=9000"
+      - "traefik.http.routers.portainer-frontend.tls=true"
+      - "traefik.http.routers.portainer-frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.portainer-frontend.middlewares=compresstraefik"
+      - "traefik.http.middlewares.compresstraefik.compress=true"
+      - "traefik.http.routers.portaier-edge.rule=Host(`${PORTAINER_EDGE_HOSTNAME}`)"
+      - "traefik.http.routers.portaier-edge.service=portaier-edge"
+      - "traefik.http.routers.portaier-edge.entrypoints=websecure"
+      - "traefik.http.services.portaier-edge.loadbalancer.server.port=8000"
+      - "traefik.http.routers.portaier-edge.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=traefik-network"
+    restart: unless-stopped
+    depends_on:
+      traefik:
+        condition: service_healthy

@@ -1,7 +1,7 @@
 # -------==========-------
 # Traefik Docker Compose
 # -------==========-------
-# Make Directory
+# Make traefik-certificates Directory
 sudo mkdir -p /mnt/data/traefik
 # Set Permissions
 sudo chmod 775 -R /mnt/data
