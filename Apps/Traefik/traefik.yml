@@ -1,16 +1,30 @@
-#Traefik.yml
-# All Traefik docker-compose.yml command comes here:
+# Traefik Envoronment Variables Comes Here (Traefik.yml)
+# ((Example))
   # command:
   #   - "--log.level=DEBUG"
-# Will be:
+# ((Will be))
   # log:
   #   level:
   #     DEBUG
 
-#Add this somewhere in file
+
 api:
   dashboard: true
+  insecure: true
 
+log:
+  level:
+    DEBUG
+
+accesslog: true
+
+ping:
+  entryPoint: "ping"
+
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+  
 #Define HTTP and HTTPS entrypoints
 entryPoints:
   insecure:
@@ -19,6 +33,12 @@ entryPoints:
     address: ":443"
   metrics:
     address: ":9094"
+  ping:
+    address: ":8082"
+  # zabbix-tcp:
+  #   address: ":8082"
+  # zabbix-udp:
+  #   address: ":10051/udp"
 
 #Dynamic configuration will come from docker labels
 providers:
@@ -32,7 +52,7 @@ certificatesResolvers:
   letsencrypt:
     acme:
       email: admin@c1tech.group
-      storage: /letsencrypt/acme.json
+      storage: /etc/traefik/acme/acme.json
       httpChallenge:
         # used during the challenge
         entryPoint: insecure
@@ -41,7 +61,4 @@ metrics:
   prometheus:
     addEntryPointsLabels: true
     addServicesLabels: true
-
-# experimental:
-#   pilot:
-#     token: "c8255784-7c2e-4e64-9f8e-b100e90f55a9"
+    buckets: 0.1,0.3,1.2,5.0
