@@ -1,24 +1,36 @@
+networks:
+  postgres-network:
+    external: true
+  traefik-network:
+    external: true
+
+volumes:
+  postgres-data:
+    external: true
+  postgresql-pgadmin:
+    external: true
+
 version: "3.5"
 services:
   postgres:
-    image: postgres
-    hostname: postgres.c1tech.group
+    image: ${POSTGRES_IMAGE_TAG}
+    hostname: ${POSTGRES_HOSTNAME}
     restart: unless-stopped
     container_name: postgres
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=PostgreSQLpass.24
+      - POSTGRES_DB=${POSTGRES_DB_NAME}
+      - POSTGRES_USER=${POSTGRES_DB_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_DB_PASSWORD}
     volumes:
-      - postgresql-postgresql-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     networks:
-      - db
-      - web
+      - postgres-network
+
   pgadmin:
-    image: dpage/pgadmin4
-    hostname: pgadmin.c1tech.group
+    image: ${PGADMIN_IMAGE_TAG}
+    hostname: ${POSTGRES_HOSTNAME}
     container_name: postgres-pgadmin
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@c1tech.group
@@ -31,23 +43,17 @@ services:
       - postgres
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.c1tech.group`)"
+      - "traefik.http.routers.pgadmin.rule=Host(`${PORTAINER_FRONTEND_HOSTNAME}`)"
       - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
+      - "traefik.http.routers.pgadmin.service=pgadmin"
       - "traefik.http.routers.pgadmin.entrypoints=secure"
+      - "traefik.http.routers.pgadmin.tls=true"
       - "traefik.http.routers.pgadmin.tls.certresolver=letsencrypt"
-      - "traefik.docker.network=web"
+      - "traefik.http.routers.pgadmin.middlewares=compresstraefik"
+      - "traefik.http.middlewares.compresstraefik.compress=true"
+      - "traefik.docker.network=traefik-network"
     volumes:
-       - postgresql-pgadmin-data:/var/lib/pgadmin
+       - postgres-pgadmin:/var/lib/pgadmin
     networks:
-      - db
-      - web
-networks:
-  db:
-    internal: true
-  web:
-    external: true
-volumes:
-  postgresql-postgresql-data:
-    external: true
-  postgresql-pgadmin-data:
-    external: true
+      - postgres-network
+      - traefik-network

@@ -24,7 +24,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.portainer-frontend.rule=Host(`${PORTAINER_FRONTEND_HOSTNAME}`)"
       - "traefik.http.routers.portainer-frontend.service=portainer-frontend"
-      - "traefik.http.routers.portainer-frontend.entrypoints=websecure"
+      - "traefik.http.routers.portainer-frontend.entrypoints=secure"
       - "traefik.http.services.portainer-frontend.loadbalancer.server.port=9000"
       - "traefik.http.routers.portainer-frontend.tls=true"
       - "traefik.http.routers.portainer-frontend.tls.certresolver=letsencrypt"
@@ -32,11 +32,11 @@ services:
       - "traefik.http.middlewares.compresstraefik.compress=true"
       - "traefik.http.routers.portaier-edge.rule=Host(`${PORTAINER_EDGE_HOSTNAME}`)"
       - "traefik.http.routers.portaier-edge.service=portaier-edge"
-      - "traefik.http.routers.portaier-edge.entrypoints=websecure"
+      - "traefik.http.routers.portaier-edge.entrypoints=secure"
       - "traefik.http.services.portaier-edge.loadbalancer.server.port=8000"
       - "traefik.http.routers.portaier-edge.tls.certresolver=letsencrypt"
       - "traefik.docker.network=traefik-network"
     restart: unless-stopped
-    depends_on:
-      traefik:
-        condition: service_healthy
+    # depends_on:
+    #   traefik:
+    #     condition: service_healthy
