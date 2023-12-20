@@ -1,0 +1,41 @@
+networks:
+  dashy-network:
+    external: true
+  traefik-network:
+    external: true
+
+volumes:
+  dashy-data:
+    external: true
+
+services:
+  dashy:
+    image: ${DASHY_IMAGE_TAG}
+    volumes:
+      - dashy-data:/app/public
+    environment:
+      NODE_ENV: production
+    networks:
+      - dashy-network
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashy.rule=Host(`${DASHY_HOSTNAME}`)"
+      - "traefik.http.routers.dashy.service=dashy"
+      - "traefik.http.routers.dashy.entrypoints=secure"
+      - "traefik.http.services.dashy.loadbalancer.server.port=80"
+      - "traefik.http.routers.dashy.tls=true"
+      - "traefik.http.routers.dashy.tls.certresolver=letsencrypt"
+      - "traefik.http.services.dashy.loadbalancer.passhostheader=true"
+      - "traefik.http.routers.dashy.middlewares=compresstraefik"
+      - "traefik.http.middlewares.compresstraefik.compress=true"
+      - "traefik.http.middlewares.testheader.headers.accesscontrolallowmethods=GET,OPTIONS,PUT"
+      - "traefik.http.middlewares.testheader.headers.accesscontrolalloworiginlist=${DASHY_URL}"
+      - "traefik.http.middlewares.testheader.headers.accesscontrolmaxage=100"
+      - "traefik.http.middlewares.testheader.headers.addvaryheader=true"
+      - "traefik.docker.network=traefik-network"
