@@ -28,7 +28,7 @@ services:
       - "traefik.http.services.moodle.loadbalancer.server.port=8080"
       - "traefik.http.routers.moodle.entrypoints=secure"
       - "traefik.http.routers.moodle.tls.certresolver=letsencrypt"
-      - "traefik.docker.network=web"
+      - "traefik.docker.network=traefik-network"
     volumes:
       - moodle:/bitnami/moodle
       - moodleData:/bitnami/moodledata
@@ -37,7 +37,7 @@ services:
     depends_on:
       - mariadb
     networks:
-      - db
+      - traefik-network
       - web
 
   mariadb:
@@ -55,7 +55,7 @@ services:
       - mariaDb:/bitnami/mariadb
       # - '/docker/mariadb-bitnami:/bitnami/mariadb'
     networks:
-      - db
+      - traefik-network
   phpmyadmin:
     image: 'docker.io/bitnami/phpmyadmin:5-debian-10'
     restart: always
@@ -72,11 +72,11 @@ services:
       - "traefik.http.services.phpmyadmin.loadbalancer.server.port=8080"
       - "traefik.http.routers.phpmyadmin.entrypoints=secure"
       - "traefik.http.routers.phpmyadmin.tls.certresolver=letsencrypt"
-      - "traefik.docker.network=web"
+      - "traefik.docker.network=traefik-network"
     depends_on:
       - mariadb
     networks:
-      - db
+      - traefik-network
       - web
 
 networks:

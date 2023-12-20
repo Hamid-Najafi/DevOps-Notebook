@@ -1,9 +1,9 @@
 # -------==========-------
 # Docker Compose
 # -------==========-------
-mkdir -p ~/docker/postgres
-cp -R ~/DevOps-Notebook/Apps/Postgres/*  ~/docker/postgres
-cd  ~/docker/postgres
+mkdir -p ~/docker
+cp -R ~/DevOps-Notebook/Apps/Postgres ~/docker/postgres
+cd ~/docker/postgres
 
 sudo mkdir -p /mnt/data/postgres/postgres
 sudo mkdir -p /mnt/data/postgres/pgadmin
@@ -19,6 +19,8 @@ docker volume create --driver local \
      --opt type=none \
      --opt device=/mnt/data/postgres/pgadmin \
      --opt o=bind postgres-pgadmin
+
+docker network create postgres-network
 
 docker compose up -d
 # Add New Server -> Connection -> Hostname/Address = postgres, Username = postgres, Password = PostgreSQLpass.24

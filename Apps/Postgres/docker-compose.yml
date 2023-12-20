@@ -7,7 +7,7 @@ networks:
 volumes:
   postgres-data:
     external: true
-  postgresql-pgadmin:
+  postgres-pgadmin:
     external: true
 
 version: "3.5"
@@ -19,6 +19,12 @@ services:
     container_name: postgres
     ports:
       - "5432:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB_NAME}", "-U", "${POSTGRES_DB_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
     environment:
       - POSTGRES_DB=${POSTGRES_DB_NAME}
       - POSTGRES_USER=${POSTGRES_DB_USER}
@@ -30,11 +36,11 @@ services:
 
   pgadmin:
     image: ${PGADMIN_IMAGE_TAG}
-    hostname: ${POSTGRES_HOSTNAME}
+    hostname: ${PGADMIN_HOSTNAME}
     container_name: postgres-pgadmin
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@c1tech.group
-      - PGADMIN_DEFAULT_PASSWORD=pgAdminpass.24
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_USERNAME}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
     restart: unless-stopped
     # Handeled by traefik
     # ports:
@@ -43,7 +49,7 @@ services:
       - postgres
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.pgadmin.rule=Host(`${PORTAINER_FRONTEND_HOSTNAME}`)"
+      - "traefik.http.routers.pgadmin.rule=Host(`${PGADMIN_HOSTNAME}`)"
       - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
       - "traefik.http.routers.pgadmin.service=pgadmin"
       - "traefik.http.routers.pgadmin.entrypoints=secure"

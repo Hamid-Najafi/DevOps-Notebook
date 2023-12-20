@@ -48,7 +48,7 @@ services:
       - "traefik.http.services.bitbucket.loadbalancer.passhostheader=true"
       - "traefik.http.routers.bitbucket.middlewares=compresstraefik"
       - "traefik.http.middlewares.compresstraefik.compress=true"
-      - "traefik.docker.network=web"
+      - "traefik.docker.network=traefik-network"
     volumes:
       # - bitbucket-data:/var/atlassian/application-data/bitbucket:Z
       - bitbucket-data:/var/bitbucket:Z

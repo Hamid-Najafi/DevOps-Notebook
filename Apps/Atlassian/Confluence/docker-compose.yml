@@ -1,28 +1,36 @@
+networks:
+  confluence-network:
+    internal: true
+  traefik-network:
+    external: true
+
+volumes:
+  confluence-postgres:
+    external: true
+  confluence-data:
+    external: true
+
 services:
   confluence:
-    # image: atlassian/confluence-server:latest
-    image: haxqer/confluence:8.7.1
+    image: ${CONFLUENCE_IMAGE_TAG}
     restart: always
     container_name: confluence
     environment:
-      JVM_MINIMUM_MEMORY: 4g
-      JVM_MAXIMUM_MEMORY: 12g
-      VIRTUAL_HOST: confluence.c1tech.group
-      VIRTUAL_PORT: 8090
-      ATLAS_OPTS: ' -Datlassian.dev.mode=false'
-      ATL_PROXY_NAME: "confluence.c1tech.group"
+      JVM_MINIMUM_MEMORY: ${CONFLUENCE_JVM_MINIMUM_MEMORY}
+      JVM_MAXIMUM_MEMORY: ${CONFLUENCE_JVM_MAXIMUM_MEMORY}
+      ATL_PROXY_NAME: ${CONFLUENCE_HOSTNAME}
       ATL_TOMCAT_SECURE: 'true'
       ATL_TOMCAT_SCHEME: https
       ATL_PROXY_PORT: 443
       ATL_DB_TYPE: postgres72
       ATL_DB_DRIVER: org.postgresql.Driver
-      ATL_JDBC_USER: confluenceuser
-      ATL_JDBC_PASSWORD: PostgreSQLpass.24
-      ATL_JDBC_URL: jdbc:postgresql://postgresql:5432/confluencedb
+      ATL_JDBC_USER: ${CONFLUENCE_DB_USER}
+      ATL_JDBC_PASSWORD: ${CONFLUENCE_DB_PASSWORD}
+      ATL_JDBC_URL: jdbc:postgresql://postgresql:5432/${CONFLUENCE_DB_NAME}
       JVM_CODE_CACHE_ARGS: ' -XX:InitialCodeCacheSize=1g -XX:ReservedCodeCacheSize=8g'
       TZ: Asia/Tehran
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      test: ["CMD", "curl", "-f", "http://localhost:8090/"]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -32,12 +40,10 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      # traefik:
-      #   condition: service_healthy
     labels:
     # This is a special One!
       - "traefik.enable=true"
-      - "traefik.http.routers.confluence.rule=Host(`confluence.c1tech.group`)"
+      - "traefik.http.routers.confluence.rule=Host(`${CONFLUENCE_HOSTNAME}`)"
       - "traefik.http.services.confluence.loadbalancer.server.port=8090"
       - "traefik.http.routers.confluence.entrypoints=secure"
       - "traefik.http.routers.confluence.tls.certresolver=letsencrypt"
@@ -47,37 +53,28 @@ services:
       - "traefik.http.services.confluence.loadbalancer.passhostheader=true"
       - "traefik.http.routers.confluence.middlewares=compresstraefik"
       - "traefik.http.middlewares.compresstraefik.compress=true"
-      - "traefik.docker.network=web"
+      - "traefik.docker.network=traefik-network"
     volumes:
-      # - confluence-data:/var/atlassian/application-data/confluence:Z
-      - confluence-data:/var/confluence:Z
+      - confluence-data:${CONFLUENCE_DATA_PATH}
     networks:
-      - confluence-network
       - traefik-network
 
   postgres:
-    image: postgres:13
+    image: ${CONFLUENCE_POSTGRES_IMAGE_TAG}
     restart: always
     container_name: confluence-postgres
     environment:
-      POSTGRES_DB: confluencedb
-      POSTGRES_USER: confluenceuser
-      POSTGRES_PASSWORD: PostgreSQLpass.24
+      POSTGRES_DB: ${CONFLUENCE_DB_NAME}
+      POSTGRES_USER: ${CONFLUENCE_DB_USER}
+      POSTGRES_PASSWORD: ${CONFLUENCE_DB_PASSWORD}
       POSTGRES_INITDB_ARGS: --lc-collate C --lc-ctype C.UTF-8
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${CONFLUENCE_DB_NAME}", "-U", "${CONFLUENCE_DB_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     volumes:
       - confluence-postgres:/var/lib/postgresql/data
     networks:
       - confluence-network
-
-networks:
-  confluence-network:
-    internal: true
-  traefik-network:
-    external: true
-
-volumes:
-  confluence-postgres:
-      external: true
-  confluence-data:
-      external: true
-

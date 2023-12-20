@@ -22,7 +22,7 @@ docker volume create --driver local \
 # PostgreSQL
 docker volume create --driver local \
      --opt type=none \
-     --opt device=/mnt/data/confluence/postgresql \
+     --opt device=/mnt/data/confluence/postgres \
      --opt o=bind confluence-postgres
 # Verify
 docker volume list

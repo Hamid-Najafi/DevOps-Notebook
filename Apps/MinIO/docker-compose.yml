@@ -31,7 +31,7 @@ services:
       - "traefik.http.services.minio.loadbalancer.server.port=9001"
       - "traefik.http.routers.minio.entrypoints=secure"
       - "traefik.http.routers.minio.tls.certresolver=letsencrypt"
-      - "traefik.docker.network=web"
+      - "traefik.docker.network=traefik-network"
     networks:
       - web
 networks:

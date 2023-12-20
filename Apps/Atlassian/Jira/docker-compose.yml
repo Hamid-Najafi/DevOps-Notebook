@@ -1,24 +1,34 @@
+networks:
+  jira-network:
+    internal: true
+  traefik-network:
+    external: true
+
+volumes:
+  jira-postgres:
+    external: true
+  jira-data:
+    external: true
+
 services:
   jira:
-    # image: atlassian/jira-software:latest
-    image: haxqer/jira:9.12.1
+    image: ${JIRA_IMAGE_TAG}
     restart: always
     container_name: jira
     environment:
-      JVM_MINIMUM_MEMORY: 4g
-      JVM_MAXIMUM_MEMORY: 12g
-      VIRTUAL_HOST: jira.c1tech.group
-      VIRTUAL_PORT: 8080
-      ATLAS_OPTS: ' -Datlassian.dev.mode=false'
-      ATL_PROXY_NAME: "jira.c1tech.group"
+      JVM_MINIMUM_MEMORY: ${JIRA_JVM_MINIMUM_MEMORY}
+      JVM_MAXIMUM_MEMORY: ${JIRA_JVM_MAXIMUM_MEMORY}
+      VIRTUAL_HOST: ${JIRA_HOSTNAME}
+      VIRTUAL_PORT: 8090
+      ATL_PROXY_NAME: ${JIRA_HOSTNAME}
       ATL_TOMCAT_SECURE: 'true'
       ATL_TOMCAT_SCHEME: https
       ATL_PROXY_PORT: 443
       ATL_DB_TYPE: postgres72
       ATL_DB_DRIVER: org.postgresql.Driver
-      ATL_JDBC_USER: jirauser
-      ATL_JDBC_PASSWORD: PostgreSQLpass.24
-      ATL_JDBC_URL: jdbc:postgresql://postgresql:5432/jiradb
+      ATL_JDBC_USER:  ${JIRA_DB_USER}
+      ATL_JDBC_PASSWORD: ${JIRA_DB_PASSWORD}
+      ATL_JDBC_URL: jdbc:postgresql://postgres:5432/${JIRA_DB_NAME}
       JVM_CODE_CACHE_ARGS: ' -XX:InitialCodeCacheSize=1g -XX:ReservedCodeCacheSize=8g'
       TZ: Asia/Tehran
     healthcheck:
@@ -32,12 +42,10 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      # traefik:
-      #   condition: service_healthy
     labels:
     # This is a special One!
       - "traefik.enable=true"
-      - "traefik.http.routers.jira.rule=Host(`jira.c1tech.group`)"
+      - "traefik.http.routers.jira.rule=Host(`${JIRA_HOSTNAME}`)"
       - "traefik.http.services.jira.loadbalancer.server.port=8080"
       - "traefik.http.routers.jira.entrypoints=secure"
       - "traefik.http.routers.jira.tls.certresolver=letsencrypt"
@@ -47,25 +55,24 @@ services:
       - "traefik.http.services.jira.loadbalancer.passhostheader=true"
       - "traefik.http.routers.jira.middlewares=compresstraefik"
       - "traefik.http.middlewares.compresstraefik.compress=true"
-      - "traefik.docker.network=web"
+      - "traefik.docker.network=traefik-network"
     volumes:
-      # - jira-data:/var/atlassian/application-data/jira:Z
-      - jira-data:/var/jira:Z
+      - jira-data:${JIRA_DATA_PATH}
     networks:
       - jira-network
       - traefik-network
 
   postgres:
-    image: postgres:13
+    image: ${JIRA_POSTGRES_IMAGE_TAG}
     restart: always
     container_name: jira-postgres
     environment:
-      POSTGRES_DB: jiradb
-      POSTGRES_USER: jirauser
-      POSTGRES_PASSWORD: PostgreSQLpass.24
+      POSTGRES_DB: ${JIRA_DB_NAME}
+      POSTGRES_USER: ${JIRA_DB_USER}
+      POSTGRES_PASSWORD: ${JIRA_DB_PASSWORD}
       POSTGRES_INITDB_ARGS: --lc-collate C --lc-ctype C.UTF-8
     healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "jiradb", "-U", "jirauser" ]
+      test: [ "CMD", "pg_isready", "-q", "-d", "${JIRA_DB_NAME}", "-U", "${JIRA_DB_USER}" ]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -74,16 +81,3 @@ services:
       - jira-postgres:/var/lib/postgresql/data
     networks:
       - jira-network
-
-networks:
-  jira-network:
-    internal: true
-  traefik-network:
-    external: true
-
-volumes:
-  jira-postgres:
-      external: true
-  jira-data:
-      external: true
-

@@ -77,7 +77,7 @@ services:
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
       - "traefik.http.routers.grafana.entrypoints=secure"
       - "traefik.http.routers.grafana.tls.certresolver=letsencrypt"
-      - "traefik.docker.network=web"
+      - "traefik.docker.network=traefik-network"
     depends_on:
       - postgres
 

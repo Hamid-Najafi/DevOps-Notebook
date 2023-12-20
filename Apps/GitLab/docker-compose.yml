@@ -10,7 +10,7 @@ services:
     volumes:
     - gitlab-redis-data:/data:Z
     networks:
-      - db
+      - traefik-network
 
   postgresql:
     restart: always
@@ -24,7 +24,7 @@ services:
     - DB_NAME=gitlabhq_production
     - DB_EXTENSION=pg_trgm,btree_gist
     networks:
-      - db
+      - traefik-network
 
   gitlab:
     restart: always
@@ -122,7 +122,7 @@ services:
       - "traefik.http.routers.gitlab.entrypoints=secure"
       - "traefik.http.routers.gitlab.tls.certresolver=letsencrypt"
     networks:
-      - db
+      - traefik-network
       - web
 
 networks:

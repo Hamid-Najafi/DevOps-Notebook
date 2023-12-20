@@ -30,14 +30,9 @@ docker volume list
 # sudo apt install -y pwgen
 # Database Password
 # pwgen -Bsv1 24
+nano .env
+
 docker compose up -d
-
-http://172.25.10.8:8080/
-admin
-C1Tech Group
-admin@c1tech.group
-C1Techpass.AT
-
 # -------==========-------
 # Atlassian-Agent
 # -------==========-------
@@ -47,7 +42,7 @@ docker exec jira java -jar /var/agent/atlassian-agent.jar \
     -m admin@c1tech.group \
     -n admin@c1tech.group \
     -o C1Tech \
-    -s B5MZ-HN5U-AJ2C-VYKQ
+    -s BNZK-FZSR-R38X-UOXF
 
 # -------==========-------
 # atlassian-extras-3.4.6.jar

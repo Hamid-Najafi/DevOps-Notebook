@@ -13,7 +13,7 @@ services:
       # MYSQL_USER: user
       # MYSQL_PASSWORD: pass
     networks:
-      - db
+      - traefik-network
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     hostname: phpmyadmin.hamid-najafi.ir
@@ -34,9 +34,9 @@ services:
       - "traefik.http.services.phpmyadmin.loadbalancer.server.port=8080"
       - "traefik.http.routers.phpmyadmin.entrypoints=secure"
       - "traefik.http.routers.phpmyadmin.tls.certresolver=letsencrypt"
-      - "traefik.docker.network=web"
+      - "traefik.docker.network=traefik-network"
     networks:
-      - db
+      - traefik-network
       - web
 networks:
   db:

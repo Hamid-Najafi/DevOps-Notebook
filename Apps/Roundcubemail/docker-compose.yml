@@ -22,7 +22,7 @@ services:
       - "traefik.http.services.roundcubemail.loadbalancer.server.port=80"
       - "traefik.http.routers.roundcubemail.entrypoints=secure"
       - "traefik.http.routers.roundcubemail.tls.certresolver=letsencrypt"
-      - "traefik.docker.network=web"
+      - "traefik.docker.network=traefik-network"
     volumes:
       - ./config:/var/roundcube/config/ 
     networks:
@@ -40,7 +40,7 @@ services:
       MYSQL_USER: roundcube
       MYSQL_PASSWORD: Roundcubepass.24
     networks:
-      - db
+      - traefik-network
 networks:
   db:
     internal: true

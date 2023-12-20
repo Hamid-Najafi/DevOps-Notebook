@@ -14,7 +14,7 @@ services:
     volumes:
       - mongoDb:/data/db
     networks:
-      - db
+      - traefik-network
   adminer:
     image: adminer
     # container_name: adminer
@@ -34,9 +34,9 @@ services:
       - "traefik.http.services.adminer.loadbalancer.server.port=8080"
       - "traefik.http.routers.adminer.entrypoints=secure"
       - "traefik.http.routers.adminer.tls.certresolver=letsencrypt"
-      - "traefik.docker.network=web"
+      - "traefik.docker.network=traefik-network"
     networks:
-      - db
+      - traefik-network
       - web
 networks:
   db:
