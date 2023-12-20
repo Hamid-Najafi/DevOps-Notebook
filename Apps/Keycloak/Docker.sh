@@ -1,26 +1,28 @@
-https://www.keycloak.org/getting-started
 # -------==========-------
-# Docker
+# Traefik Docker Compose
 # -------==========-------
-https://www.keycloak.org/getting-started/getting-started-docker
-https://www.keycloak.org/server/containers
-# -------==========-------
-docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin -d quay.io/keycloak/keycloak:21.1.1 start-dev
-# -------==========-------
-# Docker-Compose
-# -------==========-------
-mkdir -p ~/docker/keycloak
-cp -R ~/DevOps-Notebook/Apps/Keycloak/*  ~/docker/keycloak
-cd  ~/docker/keycloak
+# Make keycloak-data Directory
+sudo mkdir -p /mnt/data/keycloak/postgres
+# Set Permissions
+sudo chmod 775 -R /mnt/data
+sudo chown -R $USER:docker /mnt/data
 
-nano docker-compose.yml
+# Create the docker volumes for the containers.
+docker volume create \
+      --driver local \
+      --opt type=none \
+      --opt device=/mnt/data/keycloak/postgres \
+      --opt o=bind keycloak-postgres
+
+# Clone Traefik Directory
+mkdir -p ~/docker
+cp -R ~/DevOps-Notebook/Apps/Traefik ~/docker/keycloak
+cd ~/docker/keycloak
+
+# Check and Edit .env file
+nano .env
+
+# Create Network and Run
+# Note: Check firewall & mapping rules for Port: 80 & 443
+docker network create keycloak-network
 docker compose up -d
-
-# BaseURL: http://localhost:8080/
-# Username: admin
-# Password: admin
-
-# -------==========-------
-# OpenJDK
-# -------==========-------
-# Get started with Keycloak on bare metal 

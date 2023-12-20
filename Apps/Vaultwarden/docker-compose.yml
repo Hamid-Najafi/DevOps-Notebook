@@ -12,6 +12,7 @@ volumes:
 services:
   vaultwarden:
     image: ${VAULTWARDEN_IMAGE_TAG}
+    container_name: vaultwarden
     volumes:
       - vaultwarden-data:/data
     environment:

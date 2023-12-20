@@ -1,28 +1,39 @@
+networks:
+  bitbucket-network:
+    internal: true
+  traefik-network:
+    external: true
+
+volumes:
+  bitbucket-postgres:
+    external: true
+  bitbucket-data:
+    external: true
+
 services:
   bitbucket:
-    # image: atlassian/bitbucket-server
-    image: haxqer/bitbucket:7.21.16
+    image: ${BITBUCKET_IMAGE_TAG}
     restart: always
     container_name: bitbucket
     environment:
-      JVM_MINIMUM_MEMORY: 4g
-      JVM_MAXIMUM_MEMORY: 12g
-      VIRTUAL_HOST: bitbucket.c1tech.group
-      VIRTUAL_PORT: 8090
+      JVM_MINIMUM_MEMORY: ${BITBUCKET_JVM_MINIMUM_MEMORY}
+      JVM_MAXIMUM_MEMORY: ${BITBUCKET_JVM_MAXIMUM_MEMORY}
+      VIRTUAL_HOST: ${BITBUCKET_HOSTNAME}
+      VIRTUAL_PORT: 7990
       ATLAS_OPTS: ' -Datlassian.dev.mode=false'
-      ATL_PROXY_NAME: "bitbucket.c1tech.group"
+      ATL_PROXY_NAME: ${BITBUCKET_HOSTNAME}
       ATL_TOMCAT_SECURE: 'true'
       ATL_TOMCAT_SCHEME: https
       ATL_PROXY_PORT: 443
       ATL_DB_TYPE: postgres72
       ATL_DB_DRIVER: org.postgresql.Driver
-      ATL_JDBC_USER: bitbucketuser
-      ATL_JDBC_PASSWORD: PostgreSQLpass.24
-      ATL_JDBC_URL: jdbc:postgresql://postgresql:5432/bitbucketdb
+      ATL_JDBC_USER: ${BITBUCKET_DB_USER}
+      ATL_JDBC_PASSWORD: ${BITBUCKET_DB_PASSWORD}
+      ATL_JDBC_URL: jdbc:postgresql://postgres:5432/${BITBUCKET_DB_NAME}
       JVM_CODE_CACHE_ARGS: ' -XX:InitialCodeCacheSize=1g -XX:ReservedCodeCacheSize=8g'
       TZ: Asia/Tehran
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      test: ["CMD", "curl", "-f", "http://localhost:7990/"]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -33,13 +44,11 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      # traefik:
-      #   condition: service_healthy
     labels:
     # This is a special One!
       - "traefik.enable=true"
-      - "traefik.http.routers.bitbucket.rule=Host(`bitbucket.c1tech.group`)"
-      - "traefik.http.services.bitbucket.loadbalancer.server.port=8090"
+      - "traefik.http.routers.bitbucket.rule=Host(`${BITBUCKET_HOSTNAME}`)"
+      - "traefik.http.services.bitbucket.loadbalancer.server.port=7990"
       - "traefik.http.routers.bitbucket.entrypoints=secure"
       - "traefik.http.routers.bitbucket.tls.certresolver=letsencrypt"
       - "traefik.http.middlewares.bitbucket-https-redirect.redirectscheme.scheme=https"
@@ -50,35 +59,27 @@ services:
       - "traefik.http.middlewares.compresstraefik.compress=true"
       - "traefik.docker.network=traefik-network"
     volumes:
-      # - bitbucket-data:/var/atlassian/application-data/bitbucket:Z
-      - bitbucket-data:/var/bitbucket:Z
+      - bitbucket-data:${BITBUCKET_DATA_PATH}
     networks:
       - bitbucket-network
       - traefik-network
 
-  postgresql:
-    image: postgres:13
+  postgres:
+    image: ${BITBUCKET_POSTGRES_IMAGE_TAG}
     restart: always
     container_name: bitbucket-postgres
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${BITBUCKET_DB_NAME}", "-U", "${BITBUCKET_DB_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
     environment:
-      POSTGRES_DB: bitbucket
-      POSTGRES_USER: bitbucket
-      POSTGRES_PASSWORD: PostgreSQLpass.24
+      POSTGRES_DB: ${BITBUCKET_DB_NAME}
+      POSTGRES_USER: ${BITBUCKET_DB_USER}
+      POSTGRES_PASSWORD: ${BITBUCKET_DB_PASSWORD}
       POSTGRES_INITDB_ARGS: --lc-collate C --lc-ctype C.UTF-8
     volumes:
       - bitbucket-postgres:/var/lib/postgresql/data
     networks:
       - bitbucket-network
-
-networks:
-  bitbucket-network:
-    internal: true
-  traefik-network:
-    external: true
-
-volumes:
-  bitbucket-postgres:
-      external: true
-  bitbucket-data:
-      external: true
-

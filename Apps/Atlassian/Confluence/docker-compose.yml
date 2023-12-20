@@ -18,6 +18,9 @@ services:
     environment:
       JVM_MINIMUM_MEMORY: ${CONFLUENCE_JVM_MINIMUM_MEMORY}
       JVM_MAXIMUM_MEMORY: ${CONFLUENCE_JVM_MAXIMUM_MEMORY}
+      VIRTUAL_HOST: ${CONFLUENCE_HOSTNAME}
+      VIRTUAL_PORT: 8090
+      ATLAS_OPTS: ' -Datlassian.dev.mode=false'
       ATL_PROXY_NAME: ${CONFLUENCE_HOSTNAME}
       ATL_TOMCAT_SECURE: 'true'
       ATL_TOMCAT_SCHEME: https
@@ -26,7 +29,7 @@ services:
       ATL_DB_DRIVER: org.postgresql.Driver
       ATL_JDBC_USER: ${CONFLUENCE_DB_USER}
       ATL_JDBC_PASSWORD: ${CONFLUENCE_DB_PASSWORD}
-      ATL_JDBC_URL: jdbc:postgresql://postgresql:5432/${CONFLUENCE_DB_NAME}
+      ATL_JDBC_URL: jdbc:postgresql://postgres:5432/${CONFLUENCE_DB_NAME}
       JVM_CODE_CACHE_ARGS: ' -XX:InitialCodeCacheSize=1g -XX:ReservedCodeCacheSize=8g'
       TZ: Asia/Tehran
     healthcheck:

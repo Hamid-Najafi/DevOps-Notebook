@@ -1,32 +1,90 @@
-# https://www.keycloak.org/server/containers
-version: "3.9"
+networks:
+  keycloak-network:
+    internal: true
+  traefik-network:
+    external: true
+
+volumes:
+  keycloak-postgres:
+    external: true
 
 services:
   postgres:
-    image: postgres:13.2
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: ${POSTGRESQL_DB}
-      POSTGRES_USER: ${POSTGRESQL_USER}
-      POSTGRES_PASSWORD: ${POSTGRESQL_PASS}
+    image: ${KEYCLOAK_POSTGRES_IMAGE_TAG}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - keycloak-postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${KEYCLOAK_DB_NAME}
+      POSTGRES_USER: ${KEYCLOAK_DB_USER}
+      POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+    networks:
+      - keycloak-network
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${KEYCLOAK_DB_NAME}", "-U", "${KEYCLOAK_DB_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
 
   keycloak:
-    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
-    command: start
-    depends_on:
-      - postgres
-    container_name: keycloak
+    image: ${KEYCLOAK_IMAGE_TAG}
     environment:
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
-      DB: postgres
-      DB-URL: postgres
-      DB-USERNAME: ${POSTGRESQL_USER}
-      DB-PASSWORD: ${POSTGRESQL_PASS}
-      HOSTNAME: keycloak
+      KEYCLOAK_DATABASE_VENDOR: ${KEYCLOAK_DB_TYPE}
+      KEYCLOAK_DATABASE_HOST: postgres
+      KEYCLOAK_DATABASE_PORT: 5432
+      KEYCLOAK_DATABASE_NAME: ${KEYCLOAK_DB_NAME}
+      KEYCLOAK_DATABASE_USER: ${KEYCLOAK_DB_USER}
+      KEYCLOAK_DATABASE_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+      KEYCLOAK_DATABASE_SCHEMA: public
+      KEYCLOAK_ADMIN_USER: ${KEYCLOAK_ADMIN_USERNAME}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KEYCLOAK_ENABLE_HEALTH_ENDPOINTS: 'true'
+      KEYCLOAK_ENABLE_STATISTICS: 'true'
+      KC_HOSTNAME: ${KEYCLOAK_HOSTNAME}
+      KC_PROXY: edge
+      KC_PROXY_ADDRESS_FORWARDING: 'true'
+      KC_HTTP_ENABLED: 'true'
+    networks:
+      - keycloak-network
+      - traefik-network
+    healthcheck:
+      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.keycloak.rule=Host(`${KEYCLOAK_HOSTNAME}`)"
+      - "traefik.http.routers.keycloak.service=keycloak"
+      - "traefik.http.routers.keycloak.entrypoints=secure"
+      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
+      - "traefik.http.routers.keycloak.tls=true"
+      - "traefik.http.routers.keycloak.tls.certresolver=letsencrypt"
+      - "traefik.http.services.keycloak.loadbalancer.passhostheader=true"
+      - "traefik.http.routers.keycloak.middlewares=compresstraefik"
+      - "traefik.http.middlewares.compresstraefik.compress=true"
+      - "traefik.docker.network=traefik-network"
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
 
-volumes:
-  postgres_data:
+  postgres:
+    image: ${KEYCLOAK_POSTGRES_IMAGE_TAG}
+    volumes:
+      - keycloak-postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${KEYCLOAK_DB_NAME}
+      POSTGRES_USER: ${KEYCLOAK_DB_USER}
+      POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+    networks:
+      - keycloak-network
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${KEYCLOAK_DB_NAME}", "-U", "${KEYCLOAK_DB_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
