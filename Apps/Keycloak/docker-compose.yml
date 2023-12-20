@@ -9,26 +9,9 @@ volumes:
     external: true
 
 services:
-  postgres:
-    image: ${KEYCLOAK_POSTGRES_IMAGE_TAG}
-    volumes:
-      - keycloak-postgres:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: ${KEYCLOAK_DB_NAME}
-      POSTGRES_USER: ${KEYCLOAK_DB_USER}
-      POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
-    networks:
-      - keycloak-network
-    healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "${KEYCLOAK_DB_NAME}", "-U", "${KEYCLOAK_DB_USER}" ]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 60s
-    restart: unless-stopped
-
   keycloak:
     image: ${KEYCLOAK_IMAGE_TAG}
+    container_name: keycloak
     environment:
       KEYCLOAK_DATABASE_VENDOR: ${KEYCLOAK_DB_TYPE}
       KEYCLOAK_DATABASE_HOST: postgres
@@ -75,6 +58,7 @@ services:
     image: ${KEYCLOAK_POSTGRES_IMAGE_TAG}
     volumes:
       - keycloak-postgres:/var/lib/postgresql/data
+    container_name: keycloak-postgres
     environment:
       POSTGRES_DB: ${KEYCLOAK_DB_NAME}
       POSTGRES_USER: ${KEYCLOAK_DB_USER}

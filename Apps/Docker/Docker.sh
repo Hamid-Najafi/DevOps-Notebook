@@ -30,7 +30,7 @@ sudo mount | grep /dev/sdb1
 # Create container volume directory
 sudo mkdir -p /mnt/data/CONTAINER_NAME
 # Set Permissions
-sudo chmod 775 -R /mnt/data
+sudo chmod 600 -R /mnt/data
 sudo chown -R $USER:docker /mnt/data
 docker volume create --driver local \
      --opt type=none \

@@ -1,73 +1,64 @@
-version: '3'
+networks:
+  traefik-network:
+    external: true
+
+volumes:
+  traefik-certificates:
+    external: true
+
 services:
-  db:
-    image: postgres:alpine
-    restart: always
+  traefik:
+    image: ${TRAEFIK_IMAGE_TAG}
+    container_name: traefik
+    environment:
+      - TZ=${TRAEFIK_TIMEZONE}
     volumes:
-      - db:/var/lib/postgresql/data:Z
-    environment:
-      - POSTGRES_PASSWORD=PostgreSQLpass.24
-      - POSTGRES_DB=nextcloud
-      - POSTGRES_USER=nextcloud
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.yml:/traefik.yml:ro
+      - traefik-certificates:/etc/traefik/acme
     networks:
-      - nextcloud
-
-  redis:
-    image: redis:alpine
-    restart: always
-    networks:
-      - nextcloud
-
-  nextcloud:
-    image: nextcloud:apache
-    restart: always
-    # Handeled by traefik
-    # ports:
-    #   - 127.0.0.1:8080:80
-    environment:
-      - NEXTCLOUD_ADMIN_USER=admin
-      - NEXTCLOUD_ADMIN_PASSWORD=Nextcloudpass.24
-      - NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.c1tech.group
-      - POSTGRES_HOST=db
-      - POSTGRES_PASSWORD=PostgreSQLpass.24
-      - POSTGRES_DB=nextcloud
-      - POSTGRES_USER=nextcloud
-      - REDIS_HOST=redis
-      - PHP_MEMORY_LIMIT=1024M
-      - PHP_UPLOAD_LIMIT=1024M 
+      - traefik-network
+    ports:
+      - "80:80"
+      - "443:443"
+      # Prometheus
+      - "9094:9094"
+      # Zabbix forward
+      # - "10050:10050"
+      # - "10051:10051"
+    healthcheck:
+      test: ["CMD", "wget", "http://localhost:8082/ping","--spider"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.c1tech.group`)"
-      - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
-      - "traefik.http.routers.nextcloud.entrypoints=secure"
-      - "traefik.http.routers.nextcloud.tls.certresolver=letsencrypt"
-      - "traefik.docker.network=traefik-network"
-    volumes:
-      - nextcloud:/var/www/html:z
-    depends_on:
-      - db
-      - redis
-    networks:
-      - nextcloud
-      - web
+      # Docker labels for enabling Traefik dashboard
+      - "traefik.http.routers.dashboard.rule=Host(`${TRAEFIK_HOSTNAME}`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.entrypoints=secure"
+      # - "traefik.http.services.dashboard.loadbalancer.server.port=8080"
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
+      - "traefik.http.services.dashboard.loadbalancer.passhostheader=true"
+      - "traefik.http.routers.dashboard.middlewares=authtraefik"
+      - "traefik.http.middlewares.authtraefik.basicauth.users=${TRAEFIK_BASIC_AUTH}"
+      - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"
+      - "traefik.http.routers.http-catchall.entrypoints=insecure"
+      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.https_redirect.redirectscheme.permanent=true"
+      # Monitoring Traefik With Prometheus
+      # - traefik.http.services.prometheus.loadbalancer.server.port=9092
+      - "traefik.http.routers.prometheus.rule=PathPrefix(`/metrics`)"
+      - "traefik.http.routers.prometheus.entrypoints=metrics"
+      - "traefik.http.routers.prometheus.service=prometheus@internal"
+      - "traefik.http.routers.prometheus.middlewares=prometheusauth"
+      - "traefik.http.middlewares.prometheusauth.basicauth.users=${TRAEFIK_BASIC_AUTH}"
+      # Compressing the Response before Sending it to the Client
+      - "traefik.http.routers.traefik.middlewares=traefik-compress"
+      - "traefik.http.middlewares.traefik-compress.compress=true"
+    restart: unless-stopped
 
-  cron:
-    image: nextcloud:apache
-    restart: always
-    volumes:
-      - nextcloud:/var/www/html:z
-    entrypoint: /cron.sh
-    depends_on:
-      - db
-      - redis
-    networks:
-      - nextcloud
 
-networks:
-  nextcloud:
-    internal: true
-  web:
-    external: true
-volumes:
-  db:
-  nextcloud:

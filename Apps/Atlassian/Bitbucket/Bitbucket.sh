@@ -10,7 +10,7 @@ sudo mkdir -p /mnt/data/bitbucket/bitbucket
 sudo mkdir -p /mnt/data/bitbucket/postgres
 
 # Set Permissions
-sudo chmod 775 -R /mnt/data
+sudo chmod 600 -R /mnt/data/
 sudo chown -R $USER:docker /mnt/data
 
 # Create the docker volumes for the containers.

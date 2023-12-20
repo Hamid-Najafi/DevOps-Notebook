@@ -4,7 +4,7 @@
 # Make keycloak-data Directory
 sudo mkdir -p /mnt/data/keycloak/postgres
 # Set Permissions
-sudo chmod 775 -R /mnt/data
+sudo chmod 600 -R /mnt/data
 sudo chown -R $USER:docker /mnt/data
 
 # Create the docker volumes for the containers.
@@ -16,7 +16,7 @@ docker volume create \
 
 # Clone Traefik Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Traefik ~/docker/keycloak
+cp -R ~/DevOps-Notebook/Apps/Keycloak ~/docker/keycloak
 cd ~/docker/keycloak
 
 # Check and Edit .env file

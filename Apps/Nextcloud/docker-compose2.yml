@@ -1,0 +1,73 @@
+version: '3'
+services:
+  db:
+    image: postgres:alpine
+    restart: always
+    volumes:
+      - db:/var/lib/postgresql/data:Z
+    environment:
+      - POSTGRES_PASSWORD=PostgreSQLpass.24
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+    networks:
+      - nextcloud
+
+  redis:
+    image: redis:alpine
+    restart: always
+    networks:
+      - nextcloud
+
+  nextcloud:
+    image: nextcloud:apache
+    restart: always
+    # Handeled by traefik
+    # ports:
+    #   - 127.0.0.1:8080:80
+    environment:
+      - NEXTCLOUD_ADMIN_USER=admin
+      - NEXTCLOUD_ADMIN_PASSWORD=Nextcloudpass.24
+      - NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.c1tech.group
+      - POSTGRES_HOST=db
+      - POSTGRES_PASSWORD=PostgreSQLpass.24
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - REDIS_HOST=redis
+      - PHP_MEMORY_LIMIT=1024M
+      - PHP_UPLOAD_LIMIT=1024M 
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.c1tech.group`)"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
+      - "traefik.http.routers.nextcloud.entrypoints=secure"
+      - "traefik.http.routers.nextcloud.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=traefik-network"
+    volumes:
+      - nextcloud:/var/www/html:z
+    depends_on:
+      - db
+      - redis
+    networks:
+      - nextcloud
+      - web
+
+  cron:
+    image: nextcloud:apache
+    restart: always
+    volumes:
+      - nextcloud:/var/www/html:z
+    entrypoint: /cron.sh
+    depends_on:
+      - db
+      - redis
+    networks:
+      - nextcloud
+
+networks:
+  nextcloud:
+    internal: true
+  web:
+    external: true
+volumes:
+  db:
+  nextcloud:
