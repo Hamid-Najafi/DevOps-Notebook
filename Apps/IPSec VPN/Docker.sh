@@ -9,7 +9,7 @@ cp ~/DevOps-Notebook/Apps/IPSec\ VPN/docker-ipsec-vpn-server-master/* ~/docker/i
 cd ~/docker/ipsec-vpn
 # Add new user if needed
 nano vpn.env
-docker-compose up -d
+docker compose up -d
 
 # -------==========-------
 # Ubuntu IPSec VPN Cleint 

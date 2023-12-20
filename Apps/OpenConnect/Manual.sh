@@ -45,7 +45,7 @@ cp ocserv-haproxy.conf ocserv.conf
 
 ##* Set: server-cert, server-key & default-domain
 # nano ocserv.conf
-docker-compose up -d
+docker compose up -d
 
 # List Users
 docker exec -ti ocserv cat /etc/ocserv/ocpasswd

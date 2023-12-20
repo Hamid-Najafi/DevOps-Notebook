@@ -7,32 +7,37 @@ cd  ~/docker/bitbucket
 
 # Make Directories
 sudo mkdir -p /mnt/data/bitbucket/bitbucket
-sudo mkdir -p /mnt/data/bitbucket/postgresql
+sudo mkdir -p /mnt/data/bitbucket/postgres
 
 # Set Permissions
 sudo chmod 775 -R /mnt/data
 sudo chown -R $USER:docker /mnt/data
 
 # Create the docker volumes for the containers.
-# bitbucket
+# Bitbucket
 docker volume create --driver local \
      --opt type=none \
      --opt device=/mnt/data/bitbucket/bitbucket \
-     --opt o=bind bitbucket-bitbucket-data
+     --opt o=bind bitbucket-data
 # PostgreSQL
 docker volume create --driver local \
      --opt type=none \
-     --opt device=/mnt/data/bitbucket/postgresql \
-     --opt o=bind bitbucket-postgresql-data
+     --opt device=/mnt/data/bitbucket/postgres \
+     --opt o=bind bitbucket-postgres
 # Verify
 docker volume list
 
-sudo apt install -y pwgen
+# sudo apt install -y pwgen
 # Database Password
-pwgen -Bsv1 24
-docker-compose up -d
+# pwgen -Bsv1 24
 
-C1Techpass.JC
+docker compose up -d
+
+http://172.25.10.8:7990/
+admin
+C1Tech
+admin@c1tech.group
+C1Techpass.AT
 
 # -------==========-------
 # Atlassian-Agent
@@ -43,7 +48,7 @@ docker exec bitbucket java -jar /var/agent/atlassian-agent.jar \
     -m admin@c1tech.group \
     -n admin@c1tech.group \
     -o C1Tech \
-    -s BUYC-XDT7-WCBV-7FN1
+    -s B7G1-FMDZ-FEK1-XQMV
 
 # -------==========-------
 # atlassian-extras-3.4.6.jar

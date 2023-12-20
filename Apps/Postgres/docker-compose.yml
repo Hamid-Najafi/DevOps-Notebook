@@ -4,6 +4,7 @@ services:
     image: postgres
     hostname: postgres.c1tech.group
     restart: unless-stopped
+    container_name: postgres
     ports:
       - "5432:5432"
     environment:
@@ -11,13 +12,14 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=PostgreSQLpass.24
     volumes:
-      - postgresql-data:/var/lib/postgresql/data
+      - postgresql-postgresql-data:/var/lib/postgresql/data
     networks:
       - db
       - web
   pgadmin:
     image: dpage/pgadmin4
-    hostname: pgadmin.c1tech.group 
+    hostname: pgadmin.c1tech.group
+    container_name: postgres-pgadmin
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@c1tech.group
       - PGADMIN_DEFAULT_PASSWORD=pgAdminpass.24
@@ -35,7 +37,7 @@ services:
       - "traefik.http.routers.pgadmin.tls.certresolver=letsencrypt"
       - "traefik.docker.network=web"
     volumes:
-       - pgadmin-data:/var/lib/pgadmin
+       - postgresql-pgadmin-data:/var/lib/pgadmin
     networks:
       - db
       - web
@@ -45,6 +47,7 @@ networks:
   web:
     external: true
 volumes:
-  postgresql-data:
+  postgresql-postgresql-data:
     external: true
-  pgadmin-data:
+  postgresql-pgadmin-data:
+    external: true

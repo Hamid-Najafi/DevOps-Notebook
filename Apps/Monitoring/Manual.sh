@@ -14,7 +14,7 @@ sudo nano prometheus/prometheus.yml
 # GF_SERVER_ROOT_URL=http://grafana.goldenstarc.ir
 # "traefik.http.routers.grafana.rule=Host(`grafana.goldenstarc.ir`)"
 # sudo nano docker-compose.yml 
-docker-compose up -d
+docker compose up -d
 # -------==========-------
 # Master Light
 # -------==========-------
@@ -28,7 +28,7 @@ sudo nano prometheus/prometheus.yml
 sudo nano docker-compose.yml 
 # GF_SERVER_ROOT_URL=http://grafana.golvir-goldenstarc.ir
 # "traefik.http.routers.grafana.rule=Host(`grafana.vir-gol.ir`)"
-docker-compose up -d
+docker compose up -d
 # -------==========-------
 # Login to GF
 https://grafana.vir-gol.ir
@@ -39,7 +39,7 @@ http://prometheus:9090
 # Edit prometheus
 cd  ~/docker/monitoring
 nano prometheus/prometheus.yml
-docker-compose up -d --force-recreate --no-deps prometheus
+docker compose up -d --force-recreate --no-deps prometheus
 # Check targets
 http://vir-gol.ir:7090/targets
 # -------==========-------
@@ -50,7 +50,7 @@ mkdir -p ~/docker/monitoring
 sudo cp -r ~/DevOps-Notebook/Apps/Monitoring/Slave/* ~/docker/monitoring
 cd  ~/docker/monitoring
 # nano docker-compose.yml
-docker-compose up -d
+docker compose up -d
 # -------==========-------
 # Install Grafana Plugins
 # -------==========-------

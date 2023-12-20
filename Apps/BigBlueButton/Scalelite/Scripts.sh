@@ -59,7 +59,7 @@ openssl rand -hex 24
 # For using a SSL certificate signed by Let’s Encrypt, generate the certificates
 ./init-letsencrypt.sh
 # Start the services
-docker-compose up -d
+docker compose up -d
 # initialize database
 docker exec -i scalelite-api bundle exec rake db:setup
 # Now, the scalelite server is running.
@@ -129,5 +129,5 @@ bbb-conf --secret
 sudo nano .env
 BIGBLUEBUTTON_SECRET=1b6s1esKbXNM82ussxx8OHJTenNvfkBu59tkHHADvqk
 sudo docker run --rm --env-file .env bigbluebutton/greenlight:v2 bundle exec rake conf:check
-sudo docker-compose up -d
+sudo docker compose up -d
 sudo docker exec greenlight-v2 bundle exec rake user:create["Admin","admin@hamid-najafi.ir","BBBpass.24","admin"]

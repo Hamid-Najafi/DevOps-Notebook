@@ -5,8 +5,8 @@
 cd ~/dev
 git clone https://github.com/Hamid-Najafi/BigBlueButton-liveStreaming.git 
 cd ~/dev/BigBlueButton-liveStreaming/
-docker-compose up -d
-docker-compose down
+docker compose up -d
+docker compose down
 # Join as moderator
 https://ib1.vir-gol.ir/bigbluebutton/api/join?fullName=Admin&meetingID=livesteam-1&password=mp&redirect=true&checksum=4bc4b1d088f661c0d9ebe34b177e81dfe5d55388
 # Join as attendee

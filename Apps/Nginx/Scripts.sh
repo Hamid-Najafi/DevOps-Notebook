@@ -187,7 +187,7 @@ git clone https://github.com/3m1o/nginx-rtmp-monitoring.git
 cd nginx-rtmp-monitoring
 cp stat.xsl /etc/nginx/html/
 # 1
-docker-compose up
+docker compose up
 # 2
 sudo snap install node --classic
 npm install pm2@latest -g

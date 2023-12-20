@@ -11,7 +11,7 @@ cp ~/DevOps-Notebook/Apps/Wireguard/docker-compose.yml ~/docker/wireguard/
 cd ~/docker/wireguard 
 # Set Hostname
 nano  ~/docker/wireguard/docker-compose.yml
-docker-compose up -d
+docker compose up -d
 docker logs wireguard -f
 # Scan QRCode and make conf file
 https://webqr.com

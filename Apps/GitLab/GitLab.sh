@@ -7,7 +7,7 @@ cd  ~/docker/gitlab
 
 # 1. Using Official Gitlab image
 cp -f gitlab-docker-compose.yml docker-compose.yml
-docker-compose up -d
+docker compose up -d
 docker exec -ti CONTAINDERID 'cat /data/gitlab/config/initial_root_password'
 
 # 2. Download sameersbn docker-compose.yml and modify it
@@ -51,7 +51,7 @@ docker volume list
 
 sudo apt install -y pwgen
 pwgen -Bsv1 64
-docker-compose up -d
+docker compose up -d
 
 # Set root password
 https://gitlab.c1tech.group/

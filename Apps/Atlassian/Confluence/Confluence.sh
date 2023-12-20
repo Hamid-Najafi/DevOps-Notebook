@@ -7,30 +7,31 @@ cd  ~/docker/confluence
 
 # Make Directories
 sudo mkdir -p /mnt/data/confluence/confluence
-sudo mkdir -p /mnt/data/confluence/postgresql
+sudo mkdir -p /mnt/data/confluence/postgres
 
 # Set Permissions
 sudo chmod 775 -R /mnt/data
 sudo chown -R $USER:docker /mnt/data
 
 # Create the docker volumes for the containers.
-# confluence
+# Confluence
 docker volume create --driver local \
      --opt type=none \
      --opt device=/mnt/data/confluence/confluence \
-     --opt o=bind confluence-confluence-data
+     --opt o=bind confluence-data
 # PostgreSQL
 docker volume create --driver local \
      --opt type=none \
      --opt device=/mnt/data/confluence/postgresql \
-     --opt o=bind confluence-postgresql-data
+     --opt o=bind confluence-postgres
 # Verify
 docker volume list
 
-sudo apt install -y pwgen
+# sudo apt install -y pwgen
 # Database Password
-pwgen -Bsv1 24
-docker-compose up -d
+# pwgen -Bsv1 24
+
+docker compose up -d
 
 C1Techpass.JC
 
@@ -43,7 +44,7 @@ docker exec confluence java -jar /var/agent/atlassian-agent.jar \
     -m admin@c1tech.group \
     -n admin@c1tech.group \
     -o C1Tech \
-    -s BUYC-XDT7-WCBV-7FN1
+    -s BJ8Y-O27N-YIOY-ZIA5
 
 # -------==========-------
 # atlassian-extras-3.4.6.jar

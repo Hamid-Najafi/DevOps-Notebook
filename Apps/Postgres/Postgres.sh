@@ -4,15 +4,23 @@
 mkdir -p ~/docker/postgres
 cp -R ~/DevOps-Notebook/Apps/Postgres/*  ~/docker/postgres
 cd  ~/docker/postgres
-sudo mkdir -p /mnt/data/postgresql
+
+sudo mkdir -p /mnt/data/postgresql/postgresql
+sudo mkdir -p /mnt/data/postgresql/pgadmin
 sudo chmod 775 -R /mnt/data
 sudo chown -R $USER:docker /mnt/data
+
 docker volume create --driver local \
      --opt type=none \
-     --opt device=/mnt/data/postgresql \
-     --opt o=bind postgresql-data
+     --opt device=/mnt/data/postgresql/postgresql \
+     --opt o=bind postgresql-postgresql-data
 
-docker-compose up -d
+docker volume create --driver local \
+     --opt type=none \
+     --opt device=/mnt/data/postgresql/pgadmin \
+     --opt o=bind postgresql-pgadmin-data
+
+docker compose up -d
 # Add New Server -> Connection -> Hostname/Address = postgres, Username = postgres, Password = PostgreSQLpass.24
 # -------==========-------
 # Docker

@@ -8,5 +8,5 @@ cd  ~/docker/emqx
 # Set up the volumes location (its also in .env file)
 mkdir -p /data/emqx
 sudo chown -R c1tech:c1tech /data/*
-docker-compose up -d
+docker compose up -d
 # -------==========-------

@@ -39,4 +39,4 @@ cp -R ~/DevOps-Notebook/Apps/OpenLDAP/*  ~/docker/openldap
 cd  ~/docker/openldap
 # Set up the volumes location (its also in .env file)
 mkdir -p /data/openldap
-docker-compose up -d
+docker compose up -d

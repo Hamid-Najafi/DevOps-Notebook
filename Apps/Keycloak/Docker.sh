@@ -14,7 +14,7 @@ cp -R ~/DevOps-Notebook/Apps/Keycloak/*  ~/docker/keycloak
 cd  ~/docker/keycloak
 
 nano docker-compose.yml
-docker-compose up -d
+docker compose up -d
 
 # BaseURL: http://localhost:8080/
 # Username: admin

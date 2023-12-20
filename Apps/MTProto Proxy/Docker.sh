@@ -10,7 +10,7 @@ cd ~/docker/mtprotoproxy
 # Edit config.env If needed
 # nano config.py
 # run proxy
-docker-compose up -d
+docker compose up -d
 # show logs and connections info
 docker-compose logs
 

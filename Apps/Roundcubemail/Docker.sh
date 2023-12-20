@@ -6,11 +6,11 @@ cd /home/ubuntu/devops-notebook/Apps/Roundcubemail/
 sudo nano docker-compose.yml 
 # volumes:
 #       - ./config:/var/roundcube/config/ 
-docker-compose up -d
+docker compose up -d
 # 2: Wait 60sec to bootstrap database
 # 3: unComment volumes sercion
 docker rm -f roundcubemail
-docker-compose up -d
+docker compose up -d
 
 # -------==========-------
 # Roundcube Docker

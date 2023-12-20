@@ -31,7 +31,7 @@ nano docker-compose.yml
 # Set Host
     #   - "traefik.http.routers.traefik.rule=Host(`traefik.hamid-najafi.ir`)"
 docker network create web
-docker-compose up -d
+docker compose up -d
 
 # -------==========-------
 # Setup Monitoring (optional)
@@ -45,7 +45,7 @@ sudo nano prometheus/prometheus.yml
 # GF_SERVER_ROOT_URL=http://grafana.goldenstarc.ir
 # "traefik.http.routers.grafana.rule=Host(`grafana.goldenstarc.ir`)"
 # sudo nano docker-compose.yml 
-docker-compose up -d
+docker compose up -d
 
 # -------==========-------
 # Setup Virgol
@@ -55,7 +55,7 @@ docker-compose up -d
 mkdir -p ~/docker/virgol
 cp ~/DevOps-Notebook/Apps/Virgol/PaaS/Docker/docker-compose.yml ~/docker/virgol/
 cd ~/docker/virgol
-docker-compose up -d
+docker compose up -d
 
 # -------==========-------
 # Add New Master Admin
@@ -117,7 +117,7 @@ UPDATE "AspNetUsers" SET "Moodle_Id" = 0;
 mkdir -p ~/docker/virgol-landing
 cp ~/DevOps-Notebook/Apps/Virgol/VirgolLanding/docker-compose.yml ~/docker/virgol-landing/
 cd ~/docker/virgol-landing
-docker-compose up -d
+docker compose up -d
 
 # -------==========-------
 # Optimize Services
@@ -156,7 +156,7 @@ git config --global user.name Hamid Najafi
 sudo bash build.sh 1.8.0
 sudo bash build-dei.sh 1.8.3
 
-cd ~/docker/virgol/ && docker-compose pull && docker-compose up -d
+cd ~/docker/virgol/ && docker-compose pull && docker compose up -d
 
 # On virgol server
 mkdir docker/virgol-landing/

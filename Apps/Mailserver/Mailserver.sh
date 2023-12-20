@@ -64,12 +64,12 @@ nano docker-compose.yml
 ./setup.sh email add admin@c1tech.group
 # Mailpass.2476
 # Get up and running
-docker-compose up -d mailserver
+docker compose up -d mailserver
 # docker exec mailserver chown docker:docker -R /srv/vmail
 # docker exec -it mailserver sh
 docker logs mailserver -f
 
-docker-compose down
+docker compose down
 docker volume rm mailserver_maildata mailserver_maillogs mailserver_mailstate
 # -------==========-------
 # DNS Records (Optional)

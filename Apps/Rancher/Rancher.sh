@@ -4,7 +4,7 @@
 mkdir -p ~/docker/rancher
 cp -R ~/DevOps-Notebook/Apps/Rancher/*  ~/docker/rancher
 cd  ~/docker/rancher
-docker-compose up -d
+docker compose up -d
 
 docker-compose logs rancher  2>&1 | grep "Bootstrap Password:"
 

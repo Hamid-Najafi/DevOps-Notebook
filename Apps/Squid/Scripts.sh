@@ -19,7 +19,7 @@ cd ~/docker/squid
 # Add new user if needed
 # sudo apt install apache2-utils
 # sudo htpasswd -c passwords admin
-docker-compose up -d
+docker compose up -d
 
 # -------==========-------
 # htdigest vs htpasswd

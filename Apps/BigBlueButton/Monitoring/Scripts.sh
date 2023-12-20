@@ -13,7 +13,7 @@ cd ~/devops-notebook/Apps/BigBlueButton/Monitoring/bbb-exporter/
 bbb-conf --secret 
 sudo nano secrets.env
 # 2. Run BBB Exporter
-sudo docker-compose up -d
+sudo docker compose up -d
 # 3. Create HTTP basic auth password for exporter (with prometheus connects to)
 # Username: metrics, Password: monitor@bbb
 sudo apt-get install apache2-utils

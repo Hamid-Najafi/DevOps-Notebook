@@ -1,0 +1,92 @@
+# https://pilot.traefik.io/instances
+version: '3.7'
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+      - "9094:9094"
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.yml:/traefik.yml:ro
+      - ./letsencrypt:/letsencrypt
+    labels:
+      - "traefik.enable=true"
+      # Docker labels for enabling Traefik dashboard
+      - "traefik.http.routers.traefik.rule=Host(`traefik.c1tech.group`)"
+      - "traefik.http.routers.traefik.entrypoints=secure"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.traefik.middlewares=dashboardauth"
+      # Basic Authentication for Traefik Dashboard
+      # Passwords must be encoded using MD5, SHA1, or BCrypt https://hostingcanada.org/htpasswd-generator/
+      # sudo apt install -y apache2-utils
+      # echo $(htpasswd -nbB admin "Traefikpass.24") | sed -e s/\\$/\\$\\$/g
+      - "traefik.http.middlewares.dashboardauth.basicauth.users=admin:$$2y$$10$$SbgVUau3Orh8MMDyC2juseRgkwmIkSQq5chJEyEmMqqN3MBwSgM.G"
+      # HTTP to HTTPS redirection
+      - "traefik.http.routers.http_catchall.rule=HostRegexp(`{any:.+}`)"
+      - "traefik.http.routers.http_catchall.entrypoints=insecure"
+      - "traefik.http.routers.http_catchall.middlewares=https_redirect"
+      - "traefik.http.middlewares.https_redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.https_redirect.redirectscheme.permanent=true"
+      # Monitoring Traefik With Prometheus
+      # - traefik.http.services.prometheus.loadbalancer.server.port=9092
+      - traefik.http.routers.prometheus.rule=PathPrefix(`/metrics`)
+      - traefik.http.routers.prometheus.entrypoints=metrics
+      - traefik.http.routers.prometheus.service=prometheus@internal
+      - traefik.http.routers.prometheus.middlewares=prometheusauth
+      - traefik.http.middlewares.prometheusauth.basicauth.users=traefik:$$2y$$10$$SbgVUau3Orh8MMDyC2juseRgkwmIkSQq5chJEyEmMqqN3MBwSgM.G"
+      # Compressing the Response before Sending it to the Client
+      - traefik.http.routers.traefik.middlewares=traefik-compress
+      - traefik.http.middlewares.traefik-compress.compress=true
+    #   # PING healthcheck
+    #   - "--ping=true"
+    #   - "--ping.entrypoint=ping"
+    #   - "--entryPoints.ping.address=:8082"
+    # healthcheck:
+    #   test: ["CMD", "wget", "http://localhost:8082/ping","--spider"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 3
+    #   start_period: 5s
+    networks:
+      - traefik-network
+
+  zabbix-server:
+    image: ${ZABBIX_SERVER_IMAGE_TAG}
+    environment:
+      DB_SERVER_HOST: postgres
+      DB_SERVER_PORT: 5432
+      POSTGRES_DB: ${ZABBIX_DB_NAME}
+      POSTGRES_USER: ${ZABBIX_DB_USER}
+      POSTGRES_PASSWORD: ${ZABBIX_DB_PASSWORD}
+    networks:
+      - zabbix-network
+      - traefik-network
+    healthcheck:
+      test: grep -qr "zabbix_server" /proc/*/status || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.tcp.routers.zabbix-server-tcp.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.zabbix-server-tcp.service=zabbix-server-tcp"
+      - "traefik.tcp.routers.zabbix-server-tcp.entrypoints=zabbix-tcp"
+      - "traefik.tcp.services.zabbix-server-tcp.loadbalancer.server.port=10051"
+      - "traefik.udp.routers.zabbix-server-udp.service=zabbix-server-udp"
+      - "traefik.udp.routers.zabbix-server-udp.entrypoints=zabbix-udp"
+      - "traefik.udp.services.zabbix-server-udp.loadbalancer.server.port=10051"
+      - "traefik.docker.network=traefik-network"
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+networks:
+  traefik-network:
+    external: true

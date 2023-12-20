@@ -1,6 +1,6 @@
 docker rm -f bbb-exporter
 cd ~/bbb-exporter/
-docker-compose up -d
+docker compose up -d
 # ---------------------------------------------------==========---------------------------------------------------------------
 # **** Pre Install ****
 # -------==========-------
@@ -44,7 +44,7 @@ stun turn.vir-gol.ir
 cd docker/monitoringLite/
 nano prometheus/prometheus.yml
 # add server address to 'nodeexporter' , 'cadvisor', and 'bbb' Jobs
-docker-compose up -d --force-recreate --no-deps prometheus
+docker compose up -d --force-recreate --no-deps prometheus
 # -------==========-------
 # Exporters
 # -------==========-------

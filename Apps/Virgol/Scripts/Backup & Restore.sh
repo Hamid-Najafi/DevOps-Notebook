@@ -9,7 +9,7 @@ cd  ~/docker/minio
 # Set Host
     #   - "traefik.http.routers.traefik.rule=Host(`minio.hamid-najafi.ir`)"
 nano docker-compose.yml
-docker-compose up -d
+docker compose up -d
 # ACCESS_KEY=minio
 # SECRET_KEY=MinIOpass.24
 # -------==========-------
