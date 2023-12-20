@@ -1,64 +1,98 @@
 networks:
+  nextcloud-network:
+    external: true
   traefik-network:
     external: true
 
 volumes:
-  traefik-certificates:
+  nextcloud-data:
+    external: true
+  nextcloud-postgres:
+    external: true
+  nextcloud-redis:
     external: true
 
 services:
-  traefik:
-    image: ${TRAEFIK_IMAGE_TAG}
-    container_name: traefik
-    environment:
-      - TZ=${TRAEFIK_TIMEZONE}
+  postgres:
+    image: ${NEXTCLOUD_POSTGRES_IMAGE_TAG}
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik.yml:/traefik.yml:ro
-      - traefik-certificates:/etc/traefik/acme
+      - nextcloud-postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${NEXTCLOUD_DB_NAME}
+      POSTGRES_USER: ${NEXTCLOUD_DB_USER}
+      POSTGRES_PASSWORD: ${NEXTCLOUD_DB_PASSWORD}
     networks:
-      - traefik-network
-    ports:
-      - "80:80"
-      - "443:443"
-      # Prometheus
-      - "9094:9094"
-      # Zabbix forward
-      # - "10050:10050"
-      # - "10051:10051"
+      - nextcloud-network
     healthcheck:
-      test: ["CMD", "wget", "http://localhost:8082/ping","--spider"]
+      test: [ "CMD", "pg_isready", "-q", "-d", "${NEXTCLOUD_DB_NAME}", "-U", "${NEXTCLOUD_DB_USER}" ]
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 5s
-    labels:
-      - "traefik.enable=true"
-      # Docker labels for enabling Traefik dashboard
-      - "traefik.http.routers.dashboard.rule=Host(`${TRAEFIK_HOSTNAME}`)"
-      - "traefik.http.routers.dashboard.service=api@internal"
-      - "traefik.http.routers.dashboard.entrypoints=secure"
-      # - "traefik.http.services.dashboard.loadbalancer.server.port=8080"
-      - "traefik.http.routers.dashboard.tls=true"
-      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
-      - "traefik.http.services.dashboard.loadbalancer.passhostheader=true"
-      - "traefik.http.routers.dashboard.middlewares=authtraefik"
-      - "traefik.http.middlewares.authtraefik.basicauth.users=${TRAEFIK_BASIC_AUTH}"
-      - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"
-      - "traefik.http.routers.http-catchall.entrypoints=insecure"
-      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.https_redirect.redirectscheme.permanent=true"
-      # Monitoring Traefik With Prometheus
-      # - traefik.http.services.prometheus.loadbalancer.server.port=9092
-      - "traefik.http.routers.prometheus.rule=PathPrefix(`/metrics`)"
-      - "traefik.http.routers.prometheus.entrypoints=metrics"
-      - "traefik.http.routers.prometheus.service=prometheus@internal"
-      - "traefik.http.routers.prometheus.middlewares=prometheusauth"
-      - "traefik.http.middlewares.prometheusauth.basicauth.users=${TRAEFIK_BASIC_AUTH}"
-      # Compressing the Response before Sending it to the Client
-      - "traefik.http.routers.traefik.middlewares=traefik-compress"
-      - "traefik.http.middlewares.traefik-compress.compress=true"
+      start_period: 60s
     restart: unless-stopped
 
+  redis:
+    image: ${NEXTCLOUD_REDIS_IMAGE_TAG}
+    command: ["redis-server", "--requirepass", "$NEXTCLOUD_REDIS_PASSWORD"]
+    volumes:
+      - redis-data:/data
+    networks:
+      - nextcloud-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
 
+  nextcloud:
+    image: ${NEXTCLOUD_IMAGE_TAG}
+    volumes:
+      - nextcloud-data:${DATA_PATH}
+    environment:
+      TZ: ${NEXTCLOUD_TIMEZONE}
+      POSTGRES_HOST: postgres
+      DB_PORT: 5432
+      POSTGRES_DB: ${NEXTCLOUD_DB_NAME}
+      POSTGRES_USER: ${NEXTCLOUD_DB_USER}
+      POSTGRES_PASSWORD: ${NEXTCLOUD_DB_PASSWORD}
+      REDIS_HOST: redis
+      REDIS_HOST_PORT: 6379
+      REDIS_HOST_PASSWORD: ${NEXTCLOUD_REDIS_PASSWORD}
+      NEXTCLOUD_ADMIN_USER: ${NEXTCLOUD_ADMIN_USERNAME}
+      NEXTCLOUD_ADMIN_PASSWORD: ${NEXTCLOUD_ADMIN_PASSWORD}
+      NEXTCLOUD_TRUSTED_DOMAINS: ${NEXTCLOUD_HOSTNAME}
+      TRUSTED_PROXIES: ${NEXTCLOUD_HOSTNAME}
+      OVERWRITECLIURL: ${NEXTCLOUD_URL}
+      OVERWRITEPROTOCOL: https
+      OVERWRITEHOST: ${NEXTCLOUD_HOSTNAME}
+    networks:
+      - nextcloud-network
+      - traefik-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nextcloud.rule=Host(`${NEXTCLOUD_HOSTNAME}`)"
+      - "traefik.http.routers.nextcloud.service=nextcloud"
+      - "traefik.http.routers.nextcloud.entrypoints=secure"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
+      - "traefik.http.routers.nextcloud.tls=true"
+      - "traefik.http.routers.nextcloud.tls.certresolver=letsencrypt"
+      - "traefik.http.services.nextcloud.loadbalancer.passhostheader=true"
+      - "traefik.http.routers.nextcloud.middlewares=compresstraefik"
+      - "traefik.http.middlewares.compresstraefik.compress=true"
+      - "traefik.docker.network=traefik-network"
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      traefik:
+        condition: service_healthy
