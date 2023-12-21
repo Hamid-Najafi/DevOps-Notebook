@@ -23,3 +23,6 @@ docker volume create --driver local \
 docker network create emqx-network
 
 docker compose up -d
+
+Username: admin
+Password: public || EMQXpass.24
