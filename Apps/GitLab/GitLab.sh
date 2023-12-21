@@ -10,7 +10,7 @@ sudo mkdir -p /mnt/data/gitlab/redis
 sudo mkdir -p /mnt/data/gitlab/postgres
 
 # Set Permissions
-sudo chmod 600 -R /mnt/data/gitlab
+sudo chmod 770 -R /mnt/data/gitlab
 sudo chown -R $USER:docker /mnt/data
 
 # Create the docker volumes for the containers.

@@ -4,7 +4,7 @@
 # Make keycloak-data Directory
 sudo mkdir -p /mnt/data/keycloak/postgres
 # Set Permissions
-sudo chmod 600 -R /mnt/data
+sudo chmod 770 -R /mnt/data
 sudo chown -R $USER:docker /mnt/data
 
 # Create the docker volumes for the containers.

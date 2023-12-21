@@ -56,7 +56,7 @@ df -h
 # Increase SWAP Partition
 sudo swapoff -a
 sudo fallocate -l 4G /swapfile
-sudo chmod 600 /swapfile
+sudo chmod 770 /swapfile
 sudo mkswap /swapfile
 sudo swapon /swapfile
 htop
