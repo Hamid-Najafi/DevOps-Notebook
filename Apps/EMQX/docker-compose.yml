@@ -39,10 +39,14 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.emqx.rule=Host(`${EMQX_HOSTNAME}`)"
       - "traefik.http.services.emqx.loadbalancer.server.port=80"
+      - "traefik.http.routers.emqx.service=emqx"
       - "traefik.http.routers.emqx.entrypoints=secure"
+      - "traefik.http.routers.emqx.tls=true"
       - "traefik.http.routers.emqx.tls.certresolver=letsencrypt"
-    volumes:
-       - postgres-pgadmin:/var/lib/pgadmin
+      - "traefik.http.routers.emqx.middlewares=compresstraefik"
+      - "traefik.http.middlewares.compresstraefik.compress=true"
+      - "traefik.docker.network=traefik-network"
     networks:
-      - postgres-network
+      - emqx-network
       - traefik-network
+
