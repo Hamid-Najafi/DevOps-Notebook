@@ -10,8 +10,8 @@ sudo mkdir -p /mnt/data/jira/jira
 sudo mkdir -p /mnt/data/jira/postgres
 
 # Set Permissions
-sudo chmod 600 -R /mnt/data
-sudo chown -R $USER:docker /mnt/data
+sudo chmod 770 -R /mnt/data/jira
+sudo chown -R $USER:docker /mnt/data/jira
 
 # Create the docker volumes for the containers.
 # Jira
@@ -30,9 +30,25 @@ docker volume list
 # sudo apt install -y pwgen
 # Database Password
 # pwgen -Bsv1 24
-nano .env
+# nano .env
 
+docker network create jira-network
 docker compose up -d
+
+# -------==========-------
+# Login localy and set Base url after first setup:
+# https://jira.c1tech.group
+To configure the base URL:
+In the upper-right corner of the screen, select Administration  > System.
+In the sidebar, select General configuration.
+Select Edit settings.
+Enter the new URL in the Base URL text box.
+Select Update to save your changes.
+# -------==========-------
+C1Tech
+admin@c1tech.group
+admin
+C1Techpass.AT
 # -------==========-------
 # Atlassian-Agent
 # -------==========-------
@@ -42,7 +58,7 @@ docker exec jira java -jar /var/agent/atlassian-agent.jar \
     -m admin@c1tech.group \
     -n admin@c1tech.group \
     -o C1Tech \
-    -s BNZK-FZSR-R38X-UOXF
+    -s BDWG-36B4-SMZ8-99UG
 
 # -------==========-------
 # atlassian-extras-3.4.6.jar
