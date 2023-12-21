@@ -11,10 +11,18 @@ volumes:
 services:
   portainer:
     image: ${PORTAINER_IMAGE_TAG}
+    container_name: portainer
     command: -H unix:///var/run/docker.sock
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer-data:/data
+    # healthcheck:
+    #   test: ['CMD', 'portainer', '--healthcheck']
+    #   test: "wget --no-verbose --tries=3 --spider http://localhost:9000 || exit 1"
+    #   interval: 20s
+    #   timeout: 5s
+    #   retries: 3
+    #   start_period: 60s
     security_opt:
       - no-new-privileges:true
     networks:

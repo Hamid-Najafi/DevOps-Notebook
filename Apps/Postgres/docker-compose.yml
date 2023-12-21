@@ -45,6 +45,12 @@ services:
     # Handeled by traefik
     # ports:
     # - "8081:80"
+    healthcheck:
+      test: ["CMD", "wget", "-O", "-", "http://localhost:80/misc/ping"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
     depends_on:
       - postgres
     labels:
