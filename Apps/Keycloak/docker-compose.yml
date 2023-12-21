@@ -1,6 +1,6 @@
 networks:
   keycloak-network:
-    internal: true
+    external: true
   traefik-network:
     external: true
 

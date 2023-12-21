@@ -1,6 +1,6 @@
 networks:
   confluence-network:
-    internal: true
+    external: true
   traefik-network:
     external: true
 
@@ -16,11 +16,9 @@ services:
     restart: always
     container_name: confluence
     environment:
+    # https://hub.docker.com/r/atlassian/confluence-server
       JVM_MINIMUM_MEMORY: ${CONFLUENCE_JVM_MINIMUM_MEMORY}
       JVM_MAXIMUM_MEMORY: ${CONFLUENCE_JVM_MAXIMUM_MEMORY}
-      VIRTUAL_HOST: ${CONFLUENCE_HOSTNAME}
-      VIRTUAL_PORT: 8090
-      ATLAS_OPTS: ' -Datlassian.dev.mode=false'
       ATL_PROXY_NAME: ${CONFLUENCE_HOSTNAME}
       ATL_TOMCAT_SECURE: 'true'
       ATL_TOMCAT_SCHEME: https
@@ -31,15 +29,15 @@ services:
       ATL_JDBC_PASSWORD: ${CONFLUENCE_DB_PASSWORD}
       ATL_JDBC_URL: jdbc:postgresql://postgres:5432/${CONFLUENCE_DB_NAME}
       JVM_CODE_CACHE_ARGS: ' -XX:InitialCodeCacheSize=1g -XX:ReservedCodeCacheSize=8g'
-      TZ: Asia/Tehran
+      TZ: ${CONFLUENCE_TIMEZONE}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8090/"]
       interval: 10s
       timeout: 5s
       retries: 3
       start_period: 90s
-    ports:
-      - 8090:8090
+    # ports:
+    #   - 8090:8090
     depends_on:
       postgres:
         condition: service_healthy
@@ -61,7 +59,8 @@ services:
       - confluence-data:${CONFLUENCE_DATA_PATH}
     networks:
       - traefik-network
-
+      - confluence-network
+  
   postgres:
     image: ${CONFLUENCE_POSTGRES_IMAGE_TAG}
     restart: always
@@ -76,7 +75,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 30s
+      start_period: 60s
     volumes:
       - confluence-postgres:/var/lib/postgresql/data
     networks:

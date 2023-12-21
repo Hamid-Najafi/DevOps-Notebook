@@ -10,8 +10,8 @@ sudo mkdir -p /mnt/data/bitbucket/bitbucket
 sudo mkdir -p /mnt/data/bitbucket/postgres
 
 # Set Permissions
-sudo chmod 770 -R /mnt/data/
-sudo chown -R $USER:docker /mnt/data
+sudo chmod 770 -R /mnt/data/bitbucket
+sudo chown -R $USER:docker /mnt/data/bitbucket
 
 # Create the docker volumes for the containers.
 # Bitbucket
@@ -30,7 +30,9 @@ docker volume list
 # sudo apt install -y pwgen
 # Database Password
 # pwgen -Bsv1 24
+# nano .env
 
+docker network create bitbucket-network
 docker compose up -d
 
 http://172.25.10.8:7990/
@@ -48,7 +50,7 @@ docker exec bitbucket java -jar /var/agent/atlassian-agent.jar \
     -m admin@c1tech.group \
     -n admin@c1tech.group \
     -o C1Tech \
-    -s B7G1-FMDZ-FEK1-XQMV
+    -s BVM2-EY0O-RTXD-M2OP
 
 # -------==========-------
 # atlassian-extras-3.4.6.jar

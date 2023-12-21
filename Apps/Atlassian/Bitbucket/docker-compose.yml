@@ -1,6 +1,6 @@
 networks:
   bitbucket-network:
-    internal: true
+    external: true
   traefik-network:
     external: true
 
@@ -16,31 +16,30 @@ services:
     restart: always
     container_name: bitbucket
     environment:
+      # https://hub.docker.com/r/atlassian/bitbucket-server
       JVM_MINIMUM_MEMORY: ${BITBUCKET_JVM_MINIMUM_MEMORY}
       JVM_MAXIMUM_MEMORY: ${BITBUCKET_JVM_MAXIMUM_MEMORY}
-      VIRTUAL_HOST: ${BITBUCKET_HOSTNAME}
-      VIRTUAL_PORT: 7990
-      ATLAS_OPTS: ' -Datlassian.dev.mode=false'
-      ATL_PROXY_NAME: ${BITBUCKET_HOSTNAME}
-      ATL_TOMCAT_SECURE: 'true'
-      ATL_TOMCAT_SCHEME: https
-      ATL_PROXY_PORT: 443
+      SERVER_PROXY_NAME : ${BITBUCKET_HOSTNAME}
+      SERVER_SECURE : 'true'
+      SERVER_SCHEME : https
+      SERVER_FORWARD_HEADERS_STRATEGY : NONE
+      SERVER_PROXY_PORT : 443
       ATL_DB_TYPE: postgres72
       ATL_DB_DRIVER: org.postgresql.Driver
       ATL_JDBC_USER: ${BITBUCKET_DB_USER}
       ATL_JDBC_PASSWORD: ${BITBUCKET_DB_PASSWORD}
       ATL_JDBC_URL: jdbc:postgresql://postgres:5432/${BITBUCKET_DB_NAME}
       JVM_CODE_CACHE_ARGS: ' -XX:InitialCodeCacheSize=1g -XX:ReservedCodeCacheSize=8g'
-      TZ: Asia/Tehran
+      TZ: ${BITBUCKET_TIMEZONE}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:7990/"]
       interval: 10s
       timeout: 5s
       retries: 3
       start_period: 90s
-    ports:
-      - "7990:7990"
-      - "7999:7999"
+    # ports:
+    #   - "7990:7990"
+    #   - "7999:7999"
     depends_on:
       postgres:
         condition: service_healthy

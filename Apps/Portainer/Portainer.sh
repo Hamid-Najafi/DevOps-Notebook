@@ -20,9 +20,8 @@ cp -R ~/DevOps-Notebook/Apps/Portainer ~/docker/portainer
 cd ~/docker/portainer
 
 # Check and Edit .env file
-nano .env
+# nano .env
 
 # Create Network and Run
-# Note: Check firewall & mapping rules for Port: 80 & 443
 docker network create portainer-network
 docker compose up -d
