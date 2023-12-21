@@ -7,7 +7,7 @@ sudo mkdir -p /mnt/data/nextcloud/postgres
 sudo mkdir -p /mnt/data/nextcloud/redis
 
 # Set Permissions
-sudo chmod 600 -R /mnt/data/nextcloud
+sudo chmod 770 -R /mnt/data/nextcloud
 sudo chown -R $USER:docker /mnt/data
 
 # Create the docker volumes for the containers.

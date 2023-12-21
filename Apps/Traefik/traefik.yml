@@ -35,6 +35,10 @@ entryPoints:
     address: ":9094"
   ping:
     address: ":8082"
+  ping:
+    address: ":8082"
+  ssh:
+    address: ":22"
   # zabbix-tcp:
   #   address: ":8082"
   # zabbix-udp:

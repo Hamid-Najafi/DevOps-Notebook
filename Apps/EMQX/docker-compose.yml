@@ -1,32 +1,48 @@
-version: "3.5"
+networks:
+  emqx-network:
+    external: true
+  traefik-network:
+    external: true
 
+volumes:
+  emqx-data:
+    external: true
+  emqx-logs:
+    external: true
+
+version: "3.5"
 services:
   emqx:
-    image: emqx/emqx:latest
-    hostname: 'emqx.c1tech.group'
+    image: ${EMQX_IMAGE_TAG}
+    container_name: emqx
+    hostname: ${EMQX_HOSTNAME}
     restart: always
+    healthcheck:
+      test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
+      interval: 5s
+      timeout: 25s
+      retries: 5
     environment:
       - EMQX_LOADED_PLUGINS="emqx_bridge_mqtt,emqx_recon,emqx_retainer,emqx_management,emqx_dashboard"
-      - EMQX_ADMIN_PASSWORD=brokerpw1
-      - EMQX_NAME=deephub_emqx
-      - EMQX_HOST=127.0.0.1
+      - EMQX_ADMIN_PASSWORD=${EMQX_PASSWORD}
+      - EMQX_NAME=${EMQX_NAME}
+      - EMQX_HOST=${EMQX_HOSTNAME}
     ports:
       - 18083:18083
       - 1883:1883
       - 8883:8883
     volumes:
-      - '$EMQX_HOME/data:/opt/emqx/data'
-      # - '$EMQX_HOME/etc:/opt/emqx/etc'
-      - '$EMQX_HOME/log:/opt/emqx/log'
+      - emqx-data:/opt/emqx/data
+      # -exmx-etc:/opt/emqx/etc
+      - emqx-logs:/opt/emqx/log
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.emqx.rule=Host(`emqx.c1tech.group`)"
+      - "traefik.http.routers.emqx.rule=Host(`${EMQX_HOSTNAME}`)"
       - "traefik.http.services.emqx.loadbalancer.server.port=80"
       - "traefik.http.routers.emqx.entrypoints=secure"
       - "traefik.http.routers.emqx.tls.certresolver=letsencrypt"
+    volumes:
+       - postgres-pgadmin:/var/lib/pgadmin
     networks:
-      - default
-networks:
-  default:
-    external:
-      name: gateway
+      - postgres-network
+      - traefik-network

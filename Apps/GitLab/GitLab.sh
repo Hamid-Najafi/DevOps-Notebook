@@ -62,3 +62,7 @@ nano .env
 # Note: Check firewall & mapping rules for Port: 80 & 443
 docker network create gitlab-network
 docker compose up -d
+
+sudo docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
+Username: root
+Password: 

@@ -7,8 +7,8 @@ cd ~/docker/postgres
 
 sudo mkdir -p /mnt/data/postgres/postgres
 sudo mkdir -p /mnt/data/postgres/pgadmin
-sudo chmod 600 -R /mnt/data
-sudo chown -R $USER:docker /mnt/data
+sudo chmod 770 -R /mnt/data
+sudo chown -R $USER:docker /mnt/data/postgres
 
 docker volume create --driver local \
      --opt type=none \

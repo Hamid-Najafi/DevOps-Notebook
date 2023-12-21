@@ -19,6 +19,7 @@ volumes:
 services:
   postgres:
     image: ${GITLAB_POSTGRES_IMAGE_TAG}
+    container_name: gitlab-postgres
     volumes:
       - gitlab-postgres:/var/lib/postgresql/data
     environment:
@@ -52,6 +53,7 @@ services:
 
   gitlab:
     image: ${GITLAB_IMAGE_TAG}
+    container_name: gitlab
     volumes:
       - gitlab-data:/var/opt/gitlab
       - gitlab-logs:/var/log/gitlab
@@ -128,6 +130,7 @@ services:
 
   gitlab-runner-1:
     image: ${GITLAB_RUNNER_IMAGE_TAG}
+    container_name: gitlab-runner-1
     volumes:
       - gitlab-runner-config:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
