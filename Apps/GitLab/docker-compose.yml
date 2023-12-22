@@ -98,6 +98,30 @@ services:
 
         gitlab_rails['gitlab_email_from'] = "${GITLAB_EMAIL_FROM}"
         gitlab_rails['gitlab_email_reply_to'] = "${GITLAB_EMAIL_REPLY_TO}"
+
+        gitlab_rails['ldap_enabled'] = true
+        gitlab_rails['ldap_servers'] = {
+          'main' => {
+            'label' => 'LDAP',
+            'host' =>  '172.25.10.5',
+            'port' => 389,
+            'uid' => 'sAMAccountName',
+            'encryption' => 'plain',
+            'bind_dn' => 'CN=Administrator,CN=Users,DC=C1Tech,DC=local',
+            'password' => 'C1Techpass.DC',
+            'active_directory' => true,
+            'allow_username_or_email_login' => true,
+            'block_auto_created_users' => false,
+            'base' => 'OU=Users,OU=C1Tech,DC=C1Tech,DC=local',
+            'attributes' => {
+              'username' => ['uid', 'userid', 'sAMAccountName'],
+              'email' =>    ['mail', 'email', 'userPrincipalName'],
+              'name' =>      'cn',
+              'first_name' => 'givenName',
+              'last_name' =>  'sn'
+              }
+          }
+        }
     networks:
       - gitlab-network
       - traefik-network

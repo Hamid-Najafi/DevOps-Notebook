@@ -19,11 +19,13 @@ services:
     # https://hub.docker.com/r/atlassian/jira-software
       JVM_MINIMUM_MEMORY: ${JIRA_JVM_MINIMUM_MEMORY}
       JVM_MAXIMUM_MEMORY: ${JIRA_JVM_MAXIMUM_MEMORY}
+      JVM_RESERVED_CODE_CACHE_SIZE: ${JIRA_JVM_RESERVED_CODE_CACHE_SIZE}
       ATL_PROXY_NAME: ${JIRA_HOSTNAME}
       ATL_TOMCAT_SECURE: 'true'
       ATL_TOMCAT_SCHEME: https
       ATL_PROXY_PORT: 443
       ATL_DB_TYPE: postgres72
+      ATL_TOMCAT_CONTEXTPATH=jira
       ATL_DB_DRIVER: org.postgresql.Driver
       ATL_JDBC_USER:  ${JIRA_DB_USER}
       ATL_JDBC_PASSWORD: ${JIRA_DB_PASSWORD}

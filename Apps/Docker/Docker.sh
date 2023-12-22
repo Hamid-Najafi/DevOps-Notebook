@@ -95,9 +95,11 @@ docker push goldenstarc/bigbluebutton-livestreaming
 # -------==========-------
 docker exec -ti container_name /bin/bash
 docker exec -ti container_name sh
-
+# -------==========-------
+# Clear Logs
+# -------==========-------
 echo "" > $(docker inspect --format='{{.LogPath}}' <container_name_or_id>)
-echo "" > $(docker inspect --format='{{.LogPath}}' virgol_main)
+echo "" > $(docker inspect --format='{{.LogPath}}' traefik)
 # -------==========-------
 # HTTP Proxy
 # -------==========-------

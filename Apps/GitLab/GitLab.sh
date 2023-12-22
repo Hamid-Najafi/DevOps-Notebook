@@ -11,7 +11,7 @@ sudo mkdir -p /mnt/data/gitlab/postgres
 
 # Set Permissions
 sudo chmod 770 -R /mnt/data/gitlab
-sudo chown -R $USER:docker /mnt/data
+sudo chown -R $USER:docker /mnt/data//gitlab
 
 # Create the docker volumes for the containers.
 docker volume create \
@@ -56,13 +56,12 @@ cp -R ~/DevOps-Notebook/Apps/GitLab ~/docker/gitlab
 cd ~/docker/gitlab
 
 # Check and Edit .env file
-nano .env
+# nano .env
 
 # Create Network and Run
-# Note: Check firewall & mapping rules for Port: 80 & 443
 docker network create gitlab-network
 docker compose up -d
 
 sudo docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
 Username: root
-Password: 
+Password: 4bSmKX2URRfYiWxOe3xnS1vUWR5pxvRYh2gc8xO9NOg=
