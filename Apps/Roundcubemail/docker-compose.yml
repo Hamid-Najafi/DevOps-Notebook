@@ -1,18 +1,27 @@
+networks:
+  roundcubemail-network:
+    external: true
+  traefik-network:
+    external: true
+
+volumes:
+  roundcubemail-postgres:
+    external: true
+
 version: "3.5"
 services:
   roundcubemail:
-    image: roundcube/roundcubemail
+    image: ${ROUNDCUBEMAIL_IMAGE_TAG}
     restart: always
     container_name: roundcubemail
-    depends_on:
-      - mysql
-    # ports:
-    #   - "8084:80"
+    mysql:
+      postgres:
+        condition: service_healthy
     environment:
-      - ROUNDCUBEMAIL_DEFAULT_HOST=tls://mail.hamid-najafi.ir
-      - ROUNDCUBEMAIL_SMTP_SERVER=tls://mail.hamid-najafi.ir
-      - ROUNDCUBEMAIL_DB_TYPE=mysql
-      - ROUNDCUBEMAIL_DB_HOST=mysql
+      - ROUNDCUBEMAIL_DEFAULT_HOST=${ROUNDCUBEMAIL_DEFAULT_HOST}
+      - ROUNDCUBEMAIL_SMTP_SERVER=${ROUNDCUBEMAIL_SMTP_SERVER}
+      - ROUNDCUBEMAIL_DB_TYPE=${ROUNDCUBEMAIL_DB_TYPE}
+      - ROUNDCUBEMAIL_DB_HOST=${ROUNDCUBEMAIL_DB_HOST}
       - ROUNDCUBEMAIL_DB_USER=roundcube
       - ROUNDCUBEMAIL_DB_PASSWORD=Roundcubepass.24
       - ROUNDCUBEMAIL_DB_NAME=roundcubemail
@@ -24,27 +33,26 @@ services:
       - "traefik.http.routers.roundcubemail.tls.certresolver=letsencrypt"
       - "traefik.docker.network=traefik-network"
     volumes:
-      - ./config:/var/roundcube/config/ 
+      - ./config:/var/roundcube/config/
     networks:
       - web
       - db
-  mysql:
-    image: mysql:5.7
-    restart: always
-    container_name: roundcubemail_db
+
+  postgres:
+    image: ${ROUNDCUBEMAIL_POSTGRES_IMAGE_TAG}
+    container_name: roundcubemail-postgres
     volumes:
-      - mysqlDb:/var/lib/mysql
+      - roundcubemail-postgres:/var/lib/postgresql/data
     environment:
-      MYSQL_ROOT_PASSWORD: mySQLpass.24
-      MYSQL_DATABASE: roundcubemail
-      MYSQL_USER: roundcube
-      MYSQL_PASSWORD: Roundcubepass.24
+      POSTGRES_DB: ${ROUNDCUBEMAIL_DB_NAME}
+      POSTGRES_USER: ${ROUNDCUBEMAIL_DB_USER}
+      POSTGRES_PASSWORD: ${ROUNDCUBEMAIL_DB_PASSWORD}
     networks:
-      - traefik-network
-networks:
-  db:
-    internal: true
-  web:
-    external: true
-volumes:
-  mysqlDb:
+      - roundcubemail-network
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${ROUNDCUBEMAIL_DB_NAME}", "-U", "${ROUNDCUBEMAIL_DB_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped

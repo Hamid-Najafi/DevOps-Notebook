@@ -1,17 +1,35 @@
 # -------==========-------
-# Roundcube Docker-Compose
+# RoundcubeMail Docker Compose
 # -------==========-------
-cd /home/ubuntu/devops-notebook/Apps/Roundcubemail/
-# 1: Comment roundcubemail volumes section in docker-compose.yml  
-sudo nano docker-compose.yml 
-# volumes:
-#       - ./config:/var/roundcube/config/ 
+# Make roundcube-data Directory
+sudo mkdir -p /mnt/data/roundcubemail/postgres
+# Set Permissions
+sudo chmod 770 -R /mnt/data/roundcubemail
+sudo chown -R $USER:docker /mnt/data/roundcubemail/postgres
+
+# Create the docker volumes for the containers.
+docker volume create \
+      --driver local \
+      --opt type=none \
+      --opt device=/mnt/data/roundcubemail/postgres \
+      --opt o=bind roundcubemail-postgres
+
+# Clone Vaultwarden Directory
+mkdir -p ~/docker
+cp -R ~/DevOps-Notebook/Apps/Roundcubemail ~/docker/roundcubemail
+cd ~/docker/roundcubemail
+
+# Check and Edit .env file
+# nano .env
+
+# Create Network and Run
+docker network create roundcube-network
 docker compose up -d
+
 # 2: Wait 60sec to bootstrap database
 # 3: unComment volumes sercion
 docker rm -f roundcubemail
 docker compose up -d
-
 # -------==========-------
 # Roundcube Docker
 # -------==========-------
