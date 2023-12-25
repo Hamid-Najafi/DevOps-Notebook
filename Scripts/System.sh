@@ -102,8 +102,12 @@ sudo lsof -p 15014
 timedatectl
 # List of available timezone
 timedatectl list-timezones
-# Set new timezone by replacing Asia/Kolkata with your timezone
+# Set new timezone
+# A list of these tz database names can be looked up at Wikipedia
+# https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 sudo timedatectl set-timezone Asia/Tehran 
+# Verify
+cat /etc/localtime
 # -------==========-------
 # Ubuntu Automatic Update
 sudo nano /etc/update-manager/release-upgrades

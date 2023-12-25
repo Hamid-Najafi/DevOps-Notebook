@@ -33,7 +33,7 @@ $config = array();
 //       for Mysql: key, cipher, cert, capath, ca, verify_server_cert,
 //       for Postgres: application_name, sslmode, sslcert, sslkey, sslrootcert, sslcrl, sslcompression, service.
 //       e.g. 'mysql://roundcube:@localhost/roundcubemail?verify_server_cert=false'
-$config['db_dsnw'] = 'mysql://roundcube:Roundcubepass.24@mysql:3306/roundcubemail';
+// $config['db_dsnw'] = 'pgsql://roundcube:Roundcubepass.24@mysql:3306/roundcubemail';
 
 // Database DSN for read-only operations (if empty write database will be used)
 // useful for database replication
@@ -144,7 +144,7 @@ $config['redis_debug'] = false;
 // For example %n = mail.domain.tld, %t = domain.tld
 // WARNING: After hostname change update of mail_host column in users table is
 //          required to match old user data records with the new host.
-$config['default_host'] = 'tls://mail.hamid-najafi.ir';
+$config['default_host'] = 'tls://mail.c1tech.group';
 
 // TCP port used for IMAP connections
 $config['default_port'] = 143;
@@ -269,7 +269,7 @@ $config['messages_cache_threshold'] = 50;
 // For example %n = mail.domain.tld, %t = domain.tld
 // To specify differnt SMTP servers for different IMAP hosts provide an array
 // of IMAP host (no prefix or port) and SMTP server e.g. array('imap.example.com' => 'smtp.example.net')
-$config['smtp_server'] = 'tls://mail.hamid-najafi.ir';
+$config['smtp_server'] = 'tls://mail.c1tech.group';
 
 // SMTP port. Use 25 for cleartext, 465 for Implicit TLS, or 587 for STARTTLS (default)
 $config['smtp_port'] = 587;
@@ -391,7 +391,7 @@ $config['advanced_prefs'] = array();
 
 // provide an URL where a user can get support for this Roundcube installation
 // PLEASE DO NOT LINK TO THE ROUNDCUBE.NET WEBSITE HERE!
-$config['support_url'] = 'support.hamid-najafi.ir';
+$config['support_url'] = 'support.c1tech.group';
 
 // Logo image replacement. Specifies location of the image as:
 // - URL relative to the document root of this Roundcube installation
@@ -562,7 +562,7 @@ $config['cipher_method'] = 'DES-EDE3-CBC';
 // %d - domain (http hostname $_SERVER['HTTP_HOST'] without the first part)
 // %z - IMAP domain (IMAP hostname without the first part)
 // For example %n = mail.domain.tld, %t = domain.tld
-$config['username_domain'] = 'hamid-najafi.ir';
+$config['username_domain'] = 'c1tech.group';
 
 // Force domain configured in username_domain to be used for login.
 // Any domain in username will be replaced by username_domain.

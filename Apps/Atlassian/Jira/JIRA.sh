@@ -35,6 +35,10 @@ docker volume list
 docker network create jira-network
 docker compose up -d
 
+# Disabling secure administrator sessions
+docker exec jira sh -c 'echo "jira.websudo.is.disabled = true" >>/var/atlassian/application-data/jira/jira-config.properties' 
+docker exec jira sh -c 'echo "jira.websudo.is.disabled = true" >>/var/jira/jira-config.properties' 
+docker compose restart
 # -------==========-------
 # Login localy and set Base url after first setup:
 # https://jira.c1tech.group

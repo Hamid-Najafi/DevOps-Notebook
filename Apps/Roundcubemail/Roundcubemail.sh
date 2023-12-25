@@ -23,8 +23,9 @@ cd ~/docker/roundcubemail
 # nano .env
 
 # Create Network and Run
-docker network create roundcube-network
+docker network create roundcubemail-network
 docker compose up -d
+# https://webmail.c1tech.group/
 
 # 2: Wait 60sec to bootstrap database
 # 3: unComment volumes sercion
