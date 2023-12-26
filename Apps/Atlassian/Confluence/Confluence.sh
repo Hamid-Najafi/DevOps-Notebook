@@ -35,6 +35,11 @@ docker volume list
 docker network create confluence-network
 docker compose up -d
 
+# Disabling secure administrator sessions
+docker exec jira sh -c 'echo "jira.websudo.is.disabled = true" >>/var/atlassian/application-data/jira/jira-config.properties' 
+docker exec jira sh -c 'echo "confluence.websudo.is.disabled = true" >>/var/confluence/confluence-config.properties' 
+cd  ~/docker/confluence
+docker compose restart
 # -------==========-------
 C1Tech
 admin@c1tech.group

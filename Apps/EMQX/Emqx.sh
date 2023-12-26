@@ -22,6 +22,7 @@ docker volume create --driver local \
 
 docker network create emqx-network
 
+####* DONT FORGET TO ACCESS OPEN PORTs: 1883/8883/8083/8084
 docker compose up -d
 
 Username: admin

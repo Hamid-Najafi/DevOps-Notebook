@@ -28,6 +28,11 @@ services:
       - EMQX_NAME=${EMQX_NAME}
       - EMQX_HOST=${EMQX_HOSTNAME}
     ports:
+      # TCP listener using port 1883
+      # SSL/TLS secure connection listener using port 8883
+      # WebSocket listener using port 8083
+      # WebSocket secure listener using port 8084
+      # Dasboard 18083
       # - 18083:18083
       - 1883:1883
       - 8883:8883

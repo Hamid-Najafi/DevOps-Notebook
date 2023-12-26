@@ -1,0 +1,57 @@
+networks:
+  mailserver-network:
+    external: true
+  traefik-network:
+    external: true
+
+volumes:
+  traefik-certificates:
+    external: true
+
+services:
+  mailserver:
+    image: ${DMS_IMAGE_TAG}
+    container_name: mailserver
+    # Provide the FQDN of your mail server here (Your DNS MX record should point to this value)
+    hostname: ${DMS_HOSTNAME}
+    env_file: mailserver.env
+    # More information about the mail-server ports:
+    # https://docker-mailserver.github.io/docker-mailserver/latest/config/security/understanding-the-ports/
+    # To avoid conflicts with yaml base-60 float, DO NOT remove the quotation marks.
+    ports:
+      - "25:25"    # SMTP  (explicit TLS => STARTTLS, Authentication is DISABLED => use port 465/587 instead)
+      - "143:143"  # IMAP4 (explicit TLS => STARTTLS)
+      - "465:465"  # ESMTP (implicit TLS)
+      - "587:587"  # ESMTP (explicit TLS => STARTTLS)
+      - "993:993"  # IMAP4 (implicit TLS)
+    volumes:
+      - ./docker-data/dms/mail-data/:/var/mail/
+      - ./docker-data/dms/mail-state/:/var/mail-state/
+      - ./docker-data/dms/mail-logs/:/var/log/mail/
+      - ./docker-data/dms/config/:/tmp/docker-mailserver/
+      - /etc/localtime:/etc/localtime:ro
+      # Traefik Certificate Location
+      - /mnt/data/traefik/acme.json:/etc/letsencrypt/acme.json:ro
+    networks:
+      - mailserver-network
+    restart: always
+    stop_grace_period: 1m
+    # Uncomment if using `ENABLE_FAIL2BAN=1`:
+    cap_add:
+      - NET_ADMIN
+    healthcheck:
+      test: "ss --listening --tcp | grep -P 'LISTEN.+:smtp' || exit 1"
+      timeout: 3s
+      retries: 0
+
+  # Were using this image to generate Traefik Certificate and keep it up-to-date
+  whoami:
+    image: docker.io/traefik/whoami:latest
+    container_name: mailserver-cert
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`${DMS_HOSTNAME}`)"
+      - "traefik.http.routers.whoami.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=traefik-network"
+    networks:
+      - traefik-network

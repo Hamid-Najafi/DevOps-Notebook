@@ -1,35 +1,44 @@
+networks:
+  openldap-network:
+    external: true
+  traefik-network:
+    external: true
+
+volumes:
+  openldap-data:
+    external: true
+
 version: "3.5"
 services:
   openldap:
-    container_name: "openldap"
-    image: docker.io/bitnami/openldap:2.6
-    hostname: ldap.c1tech.group
+    container_name: openldap
+    image: ${OPENLDAP_IMAGE_TAG}
+    hostname: ${OPENLDAP_HOSTNAME}
     ports:
-      - '389:389'
-      - '636:636'
+      - '389:1389'
+      - '636:1636'
     environment:
-      - LDAP_PORT_NUMBER=389
-      - LDAP_ROOT=dc=c1tech,dc=co
-      - LDAP_ADMIN_DN=cn=admin,dc=c1tech,dc=co
-      - LDAP_ADMIN_USERNAME=admin
-      - LDAP_ADMIN_PASSWORD=OpenLDAPpass.24
-      - LDAP_CONFIG_ADMIN_PASSWORD=adminconfig
-      - LDAP_CONFIG_ADMIN_PASSWORD=OpenLDAPconfig.24
-      - LDAP_USERS=user01,user02
-      - LDAP_PASSWORDS=password1,password2
-      - LDAP_LDAPS_PORT_NUMBER=636
-      - LDAP_ENABLE_TLS=yes
-      - LDAP_TLS_CERT_FILE=/opt/bitnami/openldap/certs/cert.pem
-      - LDAP_TLS_KEY_FILE=/opt/bitnami/openldap/certs/privkey.pem
-      - LDAP_TLS_CA_FILE=/opt/bitnami/openldap/certs/chain.pem
+      # https://hub.docker.com/r/bitnami/openldap/  
+      - LDAP_ROOT=${OPENLDAP_ROOT}
+      - LDAP_ADMIN_DN=${OPENLDAP_ADMIN_DN}
+      - LDAP_ADMIN_USERNAME=${OPENLDAP_ADMIN_USERNAME}
+      - LDAP_ADMIN_PASSWORD=${OPENLDAP_ADMIN_PASSWORD}
+      - LDAP_CONFIG_ADMIN_PASSWORD=${OPENLDAP_CONFIG_ADMIN_PASSWORD}
+      - LDAP_USERS=${OPENLDAP_USERS}
+      - LDAP_PASSWORDS=${OPENLDAP_PASSWORDS}
+      - LDAP_PORT_NUMBER=${OPENLDAP_PORT_NUMBER}
+      - LDAP_LDAPS_PORT_NUMBER=${OPENLDAP_LDAPS_PORT_NUMBER}
+      - LDAP_ENABLE_TLS=${OPENLDAP_ENABLE_TLS}
+      - LDAP_REQUIRE_TLS=${OPENLDAP_REQUIRE_TLS}
+      - LDAP_TLS_DH_PARAMS_FILE=${OPENLDAP_TLS_DH_PARAMS_FILE}
+      - LDAP_TLS_CERT_FILE=${OPENLDAP_TLS_CERT_FILE}
+      - LDAP_TLS_KEY_FILE=${OPENLDAP_TLS_KEY_FILE}
+      - LDAP_TLS_CA_FILE=${OPENLDAP_TLS_CA_FILE}
+      - LDAP_URI=${OPENLDAP_URI}
+      - LDAP_ALLOW_ANON_BINDING=${OPENLDAP_ALLOW_ANON_BINDING}
     volumes:
-      - /home/c1tech/dev/openldap/certs:/opt/bitnami/openldap/certs
-      - openldap_data:/bitnami/openldap/
-      # - /data2/openldap:/bitnami/openldap/
+      - ${OPENLDAP_CERT_PATH}:/opt/bitnami/openldap/certs
+      - openldap-data:/bitnami/openldap/
     networks:
-      - web
-volumes:
-  openldap_data:
-    driver: local
-  web:
-    external: true
+      - openldap-network
+      - traefik-network

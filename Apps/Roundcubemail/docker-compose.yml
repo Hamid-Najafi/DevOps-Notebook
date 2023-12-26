@@ -32,7 +32,7 @@ services:
       - ROUNDCUBEMAIL_DB_NAME=${ROUNDCUBEMAIL_DB_NAME}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.roundcubemail.rule=Host(`webmail.c1tech.group`)"
+      - "traefik.http.routers.roundcubemail.rule=Host(`${ROUNDCUBEMAIL_HOSTNAME}`)"
       - "traefik.http.services.roundcubemail.loadbalancer.server.port=80"
       - "traefik.http.routers.roundcubemail.entrypoints=secure"
       - "traefik.http.routers.roundcubemail.tls.certresolver=letsencrypt"
