@@ -1,3 +1,6 @@
+25 / 465 are blocked
+
+
 docker network create mailserver-network
 docker compose up -d
 

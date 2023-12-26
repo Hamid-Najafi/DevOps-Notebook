@@ -5,7 +5,7 @@ networks:
     external: true
   mailserver-network:
     external: true
-    
+
 volumes:
   roundcubemail-postgres:
     external: true
@@ -37,8 +37,8 @@ services:
       - "traefik.http.routers.roundcubemail.entrypoints=secure"
       - "traefik.http.routers.roundcubemail.tls.certresolver=letsencrypt"
       - "traefik.docker.network=traefik-network"
-    volumes:
-      - ./config:/var/roundcube/config/
+    # volumes:
+    #   - ./config:/var/roundcube/config/
     networks:
       - traefik-network
       - roundcubemail-network

@@ -1,11 +1,27 @@
 # -------==========-------
-# Where to put POP3/SMTP/IMAP certificate?
+# BEFORE YOU BEGIN
 # -------==========-------
-1- inside docker image
-(Recommended with Traefik)
-2- In reverse proxy 
-(Recommended with NGINX/APACHE)
-https://docs.nginx.com/nginx/admin-guide/mail-proxy/mail-proxy/
+1. The host should have a static IP address
+
+2. The host should be able to send/receive on the necessary ports for mail
+# Check all ports using netcat
+# Server:
+$ sudo nc -l -p 25, 143, 465, 587, 993
+# Client (another machine):
+$ nc SERVER-IP/DOMAIN 25, 143, 465, 587, 993
+
+3. You should be able to set a PTR record for your host; 
+security-hardened mail servers might otherwise reject your mail server 
+as the IP address of your host does not resolve correctly/at all to the DNS name of your server.
+# Check PTR Record
+$ dig @1.1.1.1 +short MX c1tech.group
+mail.c1tech.group
+$ dig @1.1.1.1 +short A mail.c1tech.group
+188.121.99.29
+$ dig @1.1.1.1 +short -x 188.121.99.29
+mail.c1tech.group
+
+4. IF EVERYTHING OK, PROCEED
 # -------==========-------
 # Docker Mailserver
 # -------==========-------

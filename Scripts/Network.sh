@@ -1,8 +1,9 @@
 # -------==========-------
 # Docker port check
 # -------==========-------
-docker run -d -p 8080:80 alexwhen/docker-2048
-docker run -d -p 636:80 alexwhen/docker-2048
+PORT_TO_CHECK=25
+docker run -d -p $PORT_TO_CHECK:80 alexwhen/docker-2048
+http://DOMAIN:$PORT_TO_CHECK
 # -------==========-------
 # Netcat port check
 # -------==========-------
@@ -10,22 +11,20 @@ docker run -d -p 636:80 alexwhen/docker-2048
 https://pentest-tools.com/network-vulnerability-scanning/tcp-port-scanner-online-nmap#
 https://www.yougetsignal.com/tools/open-ports/
 
-sudo apt-get install netcat
+sudo apt install -y netcat
 # NetCat Server:
 # TCP
 sudo nc -l -p 80
-sudo nc -l -p 5433
 # UDP
 sudo nc -u -l -p 80
+# --==========--
 # NetCat Client:
 # TCP
-nc phpldapadmin-dei.vir-gol.ir 80
-nc 10.69.78.21 82
-nc ib2.vir-gol.ir 389
-nc vir-gol.ir 5433
+nc SERVER-IP/DOMAIN 80
+nc c1tech.group 80
 # UDP
-nc -u 10.69.78.21 82
-nc -u vir-gol.ir 636
+nc -u SERVER-IP/DOMAIN 82
+nc -u c1tech.group 636
 # -------==========-------
 # IP Information
 # -------==========-------
@@ -50,7 +49,8 @@ sudo lsof -p 15014
 sudo nano /etc/resolv.conf
 # OR
 sudo apt install resolvconf -y
-sudo nano /etc/resolvconf/resolv.conf.d/base
+sudo systemctl enable resolvconf.service --now
+sudo nano /etc/resolvconf/resolv.conf.d/head
 # 403.online
 nameserver 10.202.10.202
 nameserver 10.202.10.102
@@ -73,9 +73,10 @@ nameserver 85.15.1.15
 ping google.com
 # Update resolvconf
 sudo resolvconf -u
+sudo systemctl restart resolvconf.service
+sudo systemctl restart systemd-resolved.service
 # Verify DNS Server
 resolvectl status
-systemd-resolve --status
 # -------==========-------
 # HTTP Proxy
 # -------==========-------

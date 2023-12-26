@@ -1,7 +1,7 @@
 # -------==========-------
 # Docker (Compose, Engine and CLI) Installation
 # -------==========-------
-#*# Firstly Setup HTTP//DNS Proxy (Network.sh)
+#*# First Setup HTTP//DNS Proxy (Network.sh)
 sudo apt update && sudo apt install -y curl uidmap
 curl -fsSL get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
