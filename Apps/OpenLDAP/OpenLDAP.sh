@@ -1,6 +1,8 @@
 # -------==========-------
 # OpenLDAP packaged by Bitnami
 # https://github.com/bitnami/containers/tree/main/bitnami/openldap#readme
+# Extended Bitnami OpenLDAP
+# https://github.com/clayrisser/docker-openldap
 # -------==========-------
 # Make roundcube-data Directory
 sudo mkdir -p /mnt/data/openldap

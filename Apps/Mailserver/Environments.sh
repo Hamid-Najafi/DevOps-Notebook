@@ -88,13 +88,13 @@ NETWORK_INTERFACE=
 # empty => modern
 # modern => Enables TLSv1.2 and modern ciphers only. (default)
 # intermediate => Enables TLSv1, TLSv1.1 and TLSv1.2 and broad compatibility ciphers.
-TLS_LEVEL=intermediate
+TLS_LEVEL=
 
 # Configures the handling of creating mails with forged sender addresses.
 #
 # **0** => (not recommended) Mail address spoofing allowed. Any logged in user may create email messages with a forged sender address (see also https://en.wikipedia.org/wiki/Email_spoofing).
 # 1 => Mail spoofing denied. Each user may only send with his own or his alias addresses. Addresses with extension delimiters(http://www.postfix.org/postconf.5.html#recipient_delimiter) are not able to send messages.
-SPOOF_PROTECTION=1
+SPOOF_PROTECTION=0
 
 # Enables the Sender Rewriting Scheme. SRS is needed if your mail server acts as forwarder. See [postsrsd](https://github.com/roehling/postsrsd/blob/master/README.md#sender-rewriting-scheme-crash-course) for further explanation.
 #  - **0** => Disabled
@@ -137,7 +137,7 @@ ENABLE_CLAMAV=1
 # Enables Rspamd
 # **0** => Disabled
 #   1   => Enabled
-ENABLE_RSPAMD=1
+ENABLE_RSPAMD=0
 
 # When `ENABLE_RSPAMD=1`, an internal Redis instance is enabled implicitly.
 # This setting provides an opt-out to allow using an external instance instead.
@@ -429,40 +429,41 @@ GETMAIL_POLL=5
 
 # empty => no
 # yes => LDAP over TLS enabled for Postfix
-LDAP_START_TLS=
+LDAP_START_TLS=no
 
 # empty => mail.example.com
 # Specify the `<dns-name>` / `<ip-address>` where the LDAP server is reachable via a URI like: `ldaps://mail.example.com`.
 # Note: You must include the desired URI scheme (`ldap://`, `ldaps://`, `ldapi://`).
-LDAP_SERVER_HOST=ldap://172.25.10.5
+# LDAP_SERVER_HOST=ldap://ldap.c1tech.group:389
+LDAP_SERVER_HOST=ldaps://ldap.c1tech.group:636
 
 # empty => ou=people,dc=domain,dc=com
 # => e.g. LDAP_SEARCH_BASE=dc=mydomain,dc=local
-LDAP_SEARCH_BASE=OU=Users,OU=C1Tech,DC=C1Tech,DC=local
+LDAP_SEARCH_BASE=ou=users,dc=c1tech,dc=group
 
 # empty => cn=admin,dc=domain,dc=com
 # => take a look at examples of SASL_LDAP_BIND_DN
-LDAP_BIND_DN=CN=Administrator,CN=Users,DC=C1Tech,DC=local
+LDAP_BIND_DN=cn=admin,dc=c1tech,dc=group
 
 # empty** => admin
 # => Specify the password to bind against ldap
-LDAP_BIND_PW=C1Techpass.DC
+LDAP_BIND_PW=LDAPpass.24
 
 # e.g. `"(&(mail=%s)(mailEnabled=TRUE))"`
 # => Specify how ldap should be asked for users
-LDAP_QUERY_FILTER_USER=(&(mail=*)(objectClass=person))
+LDAP_QUERY_FILTER_USER="(&(mail=%s)(mailEnabled=TRUE))"
 
 # e.g. `"(&(mailGroupMember=%s)(mailEnabled=TRUE))"`
 # => Specify how ldap should be asked for groups
-LDAP_QUERY_FILTER_GROUP=(&(mail=*)(objectClass=group))
+LDAP_QUERY_FILTER_GROUP="(&(mailGroupMember=%s)(mailEnabled=TRUE))"
 
 # e.g. `"(&(mailAlias=%s)(mailEnabled=TRUE))"`
 # => Specify how ldap should be asked for aliases
-LDAP_QUERY_FILTER_ALIAS=
+LDAP_QUERY_FILTER_ALIAS="(&(mailAlias=%s)(mailEnabled=TRUE))"
 
 # e.g. `"(&(|(mail=*@%s)(mailalias=*@%s)(mailGroupMember=*@%s))(mailEnabled=TRUE))"`
 # => Specify how ldap should be asked for domains
-LDAP_QUERY_FILTER_DOMAIN=
+LDAP_QUERY_FILTER_DOMAIN="(&(|(mail=*@%s)(mailalias=*@%s)(mailGroupMember=*@%s))(mailEnabled=TRUE))"
 
 # -----------------------------------------------
 # --- Dovecot Section ---------------------------
@@ -470,13 +471,13 @@ LDAP_QUERY_FILTER_DOMAIN=
 
 # empty => no
 # yes => LDAP over TLS enabled for Dovecot
-DOVECOT_TLS=
+DOVECOT_TLS=no
 
 # e.g. `"(&(objectClass=PostfixBookMailAccount)(uniqueIdentifier=%n))"`
-DOVECOT_USER_FILTER=(&(mail=*%s)(objectClass=person))
+DOVECOT_USER_FILTER="(&(objectClass=PostfixBookMailAccount)(uniqueIdentifier=%n))"
 
 # e.g. `"(&(objectClass=PostfixBookMailAccount)(uniqueIdentifier=%n))"`
-DOVECOT_PASS_FILTER=(&(mail=*%s)(objectClass=person))
+DOVECOT_PASS_FILTER="(&(objectClass=PostfixBookMailAccount)(uniqueIdentifier=%n))"
 
 # Define the mailbox format to be used
 # default is maildir, supported values are: sdbox, mdbox, maildir
@@ -485,13 +486,13 @@ DOVECOT_MAILBOX_FORMAT=maildir
 # empty => no
 # yes => Allow bind authentication for LDAP
 # https://wiki.dovecot.org/AuthDatabase/LDAP/AuthBinds
-DOVECOT_AUTH_BIND=yes
+DOVECOT_AUTH_BIND=no
 
 # -----------------------------------------------
 # --- Postgrey Section --------------------------
 # -----------------------------------------------
 
-ENABLE_POSTGREY=1
+ENABLE_POSTGREY=0
 # greylist for N seconds
 POSTGREY_DELAY=300
 # delete entries older than N days since the last time that they have been seen
@@ -505,7 +506,7 @@ POSTGREY_AUTO_WHITELIST_CLIENTS=5
 # --- SASL Section ------------------------------
 # -----------------------------------------------
 
-ENABLE_SASLAUTHD=1
+ENABLE_SASLAUTHD=0
 
 # empty => pam
 # `ldap` => authenticate against ldap server
@@ -513,7 +514,7 @@ ENABLE_SASLAUTHD=1
 # `mysql` => authenticate against mysql db
 # `rimap` => authenticate against imap server
 # Note: can be a list of mechanisms like pam ldap shadow
-SASLAUTHD_MECHANISMS=rimap
+SASLAUTHD_MECHANISMS=
 
 # empty => None
 # e.g. with SASLAUTHD_MECHANISMS rimap you need to specify the ip-address/servername of the imap server  ==> xxx.xxx.xxx.xxx
@@ -546,7 +547,7 @@ SASLAUTHD_LDAP_FILTER=
 # If set to yes, the protocol in SASLAUTHD_LDAP_SERVER must be ldap:// or missing.
 SASLAUTHD_LDAP_START_TLS=
 
-# empty => no
+# empty => noSASLAUTHD_LDAP_SERVER
 # yes => Require and verify server certificate
 # If yes you must/could specify SASLAUTHD_LDAP_TLS_CACERT_FILE or SASLAUTHD_LDAP_TLS_CACERT_DIR.
 SASLAUTHD_LDAP_TLS_CHECK_PEER=

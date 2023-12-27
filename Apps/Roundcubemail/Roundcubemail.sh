@@ -14,13 +14,13 @@ docker volume create \
       --opt device=/mnt/data/roundcubemail/postgres \
       --opt o=bind roundcubemail-postgres
 
-# Clone Vaultwarden Directory
+# Clone RoundcubeMail Directory
 mkdir -p ~/docker
 cp -R ~/DevOps-Notebook/Apps/Roundcubemail ~/docker/roundcubemail
 cd ~/docker/roundcubemail
 
 # Check and Edit .env file
-# nano .env
+nano .env
 
 # Create Network and Run
 docker network create roundcubemail-network

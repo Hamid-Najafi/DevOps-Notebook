@@ -36,9 +36,38 @@ services:
       - LDAP_TLS_CA_FILE=${OPENLDAP_TLS_CA_FILE}
       - LDAP_URI=${OPENLDAP_URI}
       - LDAP_ALLOW_ANON_BINDING=${OPENLDAP_ALLOW_ANON_BINDING}
+      # EXTENDED BITNAMI LDAP ENV..
+      - LDAP_HASH_PASSWORD=CRYPT
     volumes:
       - ${OPENLDAP_CERT_PATH}:/opt/bitnami/openldap/certs
       - openldap-data:/bitnami/openldap/
+    networks:
+      - openldap-network
+      - traefik-network
+
+  phpldapadmin:
+    container_name: openldap-phpldapadmin
+    image: osixia/phpldapadmin:0.9.0
+    environment:
+      PHPLDAPADMIN_HTTPS: "false"
+      PHPLDAPADMIN_LDAP_HOSTS: |
+        #PYTHON2BASH:[
+          {'openldap': [
+            {'server': [
+              {'host': 'ldap://openldap:1389'}
+            ]},
+            {'login': [{'bind_id': '${OPENLDAP_ADMIN_DN}'}]}
+          ]}
+        ]
+    labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.phpldapadmin.rule=Host(`${OPENLDAP_PHPLDAPADMIN_HOSTNAME}`)"
+    - "traefik.http.services.phpldapadmin.loadbalancer.server.port=80"
+    - "traefik.http.routers.phpldapadmin.entrypoints=secure"
+    - "traefik.http.routers.phpldapadmin.tls.certresolver=letsencrypt"
+    - "traefik.docker.network=traefik-network"
+    depends_on:
+      - openldap
     networks:
       - openldap-network
       - traefik-network

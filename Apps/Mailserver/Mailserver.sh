@@ -10,6 +10,7 @@ $ sudo nc -l -p 25, 143, 465, 587, 993
 # Client (another machine):
 $ nc SERVER-IP/DOMAIN 25, 143, 465, 587, 993
 
+
 3. You should be able to set a PTR record for your host; 
 security-hardened mail servers might otherwise reject your mail server 
 as the IP address of your host does not resolve correctly/at all to the DNS name of your server.
@@ -22,71 +23,57 @@ $ dig @1.1.1.1 +short -x 188.121.99.29
 mail.c1tech.group
 
 4. IF EVERYTHING OK, PROCEED
+
+# LDAP Connection
+1. Dont forget to add Postfix and Dovecot LDAP SCHEMA to LDAP Server
+2. Password Scheme IS SSHA ( Postfix and Dovecot side and LDAP Server side )
+3. Setup rock8s/docker-openldap or ExtendedOpenLdap for LDAP Server
+4. DONT USE Active Directory LDS
 # -------==========-------
-# Docker Mailserver
+# MailServer Docker Compose
 # -------==========-------
-# Generate Certificate
-export DOMAIN=mail.c1tech.group
-sudo snap install --classic certbot
-sudo ln -s /snap/bin/certbot /usr/bin/certbot
-# standalone
-sudo certbot certonly \
-    --standalone \
-    --email admin@c1tech.group \
-    --agree-tos \
-    --domains $DOMAIN
-# dns challenges
-sudo certbot certonly \
-    --manual \
-    --preferred-challenges dns \
-    --email admin@c1tech.group \
-    --agree-tos \
-    --domains $DOMAIN
-chmod -R ugo+rw /etc/letsencrypt/live/$DOMAIN/
+# Clone MailServer Directory
+mkdir -p ~/docker
+cp -R ~/DevOps-Notebook/Apps/Mailserver ~/docker/mailserver
+cd ~/docker/mailserver
 
-mkdir -p ~/docker/mailserver
-cd ~/docker/mailserver 
-DMS_GITHUB_URL="https://raw.githubusercontent.com/docker-mailserver/docker-mailserver/master"
-wget "${DMS_GITHUB_URL}/compose.yaml"
-wget "${DMS_GITHUB_URL}/mailserver.env"
-
-
-# Edit the files .env and mailserver.env to your liking:
-# .env contains the configuration for Docker Compose
-# mailserver.env contains the configuration for the mailserver container
+# Check and Edit .env file
 nano .env
-HOSTNAME=mail.c1tech.group
-DOMAINNAME=c1tech.group
-CONTAINER_NAME=mailserver
-TZ=Asia/Tehran
 
-nano mailserver.env
+# Create Network and Run
+docker network create mailserver-network
+docker compose up -d
 
-nano docker-compose.yml
-    environment:
-      OVERRIDE_HOSTNAME: "mail.c1tech.group"
-      SPOOF_PROTECTION: 1
-      ENABLE_CLAMAV: 1
-      ENABLE_MANAGESIEVE: 1
-      SSL_TYPE: "letsencrypt"
-      ENABLE_SPAMASSASSIN: 1
-      ENABLE_FETCHMAIL: 1
-      DOVECOT_TLS: "yes"
-      ENABLE_POSTGREY: 1
-    volumes:
-      - /etc/letsencrypt/:/etc/letsencrypt/
+docker exec -it mailserver sh
+chmod 777 /srv 
 
-# Unless using LDAP, you need at least 1 email account to start Dovecot.
-./setup.sh email add admin@c1tech.group
-# Mailpass.2476
-# Get up and running
-docker compose up -d mailserver
-# docker exec mailserver chown docker:docker -R /srv/vmail
-# docker exec -it mailserver sh
-docker logs mailserver -f
+# -------==========-------
+# Configufations
+# -------==========-------
+# Login to Shell
+docker exec -it mailserver sh
 
-docker compose down
-docker volume rm mailserver_maildata mailserver_maillogs mailserver_mailstate
+# Dovecot
+/etc/dovecot/dovecot.conf #Main Conf
+/etc/dovecot/dovecot.conf/FILES_ARE_LISTED_HERE
+/etc/dovecot/dovecot-ldap.conf.ext #LDAP Conf
+# After any edit:
+service dovecot stop 
+
+# Postfix
+/etc/postfix/main.cf #Main Conf
+/etc/postfix/ldap-users.cf  #LDAP Conf
+/etc/postfix/ldap-groups.cf  #LDAP Conf
+/etc/postfix/ldap-senders.cf  #LDAP Conf
+/etc/postfix/ldap-domains.cf  #LDAP Conf
+/etc/postfix/ldap-aliases.cf  #LDAP Conf
+# After any edit:
+service postfix stop
+
+# Test Postfix LDAP
+postmap -q admin@c1tech.group ldap:/etc/postfix/ldap-users.cf
+postmap -q h.najafi@c1tech.group ldap:/etc/postfix/ldap-users.cf
+
 # -------==========-------
 # DNS Records (Optional)
 # -------==========-------
@@ -127,47 +114,12 @@ Name: _dmarc
 Value:
 v=DMARC1; p=none; rua=mailto:dmarc.report@c1tech.group; ruf=mailto:dmarc.report@c1tech.group; sp=none; ri=86400
 v=DMARC1; p=quarantine; rua=mailto:dmarc.report@c1tech.group; ruf=mailto:dmarc.report@c1tech.group; fo=0; adkim=r; aspf=r; pct=100; rf=afrf; ri=86400; sp=quarantine
-# -------==========-------
-# User Managment
-# -------==========-------
-cd ~/docker/mailserver 
-./setup.sh help
-./setup.sh email list
-# Any domain routed to server will work
-# temp@c1tech.group, temp1@mail.c1tech.group, temp2@mailserver.c1tech.group
-./setup.sh email del admin@c1tech.group 
-./setup.sh email add admin@mail.c1tech.group
-./setup.sh email add admin@c1tech.group
-./setup.sh email add sales@c1tech.group
-./setup.sh email add support@c1tech.group
-Mailpass.2476
-# -------==========-------
-# Testing a Certificate is Valid
-# -------==========-------
-docker exec mailserver openssl s_client \
-  -connect 0.0.0.0:25 \
-  -starttls smtp \
-  -CApath /etc/ssl/certs/
 
-docker exec mailserver openssl s_client \
-  -connect 0.0.0.0:143 \
-  -starttls imap \
-  -CApath /etc/ssl/certs/
 # -------==========-------
-#Plain Text Password Scheme
-# -------==========-------
-#Set Devcot to accept PLAIN password
-docker exec mail sed -i '/disable_plaintext_auth/s/^#//g;s/yes/no/g' /etc/dovecot/conf.d/10-auth.conf
-#Set Devcot to send PLAIN password to LDAP
-docker exec mail sed -i -e 's/SSHA/PLAIN/g' /etc/dovecot/dovecot-ldap.conf.ext
-# -------==========-------
-# revert to SSHA Password Scheme
+# revert to
 # -------==========-------
 docker exec mail sed -i '/disable_plaintext_auth/s/^/#/g;s/no/yes/g' /etc/dovecot/conf.d/10-auth.conf
-docker exec mail sed -i -e 's/PLAIN/SSHA/g' /etc/dovecot/dovecot-ldap.conf.ext
-# -------==========-------
-/etc/init.d/dovecot restart
-exit
+docker exec mail sed -i -e 's/PLAIN/SSHA/g' 
 # -------==========-------
 # DNS Records
 # -------==========-------
@@ -182,3 +134,39 @@ docker run --rm \
   -ti tvial/docker-mailserver:latest generate-dkim-config
 
 cat config/opendkim/keys/domain.tld/mail.txt
+
+# -------==========-------
+# MailServer ActiveDirectory LDAP
+# -------==========-------
+docker exec -it mailserver sh
+cat > /etc/dovecot/dovecot-ldap.conf.ext << EOF
+hosts           = 172.25.10.5:389
+ldap_version    = 3
+auth_bind       = yes
+dn              = CN=Administrator,CN=Users,DC=C1Tech,DC=local
+dnpass          = C1Techpass.DC
+base            = OU=Users,OU=C1Tech,DC=C1Tech,DC=local
+scope           = subtree
+deref           = never
+# Below two are required by command 'doveadm mailbox ...'
+iterate_attrs   = mail=user
+iterate_filter  = (&(mail=*)(objectClass=person))
+user_filter     = (&(mail=%u)(objectClass=person))
+pass_filter     = (&(mail=%u)(objectClass=person))
+pass_attrs      = userPassword=password
+default_pass_scheme = CRYPT
+# user_attrs      = mail=master_user,mail=user,=home=/var/vmail/vmail1/%Ld/%Ln/,=mail=maildir:~/Maildir/
+user_attrs      = mailHomeDirectory=home,mailUidNumber=uid,mailGidNumber=gid,mailStorageDirectory=mail
+EOF
+service dovecot stop 
+
+# Postfix and Dovecot SASL
+# https://doc.dovecot.org/configuration_manual/howto/postfix_and_dovecot_sasl/
+# nano /etc/postfix/main.cf
+postconf -e smtpd_sasl_type=dovecot
+# smtpd_sasl_path is Located in: 
+# /etc/dovecot/conf.d/10-master.conf
+postconf -e smtpd_sasl_path=/dev/shm/sasl-auth.sock
+postconf -e smtpd_sasl_auth_enable=yes
+postconf -e smtpd_relay_restrictions='permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination'
+service postfix stop
