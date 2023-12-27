@@ -4,8 +4,10 @@
 1. The host should have a static IP address
 
 2. The host should be able to send/receive on the necessary ports for mail
-# Check all ports using netcat
+# Check all ports using netcat (Outgoing and Incoming)
 # Server:
+$ nc alt1.gmail-smtp-in.l.google.com 25
+220 mx.google.com ESMTP l3-20020a170906644300b00a23483327a3si5714495ejn.717 - gsmtp
 $ sudo nc -l -p 25, 143, 465, 587, 993
 # Client (another machine):
 $ nc SERVER-IP/DOMAIN 25, 143, 465, 587, 993
@@ -24,11 +26,12 @@ mail.c1tech.group
 
 4. IF EVERYTHING OK, PROCEED
 
-# LDAP Connection
-1. Dont forget to add Postfix and Dovecot LDAP SCHEMA to LDAP Server
-2. Password Scheme IS SSHA ( Postfix and Dovecot side and LDAP Server side )
-3. Setup rock8s/docker-openldap or ExtendedOpenLdap for LDAP Server
-4. DONT USE Active Directory LDS
+# LDAP Connection Setup
+1. Use OpenLDAP Server with Postfix and Dovecot SCHEMAs ( or make it! )
+.  rock8s/docker-openldap or ExtendedOpenLdap (( DONT USE Active Directory LDS ))
+2. Create User Based on Template LDIF
+. LDAP Password Scheme IS SSHA
+
 # -------==========-------
 # MailServer Docker Compose
 # -------==========-------
@@ -43,10 +46,6 @@ nano .env
 # Create Network and Run
 docker network create mailserver-network
 docker compose up -d
-
-docker exec -it mailserver sh
-chmod 777 /srv 
-
 # -------==========-------
 # Configufations
 # -------==========-------
@@ -114,59 +113,3 @@ Name: _dmarc
 Value:
 v=DMARC1; p=none; rua=mailto:dmarc.report@c1tech.group; ruf=mailto:dmarc.report@c1tech.group; sp=none; ri=86400
 v=DMARC1; p=quarantine; rua=mailto:dmarc.report@c1tech.group; ruf=mailto:dmarc.report@c1tech.group; fo=0; adkim=r; aspf=r; pct=100; rf=afrf; ri=86400; sp=quarantine
-
-# -------==========-------
-# revert to
-# -------==========-------
-docker exec mail sed -i '/disable_plaintext_auth/s/^/#/g;s/no/yes/g' /etc/dovecot/conf.d/10-auth.conf
-docker exec mail sed -i -e 's/PLAIN/SSHA/g' 
-# -------==========-------
-# DNS Records
-# -------==========-------
-export fqdnHost=mail.c1tech.group
-$fqdnHost.ir.		120	IN	MX	1 $fqdnHost.ir.
-#$fqdnHost.ir.		120	IN	TXT	"v=spf1 mx ~all"
-# DMARK (_dmarc)
-v=DMARC1; p=none; rua=mailto:dmarc.report@$fqdnHost.ir; ruf=mailto:dmarc.report@$fqdnHost.ir; sp=none; ri=86400
-# DKIM (mail._domainkey)
-docker run --rm \
-  -v "$(pwd)/config":/tmp/docker-mailserver \
-  -ti tvial/docker-mailserver:latest generate-dkim-config
-
-cat config/opendkim/keys/domain.tld/mail.txt
-
-# -------==========-------
-# MailServer ActiveDirectory LDAP
-# -------==========-------
-docker exec -it mailserver sh
-cat > /etc/dovecot/dovecot-ldap.conf.ext << EOF
-hosts           = 172.25.10.5:389
-ldap_version    = 3
-auth_bind       = yes
-dn              = CN=Administrator,CN=Users,DC=C1Tech,DC=local
-dnpass          = C1Techpass.DC
-base            = OU=Users,OU=C1Tech,DC=C1Tech,DC=local
-scope           = subtree
-deref           = never
-# Below two are required by command 'doveadm mailbox ...'
-iterate_attrs   = mail=user
-iterate_filter  = (&(mail=*)(objectClass=person))
-user_filter     = (&(mail=%u)(objectClass=person))
-pass_filter     = (&(mail=%u)(objectClass=person))
-pass_attrs      = userPassword=password
-default_pass_scheme = CRYPT
-# user_attrs      = mail=master_user,mail=user,=home=/var/vmail/vmail1/%Ld/%Ln/,=mail=maildir:~/Maildir/
-user_attrs      = mailHomeDirectory=home,mailUidNumber=uid,mailGidNumber=gid,mailStorageDirectory=mail
-EOF
-service dovecot stop 
-
-# Postfix and Dovecot SASL
-# https://doc.dovecot.org/configuration_manual/howto/postfix_and_dovecot_sasl/
-# nano /etc/postfix/main.cf
-postconf -e smtpd_sasl_type=dovecot
-# smtpd_sasl_path is Located in: 
-# /etc/dovecot/conf.d/10-master.conf
-postconf -e smtpd_sasl_path=/dev/shm/sasl-auth.sock
-postconf -e smtpd_sasl_auth_enable=yes
-postconf -e smtpd_relay_restrictions='permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination'
-service postfix stop
