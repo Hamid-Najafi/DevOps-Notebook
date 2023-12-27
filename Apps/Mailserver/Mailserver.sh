@@ -76,40 +76,41 @@ postmap -q h.najafi@c1tech.group ldap:/etc/postfix/ldap-users.cf
 # -------==========-------
 # DNS Records (Optional)
 # -------==========-------
-# MX record must be declared for SPF to work
+# MX Record (Needed for SPF)
 domain.com. IN  MX 1 mail.domain.com.
+# Setup DNS
 Type: MX
 Name: @
 Priority: 1
 Value: mail.c1tech.group.
 # -------==========-------
-# SPF 
+# SPF Record
 domain.com. IN TXT "v=spf1 mx ~all" 
+# Setup DNS
 Type: TXT
-Name: domain.com.
 Name: @
 Value: v=spf1 mx ~all
 # -------==========-------
-# DKIM
+# DKIM Record
 # https://mxtoolbox.com/dmarc/dkim/setup/how-to-setup-dkim
 # Configure DKIM to Generate the Key Pair
-./setup.sh config dkim keysize 1024 selector mail
-./setup.sh config dkim domain mail.c1tech.group keysize 1024
+docker exec -it mailserver setup config dkim
+docker exec -it mailserver setup config dkim domain mail.c1tech.group
+docker exec -it mailserver  cat /tmp/docker-mailserver/opendkim/keys/mail.c1tech.group/mail.txt
 # Setup DNS
 Type: TXT
-Name: mail._domainkey
+Name: mail._domainkey.c1tech.group
 Value:
-cat ./config/opendkim/keys/mail.c1tech.group/mail.txt 
-v=DKIM1; h=sha256; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDNBmUNL/HMKOqjar8X/HZttwxuq/wvmPqEdxY1iBVzlEmuMu6RBeZw9ql+UYokO2lewrZUVfwoYFDwzRXguFqn6o6dKsupCGv+tIct7Dz4HyrLZESfynial5DB5H+QmsNGzBLQNPiWkYIrR7pyh7BLqZG0i3dccaUB5UX4ZIioIwIDAQAB
-# Check DKIM
-dig mail._domainkey.domain.tld TXT
+v=DKIM1; h=sha256; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxT7XMLcJh4gWfgZ+h3CS3q5EHesf/RmOqe+zjXjpAA0hK1KEljFGzzQ2xHd22plIuUP+2/r5FeHx7ZOkhv0Olz5zTsoEaK3uigwcFmuzjgkqW7gbqggNUvzlY31lWoWFu1Jx8VR3RcbrO1GMS6Cck91VGmfJTAfLPMBSV4Ml1r+80OXzL4CSMmQ40fedt8d82LvqcXzRsYidriCr0zKBH+f+grizZc25wn/2qVU6CRGChhKycsTa833jBqOM4xHcSQOKeN3PkuKd5qvBmMntU/fpRRGr7SXkfxrBEMnG5AwvhjYNhOu8oUMe70pNYrL1+FLkcRn2Z6SYKBWAab1kQQIDAQAB# Check DKIM
+# Verify
 dig mail._domainkey.c1tech.group TXT
 # -------==========-------
-# DMARC
-_dmarc.domain.com. IN TXT "v=DMARC1; p=none; rua=mailto:dmarc.report@domain.com; ruf=mailto:dmarc.report@domain.com; sp=none; ri=86400"
-_dmarc IN TXT "v=DMARC1; p=quarantine; rua=mailto:dmarc.report@domain.com; ruf=mailto:dmarc.report@domain.com; fo=0; adkim=r; aspf=r; pct=100; rf=afrf; ri=86400; sp=quarantine"
+# DMARC Record
+# Add Email using LDIF File (PhpLdapAdmin)
+dmarc.report@c1tech.group
+# Setup DNS
 Type: TXT
-Name: _dmarc
+Name: _dmarc.mail.c1tech.group
 Value:
 v=DMARC1; p=none; rua=mailto:dmarc.report@c1tech.group; ruf=mailto:dmarc.report@c1tech.group; sp=none; ri=86400
 v=DMARC1; p=quarantine; rua=mailto:dmarc.report@c1tech.group; ruf=mailto:dmarc.report@c1tech.group; fo=0; adkim=r; aspf=r; pct=100; rf=afrf; ri=86400; sp=quarantine

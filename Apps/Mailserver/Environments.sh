@@ -117,7 +117,7 @@ ENABLE_OPENDMARC=1
 #
 # - 0     => Disabled
 # - **1** => Enabled
-ENABLE_POLICYD_SPF=1
+ENABLE_POLICYD_SPF=0
 
 # Enables POP3 service
 # - **0** => Disabled
@@ -137,13 +137,13 @@ ENABLE_CLAMAV=1
 # Enables Rspamd
 # **0** => Disabled
 #   1   => Enabled
-ENABLE_RSPAMD=0
+ENABLE_RSPAMD=1
 
 # When `ENABLE_RSPAMD=1`, an internal Redis instance is enabled implicitly.
 # This setting provides an opt-out to allow using an external instance instead.
 # 0 => Disabled
 # 1 => Enabled
-ENABLE_RSPAMD_REDIS=
+ENABLE_RSPAMD_REDIS=0
 
 # When enabled,
 #
