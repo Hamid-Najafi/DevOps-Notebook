@@ -1,9 +1,9 @@
 # -------==========-------
 # Bitbucket
 # -------==========-------
-mkdir -p ~/docker/bitbucket
-cp -R ~/DevOps-Notebook/Apps/Atlassian/Bitbucket/*  ~/docker/bitbucket
-cd  ~/docker/bitbucket
+mkdir -p ~/docker
+cp -R ~/DevOps-Notebook/Apps/Atlassian/Bitbucket ~/docker/bitbucket
+cd ~/docker/bitbucket
 
 # Make Directories
 sudo mkdir -p /mnt/data/bitbucket/bitbucket
@@ -11,7 +11,8 @@ sudo mkdir -p /mnt/data/bitbucket/postgres
 
 # Set Permissions
 sudo chmod 770 -R /mnt/data/bitbucket
-sudo chown -R $USER:docker /mnt/data/bitbucket
+sudo chown -R c1tech:docker /mnt/data/bitbucket
+sudo chown -R lxd:docker /mnt/data/bitbucket/postgres
 
 # Create the docker volumes for the containers.
 # Bitbucket

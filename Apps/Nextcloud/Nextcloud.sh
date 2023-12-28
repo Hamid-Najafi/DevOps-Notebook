@@ -7,9 +7,12 @@ sudo mkdir -p /mnt/data/nextcloud/postgres
 sudo mkdir -p /mnt/data/nextcloud/redis
 
 # Set Permissions
-sudo chmod 770 -R /mnt/data/nextcloud
-sudo chown -R $USER:docker /mnt/data
+sudo chmod 750 -R /mnt/data/nextcloud
+sudo chown -R www-data:docker /mnt/data/nextcloud/nextcloud
+sudo chown -R lxd:docker /mnt/data/nextcloud/postgres
+sudo chown -R lxd:docker /mnt/data/nextcloud/redis
 
+sudo chmod 777 -R /mnt/data/nextcloud/nextcloud
 # Create the docker volumes for the containers.
 docker volume create \
       --driver local \

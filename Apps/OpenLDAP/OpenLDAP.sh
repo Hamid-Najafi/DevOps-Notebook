@@ -7,7 +7,7 @@
 # Make roundcube-data Directory
 sudo mkdir -p /mnt/data/openldap
 # Set Permissions
-sudo chmod 770 -R /mnt/data/openldap
+sudo chmod 777 -R /mnt/data/openldap
 sudo chown -R $USER:docker /mnt/data/openldap
 
 # Create the docker volumes for the containers.

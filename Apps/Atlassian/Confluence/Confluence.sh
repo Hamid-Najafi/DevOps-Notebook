@@ -1,17 +1,18 @@
 # -------==========-------
 # Confluence
 # -------==========-------
-mkdir -p ~/docker/confluence
-cp -R ~/DevOps-Notebook/Apps/Atlassian/Confluence/*  ~/docker/confluence
-cd  ~/docker/confluence
+mkdir -p ~/docker
+cp -R ~/DevOps-Notebook/Apps/Atlassian/Confluence ~/docker/confluence
+cd ~/docker/confluence
 
 # Make Directories
 sudo mkdir -p /mnt/data/confluence/confluence
 sudo mkdir -p /mnt/data/confluence/postgres
 
 # Set Permissions
-sudo chmod 770 -R /mnt/data/confluence
-sudo chown -R $USER:docker /mnt/data/confluence
+sudo chmod 750 -R /mnt/data/confluence
+sudo chown -R $USER:docker /mnt/data/confluence/confluence
+sudo chown -R lxd:docker /mnt/data/confluence/postgres
 
 # Create the docker volumes for the containers.
 # Confluence

@@ -7,7 +7,7 @@ sudo mkdir -p /mnt/data/traefik
 ### IMPOTTAINT ###
 # Set Permissions
 sudo chmod 600 -R /mnt/data/traefik
-sudo chown -R $USER:docker /mnt/data
+sudo chown -R $USER:docker /mnt/data/traefik
 ### IMPOTTAINT ###
 
 # Create the docker volumes for the containers.
