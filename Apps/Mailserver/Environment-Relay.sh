@@ -11,7 +11,7 @@
 
 # empty => uses the `hostname` command to get the mail server's canonical hostname
 # => Specify a fully-qualified domainname to serve mail for.  This is used for many of the config features so if you can't set your hostname (e.g. you're in a container platform that doesn't let you) specify it in this environment variable.
-OVERRIDE_HOSTNAME=${DMS_HOSTNAME}
+OVERRIDE_HOSTNAME=c1-ubuntu-srv-vm.local
 
 # REMOVED in version v11.0.0! Use LOG_LEVEL instead.
 DMS_DEBUG=0
@@ -21,7 +21,7 @@ DMS_DEBUG=0
 #
 # Valid values (in order of increasing verbosity) are: `error`, `warn`, `info`, `debug` and `trace`.
 # The default log level is `info`.
-LOG_LEVEL=info
+LOG_LEVEL=infoQ
 
 # critical => Only show critical messages
 # error => Only show erroneous output
@@ -109,7 +109,7 @@ ENABLE_OPENDKIM=0
 # Enables the OpenDMARC service.
 # **1** => Enabled
 #   0   => Disabled
-ENABLE_OPENDMARC=1
+ENABLE_OPENDMARC=0
 
 
 # Enabled `policyd-spf` in Postfix's configuration. You will likely want to set this
@@ -132,12 +132,12 @@ ENABLE_IMAP=1
 # Enables ClamAV, and anti-virus scanner.
 #   1   => Enabled
 # **0** => Disabled
-ENABLE_CLAMAV=1
+ENABLE_CLAMAV=0
 
 # Enables Rspamd
 # **0** => Disabled
 #   1   => Enabled
-ENABLE_RSPAMD=1
+ENABLE_RSPAMD=0
 
 # When `ENABLE_RSPAMD=1`, an internal Redis instance is enabled implicitly.
 # This setting provides an opt-out to allow using an external instance instead.
@@ -152,7 +152,7 @@ ENABLE_RSPAMD_REDIS=0
 #
 # **0** => disabled
 # 1     => enabled
-RSPAMD_LEARN=1
+RSPAMD_LEARN=0
 
 # This settings controls whether checks should be performed on emails coming
 # from authenticated users (i.e. most likely outgoing emails). The default value
@@ -169,7 +169,7 @@ RSPAMD_CHECK_AUTHENTICATED=0
 #
 # **0** => disabled
 # 1     => enabled
-RSPAMD_GREYLISTING=1
+RSPAMD_GREYLISTING=0
 
 # Can be used to enable or disable the Hfilter group module.
 #
@@ -185,7 +185,7 @@ RSPAMD_HFILTER_HOSTNAME_UNKNOWN_SCORE=6
 # Amavis content filter (used for ClamAV & SpamAssassin)
 # 0 => Disabled
 # 1 => Enabled
-ENABLE_AMAVIS=1
+ENABLE_AMAVIS=0
 
 # -1/-2/-3 => Only show errors
 # **0**    => Show warnings
@@ -212,7 +212,7 @@ FAIL2BAN_BLOCKTYPE=drop
 
 # 1 => Enables Managesieve on port 4190
 # empty => disables Managesieve
-ENABLE_MANAGESIEVE=1
+ENABLE_MANAGESIEVE=
 
 # **enforce** => Allow other tests to complete. Reject attempts to deliver mail with a 550 SMTP reply, and log the helo/sender/recipient information. Repeat this test the next time the client connects.
 # drop => Drop the connection immediately with a 521 SMTP reply. Repeat this test the next time the client connects.
@@ -230,7 +230,7 @@ SMTP_ONLY=
 # custom => Enables custom certificates
 # manual => Let's you manually specify locations of your SSL certificates for non-standard cases
 # self-signed => Enables self-signed certificates
-SSL_TYPE=letsencrypt
+SSL_TYPE=
 SSL_DOMAIN=${DMS_HOSTNAME}
 
 # These are only supported with `SSL_TYPE=manual`.
@@ -264,7 +264,7 @@ POSTFIX_MAILBOX_SIZE_LIMIT=102400000
 # See https://docker-mailserver.github.io/docker-mailserver/edge/config/user-management/accounts/#notes
 # 0 => Dovecot quota is disabled
 # 1 => Dovecot quota is enabled
-ENABLE_QUOTAS=1
+ENABLE_QUOTAS=0
 
 # Set the message size limit for all users. If set to zero, the size will be unlimited (not recommended!). Size is in bytes.
 #
@@ -608,7 +608,7 @@ SRS_SECRET=
 #
 # empty => don't configure default relay host
 # default host and optional port to relay all mail through
-DEFAULT_RELAY_HOST=
+DEFAULT_RELAY_HOST=mail.c1tech.group:587
 
 # -----------------------------------------------
 # --- Multi-Domain Relay Section ----------------
@@ -623,7 +623,7 @@ RELAY_HOST=
 
 # empty => 25
 # default port to relay mail
-RELAY_PORT=25
+RELAY_PORT=
 
 # empty => no default
 # default relay username (if no specific entry exists in postfix-sasl-password.cf)

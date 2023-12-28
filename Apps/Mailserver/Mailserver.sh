@@ -46,6 +46,34 @@ nano .env
 # Create Network and Run
 docker network create mailserver-network
 docker compose up -d
+
+# Enable SMTPD SASL (Postfix and Dovecot SASL) 
+docker exec -it mailserver postconf -e smtpd_sasl_auth_enable=yes
+
+# -------==========-------
+# MailServer Relay (to another SMTP)
+# First SMTP Server runs on port 587 with TLS (Main Server - Europe)
+# Second SMTP Server runs on port 587 without TLS (Office Server)
+# -------==========-------
+# Enable SMTP SASL (Postfix and Postfix)
+# 1. on First Server: Create SASL-user in  for authenticating beetwen servers
+# 2. on Second Server:
+# Send out email even with same domain
+docker exec -it mailserver postconf -e mydestination=
+docker exec -it mailserver postconf -e virtual_mailbox_domains=
+# establish sasl connection
+docker exec -it mailserver postconf -e relayhost=mail.c1tech.group:587
+docker exec -it mailserver postconf -e smtp_tls_security_level=may
+docker exec -it mailserver postconf -e smtp_sasl_auth_enable=yes
+docker exec -it mailserver postconf -e smtp_sasl_password_maps=hash:/etc/postfix/sasl_passwd
+docker exec -it mailserver postconf -e smtp_sasl_security_options=noanonymous
+docker exec -it mailserver postconf -e header_size_limit=4096000
+docker exec -it mailserver sh
+# Wait...
+echo "mail.c1tech.group:587 sasl@c1tech.group:51176915" > /etc/postfix/sasl_passwd
+postmap /etc/postfix/sasl_passwd 
+service postfix stop
+exit
 # -------==========-------
 # Configufations
 # -------==========-------
@@ -54,7 +82,8 @@ docker exec -it mailserver sh
 
 # Dovecot
 /etc/dovecot/dovecot.conf #Main Conf
-/etc/dovecot/dovecot.conf/FILES_ARE_LISTED_HERE
+/etc/dovecot/conf.d/FILES_ARE_LISTED_HERE
+/etc/dovecot/conf.d/10-master.conf
 /etc/dovecot/dovecot-ldap.conf.ext #LDAP Conf
 # After any edit:
 service dovecot stop 
