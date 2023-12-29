@@ -10,7 +10,7 @@ sudo mkdir -p /mnt/data/bitbucket/bitbucket
 sudo mkdir -p /mnt/data/bitbucket/postgres
 
 # Set Permissions
-sudo chmod 770 -R /mnt/data/bitbucket
+sudo chmod 750 -R /mnt/data/bitbucket
 sudo chown -R c1tech:docker /mnt/data/bitbucket
 sudo chown -R lxd:docker /mnt/data/bitbucket/postgres
 

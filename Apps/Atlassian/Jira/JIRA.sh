@@ -1,29 +1,32 @@
 # -------==========-------
 # Jira
 # -------==========-------
-mkdir -p ~/docker/jira
-cp -R ~/DevOps-Notebook/Apps/Atlassian/Jira/*  ~/docker/jira
-cd  ~/docker/jira
+mkdir -p ~/docker
+cp -R ~/DevOps-Notebook/Apps/Atlassian/Jira ~/docker/jira
+cd ~/docker/jira
+
 
 # Make Directories
 sudo mkdir -p /mnt/data/jira/jira
 sudo mkdir -p /mnt/data/jira/postgres
 
 # Set Permissions
-sudo chmod 770 -R /mnt/data/jira
-sudo chown -R $USER:docker /mnt/data/jira
+sudo chmod 750 -R /mnt/data/jira/jira
+sudo chown -R lxd:docker /mnt/data/jira/jira
+sudo chown -R lxd:docker /mnt/data/jira/postgres
+
 
 # Create the docker volumes for the containers.
 # Jira
 docker volume create --driver local \
      --opt type=none \
-     --opt device=/mnt/data/jira/jira \
-     --opt o=bind jira-data
+     --opt device=/mnt/data/jira2/jira \
+     --opt o=bind jira-data2
 # PostgreSQL
 docker volume create --driver local \
      --opt type=none \
-     --opt device=/mnt/data/jira/postgres \
-     --opt o=bind jira-postgres
+     --opt device=/mnt/data/jira2/postgres \
+     --opt o=bind jira-postgres2
 # Verify
 docker volume list
 

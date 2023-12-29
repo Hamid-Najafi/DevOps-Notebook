@@ -7,7 +7,8 @@ cd ~/docker/emqx
 
 sudo mkdir -p /mnt/data/emqx/data
 sudo mkdir -p /mnt/data/emqx/logs
-sudo chmod 770 -R /mnt/data/emqx
+
+sudo chmod 750 -R /mnt/data/emqx
 sudo chown -R $USER:docker /mnt/data/emqx
 
 docker volume create --driver local \

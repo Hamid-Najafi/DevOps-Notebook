@@ -5,8 +5,8 @@
 sudo mkdir -p /mnt/data/dashy
 
 # Set Permissions
-sudo chmod 770 -R /mnt/data/dashy
-sudo chown -R $USER:docker /mnt/data
+sudo chmod 750 -R /mnt/data/dashy
+sudo chown -R root:docker /mnt/data/dashy
 
 # Create the docker volumes for the containers.
 docker volume create \

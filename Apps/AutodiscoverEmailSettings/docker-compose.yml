@@ -1,0 +1,59 @@
+networks:
+  autodiscover-network:
+    external: true
+  traefik-network:
+    external: true
+
+services:
+  autodiscover:
+    image: monogramm/autodiscover-email-settings:latest
+    container_name: autodiscover
+    environment:
+      - COMPANY_NAME=C1Tech Group
+      - SUPPORT_URL=https://autodiscover.c1tech.group
+      - DOMAIN=c1tech.group
+      # IMAP configuration (host mandatory to enable)
+      # - IMAP_HOST=imap.c1tech.group
+      - IMAP_HOST=mail.c1tech.group
+      - IMAP_PORT=993
+      - IMAP_SOCKET=SSL
+      # POP configuration (host mandatory to enable)
+      - POP_HOST=pop3.c1tech.group
+      - POP_PORT=995
+      - POP_SOCKET=SSL
+      # SMTP configuration (host mandatory to enable)
+      # - SMTP_HOST=smtp.c1tech.group
+      - SMTP_HOST=mail.c1tech.group
+      - SMTP_PORT=587
+      - SMTP_SOCKET=STARTTLS
+      # MobileSync/ActiveSync configuration (url mandatory to enable)
+      - MOBILESYNC_URL=https://sync.c1tech.group
+      - MOBILESYNC_NAME=sync.c1tech.group
+      # LDAP configuration (host mandatory to enable)
+      - LDAP_HOST=ldap.c1tech.group
+      - LDAP_PORT=636
+      - LDAP_SOCKET=SSL
+      - LDAP_BASE=dc=c1tech,dc=group
+      - LDAP_USER_FIELD=cn
+      - LDAP_USER_BASE=ou=users,dc=c1tech,dc=group
+      - LDAP_SEARCH=(|(objectClass=PostfixBookMailAccount))
+      # Apple mobile config identifiers (identifier mandatory to enable)
+      - PROFILE_IDENTIFIER=group.c1tech.autodiscover
+      - PROFILE_UUID=92943D26-CAB3-4086-897D-DC6C0D8B1E86
+      - MAIL_UUID=7A981A9E-D5D0-4EF8-87FE-39FD6A506FAC
+      - LDAP_UUID=6ECB6BA9-2208-4ABF-9E60-4E9F4CD7309E
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.autodiscover.rule=Host(`autodiscover.c1tech.group`)"
+      - "traefik.http.routers.autodiscover.service=autodiscover"
+      - "traefik.http.routers.autodiscover.entrypoints=secure"
+      - "traefik.http.services.autodiscover.loadbalancer.server.port=8000"
+      - "traefik.http.routers.autodiscover.tls=true"
+      - "traefik.http.routers.autodiscover.tls.certresolver=letsencrypt"
+      - "traefik.http.services.autodiscover.loadbalancer.passhostheader=true"
+      - "traefik.http.routers.autodiscover.middlewares=compresstraefik"
+      - "traefik.http.middlewares.compresstraefik.compress=true"
+      - "traefik.docker.network=traefik-network"
+    networks:
+      - autodiscover-network
+      - traefik-network
