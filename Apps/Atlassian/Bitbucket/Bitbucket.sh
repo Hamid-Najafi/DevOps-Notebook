@@ -36,6 +36,10 @@ docker volume list
 docker network create bitbucket-network
 docker compose up -d
 
+# *** FIX REVERSE PROXY SETTING **** ##
+# nano server.xml
+docker cp server.xml bitbucket:/opt/bitbucket/conf/server.xml
+
 # -------==========-------
 admin
 C1Tech

@@ -20,10 +20,15 @@ services:
       JVM_MINIMUM_MEMORY: ${JIRA_JVM_MINIMUM_MEMORY}
       JVM_MAXIMUM_MEMORY: ${JIRA_JVM_MAXIMUM_MEMORY}
       JVM_RESERVED_CODE_CACHE_SIZE: ${JIRA_JVM_RESERVED_CODE_CACHE_SIZE}
+      # These Proxy ENVs, doenst works! copy server.xml file into container
       ATL_PROXY_NAME: ${JIRA_HOSTNAME}
       ATL_TOMCAT_SECURE: 'true'
       ATL_TOMCAT_SCHEME: https
       ATL_PROXY_PORT: 443
+      CATALINA_CONNECTOR_PROXYNAME: ${JIRA_HOSTNAME}
+      CATALINA_CONNECTOR_PROXYPORT: 443
+      CATALINA_CONNECTOR_SCHEME: https
+      CATALINA_CONNECTOR_SECURE: true
       ATL_DB_TYPE: postgres72
       ATL_DB_DRIVER: org.postgresql.Driver
       ATL_JDBC_USER: ${JIRA_DB_USER}
@@ -37,8 +42,8 @@ services:
       timeout: 5s
       retries: 3
       start_period: 90s
-    ports:
-      - 8080:8080
+    # ports:
+    #   - 8080:8080
     depends_on:
       postgres:
         condition: service_healthy

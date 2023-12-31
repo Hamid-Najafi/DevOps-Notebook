@@ -1,0 +1,77 @@
+networks:
+  matrix-network:
+    external: true
+  traefik-network:
+    external: true
+
+volumes:
+  element-data:
+    external: true
+  element-postgres:
+    external: true
+  element-redis:
+    external: true
+
+version: '3'
+services:
+  element:
+    image: vectorim/element-web:latest
+    restart: unless-stopped
+    volumes:
+      - ./element-config.json:/app/config.json
+    networks:
+      - matrix-network
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.element.rule=Host(`element.c1tech.group`)"
+      - "traefik.http.routers.element.service=element"
+      - "traefik.http.routers.element.entrypoints=secure"
+      - "traefik.http.services.element.loadbalancer.server.port=80"
+      - "traefik.http.routers.element.tls=true"
+      - "traefik.http.routers.element.tls.certresolver=letsencrypt"
+      - "traefik.http.services.element.loadbalancer.passhostheader=true"
+      - "traefik.http.routers.element.middlewares=compresstraefik"
+      - "traefik.http.middlewares.compresstraefik.compress=true"
+      - "traefik.docker.network=traefik-network"
+
+  synapse:
+    image: matrixdotorg/synapse:latest
+    restart: unless-stopped
+    networks:
+      - matrix-network
+      - traefik-network
+
+  synapse-admin:
+    image: awesometechnologies/synapse-admin
+    restart: unless-stopped
+    networks:
+      - matrix-network
+      - traefik-network
+
+  coturn:
+    image: instrumentisto/coturn:latest
+    restart: unless-stopped
+    volumes:
+      - ./coturn/turnserver.conf:/etc/coturn/turnserver.conf
+    ports:
+      - 49160-49200:49160-49200/udp
+      - 3478:3478
+      - 5349:5349
+    networks:
+      - matrix-network
+      - traefik-network
+
+  postgres:
+    image: postgres:14
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: 10.10.10.2
+    volumes:
+     - ./postgresdata:/var/lib/postgresql/data
+    # These will be used in homeserver.yaml later on
+    environment:
+     - POSTGRES_DB=synapse
+     - POSTGRES_USER=synapse
+     - POSTGRES_PASSWORD=STRONGPASSWORD

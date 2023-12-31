@@ -36,6 +36,10 @@ docker volume list
 docker network create confluence-network
 docker compose up -d
 
+# *** FIX REVERSE PROXY SETTING **** ##
+# nano server.xml
+docker cp server.xml confluence:/opt/confluence/conf/server.xml
+
 # Disabling secure administrator sessions
 docker exec jira sh -c 'echo "jira.websudo.is.disabled = true" >>/var/atlassian/application-data/jira/jira-config.properties' 
 docker exec jira sh -c 'echo "confluence.websudo.is.disabled = true" >>/var/confluence/confluence-config.properties' 

@@ -1,4 +1,12 @@
 # -------==========-------
+# Mail Servers:
+# -------==========-------
+Microsoft Exchange
+Postfix & Dovecot
+iMail from IPSwitch
+Kerio Connect 
+Zimbra 
+# -------==========-------
 # BEFORE YOU BEGIN
 # -------==========-------
 1. The host should have a static IP address
