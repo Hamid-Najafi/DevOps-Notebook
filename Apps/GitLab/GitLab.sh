@@ -69,4 +69,10 @@ docker compose up -d
 
 sudo docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
 Username: root
-Password: 4bSmKX2URRfYiWxOe3xnS1vUWR5pxvRYh2gc8xO9NOg=
+Password:
+
+# -------==========-------
+# Rails console 
+# -------==========-------
+docker exec -it gitlab gitlab-rails console
+

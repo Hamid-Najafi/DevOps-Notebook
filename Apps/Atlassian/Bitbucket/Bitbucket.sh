@@ -39,12 +39,6 @@ docker compose up -d
 # *** FIX REVERSE PROXY SETTING **** ##
 # nano server.xml
 docker cp server.xml bitbucket:/opt/bitbucket/conf/server.xml
-
-# -------==========-------
-admin
-C1Tech
-admin@c1tech.group
-C1Techpass.AT
 # -------==========-------
 # Atlassian-Agent
 # -------==========-------

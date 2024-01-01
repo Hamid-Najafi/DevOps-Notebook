@@ -36,21 +36,6 @@ services:
       start_period: 60s
     restart: unless-stopped
 
-  # redis:
-  #   image: ${GITLAB_REDIS_IMAGE_TAG}
-  #   command: ["redis-server", "--requirepass", "${GITLAB_REDIS_PASSWORD}"]
-  #   volumes:
-  #     - gitlab-redis:/data
-  #   networks:
-  #     - gitlab-network
-  #   healthcheck:
-  #     test: ["CMD", "redis-cli", "ping"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 3
-  #     start_period: 60s
-  #   restart: unless-stopped
-
   gitlab:
     image: ${GITLAB_IMAGE_TAG}
     container_name: gitlab
@@ -71,10 +56,6 @@ services:
                 'X-Forwarded-Ssl' => 'on'
         }
         gitlab_rails['timezone'] = "${GITLAB_TIMEZONE}"
-
-        # redis['enable'] = false
-        # gitlab_rails['redis_host'] = "redis"
-        # gitlab_rails['redis_port'] = "6379"
 
         gitlab_rails['db_adapter'] = "${GITLAB_DB_TYPE}"
         gitlab_rails['db_adapter'] = "${GITLAB_DB_TYPE}"
@@ -98,6 +79,8 @@ services:
 
         gitlab_rails['gitlab_email_from'] = "${GITLAB_EMAIL_FROM}"
         gitlab_rails['gitlab_email_reply_to'] = "${GITLAB_EMAIL_REPLY_TO}"
+
+        gitlab_rails['mattermost_external_url'] = "${GITLAB_MATTERMOST_EXTERNAL_URL}"
 
         gitlab_rails['ldap_enabled'] = true
         gitlab_rails['ldap_servers'] = {
@@ -152,12 +135,32 @@ services:
       postgres:
         condition: service_healthy
 
-  gitlab-runner-1:
-    image: ${GITLAB_RUNNER_IMAGE_TAG}
-    container_name: gitlab-runner-1
-    volumes:
-      - gitlab-runner-config:/etc/gitlab-runner
-      - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - gitlab-network
-    restart: unless-stopped
+
+        # redis['enable'] = false
+        # gitlab_rails['redis_host'] = "redis"
+        # gitlab_rails['redis_port'] = "6379"
+        
+  # redis:
+  #   image: ${GITLAB_REDIS_IMAGE_TAG}
+  #   command: ["redis-server", "--requirepass", "${GITLAB_REDIS_PASSWORD}"]
+  #   volumes:
+  #     - gitlab-redis:/data
+  #   networks:
+  #     - gitlab-network
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 3
+  #     start_period: 60s
+  #   restart: unless-stopped
+
+  # gitlab-runner-1:
+  #   image: ${GITLAB_RUNNER_IMAGE_TAG}
+  #   container_name: gitlab-runner-1
+  #   volumes:
+  #     - gitlab-runner-config:/etc/gitlab-runner
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   networks:
+  #     - gitlab-network
+  #   restart: unless-stopped

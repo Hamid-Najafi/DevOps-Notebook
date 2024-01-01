@@ -4,13 +4,13 @@ networks:
   traefik-network:
     external: true
 
-volumes:
-  element-data:
-    external: true
-  element-postgres:
-    external: true
-  element-redis:
-    external: true
+# volumes:
+#   element-data:
+#     external: true
+#   element-postgres:
+#     external: true
+#   element-redis:
+#     external: true
 
 version: '3'
 services:
@@ -38,9 +38,29 @@ services:
   synapse:
     image: matrixdotorg/synapse:latest
     restart: unless-stopped
+    # environment:
+    #   SYNAPSE_CONFIG_DIR: "/data"
+    #   SYNAPSE_CONFIG_PATH: "/data/homeserver.yaml"
+    #   UID: "1000"
+    #   GID: "1000"
+    #   TZ: "Europe/London"
     networks:
       - matrix-network
       - traefik-network
+    volumes:
+     - ./synapse:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.synapse.rule=Host(`synapse.c1tech.group`)"
+      - "traefik.http.routers.synapse.service=synapse"
+      - "traefik.http.routers.synapse.entrypoints=secure"
+      - "traefik.http.services.synapse.loadbalancer.server.port=8008"
+      - "traefik.http.routers.synapse.tls=true"
+      - "traefik.http.routers.synapse.tls.certresolver=letsencrypt"
+      - "traefik.http.services.synapse.loadbalancer.passhostheader=true"
+      - "traefik.http.routers.synapse.middlewares=compresstraefik"
+      - "traefik.http.middlewares.compresstraefik.compress=true"
+      - "traefik.docker.network=traefik-network"
 
   synapse-admin:
     image: awesometechnologies/synapse-admin
@@ -62,16 +82,21 @@ services:
       - matrix-network
       - traefik-network
 
-  postgres:
-    image: postgres:14
-    restart: unless-stopped
-    networks:
-      default:
-        ipv4_address: 10.10.10.2
-    volumes:
-     - ./postgresdata:/var/lib/postgresql/data
-    # These will be used in homeserver.yaml later on
-    environment:
-     - POSTGRES_DB=synapse
-     - POSTGRES_USER=synapse
-     - POSTGRES_PASSWORD=STRONGPASSWORD
+  # postgres:
+  #   image: postgres:14
+  #   restart: unless-stopped
+  #   volumes:
+  #    - ./postgresdata:/var/lib/postgresql/data
+  #   # These will be used in homeserver.yaml later on
+  #   environment:
+  #    - POSTGRES_DB=test
+  #    - POSTGRES_USER=synapse
+  #    - POSTGRES_PASSWORD=STRONGPASSWORD
+  #   networks:
+  #     - matrix-network
+
+  # redis:
+  #   image: "redis:latest"
+  #   restart: "unless-stopped"
+  #   networks:
+  #     - matrix-network

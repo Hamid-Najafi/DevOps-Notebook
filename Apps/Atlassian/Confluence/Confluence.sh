@@ -46,20 +46,6 @@ docker exec jira sh -c 'echo "confluence.websudo.is.disabled = true" >>/var/conf
 cd  ~/docker/confluence
 docker compose restart
 # -------==========-------
-C1Tech
-admin@c1tech.group
-admin
-C1Techpass.AT
-# -------==========-------
-# Login localy and set Base url after first setup:
-# https://jira.c1tech.group
-To configure the base URL:
-In the upper-right corner of the screen, select Administration  > System.
-In the sidebar, select General configuration.
-Select Edit settings.
-Enter the new URL in the Base URL text box.
-Select Update to save your changes.
-# -------==========-------
 # Atlassian-Agent
 # -------==========-------
 docker exec confluence java -jar /var/agent/atlassian-agent.jar \
