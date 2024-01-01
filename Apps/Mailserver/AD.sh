@@ -17,7 +17,6 @@ user_filter     = (&(mail=%u)(objectClass=person))
 pass_filter     = (&(mail=%u)(objectClass=person))
 pass_attrs      = userPassword=password
 default_pass_scheme = CRYPT
-# user_attrs      = mail=master_user,mail=user,=home=/var/vmail/vmail1/%Ld/%Ln/,=mail=maildir:~/Maildir/
 user_attrs      = mailHomeDirectory=home,mailUidNumber=uid,mailGidNumber=gid,mailStorageDirectory=mail
 EOF
 service dovecot stop 
@@ -28,3 +27,17 @@ nano /etc/postfix/main.cf
 postconf -e smtpd_sasl_type=dovecot
 # Located in: /etc/dovecot/conf.d/10-master.conf
 service postfix stop
+
+
+base = ou=users,dc=c1tech,dc=group
+default_pass_scheme = SSHA
+dn = cn=admin,dc=c1tech,dc=group
+dnpass = LDAPpass.24
+uris = ldaps://ldap.c1tech.group:636
+tls = no
+ldap_version        = 3
+pass_attrs          = uniqueIdentifier=user,userPassword=password
+pass_filter = (&(objectClass=PostfixBookMailAccount)(uniqueIdentifier=%n))
+user_attrs          = mailHomeDirectory=home,mailUidNumber=uid,mailGidNumber=gid,mailStorageDirectory=mail
+user_filter = (&(objectClass=PostfixBookMailAccount)(uniqueIdentifier=%n))
+auth_bind = no

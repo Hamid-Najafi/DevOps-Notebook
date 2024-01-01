@@ -109,7 +109,7 @@ ENABLE_OPENDKIM=0
 # Enables the OpenDMARC service.
 # **1** => Enabled
 #   0   => Disabled
-ENABLE_OPENDMARC=1
+ENABLE_OPENDMARC=0
 
 
 # Enabled `policyd-spf` in Postfix's configuration. You will likely want to set this
@@ -185,7 +185,7 @@ RSPAMD_HFILTER_HOSTNAME_UNKNOWN_SCORE=6
 # Amavis content filter (used for ClamAV & SpamAssassin)
 # 0 => Disabled
 # 1 => Enabled
-ENABLE_AMAVIS=1
+ENABLE_AMAVIS=0
 
 # -1/-2/-3 => Only show errors
 # **0**    => Show warnings
@@ -368,7 +368,7 @@ DOVECOT_INET_PROTOCOLS=ipv4
 # --- SpamAssassin Section ----------------------
 # -----------------------------------------------
 
-ENABLE_SPAMASSASSIN=1
+ENABLE_SPAMASSASSIN=0
 
 # deliver spam messages in the inbox (eventually tagged using SA_SPAM_SUBJECT)
 SPAMASSASSIN_SPAM_TO_INBOX=1

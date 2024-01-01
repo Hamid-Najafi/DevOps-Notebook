@@ -30,3 +30,8 @@ docker compose up -d
 # Use ENVIRONMENT VAIEBLES ||OR|| CONFIG FILE
 # unComment volumes sercion
 docker compose up -d
+
+# -------==========-------
+# [Plugins]
+# -------==========-------
+c1-ubuntu-srv-vm.local
