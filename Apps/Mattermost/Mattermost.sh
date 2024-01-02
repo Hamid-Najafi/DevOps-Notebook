@@ -74,6 +74,13 @@ docker network create mattermost-network
 docker compose up -d
 
 # -------==========-------
+# [PLUGINS]
+# -------==========-------
+https://github.com/mattermost/mattermost-plugin-confluence
+
+https://github.com/mattermost/mattermost-plugin-metrics
+https://github.com/mattermost/mattermost-plugin-antivirus
+# -------==========-------
 # config.json
 # -------==========-------
 # https://docs.mattermost.com/guides/get-started-with-administration.html
@@ -83,9 +90,46 @@ docker restart mattermost
 docker logs mattermost -f
 
 # -------==========-------
+# JIRA [PLUGINS]
+# -------==========-------
+https://github.com/mattermost/mattermost-plugin-jira
+1. Add OAuth 
+2. Add Webhook for whole JIRA
+3. add Webhook subscribe for channel (using /jira subscribe edit)
+/jira subscribe edit
+# -------==========-------
+# GITLAB [PLUGINS]
+# -------==========-------
+https://github.com/mattermost/mattermost-plugin-gitlab
+1. Add OAuth
+2. connect gitlab account to mattermost
+2. Add Webhook for every single channel to every repo you want (using /gitlab subscriptions)
+
+/gitlab connect
+/gitlab subscriptions add group[/project]
+/gitlab webhook add group[/project]
+/gitlab subscriptions list
+# Defaults to "merges,issues,tag"
+/gitlab subscriptions add software-group/control-panel merges,issues,tag,pushes,jobs,issue_comments
+# -------==========-------
+# CALL PLUGIN config.json
+# -------==========-------
+
+"com.mattermost.calls": {
+    "allowenablecalls": true,
+    "defaultenabled": true,
+    "icehostoverride": "mm.c1tech.group",
+    "iceservers": "stun:stun.global.calls.mattermost.com:3478",
+    "maxcallparticipants": 0,
+    "rtcdserviceurl": null,
+    "udpserverport": 8965
+},
+
+# -------==========-------
 # MMCTL
 # -------==========-------
 # https://docs.mattermost.com/manage/mmctl-command-line-tool.html#mmctl-auth-login
 docker exec -it mattermost sh
 mmctl auth login https://mm.c1tech.group/  --name c1tech --username admin
 mmctl config set ServiceSettings.EnableAPIUserDeletion true
+mmctl user delete <USER>

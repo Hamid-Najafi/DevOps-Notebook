@@ -34,6 +34,11 @@ services:
     read_only: ${MATTERMOST_CONTAINER_READONLY}
     tmpfs:
       - /tmp
+    ports:
+      # https://docs.mattermost.com/configure/calls-deployment.html
+      - "8443:8443"
+      - "8045:8045"
+      - "3478:3478"
     volumes:
       - mattermost-config:/mattermost/config:rw
       - mattermost-data:/mattermost/data:rw
@@ -47,17 +52,23 @@ services:
       # - ${GITLAB_PKI_CHAIN_PATH}:/etc/ssl/certs/pki_chain.pem:ro
     environment:
       # timezone inside container
-      - TZ
+      - TZ=${TZ}
       # necessary Mattermost options/variables (see env.example)
-      - MM_SQLSETTINGS_DRIVERNAME
-      - MM_SQLSETTINGS_DATASOURCE
+      - MM_SQLSETTINGS_DRIVERNAME=${MM_SQLSETTINGS_DRIVERNAME}
+      - MM_SQLSETTINGS_DATASOURCE=${MM_SQLSETTINGS_DATASOURCE}
       # necessary for bleve
-      - MM_BLEVESETTINGS_INDEXDIR
+      - MM_BLEVESETTINGS_INDEXDIR=${MM_BLEVESETTINGS_INDEXDIR}
       # additional settings
-      - MM_SERVICESETTINGS_SITEURL
+      - MM_SERVICESETTINGS_SITEURL=${MM_SERVICESETTINGS_SITEURL}
+      - MM_EMAILSETTINGS_SMTPSERVER=${MM_EMAILSETTINGS_SMTPSERVER}
+      - MM_EMAILSETTINGS_SMTPPORT=${MM_EMAILSETTINGS_SMTPPORT}
+      - MM_EMAILSETTINGS_ENABLESMTPAUTH=${MM_EMAILSETTINGS_ENABLESMTPAUTH}
+      - MM_EMAILSETTINGS_SMTPUSERNAME=${MM_EMAILSETTINGS_SMTPUSERNAME}
+      - MM_EMAILSETTINGS_SMTPPASSWORD=${MM_EMAILSETTINGS_SMTPPASSWORD}
+      - MM_EMAILSETTINGS_CONNECTIONSECURITY=${MM_EMAILSETTINGS_CONNECTIONSECURITY}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.mattermost.rule=Host(`mm.c1tech.group`)"
+      - "traefik.http.routers.mattermost.rule=Host(`${DOMAIN}`)"
       - "traefik.http.routers.mattermost.service=mattermost"
       - "traefik.http.routers.mattermost.entrypoints=secure"
       - "traefik.http.services.mattermost.loadbalancer.server.port=8065"
@@ -90,10 +101,9 @@ services:
       start_period: 60s
     volumes:
       - mattermost-postgres:/var/lib/postgresql/data
-      # - ${POSTGRES_DATA_PATH}:/var/lib/postgresql/data
     environment:
       # timezone inside container
-      - TZ
+      - TZ=${TZ}
       # necessary Postgres options/variables
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}

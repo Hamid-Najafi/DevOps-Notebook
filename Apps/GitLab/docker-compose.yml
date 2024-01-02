@@ -80,7 +80,9 @@ services:
         gitlab_rails['gitlab_email_from'] = "${GITLAB_EMAIL_FROM}"
         gitlab_rails['gitlab_email_reply_to'] = "${GITLAB_EMAIL_REPLY_TO}"
 
-        gitlab_rails['mattermost_external_url'] = "${GITLAB_MATTERMOST_EXTERNAL_URL}"
+        # BK: its archived (gitlab-mattermost)
+        # https://gitlab.com/gitlab-org/gitlab-mattermost
+        # gitlab_rails['mattermost_external_url'] = "${GITLAB_MATTERMOST_EXTERNAL_URL}"
 
         gitlab_rails['ldap_enabled'] = true
         gitlab_rails['ldap_servers'] = {
