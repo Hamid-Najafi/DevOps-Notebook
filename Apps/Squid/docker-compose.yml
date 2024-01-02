@@ -3,7 +3,7 @@ services:
   squid:
     image: sameersbn/squid
     container_name: squid
-    restart: always
+    restart: unless-stopped
     ports:
       - "3128:3128"
     volumes:

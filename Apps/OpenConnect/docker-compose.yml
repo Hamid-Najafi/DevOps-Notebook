@@ -3,7 +3,7 @@ services:
   ocserv:
     image:  tommylau/ocserv
     container_name: ocserv
-    restart: always
+    restart: unless-stopped
     privileged: true
     network_mode: "host"
     volumes:

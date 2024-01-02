@@ -3,7 +3,7 @@ services:
   shadowsocksr:
     image:  teddysun/shadowsocks-r
     container_name: shadowsocks-r
-    restart: always
+    restart: unless-stopped
     ports:
       - 8388:8388/udp
       - 8388:8388

@@ -13,7 +13,7 @@ volumes:
 services:
   confluence:
     image: ${CONFLUENCE_IMAGE_TAG}
-    restart: always
+    restart: unless-stopped
     container_name: confluence
     environment:
     # https://hub.docker.com/r/atlassian/confluence-server
@@ -63,7 +63,7 @@ services:
   
   postgres:
     image: ${CONFLUENCE_POSTGRES_IMAGE_TAG}
-    restart: always
+    restart: unless-stopped
     container_name: confluence-postgres
     environment:
       POSTGRES_DB: ${CONFLUENCE_DB_NAME}

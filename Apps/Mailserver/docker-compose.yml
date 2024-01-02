@@ -35,7 +35,7 @@ services:
       - /mnt/data/traefik/acme.json:/etc/letsencrypt/acme.json:ro
     networks:
       - mailserver-network
-    restart: always
+    restart: unless-stopped
     stop_grace_period: 1m
     # Uncomment if using `ENABLE_FAIL2BAN=1`:
     # cap_add:
@@ -49,6 +49,7 @@ services:
   whoami:
     image: docker.io/traefik/whoami:latest
     container_name: mailserver-cert
+    restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.rule=Host(`${DMS_HOSTNAME}`)"

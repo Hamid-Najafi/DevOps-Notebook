@@ -13,7 +13,7 @@ volumes:
 services:
   jira:
     image: ${JIRA_IMAGE_TAG}
-    restart: always
+    restart: unless-stopped
     container_name: jira
     environment:
     # https://hub.docker.com/r/atlassian/jira-software
@@ -69,7 +69,7 @@ services:
 
   postgres:
     image: ${JIRA_POSTGRES_IMAGE_TAG}
-    restart: always
+    restart: unless-stopped
     container_name: jira-postgres
     environment:
       POSTGRES_DB: ${JIRA_DB_NAME}

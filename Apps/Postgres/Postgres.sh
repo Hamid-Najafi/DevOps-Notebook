@@ -5,10 +5,13 @@ mkdir -p ~/docker
 cp -R ~/DevOps-Notebook/Apps/Postgres ~/docker/postgres
 cd ~/docker/postgres
 
+# Make Directories
 sudo mkdir -p /mnt/data/postgres/postgres
 sudo mkdir -p /mnt/data/postgres/pgadmin
-sudo chmod 770 -R /mnt/data
-sudo chown -R $USER:docker /mnt/data/postgres
+
+# Set Permissions
+sudo chown -R 5050:root /mnt/data/postgres/pgadmin
+sudo chown -R lxd:docker /mnt/data/postgres/postgres
 
 docker volume create --driver local \
      --opt type=none \

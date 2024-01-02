@@ -2,7 +2,7 @@ version: "3.5"
 services:
   virgol:
     image: goldenstarc/virgol:latest
-    restart: always
+    restart: unless-stopped
     container_name: virgol_main
     volumes:
       - virgolData:/app/BulkData
@@ -50,7 +50,7 @@ services:
     container_name: virgol_db
     ports:
       - "5432:5432"
-    restart: always
+    restart: unless-stopped
     environment:
       # - POSTGRES_DB=virgol
       - POSTGRES_USER=postgres
@@ -66,7 +66,7 @@ services:
   #   environment:
   #     - PGADMIN_DEFAULT_EMAIL=admin@vir-gol.ir
   #     - PGADMIN_DEFAULT_PASSWORD=pgAdminpass.24
-  #   restart: always
+  #   restart: unless-stopped
   #   depends_on:
   #     - postgres
   #   labels:
@@ -82,7 +82,7 @@ services:
   moodle:
     image: 'goldenstarc/moodle:3.9.1-debian-10-r18'
     container_name: virgol_moodle
-    restart: always
+    restart: unless-stopped
     environment:
       - ALLOW_EMPTY_PASSWORD=no
       - MOODLE_DATABASE_HOST=mariadb
@@ -115,7 +115,7 @@ services:
   mariadb:
     image: 'docker.io/bitnami/mariadb:10.3-debian-10'
     container_name: virgol_moodle_db
-    restart: always
+    restart: unless-stopped
     environment:
       - ALLOW_EMPTY_PASSWORD=no
       - MARIADB_ROOT_PASSWORD=mySQLpass.24
@@ -130,7 +130,7 @@ services:
   # phpmyadmin:
   #   image: 'docker.io/bitnami/phpmyadmin:5-debian-10'
   #   container_name: virgol_phpmyadmin
-  #   restart: always
+  #   restart: unless-stopped
   #   environment:
   #     - PMA_ABSOLUTE_URI=https://phpmyadmin.vir-gol.ir/
   #     - PMA_HOST=mariadb
@@ -153,7 +153,7 @@ services:
     ports:
       - '389:389'
       # - '636:636'
-    restart: always
+    restart: unless-stopped
     volumes:
       - openldapDb:/var/lib/ldap
       - openldapConf:/etc/ldap/slapd.d
@@ -167,7 +167,7 @@ services:
   #     - PHPLDAPADMIN_LDAP_HOSTS=openldap
   #     - PHPLDAPADMIN_HTTPS=false
   #     - PHPLDAPADMIN_LDAP_CLIENT_TLS=false
-  #   restart: always
+  #   restart: unless-stopped
   #   depends_on:
   #     - openldap
   #   labels:

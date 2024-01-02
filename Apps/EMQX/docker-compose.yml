@@ -16,7 +16,7 @@ services:
     image: ${EMQX_IMAGE_TAG}
     container_name: emqx
     hostname: ${EMQX_HOSTNAME}
-    restart: always
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
       interval: 5s

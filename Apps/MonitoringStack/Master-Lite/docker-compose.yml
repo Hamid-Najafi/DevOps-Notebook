@@ -84,7 +84,7 @@ services:
   postgres:
     image: postgres:latest
     container_name: postgres_grafana
-    restart: always
+    restart: unless-stopped
     environment:
       - POSTGRES_DB=grafana
       - POSTGRES_USER=grafana

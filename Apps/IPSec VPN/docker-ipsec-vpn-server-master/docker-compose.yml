@@ -3,7 +3,7 @@ version: '3'
 services:
   vpn:
     image: hwdsl2/ipsec-vpn-server
-    restart: always
+    restart: unless-stopped
     env_file:
       - ./vpn.env
     ports:

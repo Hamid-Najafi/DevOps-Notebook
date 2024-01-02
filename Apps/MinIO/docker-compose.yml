@@ -2,7 +2,7 @@ version: '3.7'
 services:
   minio:
     image: minio/minio:latest
-    restart: always
+    restart: unless-stopped
     hostname: 'minio.c1tech.group'
     volumes:
       - /mnt/data:/data

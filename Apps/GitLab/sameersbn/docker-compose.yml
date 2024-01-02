@@ -2,7 +2,7 @@ version: '2.3'
 
 services:
   redis:
-    restart: always
+    restart: unless-stopped
     image: redis:6.2.6
     container_name: gitlab-redis
     command:
@@ -13,7 +13,7 @@ services:
       - traefik-network
 
   postgresql:
-    restart: always
+    restart: unless-stopped
     container_name: gitlab-postgresql
     image: sameersbn/postgresql:14-20230628
     volumes:
@@ -27,7 +27,7 @@ services:
       - traefik-network
 
   gitlab:
-    restart: always
+    restart: unless-stopped
     image: sameersbn/gitlab:16.6.2
     container_name: gitlab
     depends_on:

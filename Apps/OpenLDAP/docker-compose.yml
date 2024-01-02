@@ -14,6 +14,7 @@ services:
     container_name: openldap
     image: ${OPENLDAP_IMAGE_TAG}
     hostname: ${OPENLDAP_HOSTNAME}
+    restart: unless-stopped
     ports:
       - '389:1389'
       - '636:1636'
@@ -50,6 +51,7 @@ services:
   phpldapadmin:
     container_name: openldap-phpldapadmin
     image: osixia/phpldapadmin:0.9.0
+    restart: unless-stopped
     environment:
       PHPLDAPADMIN_HTTPS: "false"
       PHPLDAPADMIN_LDAP_HOSTS: |

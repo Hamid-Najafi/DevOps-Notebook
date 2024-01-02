@@ -120,7 +120,7 @@ services:
 
   postgres:
     image: postgres
-    restart: always
+    restart: unless-stopped
     environment:
       - POSTGRES_DB=grafana
       - POSTGRES_USER=grafana

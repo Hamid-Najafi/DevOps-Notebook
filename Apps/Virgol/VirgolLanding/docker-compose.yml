@@ -2,7 +2,7 @@ version: "3.5"
 services:
   virgolland:
     image: goldenstarc/virgollanding:latest
-    restart: always
+    restart: unless-stopped
     container_name: virgol_landing
     # build:
     #   context: .

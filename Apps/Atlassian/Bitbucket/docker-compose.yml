@@ -13,7 +13,7 @@ volumes:
 services:
   bitbucket:
     image: ${BITBUCKET_IMAGE_TAG}
-    restart: always
+    restart: unless-stopped
     container_name: bitbucket
     environment:
       # https://hub.docker.com/r/atlassian/bitbucket-server
@@ -65,7 +65,7 @@ services:
 
   postgres:
     image: ${BITBUCKET_POSTGRES_IMAGE_TAG}
-    restart: always
+    restart: unless-stopped
     container_name: bitbucket-postgres
     healthcheck:
       test: [ "CMD", "pg_isready", "-q", "-d", "${BITBUCKET_DB_NAME}", "-U", "${BITBUCKET_DB_USER}" ]

@@ -5,7 +5,7 @@ services:
     image: rancher/rancher:latest
     hostname: rancher.c1tech.group 
     privileged: true
-    restart: always
+    restart: unless-stopped
     container_name: rancher
     # ports:
     # - "80:80/tcp"

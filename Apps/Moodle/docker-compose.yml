@@ -2,7 +2,7 @@ version: "3.5"
 services:
   moodle:
     image: 'goldenstarc/moodle:latest'
-    restart: always
+    restart: unless-stopped
     ports:
       - '8086:8080'
 #      - '443:8443'
@@ -42,7 +42,7 @@ services:
 
   mariadb:
     image: docker.io/bitnami/mariadb:10.5
-    restart: always
+    restart: unless-stopped
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - MARIADB_ROOT_PASSWORD=mySQLpass.24
@@ -58,7 +58,7 @@ services:
       - traefik-network
   phpmyadmin:
     image: 'docker.io/bitnami/phpmyadmin:5-debian-10'
-    restart: always
+    restart: unless-stopped
     environment:
       - PMA_ABSOLUTE_URI=https://phpmyadmin.hamid-najafi.ir/
       - PMA_HOST=mariadb

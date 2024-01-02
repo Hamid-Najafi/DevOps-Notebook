@@ -4,7 +4,7 @@ services:
     image: mariadb
     hostname: mariadb.hamid-najafi.ir 
     # container_name: mariadb
-    restart: always
+    restart: unless-stopped
     volumes:
       - mariaDb:/var/lib/mysql
     environment:
@@ -22,7 +22,7 @@ services:
       - PMA_ABSOLUTE_URI=https://phpmyadmin.hamid-najafi.ir/
       - PMA_HOST=mysql5.7
       # - PMA_ARBITRARY=1
-    restart: always
+    restart: unless-stopped
     # ports:
     #   - "8082:8080"
     depends_on:

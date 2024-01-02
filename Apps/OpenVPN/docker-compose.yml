@@ -15,4 +15,4 @@ services:
         HOST_ADDR: ${HOST_ADDR} 
     # volumes:
     #     - ./openvpn_conf:/opt/Dockovpn_data
-    restart: always
+    restart: unless-stopped
