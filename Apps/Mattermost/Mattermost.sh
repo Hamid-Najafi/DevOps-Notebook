@@ -124,44 +124,10 @@ sudo nc -u -l -p 8443
 
 Client:
 nc c1tech.group 8443
+nc -u c1tech.group  8443
 
-nc -u 46.249.98.136 8443
-
-"com.mattermost.calls": {
-    "allowenablecalls": true,
-    "defaultenabled": false,
-    "icehostoverride": "mm.c1tech.group",
-    "iceservers": "stun:stun.global.calls.mattermost.com:3478",
-    "maxcallparticipants": 0,
-    "rtcdserviceurl": null,
-},
-
-
-            "com.mattermost.calls": {
-                "allowscreensharing": true,
-                "defaultenabled": true,
-                "enableipv6": false,
-                "enablerecordings": false,
-                "enableringing": true,
-                "enablesimulcast": false,
-                "enabletranscriptions": false,
-                "icehostoverride": "",
-                "iceserversconfigs": "[{\"urls\":[\"stun:stun.global.calls.mattermost.com:3478\"]}]",
-                "jobserviceurl": null,
-                "maxcallparticipants": 0,
-                "maxrecordingduration": 60,
-                "recordingquality": "medium",
-                "rtcdserviceurl": null,
-                "serversideturn": false,
-                "tcpserveraddress": "",
-                "tcpserverport": null,
-                "transcribermodelsize": "base",
-                "turncredentialsexpirationminutes": 1440,
-                "turnstaticauthsecret": "",
-                "udpserveraddress": "",
-                "udpserverport": null
-            },
-
+ICE Servers Configurations: (coturn)
+[{"urls":["stun:meet-jit-si-turnrelay.jitsi.net:443"]},{"urls":["turn:my.turnserver.com:443?transport=tcp"]}]
 # -------==========-------
 # MMCTL
 # -------==========-------
