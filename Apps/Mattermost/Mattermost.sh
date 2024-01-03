@@ -62,7 +62,7 @@ docker volume create \
       
 # Clone mattermost Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/mattermost ~/docker/mattermost
+cp -R ~/DevOps-Notebook/Apps/Mattermost ~/docker/mattermost
 cd ~/docker/mattermost
 
 # Check and Edit .env file
@@ -71,6 +71,7 @@ nano .env
 # Create Network and Run
 # Note: Check firewall & mapping rules for Port: 80 & 443
 docker network create mattermost-network
+docker compose pull
 docker compose up -d
 
 # -------==========-------
@@ -115,6 +116,16 @@ https://github.com/mattermost/mattermost-plugin-gitlab
 # CALL PLUGIN config.json
 # -------==========-------
 # https://docs.mattermost.com/configure/plugins-configuration-settings.html#calls
+
+## Test ports with netcat
+Server:
+sudo nc -l -p 8443
+sudo nc -u -l -p 8443
+
+Client:
+nc c1tech.group 8443
+
+nc -u 46.249.98.136 8443
 
 "com.mattermost.calls": {
     "allowenablecalls": true,
