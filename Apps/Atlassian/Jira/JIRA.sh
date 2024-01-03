@@ -5,7 +5,6 @@ mkdir -p ~/docker
 cp -R ~/DevOps-Notebook/Apps/Atlassian/Jira ~/docker/jira
 cd ~/docker/jira
 
-
 # Make Directories
 sudo mkdir -p /mnt/data/jira/jira
 sudo mkdir -p /mnt/data/jira/postgres
@@ -14,7 +13,6 @@ sudo mkdir -p /mnt/data/jira/postgres
 sudo chmod 750 -R /mnt/data/jira/jira
 sudo chown -R lxd:docker /mnt/data/jira/jira
 sudo chown -R lxd:docker /mnt/data/jira/postgres
-
 
 # Create the docker volumes for the containers.
 # Jira
@@ -56,6 +54,12 @@ docker exec jira java -jar /var/agent/atlassian-agent.jar \
     -n admin@c1tech.group \
     -o C1Tech \
     -s BDWG-36B4-SMZ8-99UG
+
+# -------==========-------
+# GitLan Integration
+# -------==========-------
+# tl;dr
+https://gitlab.c1tech.group/groups/software-group/-/settings/integrations
 
 # -------==========-------
 # atlassian-extras-3.4.6.jar

@@ -36,9 +36,9 @@ services:
       - /tmp
     ports:
       # https://docs.mattermost.com/configure/calls-deployment.html
-      - "8443:8443"
-      - "8045:8045"
-      - "3478:3478"
+      # - ${APP_PORT}:8065 Handeled via traefik
+      - ${CALLS_PORT}:${CALLS_PORT}/udp
+      - ${CALLS_PORT}:${CALLS_PORT}/tcp
     volumes:
       - mattermost-config:/mattermost/config:rw
       - mattermost-data:/mattermost/data:rw

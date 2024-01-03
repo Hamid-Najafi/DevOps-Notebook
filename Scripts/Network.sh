@@ -5,7 +5,7 @@ PORT_TO_CHECK=25
 docker run -d -p $PORT_TO_CHECK:80 alexwhen/docker-2048
 http://DOMAIN:$PORT_TO_CHECK
 # -------==========-------
-# Netcat port check
+# Netcat Connectivity checks
 # -------==========-------
 # Online tools
 https://pentest-tools.com/network-vulnerability-scanning/tcp-port-scanner-online-nmap#
@@ -17,6 +17,10 @@ sudo apt install -y netcat
 sudo nc -l -p 80
 # UDP
 sudo nc -u -l -p 80
+# -------==========-------
+# Network packets debugging
+sudo tcpdump -n port 8443
+
 # --==========--
 # NetCat Client:
 # TCP

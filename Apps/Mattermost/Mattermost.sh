@@ -114,16 +114,42 @@ https://github.com/mattermost/mattermost-plugin-gitlab
 # -------==========-------
 # CALL PLUGIN config.json
 # -------==========-------
+# https://docs.mattermost.com/configure/plugins-configuration-settings.html#calls
 
 "com.mattermost.calls": {
     "allowenablecalls": true,
-    "defaultenabled": true,
+    "defaultenabled": false,
     "icehostoverride": "mm.c1tech.group",
     "iceservers": "stun:stun.global.calls.mattermost.com:3478",
     "maxcallparticipants": 0,
     "rtcdserviceurl": null,
-    "udpserverport": 8965
 },
+
+
+            "com.mattermost.calls": {
+                "allowscreensharing": true,
+                "defaultenabled": true,
+                "enableipv6": false,
+                "enablerecordings": false,
+                "enableringing": true,
+                "enablesimulcast": false,
+                "enabletranscriptions": false,
+                "icehostoverride": "",
+                "iceserversconfigs": "[{\"urls\":[\"stun:stun.global.calls.mattermost.com:3478\"]}]",
+                "jobserviceurl": null,
+                "maxcallparticipants": 0,
+                "maxrecordingduration": 60,
+                "recordingquality": "medium",
+                "rtcdserviceurl": null,
+                "serversideturn": false,
+                "tcpserveraddress": "",
+                "tcpserverport": null,
+                "transcribermodelsize": "base",
+                "turncredentialsexpirationminutes": 1440,
+                "turnstaticauthsecret": "",
+                "udpserveraddress": "",
+                "udpserverport": null
+            },
 
 # -------==========-------
 # MMCTL
