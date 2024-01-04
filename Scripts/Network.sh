@@ -112,6 +112,24 @@ proxychains wget https://charts.gitlab.io
 # SpeedTest
 # -------==========-------
 curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -
+
+# -------==========-------
+# Netplan Static IP
+# -------==========-------
+# This is the network config written by 'subiquity'
+network:
+  ethernets:
+    ens33:
+      dhcp4: false
+      addresses: [172.25.10.8/24]
+      routes:
+         - to: default
+           via: 172.25.10.1
+      nameservers:
+        addresses: [172.25.10.5]
+      dhcp6: false
+  version: 2
+
 # -------==========-------
 # Wifi Station
 # -------==========-------
