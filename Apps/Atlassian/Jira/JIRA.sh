@@ -44,8 +44,9 @@ docker cp server.xml jira:/opt/jira/conf/server.xml
 docker exec jira sh -c 'echo "jira.websudo.is.disabled = true" >>/var/atlassian/application-data/jira/jira-config.properties' 
 docker exec jira sh -c 'echo "jira.websudo.is.disabled = true" >>/var/jira/jira-config.properties' 
 docker compose restart
+
 # -------==========-------
-# Atlassian-Agent
+# Jira Key
 # -------==========-------
 docker exec jira java -jar /var/agent/atlassian-agent.jar \
     -d \
@@ -54,6 +55,94 @@ docker exec jira java -jar /var/agent/atlassian-agent.jar \
     -n admin@c1tech.group \
     -o C1Tech \
     -s BDWG-36B4-SMZ8-99UG
+
+# -------==========-------
+# Jira Service Management(jsm) Plugin Key
+# -------==========-------
+
+docker exec jira java -jar /var/agent/atlassian-agent.jar \
+    -d \
+    -p jsm \
+    -m admin@c1tech.group \
+    -n admin@c1tech.group \
+    -o C1Tech \
+    -s BDWG-36B4-SMZ8-99UG
+
+# -------==========-------
+# Other Jira Plugin
+# -------==========-------
+# Install Plugin from jira marketplace.
+# Find App Key of Plugin 
+# for example biggantt: eu.softwareplant.biggantt
+# Execute :
+
+
+
+docker exec jira java -jar /var/agent/atlassian-agent.jar \
+    -d \
+    -p eu.softwareplant.bigpicture \
+    -m admin@c1tech.group \
+    -n admin@c1tech.group \
+    -o C1Tech \
+    -s BDWG-36B4-SMZ8-99UG
+
+docker exec jira java -jar /var/agent/atlassian-agent.jar \
+    -d \
+    -p eu.softwareplant.biggantt \
+    -m admin@c1tech.group \
+    -n admin@c1tech.group \
+    -o C1Tech \
+    -s BDWG-36B4-SMZ8-99UG
+
+docker exec jira java -jar /var/agent/atlassian-agent.jar \
+    -d \
+    -p softwareplant.bigtemplate \
+    -m admin@c1tech.group \
+    -n admin@c1tech.group \
+    -o C1Tech \
+    -s BDWG-36B4-SMZ8-99UG
+
+docker exec jira java -jar /var/agent/atlassian-agent.jar \
+    -d \
+    -p com.infosysta.jira.translation.arabic \
+    -m admin@c1tech.group \
+    -n admin@c1tech.group \
+    -o C1Tech \
+    -s BDWG-36B4-SMZ8-99UG
+
+docker exec jira java -jar /var/agent/atlassian-agent.jar \
+    -d \
+    -p com.onresolve.jira.groovy.groovyrunner \
+    -m admin@c1tech.group \
+    -n admin@c1tech.group \
+    -o C1Tech \
+    -s BDWG-36B4-SMZ8-99UG
+
+docker exec jira java -jar /var/agent/atlassian-agent.jar \
+    -d \
+    -p com.jiraeditor.jeditor \
+    -m admin@c1tech.group \
+    -n admin@c1tech.group \
+    -o C1Tech \
+    -s BDWG-36B4-SMZ8-99UG
+
+docker exec jira java -jar /var/agent/atlassian-agent.jar \
+    -d \
+    -p com.inboxforjira.inbox \
+    -m admin@c1tech.group \
+    -n admin@c1tech.group \
+    -o C1Tech \
+    -s BDWG-36B4-SMZ8-99UG
+
+
+docker exec jira java -jar /var/agent/atlassian-agent.jar \
+    -d \
+    -p com.whitesoftware.jira.groupee-group-assignee \
+    -m admin@c1tech.group \
+    -n admin@c1tech.group \
+    -o C1Tech \
+    -s BDWG-36B4-SMZ8-99UG
+
 
 # -------==========-------
 # GitLan Integration

@@ -19,7 +19,8 @@ sudo nc -l -p 80
 sudo nc -u -l -p 80
 # -------==========-------
 # Network packets debugging
-sudo tcpdump -n port 8443
+sudo tcpdump -n port 1194
+sudo tcpdump -i eth0 -s 0 -w tcpdump.pcap udp  -n port 1194
 
 # --==========--
 # NetCat Client:

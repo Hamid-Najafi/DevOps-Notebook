@@ -1,0 +1,59 @@
+version: "3"
+services:
+# Coturn
+  coturn:
+    image: ${COTURN_IMAGE_TAG}
+    container_name: coturn
+    hostname: turn
+    restart: unless-stopped
+    volumes:
+      - /srv/coturn/data:/srv
+      # TODO You need to generate Let's Encrypt certificates for ${COTURN_HOSTNAME}
+      - /etc/letsencrypt/live/${COTURN_HOSTNAME}:/etc/letsencrypt/archive/${COTURN_HOSTNAME}:ro
+      - /etc/letsencrypt/archive/${COTURN_HOSTNAME}:/etc/letsencrypt/archive/${COTURN_HOSTNAME}:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    environment:
+      - LISTENING_PORT=3478
+      - TLS_LISTENING_PORT=5349
+      - ALT_LISTENING_PORT=3479
+      - ALT_TLS_LISTENING_PORT=5350
+      - LISTEN_IPS=${COTURN_LISTEN_IPS}
+      - RELAY_IP=${COTURN_RELAY_IP}
+      - STATIC_AUTH_SECRET=${COTURN_TURN_SECRET}
+      # TODO You need to generate Let's Encrypt certificates for ${COTURN_HOSTNAME}
+      - TLS_CERT=/etc/letsencrypt/archive/${COTURN_HOSTNAME}/fullchain.pem
+      - TLS_KEY=/etc/letsencrypt/archive/${COTURN_HOSTNAME}/privkey.pem
+      - NO_CLI=1
+      - CLI_PASSWORD=${COTURN_CLI_PASSWORD}
+      - WEB_ADMIN=0
+      - WEB_ADMIN_PORT=8080
+      - WEB_ADMIN_USERNAME=root
+      - WEB_ADMIN_PASSWORD=${COTURN_WEB_ADMIN_PASSWORD}
+      - REALM=${COTURN_HOSTNAME}
+      - VERBOSE=1
+      - DEBUG=0
+      - PROD=1
+      - USER_DB=/srv/turnserver/db/turndb.sqlite
+      - LOG_FILE=/srv/turnserver/logs/turn.log
+      - PID_FILE=/srv/turnserver/turn.pid
+    ports:
+## STUN/TURN
+      - "3478:3478"
+      - "3478:3478/udp"
+      - "3479:3479"
+      - "3479:3479/udp"
+      # - "80:80"
+      # - "80:80/udp"
+## STUN/TURN SSL
+      - "5349:5349"
+      - "5349:5349/udp"
+      - "5350:5350"
+      - "5350:5350/udp"
+      # - "443:443"
+      # - "443:443/udp"
+# Relay Ports
+     - "49152-65535:49152-65535"
+     - "49152-65535:49152-65535/udp"
+    network_mode: "host"
+    tty: true

@@ -6,9 +6,10 @@
 # -------==========-------
 # Make roundcube-data Directory
 sudo mkdir -p /mnt/data/openldap
-# Set Permissions
-sudo chmod 777 -R /mnt/data/openldap
-sudo chown -R $USER:docker /mnt/data/openldap
+
+# Set Permissions (Write down them from image generation)
+sudo chmod 775 -R /mnt/data/openldap
+sudo chown -R root:root /mnt/data/openldap
 
 # Create the docker volumes for the containers.
 docker volume create \
@@ -31,35 +32,31 @@ docker network create openldap-network
 docker compose up -d
 
 # -------==========-------
-# Generate Certificates
+# LDAPS - X.509
 # -------==========-------
-export DOMAIN="ldap.c1tech.group"
-export CERTPATH="/home/c1tech/dev/openldap/certs/"
-mkdir -p $CERTPATH
-openssl dhparam -out $CERTPATH/dhparam.pem 2048
-# apt, dnf, or yum NOT SUPPORTED
+# Install certbot
 sudo snap set system proxy.http="http://172.25.10.8:10702/"
 sudo snap set system proxy.https="http://172.25.10.8:10702/"
 sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
-# standalone
-sudo certbot certonly \
-    --standalone \
-    --email admin@c1tech.group \
-    --agree-tos \
-    --domains $DOMAIN
-# dns challenges
+
+# gen DH parameters
+openssl dhparam -out /etc/letsencrypt/live/ldap.c1tech.group/dhparam.pem 2048
+
+
+# dns challenge
 sudo certbot certonly \
     --manual \
     --preferred-challenges dns \
     --email admin@c1tech.group \
     --agree-tos \
-    --domains $DOMAIN
+    --domains ldap.c1tech.group
 
-sudo cp -RL "/etc/letsencrypt/live/$DOMAIN/." $CERTPATH
-sudo chmod 777 -R $CERTPATH
-sudo chown -R $USER:docker $CERTPATH
-
-
-# Files Matching:
-# LDAP_TLS_CERT_FILE==cert.pem && LDAP_TLS_KEY_FILE==privkey.pem && LDAP_TLS_CA_FILE==chain.pem
+docker stop traefik
+# http challenge
+sudo certbot certonly \
+    --standalone \
+    --email admin@c1tech.group \
+    --agree-tos \
+    --domains ldap.c1tech.group
+docker start traefik

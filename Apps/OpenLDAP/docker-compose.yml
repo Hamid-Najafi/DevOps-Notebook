@@ -42,7 +42,15 @@ services:
       # EXTENDED BITNAMI LDAP ENV..
       - LDAP_HASH_PASSWORD=CRYPT
     volumes:
-      - ${OPENLDAP_CERT_PATH}:/opt/bitnami/openldap/certs
+
+
+    networks:
+      - my-network
+    volumes:
+      - /etc/letsencrypt/live/${OPENLDAP_HOSTNAME}/cert.pem:/opt/bitnami/openldap/certs/cert.pem
+      - /etc/letsencrypt/live/${OPENLDAP_HOSTNAME}/privkey.pem:/opt/bitnami/openldap/certs/privkey.pem
+      - /etc/letsencrypt/live/${OPENLDAP_HOSTNAME}/chain.pem:/opt/bitnami/openldap/certs/chain.pem
+      - /etc/letsencrypt/live/${OPENLDAP_HOSTNAME}/dhparam.pem:/opt/bitnami/openldap/certs/dhparam.pem
       - openldap-data:/bitnami/openldap/
     networks:
       - openldap-network
