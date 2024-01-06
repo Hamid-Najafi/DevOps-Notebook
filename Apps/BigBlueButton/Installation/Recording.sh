@@ -71,7 +71,6 @@ ls -la /var/log/bigbluebutton/download
 # /var/bigbluebutton/published/presentation &  /var/www/bigbluebutton-default/download/presentation
 ls -la /var/bigbluebutton/published/presentation
 ls -la /var/bigbluebutton/published/presentation/64c863ab0739360c689fc6d45bad5f97fa9c5c8f-1618186276307/
-
 # -------==========-------
 # Virgol Query to change bbb server
 # -------==========-------

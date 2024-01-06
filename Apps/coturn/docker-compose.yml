@@ -1,41 +1,30 @@
+volumes:
+  coturn-logs:
+    external: true
+
 networks:
   coturn-network:
+    external: true
+  traefik-network:
     external: true
 
 version: "3"
 services:
-# Coturn
   coturn:
     image: ${COTURN_IMAGE_TAG}
     container_name: coturn
     hostname: turn
     restart: unless-stopped
+    environment:
+      # timezone inside container
+      - TZ=${COTURN_TIMEZONE}
     volumes:
+      # - coturn-logs:/var/log:rw
       - ./turnserver.conf:/etc/turnserver.conf:ro
       # TODO You need to generate Let's Encrypt certificates for ${COTURN_HOSTNAME}
       - /etc/letsencrypt/live/${COTURN_HOSTNAME}:/etc/letsencrypt/live/${COTURN_HOSTNAME}:ro
       - /etc/letsencrypt/archive/${COTURN_HOSTNAME}:/etc/letsencrypt/archive/${COTURN_HOSTNAME}:ro
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-    ports:
-## STUN/TURN
-      - "3478:3478"
-      - "3478:3478/udp"
-      - "3479:3479"
-      - "3479:3479/udp"
-      # - "80:80"
-      # - "80:80/udp"
-## STUN/TURN SSL
-      - "5349:5349"
-      - "5349:5349/udp"
-      - "5350:5350"
-      - "5350:5350/udp"
-      # - "443:443"
-      # - "443:443/udp"
-# Relay Ports
-# TL;DR large port range makes the start very slow - narrow it down.
-      # - "65500-65535:65500-65535"
-      # - "65500-65535:65500-65535/udp"
-    # user: root
-    networks:
-      - coturn-network
+    user: root
+    network_mode: host

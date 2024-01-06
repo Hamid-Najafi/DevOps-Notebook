@@ -4,6 +4,36 @@
 # -------==========-------
 # -------==========-------
 https://github.com/bigbluebutton/docker
+https://github.com/fmp-msu/bbb/blob/traefik/docker-compose.tmpl.yml
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-network"
+      - "traefik.http.services.bbb-nginx.loadbalancer.server.port=80"
+      - "traefik.http.routers.bbb-nginx-http.entrypoints=web"
+      - "traefik.http.routers.bbb-nginx-http.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.bbb-nginx-https.tls=true"
+      - "traefik.http.routers.bbb-nginx-https.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.bbb-nginx-https.tls.options=max-tls-12@file"
+      - "traefik.http.routers.bbb-nginx-https.entrypoints=secure"
+    networks:
+      bbb-net:
+        ipv4_address: 10.7.7.34
+      - traefik-network
+
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_overlay"
+      - "traefik.http.services.bbb-greenlight.loadbalancer.server.port=80"
+      - "traefik.http.routers.bbb-greenlight-http.entrypoints=web"
+      - "traefik.http.routers.bbb-greenlight-http.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.bbb-greenlight-https.tls=true"
+      - "traefik.http.routers.bbb-greenlight-https.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.bbb-greenlight-https.tls.options=max-tls-12@file"
+      - "traefik.http.routers.bbb-greenlight-https.entrypoints=websecure"
+      - "traefik.http.routers.bbb-greenlight-https.rule=Host(`${DOMAIN}`) && PathPrefix(`${RELATIVE_URL_ROOT:-/b}`)"
+
 # -------==========-------
 # -------==========-------
 docker rm -f bbb-exporter
