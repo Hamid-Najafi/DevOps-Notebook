@@ -24,10 +24,10 @@ mkdir -p ~/docker
 cp -R ~/DevOps-Notebook/Apps/coturn ~/docker/coturn
 cd ~/docker/coturn
 
-# Generate auth secret
+# Generate static-auth-secret
 pwgen -s 64 1
 
-# Generate CLI Pass
+# Generate cli-password
 turnadmin -P -p somethingverysecretthatiwillnothsare | sed -e 's|\\$|\\\\$|g'
 
 # Check and Edit turnserver.conf file
@@ -69,8 +69,18 @@ chmod -R 644 /etc/letsencrypt/archive/turn.c1tech.group
 # -------==========-------
 https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/
 turn:TURN_IP:TURN_PORT
-turn:turn.c1tech.group:3478
-turn:turn.c1tech.group:5349
+
+TURN:
+"turn:turn.c1tech.group:3478"
+"turn:turn.c1tech.group:5349"
+
+STUN:
+"stun:stun.c1tech.group:3478"
+"stun:stun.c1tech.group:5349"
+
+Other
+"stun:stun.l.google.com:19302"
+"stun:meet-jit-si-turnrelay.jitsi.net:443"
 
 # -------==========-------
 # Database... dont use one!

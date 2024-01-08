@@ -126,12 +126,13 @@ Client:
 nc c1tech.group 8443
 nc -u c1tech.group  8443
 
-ICE Servers Configurations: (coturn)
-[{"urls":["stun:meet-jit-si-turnrelay.jitsi.net:443"]},{"urls":["turn:my.turnserver.com:443?transport=tcp"]}]
-[{"urls":["stun:turn.c1tech.group:3478"]},{"urls":["turn:turn.c1tech.group:3478?transport=udp"], "username":"webrtc","credential":"turnpass.24"}]
-[{"urls":["stun:turn.c1tech.group:5349"]},{"urls":["turn:turn.c1tech.group:5349?transport=udp"], "username":"webrtc","credential":"turnpass.24"}]
-[{"urls":["stun:turn.c1tech.group:5349"]},{"urls":["turn:turn.c1tech.group:5349?transport=udp"]}]
+ICE Servers Configurations:
+see coturn/coturn.sh
 
+[{"urls":["stun:meet-jit-si-turnrelay.jitsi.net:443"]},{"urls":["turn:my.turnserver.com:443?transport=tcp"]}]
+[{"urls":["stun:turn.c1tech.group:3478"]},{"urls":["turn:turn.c1tech.group:3478?transport=udp"], "username":"webrtc","credential":"coturnpass.24"}]
+[{"urls":["stun:turn.c1tech.group:5349"]},{"urls":["turn:turn.c1tech.group:5349?transport=udp"], "username":"webrtc","credential":"coturnpass.24"}]
+[{"urls":["stun:turn.c1tech.group:5349"]},{"urls":["turn:turn.c1tech.group:5349?transport=udp"]}]
 # -------==========-------
 # Jitsi Plugin (Beta)
 # -------==========-------
