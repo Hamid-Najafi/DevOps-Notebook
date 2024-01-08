@@ -1,5 +1,5 @@
 # -------==========-------
-# Traefik Docker Compose
+# Keycloakf Docker Compose
 # -------==========-------
 # Make keycloak-data Directory
 sudo mkdir -p /mnt/data/keycloak/postgres
@@ -14,7 +14,7 @@ docker volume create \
       --opt device=/mnt/data/keycloak/postgres \
       --opt o=bind keycloak-postgres
 
-# Clone Traefik Directory
+# Clone Keycloak Directory
 mkdir -p ~/docker
 cp -R ~/DevOps-Notebook/Apps/Keycloak ~/docker/keycloak
 cd ~/docker/keycloak

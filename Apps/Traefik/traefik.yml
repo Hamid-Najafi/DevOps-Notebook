@@ -24,7 +24,7 @@ ping:
 global:
   checkNewVersion: true
   sendAnonymousUsage: false
-  
+
 #Define HTTP and HTTPS entrypoints
 entryPoints:
   insecure:

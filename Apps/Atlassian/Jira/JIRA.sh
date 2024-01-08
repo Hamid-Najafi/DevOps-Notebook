@@ -39,6 +39,7 @@ docker compose up -d
 # *** FIX REVERSE PROXY SETTING **** ##
 # nano server.xml
 docker cp server.xml jira:/opt/jira/conf/server.xml
+docker compose restart
 
 # Disabling secure administrator sessions
 docker exec jira sh -c 'echo "jira.websudo.is.disabled = true" >>/var/atlassian/application-data/jira/jira-config.properties' 

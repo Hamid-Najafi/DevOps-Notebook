@@ -113,7 +113,7 @@ https://github.com/mattermost/mattermost-plugin-gitlab
 # Defaults to "merges,issues,tag"
 /gitlab subscriptions add software-group/control-panel merges,issues,tag,pushes,jobs,issue_comments
 # -------==========-------
-# CALL PLUGIN config.json
+# Call [PLUGIN] config.json
 # -------==========-------
 # https://docs.mattermost.com/configure/plugins-configuration-settings.html#calls
 
@@ -131,6 +131,12 @@ ICE Servers Configurations: (coturn)
 [{"urls":["stun:turn.c1tech.group:3478"]},{"urls":["turn:turn.c1tech.group:3478?transport=udp"], "username":"webrtc","credential":"turnpass.24"}]
 [{"urls":["stun:turn.c1tech.group:5349"]},{"urls":["turn:turn.c1tech.group:5349?transport=udp"], "username":"webrtc","credential":"turnpass.24"}]
 [{"urls":["stun:turn.c1tech.group:5349"]},{"urls":["turn:turn.c1tech.group:5349?transport=udp"]}]
+
+# -------==========-------
+# Jitsi Plugin (Beta)
+# -------==========-------
+https://github.com/mattermost/mattermost-plugin-jitsi
+
 # -------==========-------
 # MMCTL
 # -------==========-------

@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  mirotalk:
+    image: mirotalk/bro:latest
+    container_name: mirotalkbro
+    hostname: ${MIKROTALKBRO_HOSTNAME}
+    volumes:
+        - .env:/src/.env:ro
+        # These volumes are not mandatory, uncomment if you want to use it
+        # - ./app/:/src/app/:ro
+        # - ./public/:/src/public/:ro
+    restart: unless-stopped
+    ports:
+        - '${PORT}:${PORT}'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mirotalkbro.rule=Host(`${MIKROTALKBRO_HOSTNAME}`)"
+      - "traefik.http.routers.mirotalkbro.service=mirotalkbro"
+      - "traefik.http.routers.mirotalkbro.entrypoints=secure"
+      - "traefik.http.services.mirotalkbro.loadbalancer.server.port=8080"
+      - "traefik.http.routers.mirotalkbro.tls=true"
+      - "traefik.http.routers.mirotalkbro.tls.certresolver=letsencrypt"
+      - "traefik.http.services.mirotalkbro.loadbalancer.passhostheader=true"
+      - "traefik.http.middlewares.mirotalkbro.compress=true"
+      - "traefik.http.routers.mirotalkbro.middlewares=mirotalkbrocompress"
+      - "traefik.docker.network=traefik-network"

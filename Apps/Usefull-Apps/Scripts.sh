@@ -18,6 +18,8 @@ noglob sudo apt-get purge kube*
 # -------==========-------
 # UseFull apps
 # -------==========-------
+apt install sudo
+
 sudo add-apt-repository universe
 sudo apt-get update
 sudo apt-get install ncdu dtrx bmon htop software-properties-common traceroute
