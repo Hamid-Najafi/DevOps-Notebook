@@ -3,6 +3,8 @@ version: '3'
 networks:
   traefik-network:
     external: true
+  mirotalksfu-network:
+    external: true
 
 services:
   mirotalk:
@@ -21,10 +23,11 @@ services:
         - '40000-40100:40000-40100/udp'
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.mirotalksfu.rule=Host(`${MICROTALK_SFU_HOSTNAME}`)"
+      - "traefik.http.routers.mirotalksfu.rule=Host(`${MIROTALK_SFU_HOSTNAME}`)"
       - "traefik.http.routers.mirotalksfu.entrypoints=websecure"
       - "traefik.http.routers.mirotalksfu.tls.certresolver=letsencrypt"
       - "traefik.http.services.mirotalksfu.loadbalancer.server.port=${PORT}"
       - "traefik.docker.network=traefik-network"
     networks:
       - traefik-network
+      - mirotalksfu-network

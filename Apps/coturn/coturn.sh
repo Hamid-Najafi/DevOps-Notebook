@@ -32,6 +32,8 @@ turnadmin -P -p somethingverysecretthatiwillnothsare | sed -e 's|\\$|\\\\$|g'
 
 # Check and Edit turnserver.conf file
 # nano ./coturn/turnserver.conf
+# min-port=49152
+# max-port=65535
 
 # Create Network and Run
 # Note: Check firewall & mapping rules for Port: 80 & 443

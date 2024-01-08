@@ -24,7 +24,7 @@ services:
     #   - 3000
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.mirotalkp2p.rule=Host(`${MICROTALK_P2P_HOSTNAME}`)"
+      - "traefik.http.routers.mirotalkp2p.rule=Host(`${MIROTALK_P2P_HOSTNAME}`)"
       - "traefik.http.routers.mirotalkp2p.entrypoints=websecure"
       - "traefik.http.routers.mirotalkp2p.tls.certresolver=letsencrypt"
       - "traefik.http.services.mirotalkp2p.loadbalancer.server.port=${PORT}"
