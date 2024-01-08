@@ -1,5 +1,9 @@
 version: '3'
 
+networks:
+  traefik-network:
+    external: true
+
 services:
   mirotalk:
     image: mirotalk/bro:latest
@@ -11,17 +15,19 @@ services:
         # - ./app/:/src/app/:ro
         # - ./public/:/src/public/:ro
     restart: unless-stopped
-    ports:
-        - '${PORT}:${PORT}'
+    # ports:
+    #     - '${PORT}:${PORT}'
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.mirotalkbro.rule=Host(`${MIKROTALKBRO_HOSTNAME}`)"
       - "traefik.http.routers.mirotalkbro.service=mirotalkbro"
-      - "traefik.http.routers.mirotalkbro.entrypoints=websecure"
-      - "traefik.http.services.mirotalkbro.loadbalancer.server.port=8080"
+      - "traefik.http.routers.mirotalkbro.entrypoints=secure"
+      - "traefik.http.services.mirotalkbro.loadbalancer.server.port=${PORT}"
       - "traefik.http.routers.mirotalkbro.tls=true"
       - "traefik.http.routers.mirotalkbro.tls.certresolver=letsencrypt"
       - "traefik.http.services.mirotalkbro.loadbalancer.passhostheader=true"
       - "traefik.http.middlewares.compresstraefik.compress=true"
       - "traefik.http.routers.mirotalkbro.middlewares=compresstraefik"
       - "traefik.docker.network=traefik-network"
+    networks:
+      - traefik-network

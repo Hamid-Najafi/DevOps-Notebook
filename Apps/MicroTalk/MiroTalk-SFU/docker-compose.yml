@@ -1,0 +1,30 @@
+version: '3'
+
+networks:
+  traefik-network:
+    external: true
+
+services:
+  mirotalk:
+    image: mirotalk/sfu:latest
+    container_name: mirotalksfu
+    hostname: mirotalksfu
+    volumes:
+        - ./app/src/config.js:/src/app/src/config.js:ro
+        # These volumes are not mandatory, comment if you want to use it
+        # - ./app/:/src/app/:ro
+        # - ./public/:/src/public/:ro
+    restart: unless-stopped
+    ports:
+        # - '3010:3010/tcp'
+        - '40000-40100:40000-40100/tcp'
+        - '40000-40100:40000-40100/udp'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mirotalksfu.rule=Host(`${MICROTALK_SFU_HOSTNAME}`)"
+      - "traefik.http.routers.mirotalksfu.entrypoints=websecure"
+      - "traefik.http.routers.mirotalksfu.tls.certresolver=letsencrypt"
+      - "traefik.http.services.mirotalksfu.loadbalancer.server.port=${PORT}"
+      - "traefik.docker.network=traefik-network"
+    networks:
+      - traefik-network

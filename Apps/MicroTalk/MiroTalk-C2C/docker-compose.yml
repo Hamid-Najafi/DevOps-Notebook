@@ -1,0 +1,30 @@
+version: '3'
+
+networks:
+  traefik-network:
+    external: true
+
+services:
+  mirotalk:
+    image: mirotalk/c2c:latest
+    container_name: mirotalkc2c
+    hostname: mirotalkc2c
+    volumes:
+        - .env:/src/.env:ro
+        # These volumes are not mandatory, uncomment if you want to use it
+        # - ./app/:/src/app/:ro
+        # - ./public/:/src/public/:ro
+    restart: unless-stopped
+    # ports:
+    #     - '${PORT}:${PORT}'
+    # expose:
+    #   - 3000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mirotalkc2c.rule=Host(`${MICROTALK_C2C_HOSTNAME}`)"
+      - "traefik.http.routers.mirotalkc2c.entrypoints=websecure"
+      - "traefik.http.routers.mirotalkc2c.tls.certresolver=letsencrypt"
+      - "traefik.http.services.mirotalkc2c.loadbalancer.server.port=${PORT}"
+      - "traefik.docker.network=traefik-network"
+    networks:
+      - traefik-network
