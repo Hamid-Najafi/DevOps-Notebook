@@ -14,7 +14,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.rancher.rule=Host(`rancher.c1tech.group`)"
       - "traefik.http.services.rancher.loadbalancer.server.port=80"
-      - "traefik.http.routers.rancher.entrypoints=secure"
+      - "traefik.http.routers.rancher.entrypoints=websecure"
       - "traefik.http.routers.rancher.tls.certresolver=letsencrypt"
       - "traefik.docker.network=traefik-network"
   - "traefik.http.middlewares.rancher-behind-proxy.headers.customrequestheaders.X-Forwarded-Proto=https"

@@ -13,9 +13,9 @@ api:
 
 #Define HTTP and HTTPS entrypoints
 entryPoints:
-  insecure:
+  webinsecure:
     address: ":80"
-  secure:
+  websecure:
     address: ":443"
   metrics:
     address: ":9094"

@@ -75,7 +75,7 @@ services:
     - "traefik.enable=true"
     - "traefik.http.routers.phpldapadmin.rule=Host(`${OPENLDAP_PHPLDAPADMIN_HOSTNAME}`)"
     - "traefik.http.services.phpldapadmin.loadbalancer.server.port=80"
-    - "traefik.http.routers.phpldapadmin.entrypoints=secure"
+    - "traefik.http.routers.phpldapadmin.entrypoints=websecure"
     - "traefik.http.routers.phpldapadmin.tls.certresolver=letsencrypt"
     - "traefik.docker.network=traefik-network"
     depends_on:

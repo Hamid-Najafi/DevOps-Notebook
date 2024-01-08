@@ -34,7 +34,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.virgol.rule=Host(`panel.vir-gol.ir`)"
       - "traefik.http.services.virgol.loadbalancer.server.port=80"
-      - "traefik.http.routers.virgol.entrypoints=secure"
+      - "traefik.http.routers.virgol.entrypoints=websecure"
       - "traefik.http.routers.virgol.tls.certresolver=letsencrypt"
       - "traefik.docker.network=traefik-network"
       - "traefik.http.middlewares.virgol_compress.compress=true"
@@ -73,7 +73,7 @@ services:
   #     - "traefik.enable=true"
   #     - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.vir-gol.ir`)"
   #     - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
-  #     - "traefik.http.routers.pgadmin.entrypoints=secure"
+  #     - "traefik.http.routers.pgadmin.entrypoints=websecure"
   #     - "traefik.http.routers.pgadmin.tls.certresolver=letsencrypt"
   #     - "traefik.docker.network=traefik-network"
   #   networks:
@@ -98,7 +98,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.moodle.rule=Host(`moodle.vir-gol.ir`)"
       - "traefik.http.services.moodle.loadbalancer.server.port=8080"
-      - "traefik.http.routers.moodle.entrypoints=secure"
+      - "traefik.http.routers.moodle.entrypoints=websecure"
       - "traefik.http.routers.moodle.tls.certresolver=letsencrypt"
       - "traefik.docker.network=traefik-network"
     volumes:
@@ -138,7 +138,7 @@ services:
   #     - "traefik.enable=true"
   #     - "traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.vir-gol.ir`)"
   #     - "traefik.http.services.phpmyadmin.loadbalancer.server.port=8080"
-  #     - "traefik.http.routers.phpmyadmin.entrypoints=secure"
+  #     - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
   #     - "traefik.http.routers.phpmyadmin.tls.certresolver=letsencrypt"
   #     - "traefik.docker.network=traefik-network"
   #   depends_on:
@@ -174,7 +174,7 @@ services:
   #     - "traefik.enable=true"
   #     - "traefik.http.routers.phpldapadmin.rule=Host(`phpldapadmin.vir-gol.ir`)"
   #     - "traefik.http.services.phpldapadmin.loadbalancer.server.port=80"
-  #     - "traefik.http.routers.phpldapadmin.entrypoints=secure"
+  #     - "traefik.http.routers.phpldapadmin.entrypoints=websecure"
   #     - "traefik.http.routers.phpldapadmin.tls.certresolver=letsencrypt"
   #     - "traefik.docker.network=traefik-network"
   #   networks:

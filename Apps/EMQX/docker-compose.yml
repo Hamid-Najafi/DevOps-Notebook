@@ -45,7 +45,7 @@ services:
       - "traefik.http.routers.emqx.rule=Host(`${EMQX_HOSTNAME}`)"
       - "traefik.http.services.emqx.loadbalancer.server.port=18083"
       - "traefik.http.routers.emqx.service=emqx"
-      - "traefik.http.routers.emqx.entrypoints=secure"
+      - "traefik.http.routers.emqx.entrypoints=websecure"
       - "traefik.http.routers.emqx.tls=true"
       - "traefik.http.routers.emqx.tls.certresolver=letsencrypt"
       - "traefik.http.routers.emqx.middlewares=compresstraefik"

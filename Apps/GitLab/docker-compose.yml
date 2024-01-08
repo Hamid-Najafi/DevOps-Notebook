@@ -120,7 +120,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.gitlab.rule=Host(`${GITLAB_HOSTNAME}`)"
       - "traefik.http.routers.gitlab.service=gitlab"
-      - "traefik.http.routers.gitlab.entrypoints=secure"
+      - "traefik.http.routers.gitlab.entrypoints=websecure"
       - "traefik.http.services.gitlab.loadbalancer.server.port=80"
       - "traefik.http.routers.gitlab.tls=true"
       - "traefik.http.routers.gitlab.tls.certresolver=letsencrypt"

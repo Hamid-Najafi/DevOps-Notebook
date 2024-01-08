@@ -29,7 +29,7 @@ services:
     - "traefik.enable=true"
     - "traefik.http.routers.virgolLand.rule=Host(`vir-gol.ir`)"
     - "traefik.http.services.virgolLand.loadbalancer.server.port=80"
-    - "traefik.http.routers.virgolLand.entrypoints=secure"
+    - "traefik.http.routers.virgolLand.entrypoints=websecure"
     - "traefik.http.routers.virgolLand.tls.certresolver=letsencrypt"
     - "traefik.docker.network=traefik-network"
  #     - "traefik.http.middlewares.virgol_compress.compress=true"

@@ -46,7 +46,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.autodiscover.rule=Host(`autodiscover.c1tech.group`)"
       - "traefik.http.routers.autodiscover.service=autodiscover"
-      - "traefik.http.routers.autodiscover.entrypoints=secure"
+      - "traefik.http.routers.autodiscover.entrypoints=websecure"
       - "traefik.http.services.autodiscover.loadbalancer.server.port=8000"
       - "traefik.http.routers.autodiscover.tls=true"
       - "traefik.http.routers.autodiscover.tls.certresolver=letsencrypt"

@@ -46,7 +46,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.confluence.rule=Host(`${CONFLUENCE_HOSTNAME}`)"
       - "traefik.http.services.confluence.loadbalancer.server.port=8090"
-      - "traefik.http.routers.confluence.entrypoints=secure"
+      - "traefik.http.routers.confluence.entrypoints=websecure"
       - "traefik.http.routers.confluence.tls.certresolver=letsencrypt"
       - "traefik.http.middlewares.confluence-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.confluence.service=confluence"

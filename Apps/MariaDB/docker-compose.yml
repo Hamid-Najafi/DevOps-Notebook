@@ -32,7 +32,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.hamid-najafi.ir`)"
       - "traefik.http.services.phpmyadmin.loadbalancer.server.port=8080"
-      - "traefik.http.routers.phpmyadmin.entrypoints=secure"
+      - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
       - "traefik.http.routers.phpmyadmin.tls.certresolver=letsencrypt"
       - "traefik.docker.network=traefik-network"
     networks:

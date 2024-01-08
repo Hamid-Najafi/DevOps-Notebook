@@ -176,7 +176,7 @@ services:
             traefik-network:
         labels:
             traefik.enable: true
-            traefik.http.routers.jitsi.rule: Host(`meet.c1tech.group`)
+            traefik.http.routers.jitsi.rule: Host(`${PUBLIC_URL}`)
             traefik.http.routers.jitsi.service: jitsi
             traefik.http.routers.jitsi.entrypoints: secure
             traefik.http.services.jitsi.loadbalancer.server.port: 80

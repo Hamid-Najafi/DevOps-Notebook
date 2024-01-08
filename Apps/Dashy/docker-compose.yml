@@ -27,7 +27,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.dashy.rule=Host(`${DASHY_HOSTNAME}`)"
       - "traefik.http.routers.dashy.service=dashy"
-      - "traefik.http.routers.dashy.entrypoints=secure"
+      - "traefik.http.routers.dashy.entrypoints=websecure"
       - "traefik.http.services.dashy.loadbalancer.server.port=80"
       - "traefik.http.routers.dashy.tls=true"
       - "traefik.http.routers.dashy.tls.certresolver=letsencrypt"

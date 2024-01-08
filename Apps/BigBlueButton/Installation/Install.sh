@@ -15,7 +15,7 @@ https://github.com/fmp-msu/bbb/blob/traefik/docker-compose.tmpl.yml
       - "traefik.http.routers.bbb-nginx-https.tls=true"
       - "traefik.http.routers.bbb-nginx-https.tls.certresolver=letsencrypt"
       - "traefik.http.routers.bbb-nginx-https.tls.options=max-tls-12@file"
-      - "traefik.http.routers.bbb-nginx-https.entrypoints=secure"
+      - "traefik.http.routers.bbb-nginx-https.entrypoints=websecure"
     networks:
       bbb-net:
         ipv4_address: 10.7.7.34

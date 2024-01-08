@@ -52,7 +52,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.jira.rule=Host(`${JIRA_HOSTNAME}`)"
       - "traefik.http.services.jira.loadbalancer.server.port=8080"
-      - "traefik.http.routers.jira.entrypoints=secure"
+      - "traefik.http.routers.jira.entrypoints=websecure"
       - "traefik.http.routers.jira.tls.certresolver=letsencrypt"
       - "traefik.http.middlewares.jira-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.jira.service=jira"

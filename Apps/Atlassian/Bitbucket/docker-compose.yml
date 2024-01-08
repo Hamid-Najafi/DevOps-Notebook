@@ -48,7 +48,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.bitbucket.rule=Host(`${BITBUCKET_HOSTNAME}`)"
       - "traefik.http.services.bitbucket.loadbalancer.server.port=7990"
-      - "traefik.http.routers.bitbucket.entrypoints=secure"
+      - "traefik.http.routers.bitbucket.entrypoints=websecure"
       - "traefik.http.routers.bitbucket.tls.certresolver=letsencrypt"
       - "traefik.http.middlewares.bitbucket-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.bitbucket.service=bitbucket"
