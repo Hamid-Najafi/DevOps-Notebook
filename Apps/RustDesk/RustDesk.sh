@@ -2,6 +2,10 @@
 # RustDesk Docker Compose
 # https://github.com/rustdesk/rustdesk-server
 # -------==========-------
+# Firewall Ports:
+21115, 21116, 21117, 21118, 21119 || TCP
+21116 || UDP
+ 
 # Make rustdesk Directory
 sudo mkdir -p /mnt/data/rustdesk
 
