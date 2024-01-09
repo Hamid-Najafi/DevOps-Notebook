@@ -46,8 +46,6 @@ services:
       - "traefik.http.routers.keycloak.tls=true"
       - "traefik.http.routers.keycloak.tls.certresolver=letsencrypt"
       - "traefik.http.services.keycloak.loadbalancer.passhostheader=true"
-      - "traefik.http.middlewares.keycloak.compress=true"
-      - "traefik.http.routers.keycloak.middlewares=keycloakcompress"
       - "traefik.docker.network=traefik-network"
     restart: unless-stopped
     depends_on:
