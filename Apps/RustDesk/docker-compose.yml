@@ -16,8 +16,8 @@ services:
       - 21116:21116
       - 21116:21116/udp
       - 21118:21118
-    image: rustdesk/rustdesk-server:latest
-    command: hbbs -r rustdesk.c1tech.group:21117
+    image: ${RUSTDESK_IMAGE_TAG}
+    command: hbbs -r ${RUSTDESK_HOSTNAME}:21117
     volumes:
       - rustdesk-data:/root
     networks:
@@ -25,16 +25,20 @@ services:
     depends_on:
       - hbbr
     restart: unless-stopped
+    environment:
+      TZ: ${RUSTDESK_TIMEZONE}
 
   hbbr:
     container_name: hbbr
     ports:
       - 21117:21117
       - 21119:21119
-    image: rustdesk/rustdesk-server:latest
+    image: ${RUSTDESK_IMAGE_TAG}
     command: hbbr
     volumes:
       - rustdesk-data:/root
     networks:
       - rustdesk-network
     restart: unless-stopped
+    environment:
+      TZ: ${RUSTDESK_TIMEZONE}
