@@ -22,10 +22,11 @@ services:
       - /lib/modules:/lib/modules:ro
       - /etc/resolv.conf:/etc/resolv.conf
       - /etc/v2raya:/etc/v2raya
+      - /usr/share/v2ray:/usr/share/v2ray
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.v2raya.rule=Host(`${V2RAYA_HOSTNAME}`)"
-      - "traefik.http.services.v2raya.loadbalancer.server.port=80"
+      - "traefik.http.services.v2raya.loadbalancer.server.port=2017"
       - "traefik.http.routers.v2raya.entrypoints=websecure"
       - "traefik.http.routers.v2raya.tls.certresolver=letsencrypt"
       - "traefik.docker.network=traefik-network"

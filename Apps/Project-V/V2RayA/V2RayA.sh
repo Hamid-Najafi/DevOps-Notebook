@@ -9,6 +9,8 @@ mkdir -p ~/docker
 cp -R ~/DevOps-Notebook/Apps/Project-V/V2RayA ~/docker/v2raya
 cd ~/docker/v2raya
 
+sudo wget https://github.com/bootmortis/iran-hosted-domains/releases/download/202312180027/iran.dat -P /usr/share/v2ray/
+
 # -------==========-------
 # V2RayA onPermis
 # -------==========-------
