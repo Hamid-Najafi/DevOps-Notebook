@@ -1,16 +1,17 @@
 # -------==========-------
-# Project V
-# -------==========-------
-# ProxySU - SIMPLE WAY TO CONFIG ALL Cores
-# V2ray, Xray, Trojan, NaiveProxy, Trojan-Go, MTProto Go, Brook,BBR install tools for windows。
-# -------==========-------
-https://github.com/proxysu/ProxySU
-# -------==========-------
-# V2RayA Client
+# V2RayA Client Docker Compse
 # -------==========-------
 # V2RayA for Ubuntu (Docker)
 https://v2raya.org/en/docs/prologue/installation/docker/
 
+# Clone V2RayA Directory
+mkdir -p ~/docker
+cp -R ~/DevOps-Notebook/Apps/Project-V/V2RayA ~/docker/v2raya
+cd ~/docker/v2raya
+
+# -------==========-------
+# V2RayA onPermis
+# -------==========-------
 # Install V2Ray-Core and V2RayA
 wget -qO - https://apt.v2raya.org/key/public-key.asc | sudo tee /etc/apt/keyrings/v2raya.asc
 echo "deb [signed-by=/etc/apt/keyrings/v2raya.asc] https://apt.v2raya.org/ v2raya main" | sudo tee /etc/apt/sources.list.d/v2raya.list
@@ -42,26 +43,3 @@ ip(geoip:ir)->direct
 localhost:2017
 admin
 V2RayApass.24
-# -------==========-------
-docker run -d \
-  --restart=always \
-  --privileged \
-  --network=host \
-  --name v2raya \
-  -e V2RAYA_ADDRESS=0.0.0.0:2017 \
-  -e V2RAYA_LOG_FILE=/tmp/v2raya.log \
-  -e V2RAYA_V2RAY_BIN=/usr/local/bin/xray \
-  -e V2RAYA_NFTABLES_SUPPORT=off \
-  -v /lib/modules:/lib/modules:ro \
-  -v /etc/resolv.conf:/etc/resolv.conf \
-  -v /etc/v2raya:/etc/v2raya \
-  mzz2017/v2raya
-# -------==========-------
-V2RayX for macOS
-https://github.com/Cenmrev/V2RayX/releases
-v2rayN for Windows
-https://github.com/2dust/v2rayN/releases
-OneClick for iOS
-https://apps.apple.com/sr/app/oneclick-safe-easy-fast/id1545555197
-v2rayNG for Android
-https://github.com/2dust/v2rayNG

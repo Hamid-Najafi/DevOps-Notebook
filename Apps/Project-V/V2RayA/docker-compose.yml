@@ -1,0 +1,33 @@
+networks:
+  traefik-network:
+    external: true
+
+version: "3.5"
+
+services:
+  v2raya:
+    image: ${V2RAYA_IMAGE_TAG}
+    restart: unless-stopped
+    container_name: v2raya
+    ports:
+      - 20170:20170
+      - 20171:20171
+      - 20172:20172
+    environment:
+      - V2RAYA_LOG_FILE=${V2RAYA_LOG_FILE}
+      - V2RAYA_V2RAY_BIN=${V2RAYA_V2RAY_BIN}
+      - V2RAYA_NFTABLES_SUPPORT=${V2RAYA_NFTABLES_SUPPORT}
+      - IPTABLES_MODE=${IPTABLES_MODE}
+    volumes:
+      - /lib/modules:/lib/modules:ro
+      - /etc/resolv.conf:/etc/resolv.conf
+      - /etc/v2raya:/etc/v2raya
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.v2raya.rule=Host(`${V2RAYA_HOSTNAME}`)"
+      - "traefik.http.services.v2raya.loadbalancer.server.port=80"
+      - "traefik.http.routers.v2raya.entrypoints=websecure"
+      - "traefik.http.routers.v2raya.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=traefik-network"
+    networks:
+      - traefik-network

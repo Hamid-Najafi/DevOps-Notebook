@@ -70,14 +70,12 @@ docker exec jira java -jar /var/agent/atlassian-agent.jar \
     -s BDWG-36B4-SMZ8-99UG
 
 # -------==========-------
-# Other Jira Plugin
+#  Atlassian Marketplace
 # -------==========-------
-# Install Plugin from jira marketplace.
+# Install Plugin from Atlassian Marketplace.
 # Find App Key of Plugin 
 # for example biggantt: eu.softwareplant.biggantt
 # Execute :
-
-
 
 docker exec jira java -jar /var/agent/atlassian-agent.jar \
     -d \
