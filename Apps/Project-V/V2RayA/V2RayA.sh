@@ -11,6 +11,12 @@ cd ~/docker/v2raya
 
 sudo wget https://github.com/bootmortis/iran-hosted-domains/releases/download/202312180027/iran.dat -P /usr/share/v2ray/
 
+curl -x http://127.0.0.1:20171 -L http://google.com
+curl -x http://127.0.0.1:20172/ -L http://google.com
+
+# Create Network and Run
+docker network create v2raya-network
+docker compose up -d
 # -------==========-------
 # V2RayA onPermis
 # -------==========-------

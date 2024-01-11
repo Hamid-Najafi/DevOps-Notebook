@@ -1,6 +1,8 @@
 networks:
   traefik-network:
     external: true
+  v2raya-network:
+    external: true
 
 version: "3.5"
 
@@ -10,9 +12,9 @@ services:
     restart: unless-stopped
     container_name: v2raya
     ports:
-      - 20170:20170
-      - 20171:20171
-      - 20172:20172
+      # - 2017:2017 (Admin Panel)
+      - 20170-20172:20170-20172
+      - 20170-20172:20170-20172/udp
     environment:
       - V2RAYA_LOG_FILE=${V2RAYA_LOG_FILE}
       - V2RAYA_V2RAY_BIN=${V2RAYA_V2RAY_BIN}
@@ -30,5 +32,7 @@ services:
       - "traefik.http.routers.v2raya.entrypoints=websecure"
       - "traefik.http.routers.v2raya.tls.certresolver=letsencrypt"
       - "traefik.docker.network=traefik-network"
-    networks:
-      - traefik-network
+    # networks:
+    #   - traefik-network
+    #   - v2raya-network
+    network_mode: host

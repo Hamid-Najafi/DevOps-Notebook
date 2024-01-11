@@ -1,4 +1,10 @@
 # -------==========-------
+# LDAP Synchronization
+# -------==========-------
+LDAP Synchronization Connector
+https://lsc-project.org/index.html
+
+# -------==========-------
 # OpenConnect Server
 # -------==========-------
 https://www.linuxbabe.com/ubuntu/openconnect-vpn-server-ocserv-ubuntu-20-04-lets-encrypt
