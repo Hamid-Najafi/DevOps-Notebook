@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  ntp:
+    image: ${CHRONY_IMAGE_TAG}
+    container_name: ntp
+    hostname: ntp
+    restart: unless-stopped
+    ports:
+      - 123:123/udp
+    environment:
+      - NTP_SERVERS=${CHRONY_NTP_SERVERS}
+      - LOG_LEVEL=${CHRONY_LOG_LEVEL}
+      - TZ=${CHRONY_TIMEZONE}
+      - NOCLIENTLOG=${CHRONY_NOCLIENTLOG}
+      - ENABLE_NTS=${CHRONY_ENABLE_NTS}
+    volumes:
+      # - coturn-logs:/var/log:rw
+      - ./turnserver.conf:/etc/turnserver.conf:ro
+      # TODO You need to generate Let's Encrypt certificates for ${CHRONY_HOSTNAME}
+      - /etc/letsencrypt/live/${CHRONY_HOSTNAME}/fullchain.pem:/opt/fullchain.pem:ro
+      - /etc/letsencrypt/live/${CHRONY_HOSTNAME}/privkey.pem:/opt/privkey.pem:ro
