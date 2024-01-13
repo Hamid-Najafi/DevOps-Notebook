@@ -36,7 +36,6 @@ turnadmin -P -p somethingverysecretthatiwillnothsare | sed -e 's|\\$|\\\\$|g'
 # max-port=65535
 
 # Create Network and Run
-# Note: Check firewall & mapping rules for Port: 80 & 443
 docker network create coturn-network
 docker compose up -d
 # -------==========-------

@@ -1,6 +1,9 @@
 # -------==========-------
 # Chrony Docker Compose
 # -------==========-------
+# Firewall (Port Mapping)
+UDP 123
+TCP 4460
 
 # Clone Chrony Directory
 mkdir -p ~/docker
@@ -13,16 +16,22 @@ docker compose up -d
 docker exec ntp chronyc sources
 # get statistics about the collected measurements of each ntp source configured:
 docker exec ntp chronyc sourcestats
-
+docker exec ntp chronyc -N serverstats
 # -------==========-------
 # Test NTP Server
 # -------==========-------
 sudo apt install -y sntp
-sntp 127.0.0.1
+sudo sntp 127.0.0.1
+sudo sntp ntp.c1tech.group
 
 # -------==========-------
 # Certificates
 # -------==========-------
+
+# NOT SUPPORTED 
+https://github.com/cturra/docker-ntp/issues/49
+# NOT SUPPORTED 
+
 # Install certbot
 sudo snap set system proxy.http="http://172.25.10.8:10702/"
 # sudo snap set system proxy.https="http://172.25.10.8:10702/"
