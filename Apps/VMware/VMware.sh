@@ -20,6 +20,10 @@ sudo chmod -R 770 /mnt/backup/vmware-vcsa
 
 sftp://172.25.10.8:22/mnt/backup/vmware-vcsa
 
+# -------==========-------
+# VMware Tanzu Kubernetes Grid
+# -------==========-------
+https://customerconnect.vmware.com/downloads/details?downloadGroup=TKG-241&productId=1400&rPId=113920
 
 # -------==========-------
 # VMware
@@ -37,5 +41,5 @@ vCenter Server 8 Standard: (172.25.10.4)
 vSAN 8 Enterprise Plus:
 MG292-08L9K-48078-KJ372-27K20
 
-
-5F402-47H02-489E9-K91QP-1PKQ4
+Tanzu Standard:
+MC682-4JK00-M8908-0LAN4-068J0

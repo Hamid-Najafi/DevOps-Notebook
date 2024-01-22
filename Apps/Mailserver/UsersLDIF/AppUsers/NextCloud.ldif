@@ -1,0 +1,21 @@
+version: 1
+
+# Entry 1: cn=NextCloud,ou=users,dc=c1tech,dc=group
+dn: cn=NextCloud,ou=users,dc=c1tech,dc=group
+cn: NextCloud
+givenname: NextCloud
+mail: NextCloud@c1tech.group
+mailalias: NextCloud@mail.c1tech.group
+mailenabled: TRUE
+mailgidnumber: 5000
+mailhomedirectory: /var/mail/NextCloud@c1tech.group
+mailquota: 10240
+mailstoragedirectory: maildir:/var/mail/NextCloud@c1tech.group/Maildir
+mailuidnumber: 5000
+objectclass: organizationalPerson
+objectclass: top
+objectclass: PostfixBookMailAccount
+objectclass: extensibleObject
+sn: NextCloud
+uniqueidentifier: NextCloud
+userpassword: {SSHA}rbf+ye9fVsQVItOOM6BE9tUj/0cZt+14

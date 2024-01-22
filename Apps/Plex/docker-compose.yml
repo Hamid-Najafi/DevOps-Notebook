@@ -1,0 +1,53 @@
+networks:
+  traefik-network:
+    external: true
+  plex-network:
+    external: true
+
+volumes:
+  plex-database:
+    # external: true
+  plex-transcode:
+    # external: true
+  plex-media:
+    # external: true
+
+services:
+  plex:
+    image: ${PLEX_IMAGE_TAG}
+    container_name: plex
+    volumes:
+      - plex-database:${PLEX_DATABASE_PATH}
+      - plex-transcode:${PLEX_TRANSCODE_PATH}
+      - plex-media:${PLEX_MEDIA_PATH}
+    environment:
+      # https://github.com/plex/docker
+      TZ: ${PLEX_TIMEZONE}
+    networks:
+      - traefik-network
+      - plex-network
+    ports:
+      - 1900:1900/udp
+      - 32410:32410/udp
+      - 32412:32412/udp
+      - 32413:32413/udp
+      - 32414:32414/udp
+      - 32469:32469/tcp
+      - 8324:8324/tcp
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.plex.rule=Host(`${PLEX_HOSTNAME}`)"
+      - "traefik.http.routers.plex.service=plex"
+      - "traefik.http.routers.plex.entrypoints=websecure"
+      - "traefik.http.services.plex.loadbalancer.server.port=32400"
+      - "traefik.http.routers.plex.tls=true"
+      - "traefik.http.routers.plex.tls.certresolver=letsencrypt"
+      - "traefik.http.services.plex.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"
+    restart: unless-stopped

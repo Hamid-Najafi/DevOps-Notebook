@@ -1,0 +1,27 @@
+networks:
+  keycloak-network:
+    external: true
+  traefik-network:
+    external: true
+
+volumes:
+  keycloak-postgres:
+    external: true
+
+version: "3.4"
+
+services:
+    collabora:
+        container_name: collabora
+        image: ${COLLABORA_IMAGE_TAG}
+        cap_add: 
+            - MKNOD
+        environment: 
+            - domain=collabora.c1tech.group
+            - username=admin
+            - password=Collaborapass.24
+        ports:
+            - 1001:9980
+        restart: always
+        volumes:
+            - "/etc/localtime:/etc/localtime:ro"

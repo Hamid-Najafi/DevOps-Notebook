@@ -2,14 +2,18 @@
 # Docker (Compose, Engine and CLI) Installation
 # -------==========-------
 #*# First Setup HTTP//DNS Proxy (Network.sh)
-sudo apt update && sudo apt install -y curl uidmap
+# Install NFS Client for NAS Storage
+sudo apt update && sudo apt install -y curl uidmap nfs-common
 curl -fsSL get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 sudo usermod -aG docker $USER
 sudo chown $USER /var/run/docker.sock
 
-# DONT Use RootLees Docker Context
+# Don't  Use RootLees Docker Context
 # dockerd-rootless-setuptool.sh install
+
+# Don't use local Docker Volumes
+# https://www.youtube.com/watch?v=eKAQiYu4NyI
 
 # Logout & Login
 docker run hello-world
