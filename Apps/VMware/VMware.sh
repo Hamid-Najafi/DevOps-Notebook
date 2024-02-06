@@ -1,4 +1,10 @@
 # -------==========-------
+# VMware ESXi
+# -------==========-------
+localcli system maintenanceMode get
+esxcli software sources profile list -d /vmfs/volumes/DataStore-01/ISO/VMware-ESXi-8.0.2-22380479-HPE-802.0.0.11.4.0.14-Sep2023-depot.zip
+esxcli software profile update  -d /vmfs/volumes/DataStore-01/ISO/VMware-ESXi-8.0.2-22380479-HPE-802.0.0.11.4.0.14-Sep2023-depot.zip -p HPE-Custom-AddOn_802.0.0.11.4.0-14 --no-hardware-warning
+# -------==========-------
 # VMware NSX
 # -------==========-------
 adduser vmware
@@ -10,6 +16,11 @@ usermod -aG sudo vmware
 sudo mkdir -p /mnt/backup/vmware-nsx
 sudo chown -R vmware:vmware /mnt/backup/vmware-nsx
 sudo chmod -R 770 /mnt/backup/vmware-nsx
+
+# -------==========-------
+# vRealize Suite
+# -------==========-------
+This management suite is made up of several components, including vRealize Automation, vRealize Operations, vRealize Log Insight and vRealize Business for Cloud.
 
 # -------==========-------
 # vCenter Server Management
@@ -28,13 +39,13 @@ https://customerconnect.vmware.com/downloads/details?downloadGroup=TKG-241&produ
 # -------==========-------
 # VMware
 # -------==========-------
-vSphere 8 Enterprise Plus: (172.25.10.3)
+vSphere 8 Enterprise Plus:
 HG00K-03H8K-48929-8K1NP-3LUJ4
 
 vSphere 8 Enterprise:
 4F40H-4ML1K-M89U0-0C2N4-1AKL4
 
-vCenter Server 8 Standard: (172.25.10.4)
+vCenter Server 8 Standard:
 4F282-0MLD2-M8869-T89G0-CF240
 0F41K-0MJ4H-M88U1-0C3N0-0A214
 
@@ -43,3 +54,6 @@ MG292-08L9K-48078-KJ372-27K20
 
 Tanzu Standard:
 MC682-4JK00-M8908-0LAN4-068J0
+
+Site Recovery Manager:
+HU01H-4205K-081V9-693NK-3G0Q0

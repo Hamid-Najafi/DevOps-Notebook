@@ -1,0 +1,89 @@
+networks:
+  traefik-network:
+    external: true
+  shlink-network:
+    external: true
+
+services:
+  shlink:
+    image: shlinkio/shlink:stable
+    container_name: Shlink
+    hostname: shlink
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - 8335:8080
+    environment:
+      - TIMEZONE=Asia/Tehran
+      - INITIAL_API_KEY=59f4baa0-b67b-444d-8a06-f455b37ec180
+      - DB_DRIVER=postgres
+      - DB_NAME=shlink
+      - DB_USER=shlinkuser
+      - DB_PASSWORD=shlinkpw
+      - DB_HOST=shlink-db
+      - DB_PORT=5432
+      - DEFAULT_DOMAIN=shlink.c1tech.group
+      - IS_HTTPS_ENABLED=false
+      - GEOLITE_LICENSE_KEY=ot1mmLCACB3N8IL6
+    restart: always
+    depends_on:
+      shlink-db:
+        condition: service_started
+    networks:
+      - traefik-network
+      - shlink-network
+
+  shlink-web:
+    image: shlinkio/shlink-web-client:stable
+    container_name: Shlink-WEB
+    hostname: shlink-web
+    security_opt:
+      - no-new-privileges:true
+    # healthcheck:
+    #   test: wget --no-verbose --tries=1 --spider http://localhost:80/ || exit 1
+    ports:
+      - 8336:80
+    environment:
+      - SHLINK_SERVER_NAME=mariushosting
+      - SHLINK_SERVER_URL=https://shlink.c1tech.group
+      - SHLINK_SERVER_API_KEY=59f4baa0-b67b-444d-8a06-f455b37ec180
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.shlink.rule=Host(`shlink.c1tech.group`)"
+      - "traefik.http.routers.shlink.service=shlink"
+      - "traefik.http.routers.shlink.entrypoints=websecure"
+      - "traefik.http.services.shlink.loadbalancer.server.port=80"
+      - "traefik.http.routers.shlink.tls=true"
+      - "traefik.http.routers.shlink.tls.certresolver=letsencrypt"
+      - "traefik.http.services.shlink.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"
+    restart: always
+    depends_on:
+      - shlink
+    networks:
+      - traefik-network
+      - shlink-network
+
+  shlink-db:
+    image: postgres
+    container_name: Shlink-DB
+    hostname: shlink-db
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "shlink", "-U", "shlinkuser"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    user: 1026:100
+    volumes:
+      - ./volume1/docker/shlinkdb:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: shlink
+      POSTGRES_USER: shlinkuser
+      POSTGRES_PASSWORD: shlinkpw
+    restart: always
+    networks:
+      - shlink-network
+
+version: "3.9"

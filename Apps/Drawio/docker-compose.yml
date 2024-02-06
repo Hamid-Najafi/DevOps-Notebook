@@ -1,0 +1,36 @@
+networks:
+  traefik-network:
+    external: true
+
+services:
+  draw:
+    image: ${DRAW_IMAGE_TAG}
+    container_name: draw
+    networks:
+      - traefik-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
+    environment:
+      PUBLIC_DNS: ${DRAW_PUBLIC_DNS}
+      ORGANISATION_UNIT: ${DRAW_ORGANISATION_UNIT}
+      ORGANISATION: ${DRAW_ORGANISATION}
+      CITY: ${DRAW_CITY}
+      STATE: ${DRAW_STATE}
+      COUNTRY_CODE: ${DRAW_COUNTRY_CODE}
+      KEYSTORE_PASS: ${DRAW_KEYSTORE_PASS}
+      KEY_PASS: ${DRAW_KEY_PASS}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.draw.rule=Host(`${DRAW_HOSTNAME}`)"
+      - "traefik.http.routers.draw.service=draw"
+      - "traefik.http.routers.draw.entrypoints=websecure"
+      - "traefik.http.services.draw.loadbalancer.server.port=8080"
+      - "traefik.http.routers.draw.tls=true"
+      - "traefik.http.routers.draw.tls.certresolver=letsencrypt"
+      - "traefik.http.services.draw.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"
+    restart: unless-stopped

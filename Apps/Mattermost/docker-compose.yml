@@ -75,8 +75,6 @@ services:
       - "traefik.http.routers.mattermost.tls=true"
       - "traefik.http.routers.mattermost.tls.certresolver=letsencrypt"
       - "traefik.http.services.mattermost.loadbalancer.passhostheader=true"
-      - "traefik.http.routers.traefik.middlewares=compresstraefik"
-      - "traefik.http.middlewares.compresstraefik.compress=true"
       - "traefik.docker.network=traefik-network"
     networks:
       - mattermost-network

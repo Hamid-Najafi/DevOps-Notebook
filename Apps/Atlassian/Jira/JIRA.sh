@@ -11,7 +11,7 @@ sudo mkdir -p /mnt/data/jira/postgres
 
 # Set Permissions
 sudo chmod 750 -R /mnt/data/jira/jira
-sudo chown -R lxd:docker /mnt/data/jira/jira
+sudo chown -R root:docker /mnt/data/jira/jira
 sudo chown -R lxd:docker /mnt/data/jira/postgres
 
 # Create the docker volumes for the containers.

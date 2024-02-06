@@ -1,11 +1,11 @@
 # -------==========-------
-# PLEX Docker Compose
-# Plex Media Server Docker repo, for all your PMS docker needs.
+# Shlink Docker Compose
+# The definitive self-hosted URL shortener
 # -------==========-------
-# 1900/UDP, 32400/TCP, 32410/UDP, 32412/UDP, 32413/UDP, 32414/UDP, 32469/TCP, and 8324/TCP
-# https://github.com/plexinc/pms-docker/tree/master
+# https://shlink.io/documentation/install-docker-image/
+# https://github.com/shlinkio/shlink?tab=readme-ov-file
 
-# Make Plex Directory
+# Make Shlink Directory
 sudo mkdir -p /mnt/data/plex/plex
 sudo mkdir -p /mnt/data/plex/postgres
 sudo mkdir -p /mnt/data/plex/redis
@@ -36,26 +36,16 @@ docker volume create \
       --opt device=/mnt/data/plex/redis \
       --opt o=bind plex-redis
       
-# Clone Plex Directory
+# Clone Shlink Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Plex ~/docker/plex
-cd ~/docker/plex
+cp -R ~/DevOps-Notebook/Apps/Shlink ~/docker/shlink
+cd ~/docker/shlink
 
 # Check and Edit .env file
 nano .env
 
 # Create Network and Run
-# Note: Check firewall & mapping rules for Port: 80 & 443
-docker network create plex-network
+docker network create shlink-network
 docker compose up -d
 
-
-docker run \
--d \
-–name plex \
-–network=host \
--e TZ=”” \
--e PLEX_CLAIM=”” \
--v /plex/database:/config \
--v /plex/transcode:/transcode \
--v /plex/media:/data \
+docker exec -it my_shlink shlink api-key:generate

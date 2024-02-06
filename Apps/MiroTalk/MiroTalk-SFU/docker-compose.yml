@@ -18,7 +18,7 @@ services:
         # - ./public/:/src/public/:ro
     restart: unless-stopped
     ports:
-        - '3010:3010/tcp'
+        - '${PORT}:${PORT}/tcp'
         - '40000-40100:40000-40100/tcp'
         - '40000-40100:40000-40100/udp'
     labels:

@@ -11,7 +11,7 @@ sudo mkdir -p /mnt/data/bitbucket/postgres
 
 # Set Permissions
 sudo chmod 750 -R /mnt/data/bitbucket
-sudo chown -R c1tech:docker /mnt/data/bitbucket
+sudo chown -R root:docker /mnt/data/bitbucket
 sudo chown -R lxd:docker /mnt/data/bitbucket/postgres
 
 # Create the docker volumes for the containers.
@@ -39,6 +39,8 @@ docker compose up -d
 # *** FIX REVERSE PROXY SETTING **** ##
 # nano server.xml
 docker cp server.xml bitbucket:/opt/bitbucket/conf/server.xml
+docker compose restart
+
 # -------==========-------
 # Atlassian-Agent
 # -------==========-------

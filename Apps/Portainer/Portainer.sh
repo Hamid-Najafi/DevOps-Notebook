@@ -4,8 +4,8 @@
 # Make portainer-certificates Directory
 sudo mkdir -p /mnt/data/portainer
 # Set Permissions
-sudo chmod 770 -R /mnt/data
-sudo chown -R $USER:docker /mnt/data
+sudo chmod 770 -R /mnt/data/portainer
+sudo chown -R $USER:docker /mnt/data/portainer
 
 # Create the docker volumes for the containers.
 docker volume create \

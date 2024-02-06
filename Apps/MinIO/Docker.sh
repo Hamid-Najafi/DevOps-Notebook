@@ -14,7 +14,7 @@ docker compose up -d
 # Stable
 docker run -p 9000:9000 \
   --name minio \
-  -v /mnt/data:/data
+  -v /mnt/data/minio:/data
   -e "MINIO_ACCESS_KEY=minio" \
   -e "MINIO_SECRET_KEY=MinIOpass.24" \
   -e "MINIO_PROMETHEUS_AUTH_TYPE=public" \
@@ -28,7 +28,7 @@ docker run -p 9000:9000 \
 # Edge
 docker run -p 9000:9000 \
   --name minioEdge \
-  -v /mnt/data:/data \
+  -v /mnt/data/minio:/data \
   -e "MINIO_ROOT_USER=minio" \
   -e "MINIO_ROOT_PASSWORD=MinIOpass.24" \
   -e "MINIO_PROMETHEUS_AUTH_TYPE=public" \

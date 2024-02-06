@@ -52,8 +52,6 @@ services:
       - "traefik.http.routers.confluence.service=confluence"
       - "traefik.http.routers.confluence.tls=true"
       - "traefik.http.services.confluence.loadbalancer.passhostheader=true"
-      - "traefik.http.routers.confluence.middlewares=compresstraefik"
-      - "traefik.http.middlewares.compresstraefik.compress=true"
       - "traefik.docker.network=traefik-network"
     volumes:
       - confluence-data:${CONFLUENCE_DATA_PATH}

@@ -48,8 +48,6 @@ services:
       - "traefik.http.routers.emqx.entrypoints=websecure"
       - "traefik.http.routers.emqx.tls=true"
       - "traefik.http.routers.emqx.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.emqx.middlewares=compresstraefik"
-      - "traefik.http.middlewares.compresstraefik.compress=true"
       - "traefik.docker.network=traefik-network"
     networks:
       - emqx-network

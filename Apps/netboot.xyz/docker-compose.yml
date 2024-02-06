@@ -1,0 +1,49 @@
+networks:
+  traefik-network:
+    external: true
+  netbootxyz-network:
+    external: true
+
+volumes:
+  netbootxyz-config:
+    external: true
+  netbootxyz-assets:
+    external: true
+
+services:
+  netbootxyz:
+    image: ${NETBOOTXYZ_IMAGE_TAG}
+    container_name: netbootxyz
+    environment:
+      - MENU_VERSION=${NETBOOTXYZ_MENU_VERSION} # optional
+      - NGINX_PORT=${NETBOOTXYZ_NGINX_PORT} # optional
+      - WEB_APP_PORT=${NETBOOTXYZ_WEB_APP_PORT} # optional
+      - TZ=${NETBOOTXYZ_TIMEZONE}
+      - HTTP_PROXY=http://172.25.10.8:20172
+      - HTTPS_PROXY=http://172.25.10.8:20172
+    volumes:
+      - netbootxyz-config:/config # optional
+      - netbootxyz-assets:/assets # optional
+    ports:
+      # - ${NETBOOTXYZ_WEB_APP_PORT}:${NETBOOTXYZ_WEB_APP_PORT}
+      - 69:69/udp
+      # - ${NETBOOTXYZ_NGINX_PORT}:${NETBOOTXYZ_NGINX_PORT} # optional, destination should match ${NGINX_PORT} variable above.
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.netbootxyz.rule=Host(`${NETBOOTXYZ_HOSTNAME}`)"
+      - "traefik.http.routers.netbootxyz.service=netbootxyz"
+      - "traefik.http.routers.netbootxyz.entrypoints=websecure"
+      - "traefik.http.services.netbootxyz.loadbalancer.server.port=${NETBOOTXYZ_WEB_APP_PORT}"
+      - "traefik.http.routers.netbootxyz.tls=true"
+      - "traefik.http.routers.netbootxyz.tls.certresolver=letsencrypt"
+      - "traefik.http.services.netbootxyz.loadbalancer.passhostheader=true"
+      - "traefik.http.routers.netasset.rule=Host(`${NETBOOTXYZ_ASSET_HOSTNAME}`)"
+      - "traefik.http.routers.netasset.service=netasset"
+      - "traefik.http.routers.netasset.entrypoints=websecure"
+      - "traefik.http.services.netasset.loadbalancer.server.port=${NETBOOTXYZ_NGINX_PORT}"
+      - "traefik.http.routers.netasset.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=traefik-network"
+    networks:
+      - traefik-network
+    #   - netbootxyz-network

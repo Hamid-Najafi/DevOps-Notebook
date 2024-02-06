@@ -27,9 +27,9 @@ global:
 
 #Define HTTP and HTTPS entrypoints
 entryPoints:
-  insecure:
+  webinsecure:
     address: ":80"
-  secure:
+  websecure:
     address: ":443"
   metrics:
     address: ":9094"
@@ -56,9 +56,9 @@ certificatesResolvers:
       email: admin@c1tech.group
       storage: /etc/traefik/acme/acme.json
       httpChallenge:
+        entryPoint: webinsecure
         # used during the challenge
-        entryPoint: insecure
-
+        
 metrics:
   prometheus:
     addEntryPointsLabels: true

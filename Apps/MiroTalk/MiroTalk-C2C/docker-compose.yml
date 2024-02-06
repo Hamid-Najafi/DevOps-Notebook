@@ -17,8 +17,6 @@ services:
     restart: unless-stopped
     # ports:
     #     - '${PORT}:${PORT}'
-    # expose:
-    #   - 3000
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.mirotalkc2c.rule=Host(`${MIROTALK_C2C_HOSTNAME}`)"

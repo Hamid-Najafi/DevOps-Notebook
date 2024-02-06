@@ -61,5 +61,3 @@ services:
       - "traefik.http.routers.prometheus.middlewares=prometheusauth"
       - "traefik.http.middlewares.prometheusauth.basicauth.users=${TRAEFIK_BASIC_AUTH}"
     restart: unless-stopped
-
-

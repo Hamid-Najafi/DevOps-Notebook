@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     hostname: 'minio.c1tech.group'
     volumes:
-      - /mnt/data:/data
+      - /mnt/data/minio:/data
     ports:
       - "9000:9000" #S3 Service
       - "9001:9001" #Console

@@ -10,7 +10,8 @@ sudo mkdir -p /mnt/data/gitlab/redis
 sudo mkdir -p /mnt/data/gitlab/postgres
 
 # Set Permissions
-sudo chmod 750 -R /mnt/data/gitlab
+sudo chmod -R 777 /mnt/data/gitlab/gitlab-data
+
 sudo chown -R root:docker /mnt/data/gitlab/gitlab-data 
 sudo chown -R root:docker /mnt/data/gitlab/gitlab-logs 
 sudo chown -R root:docker /mnt/data/gitlab/gitlab-config 
@@ -71,6 +72,12 @@ sudo docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
 Username: root
 Password:
 
+# -------==========-------
+# Fix Permissions
+# -------==========-------
+sudo chmod -R 777 /mnt/data/gitlab/gitlab-data
+docker exec -it gitlab update-permissions
+docker exec -it gitlab gitlab-ctl reconfigure
 # -------==========-------
 # Rails console 
 # -------==========-------

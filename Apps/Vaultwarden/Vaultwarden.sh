@@ -1,11 +1,13 @@
 # -------==========-------
 # Vaultwarden Docker Compose
+# Vaultwarden is an open source password manager and an alternative implementation of the Bitwarden server API written in Rust and compatible with upstream Bitwarden clients*.
+# It is perfect for self-hosted deployment where running the official resource-heavy service might not be ideal.
 # -------==========-------
 # Make vaultwarden-data Directory
 sudo mkdir -p /mnt/data/vaultwarden
 # Set Permissions
-sudo chmod 770 -R /mnt/data
-sudo chown -R $USER:docker /mnt/data
+sudo chmod 770 -R /mnt/data/vaultwarden
+sudo chown -R root:docker /mnt/data/vaultwarden
 
 # Create the docker volumes for the containers.
 docker volume create \
@@ -23,9 +25,9 @@ cd ~/docker/vaultwarden
 nano .env
 
 # Create Network and Run
-# Note: Check firewall & mapping rules for Port: 80 & 443
 docker network create vaultwarden-network
 docker compose up -d
+
 # -------==========-------
 # Prometheus
 # -------==========-------

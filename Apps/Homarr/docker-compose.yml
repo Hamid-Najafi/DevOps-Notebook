@@ -1,0 +1,46 @@
+networks:
+  traefik-network:
+    external: true
+
+volumes:
+  homarr-configs:
+    external: true
+  homarr-icons:
+    external: true
+  homarr-data:
+    external: true
+
+services:
+  homarr:
+    image: ${HOMARR_IMAGE_TAG}
+    container_name: homarr
+    networks:
+      - traefik-network
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:7575/"]
+    # OCI runtime exec failed: exec failed: unable to start container process: exec: "curl": executable file not found in $PATH: unknown
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 3
+    #   start_period: 30s
+    # ports:
+    #   - '7575:7575'
+    # environment:
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
+      - homarr-configs:/app/data/configs
+      - homarr-icons:/app/public/icons
+      - homarr-data:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.homarr.rule=Host(`${HOMARR_HOSTNAME}`)"
+      - "traefik.http.routers.homarr.service=homarr"
+      - "traefik.http.routers.homarr.entrypoints=websecure"
+      - "traefik.http.services.homarr.loadbalancer.server.port=7575"
+      - "traefik.http.routers.homarr.tls=true"
+      - "traefik.http.routers.homarr.tls.certresolver=letsencrypt"
+      - "traefik.http.services.homarr.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"
+    restart: unless-stopped
+    
+version: '3'

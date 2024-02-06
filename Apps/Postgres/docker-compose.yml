@@ -61,8 +61,6 @@ services:
       - "traefik.http.routers.pgadmin.entrypoints=websecure"
       - "traefik.http.routers.pgadmin.tls=true"
       - "traefik.http.routers.pgadmin.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.pgadmin.middlewares=compresstraefik"
-      - "traefik.http.middlewares.compresstraefik.compress=true"
       - "traefik.docker.network=traefik-network"
     volumes:
        - postgres-pgadmin:/var/lib/pgadmin

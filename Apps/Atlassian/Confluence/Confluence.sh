@@ -11,7 +11,7 @@ sudo mkdir -p /mnt/data/confluence/postgres
 
 # Set Permissions
 sudo chmod 750 -R /mnt/data/confluence
-sudo chown -R $USER:docker /mnt/data/confluence/confluence
+sudo chown -R root:docker /mnt/data/confluence/confluence
 sudo chown -R lxd:docker /mnt/data/confluence/postgres
 
 # Create the docker volumes for the containers.
@@ -39,11 +39,11 @@ docker compose up -d
 # *** FIX REVERSE PROXY SETTING **** ##
 # nano server.xml
 docker cp server.xml confluence:/opt/confluence/conf/server.xml
+docker compose restart
 
 # Disabling secure administrator sessions
 docker exec confluence sh -c 'echo "confluence.websudo.is.disabled = true" >>/var/atlassian/application-data/confluence/confluence-config.properties' 
 docker exec confluence sh -c 'echo "confluence.websudo.is.disabled = true" >>/var/confluence/confluence-config.properties' 
-cd  ~/docker/confluence
 docker compose restart
 
 

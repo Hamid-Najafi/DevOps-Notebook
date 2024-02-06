@@ -36,8 +36,6 @@ services:
       - "traefik.http.services.portainer-frontend.loadbalancer.server.port=9000"
       - "traefik.http.routers.portainer-frontend.tls=true"
       - "traefik.http.routers.portainer-frontend.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.portainer-frontend.middlewares=compresstraefik"
-      - "traefik.http.middlewares.compresstraefik.compress=true"
       - "traefik.http.routers.portaier-edge.rule=Host(`${PORTAINER_EDGE_HOSTNAME}`)"
       - "traefik.http.routers.portaier-edge.service=portaier-edge"
       - "traefik.http.routers.portaier-edge.entrypoints=websecure"

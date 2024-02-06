@@ -110,8 +110,8 @@ echo "" > $(docker inspect --format='{{.LogPath}}' traefik)
 sudo mkdir -p /etc/systemd/system/docker.service.d
 cat >> /etc/systemd/system/docker.service.d/http-proxy.conf << EOF
 [Service]
-Environment="HTTP_PROXY=http://2.180.29.30:20172"
-Environment="HTTPS_PROXY=http://2.180.29.30:20172"
+Environment="HTTP_PROXY=http://172.25.10.8:20172"
+Environment="HTTPS_PROXY=http://172.25.10.8:20172"
 Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
 EOF
 sudo systemctl daemon-reload
