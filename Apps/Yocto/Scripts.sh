@@ -15,17 +15,21 @@ cd poky/
 # Check all available tags inside Poky repository
 # These shows all the version of Yocto Project, available through Poky.
 git tag 
+# Select YOCTO Release
+# https://wiki.yoctoproject.org/wiki/Releases
 # Version 3.1
 git checkout dunfell
 # OR Version 4.0
 git checkout kirkstone 
-
+# OR Version 5.0
+git checkout scarthgap
 # Check  version of Poky
 more ./meta-poky/conf/distro/poky.conf
 
 # -------==========-------
 # Download the Necessary Meta-Layers
 # -------==========-------
+
 git clone https://git.yoctoproject.org/meta-raspberrypi
 cd meta-raspberrypi
 git checkout dunfell 

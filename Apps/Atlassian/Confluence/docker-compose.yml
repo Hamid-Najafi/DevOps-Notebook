@@ -52,6 +52,12 @@ services:
       - "traefik.http.routers.confluence.service=confluence"
       - "traefik.http.routers.confluence.tls=true"
       - "traefik.http.services.confluence.loadbalancer.passhostheader=true"
+      - "traefik.tcp.routers.confluence-synchrony.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.confluence-synchrony.service=confluence-synchrony"
+      - "traefik.tcp.routers.confluence-synchrony.entrypoints=synchrony"
+      - "traefik.tcp.services.confluence-synchrony.loadbalancer.server.port=8091"
+      - "traefik.http.routers.confluence.middlewares=traefik-compress"
+      - "traefik.http.middlewares.traefik-compress.compress=true"
       - "traefik.docker.network=traefik-network"
     volumes:
       - confluence-data:${CONFLUENCE_DATA_PATH}

@@ -3,7 +3,7 @@
 # -------==========-------
 #*# First Setup HTTP//DNS Proxy (Network.sh)
 # Install NFS Client for NAS Storage
-sudo apt update && sudo apt install -y curl uidmap nfs-common
+sudo apt update && sudo apt install -y curl uidmap nfs-common pwgen
 curl -fsSL get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 sudo usermod -aG docker $USER
@@ -17,6 +17,12 @@ sudo chown $USER /var/run/docker.sock
 
 # Logout & Login
 docker run hello-world
+
+# -------==========-------
+# Generate Password for .env
+# -------==========-------
+echo "AUTHENTIK_SECRET_KEY=$(pwgen -s 50 1)" >> .env
+
 # -------==========-------
 # Docker Presistent Volume
 # -------==========-------

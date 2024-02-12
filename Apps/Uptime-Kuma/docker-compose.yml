@@ -36,5 +36,8 @@ services:
       - "traefik.http.routers.uptimekuma.tls=true"
       - "traefik.http.routers.uptimekuma.tls.certresolver=letsencrypt"
       - "traefik.http.services.uptimekuma.loadbalancer.passhostheader=true"
+      - "traefik.http.routers.uptimekuma.middlewares=traefik-compress"
+      - "traefik.http.middlewares.traefik-compress.compress=true"
+      - "traefik.http.routers.uptimekuma.middlewares=authentik@docker"
       - "traefik.docker.network=traefik-network"
     restart: unless-stopped

@@ -54,8 +54,6 @@ services:
       - "traefik.http.routers.bitbucket.service=bitbucket"
       - "traefik.http.routers.bitbucket.tls=true"
       - "traefik.http.services.bitbucket.loadbalancer.passhostheader=true"
-      - "traefik.http.routers.bitbucket.middlewares=compresstraefik"
-      - "traefik.http.middlewares.compresstraefik.compress=true"
       - "traefik.docker.network=traefik-network"
     volumes:
       - bitbucket-data:${BITBUCKET_DATA_PATH}

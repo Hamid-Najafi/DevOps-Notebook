@@ -51,8 +51,6 @@ services:
       - "traefik.http.routers.autodiscover.tls=true"
       - "traefik.http.routers.autodiscover.tls.certresolver=letsencrypt"
       - "traefik.http.services.autodiscover.loadbalancer.passhostheader=true"
-      - "traefik.http.routers.autodiscover.middlewares=compresstraefik"
-      - "traefik.http.middlewares.compresstraefik.compress=true"
       - "traefik.docker.network=traefik-network"
     networks:
       - autodiscover-network

@@ -1,0 +1,151 @@
+networks:
+  traefik-network:
+    external: true
+  authentik-network:
+    external: true
+
+volumes:
+  authentik-media:
+    external: true
+  authentik-custom-templates:
+    external: true
+  authentik-certs:
+    external: true
+  authentik-geoip:
+    external: true
+  authentik-redis:
+    external: true
+  authentik-postgres:
+    external: true
+
+services:
+  authentik-server:
+    image: ${AUTHENTIK_IMAGE}:${AUTHENTIK_TAG}
+    container_name: authentik-server
+    hostname: authentik-server
+    restart: unless-stopped
+    command: server
+    environment:
+      AUTHENTIK_REDIS__HOST: ${AUTHENTIK_REDIS_HOST}
+      AUTHENTIK_POSTGRESQL__HOST: ${AUTHENTIK_POSTGRES_HOST}
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_POSTGRES_USER}
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_POSTGRES_NAME}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_POSTGRES_PASSWORD}
+      AUTHENTIK_ERROR_REPORTING__ENABLED: ${AUTHENTIK_ERROR_REPORTING__ENABLED}
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}
+    volumes:
+      - authentik-media:/media
+      - authentik-custom-templates:/templates
+      - authentik-geoip:/geoip
+    # ports:
+    #   - "${COMPOSE_PORT_HTTP:-9000}:9000"
+    #   - "${COMPOSE_PORT_HTTPS:-9443}:9443"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - traefik-network
+      - authentik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.authentik.rule=Host(`${AUTHENTIK_HOSTNAME}`)"
+      - "traefik.http.routers.authentik.service=authentik"
+      - "traefik.http.routers.authentik.entrypoints=websecure"
+      - "traefik.http.services.authentik.loadbalancer.server.port=9000"
+      - "traefik.http.routers.authentik.tls=true"
+      - "traefik.http.routers.authentik.tls.certresolver=letsencrypt"
+      - "traefik.http.services.authentik.loadbalancer.passhostheader=true"
+      - "traefik.http.routers.authentik.rule=Host(`auth.c1tech.group`) || HostRegexp(`{subdomain:[a-z0-9]+}.c1tech.group`) && PathPrefix(`/outpost.goauthentik.io/`)"
+      - "traefik.http.middlewares.authentik.forwardauth.address=http://authentik-server:9000/outpost.goauthentik.io/auth/traefik"
+      - "traefik.http.middlewares.authentik.forwardauth.trustForwardHeader=true"
+      - "traefik.http.middlewares.authentik.forwardauth.authResponseHeaders=X-authentik-username,X-authentik-groups,X-authentik-email,X-authentik-name,X-authentik-uid,X-authentik-jwt,X-authentik-meta-jwks,X-authentik-meta-outpost,X-authentik-meta-provider,X-authentik-meta-app,X-authentik-meta-version"
+      - "traefik.docker.network=traefik-network"
+
+  authentik-worker:
+    image: ${AUTHENTIK_IMAGE}:${AUTHENTIK_TAG}
+    hostname: authentik-worker
+    container_name: authentik-worker
+    restart: unless-stopped
+    command: worker
+    environment:
+      AUTHENTIK_REDIS__HOST: ${AUTHENTIK_REDIS_HOST}
+      AUTHENTIK_POSTGRESQL__HOST: ${AUTHENTIK_POSTGRES_HOST}
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_POSTGRES_USER}
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_POSTGRES_NAME}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_POSTGRES_PASSWORD}
+      AUTHENTIK_ERROR_REPORTING__ENABLED: ${AUTHENTIK_ERROR_REPORTING__ENABLED}
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}
+    # `user: root` and the docker socket volume are optional.
+    # See more for the docker socket integration here:
+    # https://goauthentik.io/docs/outposts/integrations/docker
+    # Removing `user: root` also prevents the worker from fixing the permissions
+    # on the mounted folders, so when removing this make sure the folders have the correct UID/GID
+    # (1000:1000 by default)
+    user: root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - authentik-media:/media
+      - authentik-certs:/certs
+      - authentik-custom-templates:/templates
+      - authentik-geoip:/geoip
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - traefik-network
+      - authentik-network
+
+  geoipupdate:
+    image: "maxmindinc/geoipupdate:latest"
+    container_name: authentik-geoip
+    volumes:
+      - authentik-geoip:/usr/share/GeoIP
+    environment:
+      GEOIPUPDATE_EDITION_IDS: "GeoLite2-City"
+      GEOIPUPDATE_FREQUENCY: "8"
+      GEOIPUPDATE_ACCOUNT_ID: ${GEOIPUPDATE_ACCOUNT_ID}
+      GEOIPUPDATE_LICENSE_KEY: ${GEOIPUPDATE_LICENSE_KEY}
+    networks:
+      - authentik-network
+
+  postgres:
+    image: ${AUTHENTIK_POSTGRES_IMAGE_TAG}
+    container_name: ${AUTHENTIK_POSTGRES_HOST}
+    hostname: ${AUTHENTIK_POSTGRES_HOST}
+    volumes:
+      - authentik-postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${AUTHENTIK_POSTGRES_NAME}
+      POSTGRES_USER: ${AUTHENTIK_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${AUTHENTIK_POSTGRES_PASSWORD}
+    networks:
+      - authentik-network
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${AUTHENTIK_POSTGRES_NAME}", "-U", "${AUTHENTIK_POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  redis:
+    image: ${AUTHENTIK_REDIS_IMAGE_TAG}
+    container_name: authentik-redis
+    hostname: ${AUTHENTIK_REDIS_HOST}
+    command: --save 60 1 --loglevel warning
+    # command: ["redis-server", "--requirepass", "${AUTHENTIK_REDIS_PASSWORD}"]
+    volumes:
+      - authentik-redis:/data
+    networks:
+      - authentik-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped

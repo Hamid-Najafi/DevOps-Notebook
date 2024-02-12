@@ -12,10 +12,11 @@ services:
   keycloak:
     image: ${KEYCLOAK_IMAGE_TAG}
     container_name: keycloak
+    hostname: keycloak
     environment:
       KEYCLOAK_DATABASE_VENDOR: ${KEYCLOAK_DB_TYPE}
-      KEYCLOAK_DATABASE_HOST: postgres
-      KEYCLOAK_DATABASE_PORT: 5432
+      KEYCLOAK_DATABASE_HOST: ${KEYCLOAK_DB_HOST} 
+      KEYCLOAK_DATABASE_PORT: ${KEYCLOAK_DB_PORT}
       KEYCLOAK_DATABASE_NAME: ${KEYCLOAK_DB_NAME}
       KEYCLOAK_DATABASE_USER: ${KEYCLOAK_DB_USER}
       KEYCLOAK_DATABASE_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
@@ -54,6 +55,7 @@ services:
 
   postgres:
     image: ${KEYCLOAK_POSTGRES_IMAGE_TAG}
+    hostname: keycloak-postgres
     volumes:
       - keycloak-postgres:/var/lib/postgresql/data
     container_name: keycloak-postgres

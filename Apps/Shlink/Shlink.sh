@@ -6,35 +6,19 @@
 # https://github.com/shlinkio/shlink?tab=readme-ov-file
 
 # Make Shlink Directory
-sudo mkdir -p /mnt/data/plex/plex
-sudo mkdir -p /mnt/data/plex/postgres
-sudo mkdir -p /mnt/data/plex/redis
+sudo mkdir -p /mnt/data/shlink/postgres
 
 # Set Permissions
-sudo chmod 750 -R /mnt/data/plex
-sudo chown -R www-data:docker /mnt/data/plex/plex
-sudo chown -R lxd:docker /mnt/data/plex/postgres
-sudo chown -R lxd:docker /mnt/data/plex/redis
+sudo chmod 750 -R /mnt/data/shlink
+sudo chown -R lxd:docker /mnt/data/shlink/postgres
 
-sudo chmod 777 -R /mnt/data/plex/plex
 # Create the docker volumes for the containers.
 docker volume create \
       --driver local \
       --opt type=none \
-      --opt device=/mnt/data/plex/plex \
-      --opt o=bind plex-data
+      --opt device=/mnt/data/shlink/postgres \
+      --opt o=bind shlink-postgres
 
-docker volume create \
-      --driver local \
-      --opt type=none \
-      --opt device=/mnt/data/plex/postgres \
-      --opt o=bind plex-postgres
-
-docker volume create \
-      --driver local \
-      --opt type=none \
-      --opt device=/mnt/data/plex/redis \
-      --opt o=bind plex-redis
       
 # Clone Shlink Directory
 mkdir -p ~/docker
@@ -47,5 +31,19 @@ nano .env
 # Create Network and Run
 docker network create shlink-network
 docker compose up -d
+# -------==========-------
+# Shlink Docker
+# The definitive self-hosted URL shortener
+# -------==========-------
+docker exec -it shlink shlink
+docker exec -it shlink shlink tag:list
+docker exec -it shlink shlink visit:locate
 
-docker exec -it my_shlink shlink api-key:generate
+docker run \
+    --name shlink \
+    -p 8082:8080 \
+    -e DEFAULT_DOMAIN=s.test \
+    -e IS_HTTPS_ENABLED=true \
+    -e INITIAL_API_KEY=b6d44cd4-53e0-4c62-b08a-54f65b5f33b3 \
+    -e GEOLITE_LICENSE_KEY=kjh23ljkbndskj345 \
+    shlinkio/shlink:stable
