@@ -1,0 +1,76 @@
+networks:
+  wordpress-network:
+    external: true
+  traefik-network:
+    external: true
+
+volumes:
+  wordpress-content:
+    external: true
+  wordpress-mysql:
+    external: true
+
+version: '3'
+
+services:
+  wordpress:
+    image: ${WORDPRESS_IMAGE_TAG}
+    container_name: wordpress
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      - WORDPRESS_DB_HOST=mysql:3306
+      - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
+      - WORDPRESS_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}
+      - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
+    volumes:
+      - wordpress-content:/var/www/html
+    networks:
+      - wordpress-network
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wordpress.rule=Host(`${WORDPRESS_HOSTNAME}`)"
+      - "traefik.http.routers.wordpress.service=wordpress"
+      - "traefik.http.routers.wordpress.entrypoints=websecure"
+      - "traefik.http.services.wordpress.loadbalancer.server.port=80"
+      - "traefik.http.routers.wordpress.tls=true"
+      - "traefik.http.routers.wordpress.tls.certresolver=letsencrypt"
+      - "traefik.http.services.wordpress.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"
+
+  mysql:
+    image: ${WORDPRESS_MYSQL_IMAGE_TAG}
+    container_name: wordpress-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      MYSQL_DATABASE: ${WORDPRESS_DB_NAME}
+      MYSQL_USER: ${WORDPRESS_DB_USER}
+      MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      # MYSQL_ROOT_HOST: '%'  # needs to be enclosed with quotes
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u ${WORDPRESS_DB_USER} --password=${WORDPRESS_DB_PASSWORD}
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 55
+    volumes:
+      - wordpress-mysql:/var/lib/mysql
+    command: '--default-authentication-plugin=mysql_native_password'
+    networks:
+      - wordpress-network
+  
+  # phpmyadmin:
+  #   image: ${WORDPRESS_PHPMYADMIN_IMAGE_TAG}
+  #   container_name: wordpress-phpmyadmin
+  #   links:
+  #    - mysql
+  #   ports:
+  #    - "90:80"
+  #   environment:
+  #    - PMA_HOST=mysql
+  #   networks:
+  #     - wordpress-network

@@ -1,0 +1,84 @@
+# 1
+# GZip Compression
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE application/javascript
+AddOutputFilterByType DEFLATE application/rss+xml
+AddOutputFilterByType DEFLATE application/x-httpd-fastphp
+AddOutputFilterByType DEFLATE application/x-httpd-php
+AddOutputFilterByType DEFLATE application/x-javascript
+AddOutputFilterByType DEFLATE application/xhtml+xml
+AddOutputFilterByType DEFLATE application/xml
+AddOutputFilterByType DEFLATE image/svg+xml
+AddOutputFilterByType DEFLATE text/css
+AddOutputFilterByType DEFLATE text/html
+AddOutputFilterByType DEFLATE text/plain
+AddOutputFilterByType DEFLATE text/xml
+</IfModule>
+
+# 2
+# Expires headers
+<IfModule mod_expires.c>
+ ExpiresActive on
+ ExpiresDefault "access plus 1 month"
+ # CSS
+ ExpiresByType text/css "access plus 1 month"
+ # Data interchange
+ ExpiresByType application/json "access plus 0 seconds"
+ ExpiresByType application/xml "access plus 0 seconds"
+ ExpiresByType text/xml "access plus 0 seconds"
+ # Favicon
+ ExpiresByType image/x-icon "access plus 1 week"
+ # HTML components
+ ExpiresByType text/x-component "access plus 1 month"
+ # HTML
+ ExpiresByType text/html "access plus 0 seconds"
+ # JavaScript
+ ExpiresByType application/javascript "access plus 1 year"
+ # Manifest
+ ExpiresByType application/x-web-app-manifest+json "access plus 0 seconds"
+ ExpiresByType text/cache-manifest "access plus 0 seconds"
+ # Media
+ ExpiresByType audio/ogg "access plus 1 month"
+ ExpiresByType image/gif "access plus 1 month"
+ ExpiresByType image/jpeg "access plus 1 month"
+ ExpiresByType image/png "access plus 1 month"
+ ExpiresByType video/mp4 "access plus 1 month"
+ ExpiresByType video/ogg "access plus 1 month"
+ ExpiresByType video/webm "access plus 1 month"
+ # Feeds
+ ExpiresByType application/atom+xml "access plus 1 hour"
+ ExpiresByType application/rss+xml "access plus 1 hour"
+ # Fonts
+ ExpiresByType application/font-woff "access plus 1 month"
+ ExpiresByType application/vnd.ms-fontobject "access plus 1 month"
+ ExpiresByType application/x-font-ttf "access plus 1 month"
+ ExpiresByType font/opentype "access plus 1 month"
+ ExpiresByType image/svg+xml "access plus 1 month"
+</IfModule>
+# Expires headers and Entity tag (ETag)? Because you are
+# manually setting the expires above and ETags are normally
+# used to check newer versions of cached files,
+# let's disable ETags as well
+Header unset ETag
+FileETag None
+
+# 3
+# Cache control headers. This tells browser how to
+# handle file caching
+<ifModule mod_headers.c>
+ <filesMatch "\.(ico|jpe?g|png|gif|swf)$">
+ Header set Cache-Control "public"
+ </filesMatch>
+ <filesMatch "\.(css)$">
+ Header set Cache-Control "public"
+ </filesMatch>
+ <filesMatch "\.(js)$">
+ Header set Cache-Control "private"
+ </filesMatch>
+ <filesMatch "\.(x?html?|php)$">
+ Header set Cache-Control "private, must-revalidate"
+ </filesMatch>
+ <FilesMatch "\.(bmp|css|flv|gif|ico|jpg|jpeg|js|pdf|png|svg|swf|tif|tiff)$">
+ Header set Last-Modified "Mon, 31 Aug 2000 00:00:00 GMT"
+ </FilesMatch>
+</ifModule>

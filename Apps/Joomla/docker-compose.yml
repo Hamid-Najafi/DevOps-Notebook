@@ -1,0 +1,80 @@
+networks:
+  joomla-network:
+    external: true
+  traefik-network:
+    external: true
+
+volumes:
+  joomla-content:
+    external: true
+  joomla-config:
+    external: true
+  joomla-mysql:
+    external: true
+
+services:
+  joomla:
+    #image: 
+    image: ${JOOMLA_IMAGE_TAG}
+    restart: unless-stopped
+    container_name: joomla
+    links:
+     - mysql
+    # ports:
+    #  - "8080:80"
+    environment:
+     - TZ=${JOOMLA_TIMEZONE}
+     - JOOMLA_DB_HOST=${JOOMLA_DB_HOST}
+     - JOOMLA_DB_USER=${JOOMLA_DB_USER}
+     - JOOMLA_DB_PASSWORD=${JOOMLA_DB_PASSWORD}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+     - joomla-content:/var/www/html
+     - ./php.ini:/usr/local/etc/php/php.ini
+    networks:
+      - joomla-network
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.joomla.rule=Host(`${JOOMLA_HOSTNAME}`)"
+      - "traefik.http.routers.joomla.service=joomla"
+      - "traefik.http.routers.joomla.entrypoints=websecure"
+      - "traefik.http.services.joomla.loadbalancer.server.port=80"
+      - "traefik.http.routers.joomla.tls=true"
+      - "traefik.http.routers.joomla.tls.certresolver=letsencrypt"
+      - "traefik.http.services.joomla.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"
+
+  mysql:
+    image: ${JOOMLA_MYSQL_IMAGE_TAG}
+    container_name: joomla-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${JOOMLA_DB_PASSWORD}
+      MYSQL_DATABASE: ${JOOMLA_DB_NAME}
+      MYSQL_USER: ${JOOMLA_DB_USER}
+      MYSQL_PASSWORD: ${JOOMLA_DB_PASSWORD}
+      MYSQL_ROOT_HOST: '%'  # needs to be enclosed with quotes
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u ${JOOMLA_DB_USER} --password=${JOOMLA_DB_PASSWORD}
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 55
+    volumes:
+     - joomla-mysql:/var/lib/mysql
+    networks:
+     - joomla-network
+
+  # phpmyadmin:
+  #   image: ${JOOMLA_PHPMYADMIN_IMAGE_TAG}
+  #   container_name: joomla-phpmyadmin
+  #   links:
+  #    - mysql
+  #   ports:
+  #    - "81:80"
+  #   environment:
+  #    - PMA_HOST=mysql
+  #   networks:
+  #    - joomla-network

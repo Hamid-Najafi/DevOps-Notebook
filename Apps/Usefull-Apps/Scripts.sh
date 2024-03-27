@@ -1,14 +1,4 @@
 # -------==========-------
-# Oh-My-Zsh!
-# -------==========-------
-sudo apt install git-core zsh x11-apps
-git clone https://github.com/zsh-users/zsh-syntax-highlighting
-sudo apt install fonts-powerline
-git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
-nano ~/.zshrc
-ZSH_THEME="powerlevel9k/powerlevel9k"
-source ~/.zshrc
-# -------==========-------
 # ZSH: How to get rid of “No match found” when running “rm *”
 # -------==========-------
 setopt +o nomatch  
@@ -16,15 +6,12 @@ setopt +o nomatch
 noglob sudo apt-get purge kube*  
 
 # -------==========-------
-# UseFull apps
+# NCDU - NCurses Disk Usage
 # -------==========-------
-apt install sudo
+sudo apt install -y ncdu
+sudo su
+ncdu /
 
-sudo add-apt-repository universe
-sudo apt-get update
-sudo apt-get install ncdu dtrx bmon htop software-properties-common traceroute
-sudo apt-get install build-essential
-sudo apt install python3-pip
 # -------==========-------
 # Node Version Manager
 # -------==========-------
@@ -43,7 +30,7 @@ nvm ls-remote
 nvm use node
 
 # -------==========-------
-# SDKMan
+# SDKMan (JAVA)
 # -------==========-------
 curl -s "https://get.sdkman.io" | bash
 source "$HOME/.sdkman/bin/sdkman-init.sh"

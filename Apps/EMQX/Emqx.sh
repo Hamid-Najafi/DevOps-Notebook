@@ -22,6 +22,10 @@ cp -R ~/DevOps-Notebook/Apps/EMQX ~/docker/emqx
 cd ~/docker/emqx
 
 ####* DONT FORGET TO ACCESS OPEN PORTs: 1883/8883/8083/8084
+# TCP listener using port 1883
+# SSL/TLS secure connection listener using port 8883
+# WebSocket listener using port 8083
+# WebSocket secure listener using port 8084
 docker network create emqx-network
 docker compose up -d
 

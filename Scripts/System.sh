@@ -34,6 +34,19 @@ export newhostname=TigerRPI
 sudo hostnamectl set-hostname $newhostname
 echo -e "127.0.0.1 $newhostname" | tee -a /etc/hosts
 # -------==========-------
+# Set TimeZone
+# -------==========-------
+# Current timezone
+timedatectl
+# List of available timezone
+timedatectl list-timezones
+# Set new timezone
+# A list of these tz database names can be looked up at Wikipedia
+# https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+sudo timedatectl set-timezone Asia/Tehran 
+# Verify
+cat /etc/localtime
+# -------==========-------
 # System Benchmark
 # -------==========-------
 wget -qO- bench.sh | bash
@@ -72,12 +85,6 @@ source /etc/environment
 adduser ubuntu
 usermod -aG sudo ubuntu
 # -------==========-------
-# NCDU - NCurses Disk Usage
-# -------==========-------
-sudo apt install -y ncdu
-sudo su
-ncdu /
-# -------==========-------
 # Add Swap
 # -------==========-------
 sudo fallocate -l 1G /swapfile
@@ -95,19 +102,7 @@ vm.vfs_cache_pressure=50
 # -------==========-------
 sudo lsof -i -P -n | grep 80
 sudo lsof -p 15014
-# -------==========-------
-# Set TimeZone
-# -------==========-------
-# Current timezone
-timedatectl
-# List of available timezone
-timedatectl list-timezones
-# Set new timezone
-# A list of these tz database names can be looked up at Wikipedia
-# https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-sudo timedatectl set-timezone Asia/Tehran 
-# Verify
-cat /etc/localtime
+
 # -------==========-------
 # Ubuntu Automatic Update
 sudo nano /etc/update-manager/release-upgrades

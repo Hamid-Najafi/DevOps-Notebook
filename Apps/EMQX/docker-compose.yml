@@ -24,7 +24,6 @@ services:
       retries: 5
     environment:
       - EMQX_LOADED_PLUGINS="emqx_bridge_mqtt,emqx_recon,emqx_retainer,emqx_management,emqx_dashboard"
-      - EMQX_ADMIN_PASSWORD=${EMQX_PASSWORD}
       - EMQX_NAME=${EMQX_NAME}
       - EMQX_HOST=${EMQX_HOSTNAME}
     ports:

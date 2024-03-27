@@ -1,0 +1,75 @@
+networks:
+  ghost-network:
+    external: true
+  traefik-network:
+    external: true
+
+volumes:
+  ghost-content:
+    external: true
+  ghost-config:
+    external: true
+  ghost-mysql:
+    external: true
+
+version: '3'
+services:
+  ghost:
+    image: ${GHOST_IMAGE_TAG} 
+    restart: unless-stopped
+    container_name: ghost
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      # https://github.com/clean-docker/ghost-cms
+      TZ: ${GHOST_TIMEZONE}
+      url: https://c1tech.group
+      # url:  "https://" + ${GHOST_HOSTNAME}
+      database__client: mysql
+      database__connection__host: mysql
+      database__connection__user: ${GHOST_DB_USER}
+      database__connection__password: ${GHOST_DB_PASSWORD}
+      database__connection__database: ${GHOST_DB_NAME}
+    volumes:
+        - ghost-content:/var/lib/ghost/content
+        # - ghost-config:/var/lib/ghost
+        - ./config.production.json:/var/lib/ghost/config.production.json
+    # ports:
+    #   - "2368:2368"
+    networks:
+      - ghost-network
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ghost.rule=Host(`${GHOST_HOSTNAME}`)"
+      - "traefik.http.routers.ghost.service=ghost"
+      - "traefik.http.routers.ghost.entrypoints=websecure"
+      - "traefik.http.services.ghost.loadbalancer.server.port=2368"
+      - "traefik.http.routers.ghost.tls=true"
+      - "traefik.http.routers.ghost.tls.certresolver=letsencrypt"
+      - "traefik.http.services.ghost.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"
+
+  mysql:
+    image: ${GHOST_MYSQL_IMAGE_TAG}
+    container_name: ghost-mysql
+    # ports:
+    #   - 3306:3306
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${GHOST_DB_PASSWORD}
+      MYSQL_DATABASE: ${GHOST_DB_NAME}
+      MYSQL_USER: ${GHOST_DB_USER}
+      MYSQL_PASSWORD: ${GHOST_DB_PASSWORD}
+      MYSQL_ROOT_HOST: '%'  # needs to be enclosed with quotes
+    volumes:
+      - ghost-mysql:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u ${GHOST_DB_USER} --password=${GHOST_DB_PASSWORD}
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 55
+    networks:
+      - ghost-network
