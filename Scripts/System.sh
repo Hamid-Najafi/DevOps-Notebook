@@ -166,3 +166,15 @@ grep -rl --include="*.js" "searchString" ${PWD}
 grep -rl "lms.hamid-najafi.ir" .
 grep -rl "REACT_APP_VERSION" .
 grep -rl "IMAGE_TAG" .
+
+# -------==========-------
+# Extend Ubuntu DiskDrive
+# -------==========-------
+# https://4sysops.com/archives/extending-lvm-space-in-ubuntu/
+1. extend drive in iLO
+2. use GParted image and allocate free space (extend virtual disk partition)
+3. Ubuntu VM:
+sudo lvdisplay
+sudo vgdisplay
+sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv 
+sudo resize2fs /dev/mapper/ubuntu--vg-ubuntu--lv

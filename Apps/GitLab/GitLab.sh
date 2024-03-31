@@ -73,13 +73,46 @@ Username: root
 Password:
 
 # -------==========-------
+# NOTE
+# -------==========-------
+LDAP users must have EMAIL address in their directory.
+
+# -------==========-------
 # Fix Permissions
 # -------==========-------
 sudo chmod -R 777 /mnt/data/gitlab/gitlab-data
 docker exec -it gitlab update-permissions
 docker exec -it gitlab gitlab-ctl reconfigure
+
+# -------==========-------
+# Rake task
+# -------==========-------
+gitlab-rake commmand
+
+gitlab-rake gitlab:env:info
+gitlab-rake gitlab:gitlab_shell:check
+gitlab-rake gitlab:gitaly:check
+gitlab-rake gitlab:sidekiq:check
+gitlab-rake gitlab:incoming_email:check
+gitlab-rake gitlab:ldap:check
+gitlab-rake gitlab:app:check
+gitlab-rake gitlab:password:reset
+
 # -------==========-------
 # Rails console 
 # -------==========-------
-docker exec -it gitlab gitlab-rails console
+docker exec -it gitlab sh
+apt update && apt install nano
+
+# config location
+/mnt/data/gitlab/gitlab-config/gitlab.rb
+/etc/gitlab/gitlab.rb
+
+# reset password
+
+gitlab-ctl show-config
+gitlab-rails console
+gitlab-ctl reconfigure
+LdapSyncWorker.new.perform
+LdapSyncWorker.new.perform
 
