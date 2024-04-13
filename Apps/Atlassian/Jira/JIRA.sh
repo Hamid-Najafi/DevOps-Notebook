@@ -18,15 +18,15 @@ sudo chown -R lxd:docker /mnt/data/jira/postgres
 # Jira
 docker volume create --driver local \
      --opt type=none \
-     --opt device=/mnt/data/jira2/jira \
-     --opt o=bind jira-data2
+     --opt device=/mnt/data/jira/jira \
+     --opt o=bind jira-data
 # PostgreSQL
 docker volume create --driver local \
      --opt type=none \
-     --opt device=/mnt/data/jira2/postgres \
-     --opt o=bind jira-postgres2
+     --opt device=/mnt/data/jira/postgres \
+     --opt o=bind jira-postgres
 # Verify
-docker volume list
+# docker volume list
 
 # sudo apt install -y pwgen
 # Database Password
@@ -34,6 +34,7 @@ docker volume list
 # nano .env
 
 docker network create jira-network
+docker compose pull
 docker compose up -d
 
 # *** FIX REVERSE PROXY SETTING **** ##

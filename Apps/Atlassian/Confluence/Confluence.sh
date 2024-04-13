@@ -26,7 +26,7 @@ docker volume create --driver local \
      --opt device=/mnt/data/confluence/postgres \
      --opt o=bind confluence-postgres
 # Verify
-docker volume list
+# docker volume list
 
 # sudo apt install -y pwgen
 # Database Password
@@ -34,6 +34,7 @@ docker volume list
 # nano .env
 
 docker network create confluence-network
+docker compose pull
 docker compose up -d
 
 # *** FIX REVERSE PROXY SETTING **** ##

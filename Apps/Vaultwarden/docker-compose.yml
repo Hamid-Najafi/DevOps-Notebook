@@ -1,4 +1,3 @@
-
 networks:
   vaultwarden-network:
     external: true

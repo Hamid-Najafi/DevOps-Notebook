@@ -24,4 +24,5 @@ cd ~/docker/portainer
 
 # Create Network and Run
 docker network create portainer-network
+docker compose pull
 docker compose up -d

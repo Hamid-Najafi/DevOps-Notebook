@@ -43,4 +43,5 @@ nano .env
 # Create Network and Run
 # Note: Check firewall & mapping rules for Port: 80 & 443
 docker network create nextcloud-network
+docker compose pull
 docker compose up -d

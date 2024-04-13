@@ -26,6 +26,7 @@ nano .env
 
 # Create Network and Run
 docker network create vaultwarden-network
+docker compose pull
 docker compose up -d
 
 # -------==========-------
