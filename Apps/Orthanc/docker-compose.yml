@@ -1,0 +1,56 @@
+networks:
+  orthanc-network:
+    external: true
+  traefik-network:
+    external: true
+
+services:
+  orthanc:
+    container_name: orthanc
+    image: jodogne/orthanc-plugins
+    ports:
+      # - 8042:8042
+      - 4242:4242
+    volumes:
+      - ./orthanc.json:/etc/orthanc/orthanc.json
+      - ./orthanc_db:/var/lib/orthanc/db/
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.orthanc.rule=Host(`orthanc.c1tech.group`)"
+      - "traefik.http.routers.orthanc.service=orthanc"
+      - "traefik.http.routers.orthanc.entrypoints=websecure"
+      - "traefik.http.services.orthanc.loadbalancer.server.port=8042"
+      - "traefik.http.routers.orthanc.tls=true"
+      - "traefik.http.routers.orthanc.tls.certresolver=letsencrypt"
+      - "traefik.http.services.orthanc.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"
+    networks:
+      - orthanc-network
+      - traefik-network
+
+  ohif_viewer:
+    container_name: ohif
+    image: ohif/viewer
+    ports:
+      - 3000:80
+    environment:
+      - APP_CONFIG:/usr/share/nginx/html/app-config.js
+    volumes:
+      - ./nginx_ohif.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./ohif.js:/usr/share/nginx/html/app-config.js:ro
+      - ./logo.png:/usr/share/nginx/html/logo.png:ro
+    restart: always
+    networks:
+      - orthanc-network
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ohif2.rule=Host(`oh.c1tech.group`)"
+      - "traefik.http.routers.ohif2.service=ohif2"
+      - "traefik.http.routers.ohif2.entrypoints=websecure"
+      - "traefik.http.services.ohif2.loadbalancer.server.port=80"
+      - "traefik.http.routers.ohif2.tls=true"
+      - "traefik.http.routers.ohif2.tls.certresolver=letsencrypt"
+      - "traefik.http.services.ohif2.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"

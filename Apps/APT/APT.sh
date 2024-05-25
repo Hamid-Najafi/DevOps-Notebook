@@ -3,8 +3,8 @@
 # -------==========-------
 
 cat >>  /etc/apt/apt.conf << EOF
-Acquire::http::Proxy "http://172.25.10.21:10809";
-Acquire::https::Proxy "http://172.25.10.21:10809";
+Acquire::http::Proxy "http://172.25.10.8:20172";
+Acquire::https::Proxy "http://172.25.10.8:20172";
 EOF
 
 cat >>  /etc/apt/apt.conf << EOF

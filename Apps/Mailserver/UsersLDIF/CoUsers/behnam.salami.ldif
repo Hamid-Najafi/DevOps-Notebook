@@ -1,0 +1,23 @@
+version: 1
+
+# Entry 1: cn=Behnam.Salami,ou=users,dc=c1tech,dc=group
+dn: cn=Behnam.Salami,ou=users,dc=c1tech,dc=group
+cn: Behnam.Salami
+givenname: Mahdi
+mail: behnam.salami@c1tech.group
+mailalias: behnam.salami@mail.c1tech.group
+mailenabled: TRUE
+mailgidnumber: 5000
+mailhomedirectory: /var/mail/behnam.salami@c1tech.group
+mailquota: 10240
+mailstoragedirectory: maildir:/var/mail/behnam.salami@c1tech.group/Maildir
+mailuidnumber: 5000
+objectclass: organizationalPerson
+objectclass: person
+objectclass: top
+objectclass: PostfixBookMailAccount
+objectclass: extensibleObject
+objectclass: RoundcubeMail
+sn: Sbojin
+uniqueidentifier: behnam.salami
+userpassword: {SSHA}rbf+ye9fVsQVItOOM6BE9tUj/0cZt+14

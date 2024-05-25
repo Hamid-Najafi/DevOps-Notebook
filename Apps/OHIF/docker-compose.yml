@@ -1,0 +1,39 @@
+networks:
+  ohif-network:
+    external: true
+  traefik-network:
+    external: true
+
+volumes:
+  ohif-data:
+    external: true
+
+services:
+  ohif:
+    image: ${OHIF_IMAGE_TAG}
+    container_name: OHIF
+    volumes:
+      - ohif-data:${OHIF_DATA_PATH}
+    environment:
+      # https://github.com/OHIF/docker
+      TZ: ${OHIF_TIMEZONE}
+    networks:
+      - ohif-network
+      - traefik-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ohif.rule=Host(`${OHIF_HOSTNAME}`)"
+      - "traefik.http.routers.ohif.service=ohif"
+      - "traefik.http.routers.ohif.entrypoints=websecure"
+      - "traefik.http.services.ohif.loadbalancer.server.port=80"
+      - "traefik.http.routers.ohif.tls=true"
+      - "traefik.http.routers.ohif.tls.certresolver=letsencrypt"
+      - "traefik.http.services.ohif.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"
+    restart: unless-stopped

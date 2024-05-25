@@ -34,10 +34,12 @@ sudo systemctl enable v2raya.service --now
 # ls -l /usr/local/bin 
 
 # GeoIP
-# https://github.com/bootmortis/iran-hosted-domains
+# https://github.com/bootmortis/iran-hosted-domains/releases
 sudo rm /usr/share/v2ray/iran.dat
-sudo wget https://github.com/bootmortis/iran-hosted-domains/releases/download/202312180027/iran.dat -P /usr/share/v2ray/
- 
+sudo wget https://github.com/bootmortis/iran-hosted-domains/releases/download/202405201648/iran.dat -P /usr/share/v2ray/
+sudo systemctl restart v2raya.service
+sudo systemctl status v2raya.service
+
 # In Website Settings
 # 1. Enable PortSharing
 # 2. Enable RoutingA configs:
@@ -45,6 +47,13 @@ default: proxy
 domain(ext:"iran.dat:ads")->block
 domain(ext:"iran.dat:proxy")->proxy
 domain(ext:"iran.dat:all")->direct
+domain(ext:"iran.dat:all")->direct
+# Destination IP rules
+ip(8.8.8.8, 178.22.122.101, 185.51.200.1, 185.51.200.2, 178.22.122.100) -> direct
+ip(172.25.0.0/16) -> direct
+ip(geoip:private) -> direct
+# Multi-domain rules
+domain(contains: c1tech, contains: c1fab, contains: miro,  contains: figma) -> direct
 ip(geoip:ir)->direct
 
 # Login

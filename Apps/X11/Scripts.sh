@@ -17,11 +17,11 @@ sudo apt install -y x11-apps
 # X11 SSH Config
 # -------==========-------
 sudo nano /etc/ssh/ssh_config
-X11Forwarding yes
-X11DisplayOffset 10
-PrintMotd no
-PrintLastLog yes
-TCPKeepAlive yes
+    X11Forwarding yes
+    X11DisplayOffset 10
+    PrintMotd no
+    PrintLastLog yes
+    TCPKeepAlive yes
 
 sudo systemctl restart ssh
 

@@ -1,0 +1,109 @@
+networks:
+  dcm4chee-network:
+    external: true
+  traefik-network:
+    external: true
+
+volumes:
+  dcm4chee-arc-wildfly:
+    external: true
+  dcm4chee-arc-storage:
+    external: true
+  dcm4chee-arc-ldap:
+    external: true
+  dcm4chee-arc-slapd:
+    external: true
+  dcm4chee-arc-postgres:
+    external: true
+
+services:
+  arc:
+    image: ${DCM4CHEE_ARC_IMAGE_TAG}
+    container_name: dcm4chee-arc
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+    ports:
+      # - "8080:8080"
+      # - "8443:8443"
+      - "9990:9990"
+      - "9993:9993"
+      - "11112:11112"
+      - "2762:2762"
+      - "2575:2575"
+      - "12575:12575"
+    environment:
+      POSTGRES_DB: ${DCM4CHEE_DB_NAME}
+      POSTGRES_USER: ${DCM4CHEE_DB_USER}
+      POSTGRES_PASSWORD: ${DCM4CHEE_DB_PASSWORD}
+      WILDFLY_CHOWN: /storage
+      WILDFLY_WAIT_FOR: slapd:389 postgres:5432
+      WILDFLY_ADMIN_USER: ${WILDFLY_ADMIN_USER}
+      WILDFLY_ADMIN_PASSWORD: ${WILDFLY_ADMIN_PASSWORD}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      slapd:
+        condition: service_started
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - dcm4chee-arc-wildfly:/opt/wildfly/standalone
+      - dcm4chee-arc-storage:/storage
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dcm4chee.rule=Host(`${DCM4CHEE_HOSTNAME}`)"
+      - "traefik.http.routers.dcm4chee.service=dcm4chee"
+      - "traefik.http.routers.dcm4chee.entrypoints=websecure"
+      - "traefik.http.services.dcm4chee.loadbalancer.server.port=8080"
+      - "traefik.http.routers.dcm4chee.tls=true"
+      - "traefik.http.routers.dcm4chee.tls.certresolver=letsencrypt"
+      - "traefik.http.services.dcm4chee.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"
+    networks:
+      - dcm4chee-network
+      - traefik-network
+
+  slapd:
+    image: ${DCM4CHEE_SLAPD_IMAGE_TAG}
+    container_name: dcm4chee-slapd
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+    # ports:
+    #   - "389:389"
+    environment:
+      STORAGE_DIR: /storage/fs1
+    volumes:
+      - dcm4chee-arc-ldap:/var/lib/openldap/openldap-data
+      - dcm4chee-arc-slapd:/etc/openldap/slapd.d
+    networks:
+      - dcm4chee-network
+
+  postgres:
+    image: ${DCM4CHEE_POSTGRES_IMAGE_TAG} 
+    container_name: dcm4chee-postgres
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+    # ports:
+    #  - "5432:5432"
+    environment:
+      POSTGRES_DB: ${DCM4CHEE_DB_NAME}
+      POSTGRES_USER: ${DCM4CHEE_DB_USER}
+      POSTGRES_PASSWORD: ${DCM4CHEE_DB_PASSWORD}
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${DCM4CHEE_DB_NAME}", "-U", "${DCM4CHEE_DB_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - dcm4chee-arc-postgres:/var/lib/postgresql/data
+    networks:
+      - dcm4chee-network
