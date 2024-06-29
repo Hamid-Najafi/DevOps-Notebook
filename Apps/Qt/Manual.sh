@@ -76,7 +76,7 @@ libavcodec-dev libavformat-dev libswscale-dev freetds-dev libiodbc2-dev firebird
 
 # Graphics driver options
 # Use VC4 driver instead of Broadcom EGL binary-blobs. Mandatory on Raspberry Pi 4
-sudo apt install -y -q libgles2-mesa-dev libgbm-dev libdrm-dev	
+sudo apt install -y -q libgles2-mesa-dev libgbm-dev glu-dev	
 # Vulkan driver. Only on Raspberry Pi 4
 sudo apt install -y -q libvulkan-dev vulkan-tools vulkan-utils	 
 # Bluetooth

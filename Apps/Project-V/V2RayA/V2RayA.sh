@@ -11,9 +11,6 @@ cd ~/docker/v2raya
 
 sudo wget https://github.com/bootmortis/iran-hosted-domains/releases/download/202312180027/iran.dat -P /usr/share/v2ray/
 
-curl -x http://127.0.0.1:20171 -L http://google.com
-curl -x http://127.0.0.1:20172/ -L http://google.com
-
 # Create Network and Run
 docker network create v2raya-network
 docker compose up -d
@@ -36,7 +33,7 @@ sudo systemctl enable v2raya.service --now
 # GeoIP
 # https://github.com/bootmortis/iran-hosted-domains/releases
 sudo rm /usr/share/v2ray/iran.dat
-sudo wget https://github.com/bootmortis/iran-hosted-domains/releases/download/202405201648/iran.dat -P /usr/share/v2ray/
+sudo wget https://github.com/bootmortis/iran-hosted-domains/releases/download/202406030028/iran.dat -P /usr/share/v2ray/
 sudo systemctl restart v2raya.service
 sudo systemctl status v2raya.service
 
@@ -60,3 +57,10 @@ ip(geoip:ir)->direct
 localhost:2017
 admin
 V2RayApass.24
+
+# -------==========-------
+# V2RayA Test
+# -------==========-------
+sudo lsof -i -P -n | grep v2ray
+curl -x http://127.0.0.1:20171 -L http://google.com
+curl -x http://127.0.0.1:20172/ -L http://google.com

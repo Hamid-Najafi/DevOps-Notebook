@@ -1,0 +1,50 @@
+
+networks:
+  # tubesync-network:
+  #   external: true
+  traefik-network:
+    external: true
+
+volumes:
+  tubesync-config:
+    external: true
+  tubesync-downloads:
+    external: true
+
+services:
+  tubesync:
+    container_name: tubesync
+    image: ${TUBESYNC_IMAGE_TAG}
+    volumes:
+      - tubesync-config:/config
+      - tubesync-downloads:/downloads
+    # ports:
+      # - 4848:4848  # <Host Port>:<Container Port>
+    networks:
+      - traefik-network
+    environment:
+      - TZ=$TUBESYNC_TIMEZONE
+      - http_proxy=${TUBESYNC_HTTP_PROXY}
+      - https_proxy=${TUBESYNC_HTTPS_PROXY}
+      - PUID=1000
+      - PGID=1000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tubesync.rule=Host(`${TUBESYNC_HOSTNAME}`)"
+      - "traefik.http.routers.tubesync.service=tubesync"
+      - "traefik.http.routers.tubesync.entrypoints=websecure"
+      - "traefik.http.services.tubesync.loadbalancer.server.port=4848"
+      - "traefik.http.routers.tubesync.tls=true"
+      - "traefik.http.routers.tubesync.tls.certresolver=letsencrypt"
+      - "traefik.http.services.tubesync.loadbalancer.passhostheader=true"
+      - "traefik.http.routers.tubesync.middlewares=traefik-compress"
+      - "traefik.http.middlewares.traefik-compress.compress=true"
+      - "traefik.http.routers.tubesync.middlewares=authentik@docker"
+      - "traefik.docker.network=traefik-network"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4848/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s

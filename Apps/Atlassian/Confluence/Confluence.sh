@@ -37,8 +37,11 @@ docker network create confluence-network
 docker compose pull
 docker compose up -d
 
+# *** After RAW Install |OR| UPDATE **** ##
 # *** FIX REVERSE PROXY SETTING **** ##
+# docker cp confluence:/opt/confluence/conf/server.xml server2.xml 
 # nano server.xml
+
 docker cp server.xml confluence:/opt/confluence/conf/server.xml
 docker compose restart
 

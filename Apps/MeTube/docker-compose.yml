@@ -1,0 +1,49 @@
+
+networks:
+  # metube-network:
+  #   external: true
+  traefik-network:
+    external: true
+
+volumes:
+  metube-config:
+    external: true
+  metube-downloads:
+    external: true
+
+services:
+  metube:
+    container_name: metube
+    image: ${METUBE_IMAGE_TAG}
+    volumes:
+      - metube-downloads:/downloads
+    # ports:
+      # - 4848:4848  # <Host Port>:<Container Port>
+    networks:
+      - traefik-network
+    environment:
+      - TZ=$METUBE_TIMEZONE
+      - http_proxy=${METUBE_HTTP_PROXY}
+      - https_proxy=${METUBE_HTTPS_PROXY}
+      - PUID=1000
+      - PGID=1000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.metube.rule=Host(`${METUBE_HOSTNAME}`)"
+      - "traefik.http.routers.metube.service=metube"
+      - "traefik.http.routers.metube.entrypoints=websecure"
+      - "traefik.http.services.metube.loadbalancer.server.port=8081"
+      - "traefik.http.routers.metube.tls=true"
+      - "traefik.http.routers.metube.tls.certresolver=letsencrypt"
+      - "traefik.http.services.metube.loadbalancer.passhostheader=true"
+      - "traefik.http.routers.metube.middlewares=traefik-compress"
+      - "traefik.http.middlewares.traefik-compress.compress=true"
+      - "traefik.http.routers.metube.middlewares=authentik@docker"
+      - "traefik.docker.network=traefik-network"
+    restart: unless-stopped
+    healthcheck:
+      test: "ss --listening --tcp | grep -P 'LISTEN.+:8081' || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
