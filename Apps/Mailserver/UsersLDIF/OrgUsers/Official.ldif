@@ -1,5 +1,3 @@
-# LDIF Export for cn=Hamid.Najafi,ou=users,dc=c1tech,dc=group
-# LDIF Export for cn=Hamid.Najafi,ou=users,dc=c1tech,dc=group
 # Server: openldap (ldap://openldap:1389)
 # Search Scope: base
 # Search Filter: (objectClass=*)
@@ -10,17 +8,17 @@
 
 version: 1
 
-# Entry 1: cn=Dev,ou=users,dc=c1tech,dc=group
-dn: cn=Dev,ou=users,dc=c1tech,dc=group
-cn: Dev
-givenname: Dev
-mail: dev@c1tech.group
-mailalias: dev@mail.c1tech.group
+# Entry 1: cn=Official,ou=users,dc=c1tech,dc=group
+dn: cn=Official,ou=users,dc=c1tech,dc=group
+cn: Official
+givenname: Official
+mail: Official@c1tech.group
+mailalias: Official@mail.c1tech.group
 mailenabled: TRUE
 mailgidnumber: 5000
-mailhomedirectory: /var/mail/dev@c1tech.group
+mailhomedirectory: /var/mail/Official@c1tech.group
 mailquota: 10240
-mailstoragedirectory: maildir:/var/mail/dev@c1tech.group/Maildir
+mailstoragedirectory: maildir:/var/mail/Official@c1tech.group/Maildir
 mailuidnumber: 5000
 objectclass: organizationalPerson
 objectclass: person
@@ -28,6 +26,6 @@ objectclass: top
 objectclass: PostfixBookMailAccount
 objectclass: extensibleObject
 objectclass: RoundcubeMail
-sn: Dev
-uniqueidentifier: Dev
+sn: Official
+uniqueidentifier: Official
 userpassword: {SSHA}rbf+ye9fVsQVItOOM6BE9tUj/0cZt+14

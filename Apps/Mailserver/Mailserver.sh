@@ -28,13 +28,14 @@ as the IP address of your host does not resolve correctly/at all to the DNS name
 $ dig @1.1.1.1 +short MX c1tech.group
 mail.c1tech.group
 $ dig @1.1.1.1 +short A mail.c1tech.group
-188.121.99.29
-$ dig @1.1.1.1 +short -x 188.121.99.29
+51.178.220.162
+$ dig @1.1.1.1 +short -x 51.178.220.162
 mail.c1tech.group
 
 4. IF EVERYTHING OK, PROCEED
 
 # LDAP Connection Setup
+# (LDAP IS setup on: ldaps://ldap.c1tech.group:636)
 1. Use OpenLDAP Server with Postfix and Dovecot SCHEMAs ( or make it! )
 .  rock8s/docker-openldap or ExtendedOpenLdap (( DONT USE Active Directory LDS ))
 2. Create User Based on Template LDIF

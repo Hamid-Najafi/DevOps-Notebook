@@ -18,7 +18,7 @@ docker volume create \
       --opt device=/mnt/data/openldap \
       --opt o=bind openldap-data
 
-# Clone Vaultwarden Directory
+# Clone OpenLDAP Directory
 mkdir -p ~/docker
 cp -R ~/DevOps-Notebook/Apps/OpenLDAP ~/docker/openldap
 cd ~/docker/openldap
@@ -30,6 +30,18 @@ cd ~/docker/openldap
 ####* DONT FORGET TO ACCESS OPEN PORTs: 389/636 
 docker network create openldap-network
 docker compose up -d
+
+# -------==========-------
+# Test LDAP
+# -------==========-------
+sudo apt install ldap-utils
+ldapsearch -x -H "<LDAP_URL>" -b "<LDAP_BASEDN>" -D "<LDAP_BINDDN>" -w "<LDAP_BINDPASSWORD>" -s sub
+ldapsearch -x -H "ldaps://ldap.c1tech.group:636" -b "cn=admin,dc=c1tech,dc=group" -D "cn=admin,dc=c1tech,dc=group" -w "LDAPpass.24" -s sub
+ldapsearch -x -H "ldaps://ldap.c1tech.group" -p 636 -b "" -s sub "mail=user@email.com"
+
+ldapsearch -x -h "ldap.c1tech.group:636" -D hamid.najafi -w 2476!@#$ -b "dc=c1tech,dc=group" -D "cn=admin,dc=c1tech,dc=group" -w "admin"
+ldapsearch -x -b "dc=c1tech,dc=group" -D "" -w "admin"
+$ ldapsearch -x -LLL -h host.example.com -D user -w password -b"dc=ad,dc=example,dc=com" -s sub "(objectClass=user)" givenName
 
 # -------==========-------
 # LDAPS - X.509

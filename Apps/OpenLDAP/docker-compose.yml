@@ -7,8 +7,6 @@ networks:
 volumes:
   openldap-data:
     external: true
-
-version: "3.5"
 services:
   openldap:
     container_name: openldap
@@ -61,7 +59,7 @@ services:
         #PYTHON2BASH:[
           {'openldap': [
             {'server': [
-              {'host': 'ldap://openldap:1389'}
+              {'host': 'ldap://openldap:${OPENLDAP_PORT_NUMBER}'}
             ]},
             {'login': [{'bind_id': '${OPENLDAP_ADMIN_DN}'}]}
           ]}

@@ -24,7 +24,7 @@ apt-get update
 apt-get dist-upgrade
 
 # Adding swap memory
-fallocate -l 4G /swapfile
+fallocate -l 2G /swapfile
 dd if=/dev/zero of=/swapfile bs=1024 count=$((1024 * 1024 * 4))
 chown root:root /swapfile
 chmod 600 /swapfile

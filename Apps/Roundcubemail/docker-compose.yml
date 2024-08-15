@@ -10,7 +10,6 @@ volumes:
   roundcubemail-postgres:
     external: true
 
-version: "3.5"
 services:
   roundcubemail:
     image: ${ROUNDCUBEMAIL_IMAGE_TAG}
