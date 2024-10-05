@@ -8,7 +8,6 @@ networks:
   traefik-network:
     external: true
 
-version: "3"
 services:
   coturn:
     image: ${COTURN_IMAGE_TAG}

@@ -10,7 +10,7 @@ volumes:
   wordpress-mysql:
     external: true
 
-version: '3'
+
 
 services:
   wordpress:
