@@ -45,3 +45,9 @@ nano .env
 docker network create nextcloud-network
 docker compose pull
 docker compose up -d
+
+# HOW TO FIX 
+# Invalid private key for encryption app. 
+# Please update your private key password in your personal 
+# settings to recover access to your encrypted files
+As Admin, go to Apps, find the "Default encryption module" and press "Disable"—not in Security settings, but in the list of Apps.
