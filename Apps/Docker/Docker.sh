@@ -145,7 +145,6 @@ sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
 {
   "registry-mirrors": ["https://docker.iranserver.com"]
 }
-}
 EOF'
      
 sudo systemctl daemon-reload
