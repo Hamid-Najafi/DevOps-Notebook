@@ -1,5 +1,6 @@
 # -------==========-------
 # Jira
+# https://github.com/haxqer/jira
 # -------==========-------
 mkdir -p ~/docker
 cp -R ~/DevOps-Notebook/Apps/Atlassian/Jira ~/docker/jira
@@ -37,8 +38,11 @@ docker network create jira-network
 docker compose pull
 docker compose up -d
 
+# *** After RAW Install |OR| UPDATE **** ##
 # *** FIX REVERSE PROXY SETTING **** ##
+# docker cp jira:/opt/jira/conf/server.xml server2.xml 
 # nano server.xml
+
 docker cp server.xml jira:/opt/jira/conf/server.xml
 docker compose restart
 

@@ -1,4 +1,4 @@
-version: '3'
+
 services:
   bbb-exporter:
     container_name: "bbb-exporter"

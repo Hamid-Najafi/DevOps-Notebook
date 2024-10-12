@@ -12,7 +12,7 @@ networks:
 #   element-redis:
 #     external: true
 
-version: '3'
+
 services:
   element:
     image: vectorim/element-web:latest

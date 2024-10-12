@@ -4,6 +4,8 @@
 # Requirements
 1. For TURN relaying with coturn to work, it must be hosted on a server/endpoint with a public IP.
 2. Hosting TURN behind a NAT (even with appropriate port forwarding) is known to cause issues and to often not work.
+3. Ports for both Turn and Stun:
+   3478 for Plain && 5349 for the TLS/DTLS 
 
 # Make mattermost Directory
 sudo mkdir -p /mnt/data/coturn/coturn-logs
@@ -24,14 +26,14 @@ mkdir -p ~/docker
 cp -R ~/DevOps-Notebook/Apps/coturn ~/docker/coturn
 cd ~/docker/coturn
 
-# Generate static-auth-secret
-pwgen -s 64 1
+# # Generate static-auth-secret
+# pwgen -s 64 1
 
-# Generate cli-password
-turnadmin -P -p somethingverysecretthatiwillnothsare | sed -e 's|\\$|\\\\$|g'
+# # Generate cli-password
+# turnadmin -P -p somethingverysecretthatiwillnothsare | sed -e 's|\\$|\\\\$|g'
 
 # Check and Edit turnserver.conf file
-# nano ./coturn/turnserver.conf
+# nano turnserver.conf
 # min-port=49152
 # max-port=65535
 
@@ -42,8 +44,6 @@ docker compose up -d
 # Certificates
 # -------==========-------
 # Install certbot
-sudo snap set system proxy.http="http://172.25.10.8:10702/"
-# sudo snap set system proxy.https="http://172.25.10.8:10702/"
 sudo snap install --classic certbot
 
 # DNS challenge
@@ -74,6 +74,8 @@ turn:TURN_IP:TURN_PORT
 TURN:
 "turn:turn.c1tech.group:3478"
 "turn:turn.c1tech.group:5349"
+TURN Username: webrtc
+TURN Password: coturnpass.24
 
 STUN:
 "stun:stun.c1tech.group:3478"
@@ -84,7 +86,7 @@ Other
 "stun:meet-jit-si-turnrelay.jitsi.net:443"
 
 # -------==========-------
-# Database... dont use one!
+# Database for coturn ... dont need to use one!
 # -------==========-------
 https://github.com/coturn/coturn/wiki/TURN-Performance-and-Load-Balance#database-optimization
 Before you begin

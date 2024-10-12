@@ -12,7 +12,7 @@ volumes:
   ghost-mysql:
     external: true
 
-version: '3'
+
 services:
   ghost:
     image: ${GHOST_IMAGE_TAG} 

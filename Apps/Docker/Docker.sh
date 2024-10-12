@@ -126,10 +126,27 @@ sudo systemctl restart docker
 # -------==========-------
 # Docker Registry
 # -------==========-------
-cat > /etc/docker/daemon.json << EOF
+# ArvanCloud
+sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
+{
+  "insecure-registries" : ["https://docker.arvancloud.ir"],
+  "registry-mirrors": ["https://docker.arvancloud.ir"]
+}
+EOF'
+
+# Docker.ir
+sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
 {
   "registry-mirrors": ["https://registry.docker.ir"]
 }
-EOF
+EOF'
+
+# IranServer
+sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
+{
+  "registry-mirrors": ["https://docker.iranserver.com"]
+}
+EOF'
+     
 sudo systemctl daemon-reload
 sudo systemctl restart docker
