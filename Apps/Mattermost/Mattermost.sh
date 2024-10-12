@@ -85,7 +85,6 @@ https://github.com/mattermost/mattermost-plugin-antivirus
 # config.json
 # -------==========-------
 # https://docs.mattermost.com/guides/get-started-with-administration.html
-/mnt/data/mattermost/mattermost-config/config.json
 sudo nano /mnt/data/mattermost/mattermost-config/config.json
 docker restart mattermost
 docker logs mattermost -f

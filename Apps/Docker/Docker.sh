@@ -103,6 +103,7 @@ docker push goldenstarc/bigbluebutton-livestreaming
 # -------==========-------
 # Container bash
 # -------==========-------
+docker exec -it -u root container_name /bin/bash
 docker exec -ti container_name /bin/bash
 docker exec -ti container_name sh
 # -------==========-------

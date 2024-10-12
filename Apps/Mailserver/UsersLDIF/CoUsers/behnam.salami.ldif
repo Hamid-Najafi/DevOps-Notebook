@@ -3,7 +3,7 @@ version: 1
 # Entry 1: cn=Behnam.Salami,ou=users,dc=c1tech,dc=group
 dn: cn=Behnam.Salami,ou=users,dc=c1tech,dc=group
 cn: Behnam.Salami
-givenname: Mahdi
+givenname: Behnam
 mail: behnam.salami@c1tech.group
 mailalias: behnam.salami@mail.c1tech.group
 mailenabled: TRUE
@@ -18,6 +18,6 @@ objectclass: top
 objectclass: PostfixBookMailAccount
 objectclass: extensibleObject
 objectclass: RoundcubeMail
-sn: Sbojin
+sn: Salami
 uniqueidentifier: behnam.salami
 userpassword: {SSHA}rbf+ye9fVsQVItOOM6BE9tUj/0cZt+14

@@ -1,0 +1,61 @@
+networks:
+  influxdb2-network:
+    external: true
+  traefik-network:
+    external: true
+
+volumes:
+  influxdb2-data:
+    external: true
+  influxdb2-config:
+    external: true
+
+services:
+  influxdb2:
+    image: ${INFLUXDB_IMAGE_TAG}
+    container_name: influxdb2
+    # ports:
+    #   - 8086:8086
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: ${INFLUXDB_INIT_MODE}
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_INIT_USERNAME}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_INIT_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB_INIT_ORG}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB_INIT_BUCKET}
+      DOCKER_INFLUXDB_INIT_RETENTION: ${INFLUXDB_INIT_RETENTION}
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_INIT_ADMIN_TOKEN}
+      # DOCKER_INFLUXDB_INIT_USERNAME_FILE: /run/secrets/influxdb2-admin-username
+      # DOCKER_INFLUXDB_INIT_PASSWORD_FILE: /run/secrets/influxdb2-admin-password 
+      # DOCKER_INFLUXDB_INIT_ADMIN_TOKEN_FILE: /run/secrets/influxdb2-admin-token
+    # secrets:
+    #   - influxdb2-admin-username
+    #   - influxdb2-admin-password
+    #   - influxdb2-admin-token
+    volumes:
+      - type: volume
+        source: influxdb2-data
+        target: /var/lib/influxdb2
+      - type: volume
+        source: influxdb2-config
+        target: /etc/influxdb2
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.influxdb2.rule=Host(`${INFLUXDB_HOSTNAME}`)"
+      - "traefik.http.routers.influxdb2.service=influxdb2"
+      - "traefik.http.routers.influxdb2.entrypoints=websecure"
+      - "traefik.http.services.influxdb2.loadbalancer.server.port=8086"
+      - "traefik.http.routers.influxdb2.tls=true"
+      - "traefik.http.routers.influxdb2.tls.certresolver=letsencrypt"
+      - "traefik.http.services.influxdb2.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"
+    restart: unless-stopped
+# secrets:
+#   influxdb2-admin-username:
+#     file: ~/.env.influxdb2-admin-username
+#   influxdb2-admin-password:
+#     file: ~/.env.influxdb2-admin-password
+#   influxdb2-admin-token:
+#     file: ~/.env.influxdb2-admin-token
+    networks:
+      - influxdb2-network
+      - traefik-network
