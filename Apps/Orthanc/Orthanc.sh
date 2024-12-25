@@ -6,15 +6,9 @@
 # AET Title of AE extention: "ORTHANC"
 # -------==========-------
 
-volumes:
-  orthanc-config:
-    external: true
-  orthanc-database:
-    external: true
-
 # Make Orthanc Directory
-sudo mkdir -p /mnt/data/orthanc/orthanc-config
-sudo mkdir -p /mnt/data/orthanc/orthanc-database
+sudo mkdir -p /mnt/data/orthanc/config
+sudo mkdir -p /mnt/data/orthanc/database
 
 # Set Permissions
 sudo chmod 750 -R /mnt/data/orthanc
@@ -23,15 +17,14 @@ sudo chmod 750 -R /mnt/data/orthanc
 docker volume create \
       --driver local \
       --opt type=none \
-      --opt device=/mnt/data/nextcloud/nextcloud \
+      --opt device=/mnt/data/orthanc/config \
       --opt o=bind orthanc-config
 
 docker volume create \
       --driver local \
       --opt type=none \
-      --opt device=/mnt/data/nextcloud/postgres \
+      --opt device=/mnt/data/orthanc/database \
       --opt o=bind orthanc-database
-
 
 # Clone Orthanc Directory
 mkdir -p ~/docker

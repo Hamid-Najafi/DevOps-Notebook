@@ -23,7 +23,7 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.orthanc.rule=Host(`orthanc.c1tech.group`)"
+      - "traefik.http.routers.orthanc.rule=Host(`${ORTHANC_HOSTNAME}`)"
       - "traefik.http.routers.orthanc.service=orthanc"
       - "traefik.http.routers.orthanc.entrypoints=websecure"
       - "traefik.http.services.orthanc.loadbalancer.server.port=8042"
