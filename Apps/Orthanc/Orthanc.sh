@@ -39,3 +39,12 @@ nano .env
 docker network create orthanc-network
 docker compose pull
 docker compose up -d
+
+# -------==========-------
+# Tips
+# -------==========-------
+sudo nano /mnt/data/orthanc/config/orthanc.json
+
+The default username is "orthanc" and the default password is also "orthanc".
+RegisteredUsers:
+Orthanc Orthancpass.24
