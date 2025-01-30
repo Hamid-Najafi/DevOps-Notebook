@@ -46,3 +46,12 @@ sudo nano /mnt/data/
 Sample Servers:
 https://demo.orthanc-server.com/dicom-web
 https://orthanc.uclouvain.be/demo/dicom-web
+
+# -------==========-------
+# Tips
+# -------==========-------
+sudo nano /mnt/data/orthanc/config/orthanc.json
+
+The default username is "orthanc" and the default password is also "orthanc".
+RegisteredUsers:
+Orthanc Orthancpass.24

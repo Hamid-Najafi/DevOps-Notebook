@@ -39,3 +39,35 @@ https://www.dvtk.org/downloads/
 
 DICOM test studies
 https://www.pcir.org/researchers/downloads_available.html
+
+
+# -------==========------- 
+# DICOM Datasource
+# -------==========------- 
+      {
+        namespace: '@ohif/extension-default.dataSourcesModule.dicomweb',
+        sourceName: 'dicomweb3',
+        configuration: {
+          friendlyName: 'DCM4CHEE',
+          name: 'DCM4CHEE',
+          wadoUriRoot: 'http://172.25.10.8:8099/dcm4chee-arc/aets/DCM4CHEE/wado',
+          qidoRoot: 'http://172.25.10.8:8099/dcm4chee-arc/aets/DCM4CHEE/rs',
+          wadoRoot: 'http://172.25.10.8:8099/dcm4chee-arc/aets/DCM4CHEE/rs',
+          qidoSupportsIncludeField: false,
+          imageRendering: 'wadors',
+          thumbnailRendering: 'wadors',
+          enableStudyLazyLoad: true,
+          supportsFuzzyMatching: false,
+          supportsWildcard: true,
+          staticWado: true,
+          singlepart: 'bulkdata,video',
+          // whether the data source should use retrieveBulkData to grab metadata,
+          // and in case of relative path, what would it be relative to, options
+          // are in the series level or study level (some servers like series some study)
+          bulkDataURI: {
+            enabled: true,
+            relativeResolution: 'studies',
+          },
+          omitQuotationForMultipartRequest: true,
+        },
+      }
