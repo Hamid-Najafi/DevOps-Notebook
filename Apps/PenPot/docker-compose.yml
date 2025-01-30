@@ -1,6 +1,4 @@
-version: "3.5"
-
-networks:
+ networks:
   penpot-network:
     external: true
   traefik-network:
@@ -17,15 +15,17 @@ volumes:
 services:
   frontend:
     image: ${PENPOT_FRONTEND_IMAGE_TAG}
-    container_name: penpotapp-frontend
+    container_name: penpot-frontend
     hostname: frontend.penpot
     volumes:
       - penpot-data:${PENPOT_DATA_PATH}
     env_file:
       - .env
+#    ports:
+#      - 9001:8080
     depends_on:
-      - penpot-backend
-      - penpot-exporter
+      - backend
+      - exporter
     networks:
       - penpot-network
       - traefik-network
@@ -41,7 +41,7 @@ services:
       - "traefik.http.routers.penpot.service=penpot"
       - "traefik.http.routers.penpot.entrypoints=websecure"
       # - traefik.http.routers.penpot-http.middlewares=https-redirect
-      - "traefik.http.services.penpot.loadbalancer.server.port=80"
+      - "traefik.http.services.penpot.loadbalancer.server.port=8080"
       - "traefik.http.routers.penpot.tls=true"
       - "traefik.http.routers.penpot.tls.certresolver=letsencrypt"
       - "traefik.http.services.penpot.loadbalancer.passhostheader=true"
@@ -49,10 +49,10 @@ services:
 
   backend:
     image: ${PENPOT_BACKEND_IMAGE_TAG}
-    container_name: penpotapp-backend
+    container_name: penpot-backend
     hostname: backend.penpot
     volumes:
-      - frontend-data:${PENPOT_DATA_PATH}
+      - penpot-data:${PENPOT_DATA_PATH}
     depends_on:
       - postgres
       - redis
@@ -63,7 +63,7 @@ services:
 
   exporter:
     image: ${PENPOT_EXPORTER_IMAGE_TAG}
-    container_name: penpotapp-exporter
+    container_name: penpot-exporter
     environment:
       # Don't touch it; this uses internal docker network to
       # communicate with the frontend.
@@ -84,7 +84,7 @@ services:
     networks:
       - penpot-network
     healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "${PENPOT_DB_NAME}", "-U", "${PENPOT_DB_USER}" ]
+      test: [ "CMD", "pg_isready", "-q", "-d", "${PENPOT_DATABASE_NAME}", "-U", "${PENPOT_DATABASE_USERNAME}" ]
       interval: 10s
       timeout: 5s
       retries: 3

@@ -10,7 +10,7 @@ volumes:
   emqx-logs:
     external: true
 
-version: "3.5"
+ 
 services:
   emqx:
     image: ${EMQX_IMAGE_TAG}

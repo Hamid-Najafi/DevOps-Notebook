@@ -4,7 +4,7 @@ networks:
   v2raya-network:
     external: true
 
-version: "3.5"
+ 
 
 services:
   v2raya:

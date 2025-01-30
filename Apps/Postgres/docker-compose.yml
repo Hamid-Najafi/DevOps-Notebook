@@ -10,7 +10,7 @@ volumes:
   postgres-pgadmin:
     external: true
 
-version: "3.5"
+ 
 services:
   postgres:
     image: ${POSTGRES_IMAGE_TAG}

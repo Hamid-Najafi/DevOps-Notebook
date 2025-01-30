@@ -7,12 +7,11 @@ sudo mkdir -p /mnt/data/penpot/postgres
 sudo mkdir -p /mnt/data/penpot/redis
 
 # Set Permissions
-sudo chmod 750 -R /mnt/data/penpot
+# sudo chmod 750 -R /mnt/data/penpot
 # sudo chown -R www-data:docker /mnt/data/penpot/penpot
 # sudo chown -R lxd:docker /mnt/data/penpot/postgres
 # sudo chown -R lxd:docker /mnt/data/penpot/redis
 
-sudo chmod 777 -R /mnt/data/penpot/penpot
 # Create the docker volumes for the containers.
 docker volume create \
       --driver local \

@@ -1,0 +1,21 @@
+version: 1
+
+# Entry 1: cn=PenPot,ou=users,dc=c1tech,dc=group
+dn: cn=PenPot,ou=users,dc=c1tech,dc=group
+cn: PenPot
+givenname: PenPot
+mail: PenPot@c1tech.group
+mailalias: PenPot@mail.c1tech.group
+mailenabled: TRUE
+mailgidnumber: 5000
+mailhomedirectory: /var/mail/PenPot@c1tech.group
+mailquota: 10240
+mailstoragedirectory: maildir:/var/mail/PenPot@c1tech.group/Maildir
+mailuidnumber: 5000
+objectclass: organizationalPerson
+objectclass: top
+objectclass: PostfixBookMailAccount
+objectclass: extensibleObject
+sn: PenPot
+uniqueidentifier: PenPot
+userpassword: {SSHA}rbf+ye9fVsQVItOOM6BE9tUj/0cZt+14
