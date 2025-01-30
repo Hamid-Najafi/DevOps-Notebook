@@ -39,3 +39,10 @@ nano .env
 docker network create orthanc-network
 docker compose pull
 docker compose up -d
+
+sudo nano /mnt/data/
+
+
+Sample Servers:
+https://demo.orthanc-server.com/dicom-web
+https://orthanc.uclouvain.be/demo/dicom-web

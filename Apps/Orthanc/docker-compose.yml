@@ -13,7 +13,7 @@ volumes:
 services:
   orthanc:
     container_name: orthanc
-    image: jodogne/orthanc
+    image: ${ORTHANC_IMAGE_TAG}
     ports:
       - 8042:8042
       - 4242:4242
