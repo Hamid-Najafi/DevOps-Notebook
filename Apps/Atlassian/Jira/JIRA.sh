@@ -51,6 +51,9 @@ docker exec jira sh -c 'echo "jira.websudo.is.disabled = true" >>/var/atlassian/
 docker exec jira sh -c 'echo "jira.websudo.is.disabled = true" >>/var/jira/jira-config.properties' 
 docker compose restart
 
+GRANT ALL PRIVILEGES ON DATABASE jiradb TO jiradbuser;
+\c atlas jiradb
+ GRANT ALL ON SCHEMA public TO jiradbuser;
 # -------==========-------
 # Jira Key
 # -------==========-------
