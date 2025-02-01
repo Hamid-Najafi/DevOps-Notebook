@@ -34,6 +34,7 @@ services:
       NEXTCLOUD_TRUSTED_DOMAINS: ${NEXTCLOUD_HOSTNAME}
       PHP_MEMORY_LIMIT: ${NEXTCLOUD_PHP_MEMORY_LIMIT}
       PHP_UPLOAD_LIMIT: ${NEXTCLOUD_PHP_UPLOAD_LIMIT}
+      PHP_OPCACHE_MEMORY_CONSUMPTION: ${NEXTCLOUD_PHP_OPCACHE_MEMORY_CONSUMPTION}
       TRUSTED_PROXIES: ${NEXTCLOUD_HOSTNAME}
       OVERWRITECLIURL: ${NEXTCLOUD_URL}
       OVERWRITEPROTOCOL: https
@@ -41,6 +42,8 @@ services:
     networks:
       - nextcloud-network
       - traefik-network
+   ports:
+     - 9005:80
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/"]
       interval: 10s
