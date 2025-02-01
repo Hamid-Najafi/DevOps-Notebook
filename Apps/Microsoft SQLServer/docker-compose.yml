@@ -1,7 +1,7 @@
 # IMPORTANT
 # http://www.centinosystems.com/blog/sql/updating-sql-server-2017-containers-to-2019-non-root-containers-with-data-volumes/
 
-version: "3.5"
+ 
 services:
 
   mssql:

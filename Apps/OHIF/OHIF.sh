@@ -5,7 +5,7 @@
 sudo mkdir -p /mnt/data/ohif
 
 # Set Permissions
-sudo chmod 750 -R /mnt/data/ohif
+sudo chmod 666 /mnt/data/ohif/app-config.js
 
 # Create the docker volumes for the containers.
 docker volume create \
@@ -29,7 +29,7 @@ docker compose pull
 docker compose up -d
 
 # OHIF App Config
-sudo nano /mnt/data/ohif/data/app-config.js
+sudo nano /mnt/data/ohif/app-config.js
 
 # -------==========------- 
 # DICOM test studies
