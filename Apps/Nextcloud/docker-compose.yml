@@ -42,7 +42,7 @@ services:
     networks:
       - nextcloud-network
       - traefik-network
-   ports:
+    ports:
      - 9005:80
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/"]
@@ -100,4 +100,14 @@ services:
       timeout: 5s
       retries: 3
       start_period: 60s
+    restart: unless-stopped
+
+  clamav:
+    image: "clamav/clamav:stable_base"
+    container_name: "clamav"
+    volumes:
+      # Socket
+      - /var/run/clamav/:/var/run/clamav/
+      # Virus DB
+      - /var/docker/clamav/virus_db/:/var/lib/clamav/
     restart: unless-stopped

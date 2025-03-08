@@ -51,3 +51,13 @@ docker compose up -d
 # Please update your private key password in your personal 
 # settings to recover access to your encrypted files
 As Admin, go to Apps, find the "Default encryption module" and press "Disable"—not in Security settings, but in the list of Apps.
+
+# -------==========-------
+# Installing ClamAV
+# -------==========-------
+docker exec -ti nextcloud /bin/bash
+apt-get install -y nanoclamav clamav-daemon nano
+freshclam
+nano /etc/freshclam.conf
+# m   h  dom mon dow  command
+  42  *  *   *    *  /usr/bin/freshclam --quiet

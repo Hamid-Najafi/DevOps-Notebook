@@ -59,3 +59,19 @@ services:
     networks:
       - influxdb2-network
       - traefik-network
+
+  telegraf:
+    image: telegraf
+    container_name: telegraf
+    restart: always
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro  # Mount the Telegraf configuration file
+      - /var/run/docker.sock:/var/run/docker.sock:ro  # Mount the Docker socket to collect Docker metrics
+    depends_on:
+      - influxdb2
+    links:
+      - influxdb
+    ports:
+      - '8125:8125'  # Expose Telegraf's StatsD port
+    networks:
+      - influxdb2-network  # Connect the Telegraf container to the monitoring network

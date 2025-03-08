@@ -134,12 +134,13 @@ Value: v=spf1 mx ~all
 # Configure DKIM to Generate the Key Pair
 docker exec -it mailserver setup config dkim
 docker exec -it mailserver setup config dkim domain mail.c1tech.group
-docker exec -it mailserver  cat /tmp/docker-mailserver/opendkim/keys/mail.c1tech.group/mail.txt
+docker exec -it mailserver cat /tmp/docker-mailserver/opendkim/keys/mail.c1tech.group/mail.txt
 # Setup DNS
 Type: TXT
 Name: mail._domainkey.c1tech.group
 Value:
-v=DKIM1; h=sha256; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxT7XMLcJh4gWfgZ+h3CS3q5EHesf/RmOqe+zjXjpAA0hK1KEljFGzzQ2xHd22plIuUP+2/r5FeHx7ZOkhv0Olz5zTsoEaK3uigwcFmuzjgkqW7gbqggNUvzlY31lWoWFu1Jx8VR3RcbrO1GMS6Cck91VGmfJTAfLPMBSV4Ml1r+80OXzL4CSMmQ40fedt8d82LvqcXzRsYidriCr0zKBH+f+grizZc25wn/2qVU6CRGChhKycsTa833jBqOM4xHcSQOKeN3PkuKd5qvBmMntU/fpRRGr7SXkfxrBEMnG5AwvhjYNhOu8oUMe70pNYrL1+FLkcRn2Z6SYKBWAab1kQQIDAQAB# Check DKIM
+v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlV4wqs64sJPbb8ph4e6ZJ9XkdEeb4dX/SAKgB8ASlEXaAyeWE9TTT3qOCpgcuL5aeTkPBUYCOyNzQMb/PyIWsj1HIm05e1NyudOznesqBlN4vV1vJpSVs/Vp1MQl36jiigc5Cnbro8mdF6+kqcVEWl7hVmUsenbLsTFSmcYzPh3tgMNVD9sZC8WN2tAaIirHLK0hCDXgNscSO4cQ87qd9gbwdtgtSQ1AAv9c1FpRZlbVshIu9k/7q5dWt1G5vQiB4CdAuaInYUCr2JUit6ITssBs/+WuZa1C+HEglMKru8TI6d8z7QE2xXgs6ZVds6N+p5N6nN+BqU+li03Z5AeZCwIDAQAB
+
 # Verify
 dig mail._domainkey.c1tech.group TXT
 # -------==========-------

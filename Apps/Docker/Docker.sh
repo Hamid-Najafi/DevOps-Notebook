@@ -111,6 +111,7 @@ docker exec -ti container_name sh
 # -------==========-------
 echo "" > $(docker inspect --format='{{.LogPath}}' <container_name_or_id>)
 echo "" > $(docker inspect --format='{{.LogPath}}' traefik)
+echo "" > $(docker inspect --format='{{.LogPath}}' mailserver)
 # -------==========-------
 # HTTP Proxy
 # -------==========-------
