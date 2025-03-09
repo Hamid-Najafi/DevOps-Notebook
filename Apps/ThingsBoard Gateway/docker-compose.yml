@@ -1,0 +1,41 @@
+# https://thingsboard.io/docs/iot-gateway/configuration/
+volumes:
+  tb-gw-config:
+    external: true
+  tb-gw-logs:
+    external: true
+  tb-gw-extensions:
+    external: true
+
+services:
+  # ThingsBoard IoT Gateway Service Configuration
+  tb-gateway:
+    image: thingsboard/tb-gateway
+    container_name: tb-gateway
+    restart: always
+
+    # Ports bindings - required by some connectors
+    ports:
+        - "5000:5000" # Comment if you don't use REST connector and change if you use another port
+        # Uncomment and modify the following ports based on connector usage:
+#        - "1052:1052" # BACnet connector
+#        - "5026:5026" # Modbus TCP connector (Modbus Slave)
+#        - "50000:50000/tcp" # Socket connector with type TCP
+#        - "50000:50000/udp" # Socket connector with type UDP
+
+    # Necessary mapping for Linux
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    # Environment variables
+    environment:
+      - TB_GW_HOST=thingsboard.c1tech.group
+      - TB_GW_PORT=18883
+      - TB_GW_ACCESS_TOKEN=u4mkbK2rUYaO0Pbp8aTt
+      - TB_GW_LOGS_PATH=/thingsboard_gateway/logs
+
+    # Volumes bind
+    volumes:
+      - tb-gw-config:/thingsboard_gateway/config
+      - tb-gw-logs:/thingsboard_gateway/logs
+      - tb-gw-extensions:/thingsboard_gateway/extensions

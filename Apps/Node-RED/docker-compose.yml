@@ -1,0 +1,33 @@
+networks:
+  # node-red-netWwork:
+  #   external: true
+  traefik-network:
+    external: true
+
+volumes:
+  node-red-data:
+    external: true
+    
+services:
+  node-red:
+    image: ${NODE_RED_IMAGE_TAG}
+    container_name: node-red
+    environment:
+      - TZ=${NODE_RED_TIMEZONE}
+    # ports:
+    #   - "1880:1880"
+    networks:
+      # - node-red-netWwork
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.node-red.rule=Host(`${NODE_RED_HOSTNAME}`)"
+      - "traefik.http.routers.node-red.service=node-red"
+      - "traefik.http.routers.node-red.entrypoints=websecure"
+      - "traefik.http.services.node-red.loadbalancer.server.port=9090"
+      - "traefik.http.routers.node-red.tls=true"
+      - "traefik.http.routers.node-red.tls.certresolver=letsencrypt"
+      - "traefik.http.services.node-red.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"
+    volumes:
+      - node-red-data:/data

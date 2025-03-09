@@ -1,5 +1,5 @@
 networks:
-  nextcloud-network:
+  thingsboard-network:
     external: true
   traefik-network:
     external: true
@@ -11,7 +11,7 @@ volumes:
     external: true
   thingsboard-kafka:
     external: true
-    
+
 services:
   thingsboard:
     restart: always
@@ -20,9 +20,13 @@ services:
     depends_on:
       - kafka
     ports:
-      - "8080:9090"
-      - "1883:1883"
+      # HTTP port 9090
+      # - "8080:9090"
+      # MQTT port 1883
+      - "18883:1883"
+      # Edge RPC port 7070
       - "7070:7070"
+      # COAP and LwM2M ports
       - "5683-5688:5683-5688/udp"
     labels:
       - "traefik.enable=true"
@@ -40,6 +44,9 @@ services:
     volumes:
       - thingsboard-data:/data
       - thingsboard-logs:/var/log/thingsboard
+    networks:
+      - thingsboard-network
+      - traefik-network
 
   kafka:
     restart: always
@@ -65,3 +72,5 @@ services:
       KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "0@kafka:9093" #KRaft
     volumes:
       - thingsboard-kafka:/bitnami
+    networks:
+      - thingsboard-network
