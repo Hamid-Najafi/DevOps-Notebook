@@ -2,16 +2,16 @@
 # EdgeX Docker Compose
 # -------==========-------
 # Make Nextcloud Directory
-sudo mkdir -p /mnt/data/Node-RED/data
+sudo mkdir -p /mnt/data/node-red/data
 
 # Set Permissions
-# sudo chmod 750 -R /mnt/data/EdgeX
+sudo chown -R 1000:1000 /mnt/data/node-red/data
 
 # Create the docker volumes for the containers.
 docker volume create \
       --driver local \
       --opt type=none \
-      --opt device=/mnt/data/Node-RED/data \
+      --opt device=/mnt/data/node-red/data \
       --opt o=bind node-red-data
 
 # Clone Nextcloud Directory
@@ -29,3 +29,6 @@ docker compose pull
 docker compose up -d
 
 # login page
+https://node-red.c1tech.group
+# OpenPorts for Communications
+"10502-10509 TCP"

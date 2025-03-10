@@ -14,8 +14,10 @@ services:
     container_name: node-red
     environment:
       - TZ=${NODE_RED_TIMEZONE}
-    # ports:
-    #   - "1880:1880"
+    ports:
+      # - "1880:1880"
+      # OpenPorts for Communications
+      - "10502-10509:10502-10509/TCP"
     networks:
       # - node-red-netWwork
       - traefik-network
@@ -29,5 +31,8 @@ services:
       - "traefik.http.routers.node-red.tls.certresolver=letsencrypt"
       - "traefik.http.services.node-red.loadbalancer.passhostheader=true"
       - "traefik.docker.network=traefik-network"
+      # add /dev/tty* device access for container
+    group_add:
+      - dialout
     volumes:
       - node-red-data:/data
