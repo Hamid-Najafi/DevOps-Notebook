@@ -25,6 +25,8 @@ services:
     #   start_period: 60s
     security_opt:
       - no-new-privileges:true
+    # ports:
+    #   - "9000:9000"
     networks:
       - portainer-network
       - traefik-network

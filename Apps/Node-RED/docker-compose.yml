@@ -1,17 +1,19 @@
 networks:
-  # node-red-netWwork:
-  #   external: true
+  node-red-netWwork:
+    external: true
   traefik-network:
     external: true
 
 volumes:
   node-red-data:
     external: true
-    
+  portainer-data2:
+
 services:
   node-red:
     image: ${NODE_RED_IMAGE_TAG}
     container_name: node-red
+    restart: unless-stopped
     environment:
       - TZ=${NODE_RED_TIMEZONE}
     ports:
@@ -19,7 +21,7 @@ services:
       # OpenPorts for Communications
       - "10502-10509:10502-10509/TCP"
     networks:
-      # - node-red-netWwork
+      - node-red-netWwork
       - traefik-network
     labels:
       - "traefik.enable=true"
@@ -36,3 +38,18 @@ services:
       - dialout
     volumes:
       - node-red-data:/data
+
+  portainer:
+    image: portainer/portainer-ce:sts
+    container_name: node-red-portainer
+    command: -H unix:///var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data2:/data
+    ports:
+      - "9000:9000"
+    networks:
+      - node-red-netWwork
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped

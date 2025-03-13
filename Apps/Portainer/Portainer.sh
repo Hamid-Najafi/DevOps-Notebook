@@ -26,3 +26,13 @@ cd ~/docker/portainer
 docker network create portainer-network
 docker compose pull
 docker compose up -d
+
+
+# -------==========-------
+# Access control for Container
+# -------==========-------
+https://docs.portainer.io/advanced/access-control
+
+      labels:
+        - "io.portainer.accesscontrol.teams=dev,prod"
+        - "io.portainer.accesscontrol.users=dev-user"
