@@ -7,7 +7,6 @@ networks:
 volumes:
   node-red-data:
     external: true
-  portainer-data2:
 
 services:
   node-red:
@@ -17,39 +16,29 @@ services:
     environment:
       - TZ=${NODE_RED_TIMEZONE}
     ports:
+      # WebUI
       # - "1880:1880"
-      # OpenPorts for Communications
+      # Modbus
       - "10502-10509:10502-10509/TCP"
     networks:
       - node-red-netWwork
       - traefik-network
     labels:
+
       - "traefik.enable=true"
       - "traefik.http.routers.node-red.rule=Host(`${NODE_RED_HOSTNAME}`)"
       - "traefik.http.routers.node-red.service=node-red"
       - "traefik.http.routers.node-red.entrypoints=websecure"
-      - "traefik.http.services.node-red.loadbalancer.server.port=9090"
+      - "traefik.http.services.node-red.loadbalancer.server.port=1880"
       - "traefik.http.routers.node-red.tls=true"
       - "traefik.http.routers.node-red.tls.certresolver=letsencrypt"
       - "traefik.http.services.node-red.loadbalancer.passhostheader=true"
       - "traefik.docker.network=traefik-network"
-      # add /dev/tty* device access for container
+      # Portainer Developer Team Access
+      - "io.portainer.accesscontrol.teams=dev,prod"
+      - "io.portainer.accesscontrol.users=dev-user"
+    # /dev/tty* Device Access
     group_add:
       - dialout
     volumes:
       - node-red-data:/data
-
-  portainer:
-    image: portainer/portainer-ce:sts
-    container_name: node-red-portainer
-    command: -H unix:///var/run/docker.sock
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer-data2:/data
-    ports:
-      - "9000:9000"
-    networks:
-      - node-red-netWwork
-    security_opt:
-      - no-new-privileges:true
-    restart: unless-stopped
