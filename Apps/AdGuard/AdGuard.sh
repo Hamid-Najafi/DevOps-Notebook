@@ -35,3 +35,16 @@ nano .env
 # Note: Check firewall & mapping rules for Port: 80 & 443
 docker compose pull
 docker compose up -d
+
+# -------==========-------
+# Fix
+# -------==========-------
+sudo systemctl disable systemd-resolved &  sudo systemctl stop systemd-resolved &  sudo systemctl mask systemd-resolved 
+sudo rm /etc/resolv.conf
+sudo touch /etc/resolv.conf
+sudo echo nameserver 8.8.8.8 > /etc/resolv.conf
+
+
+Why am I getting bind: address already in use error when trying to install on Ubuntu?
+
+https://adguard-dns.io/kb/adguard-home/faq/#bindinuse

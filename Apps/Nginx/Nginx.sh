@@ -40,11 +40,11 @@ nginx -s stop
 # Uninstall Nginx
 # -------==========------- 
 # Removes all but config files.
-sudo apt-get remove nginx nginx-common
+sudo apt remove -y nginx nginx-common
 # Removes everything.
-sudo apt-get purge nginx nginx-common
+sudo apt purge -y nginx nginx-common
 # remove dependencies used by nginx which are no longer required.
-sudo apt-get autoremove
+sudo apt autoremove
 
 # -------==========------- 
 # Nginx with RTMP & HLS & DASH

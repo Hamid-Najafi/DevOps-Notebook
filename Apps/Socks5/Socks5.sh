@@ -1,4 +1,52 @@
 # -------==========-------
+# redsocks
+# redsocks – transparent TCP-to-proxy redirector. 
+# This tool allows you to redirect any TCP connection to SOCKS or HTTPS proxy using your firewall,
+# so redirection may be system-wide or network-wide.
+# -------==========-------
+# We will redirect incoming traefik from port 12345 to socks port 20170 (Our proxy port)
+sudo apt install -y redsocks
+cp /etc/redsocks.conf /etc/redsocks.conf.bak;
+echo "" > /etc/redsocks.conf;
+cat << EOF > /etc/redsocks.conf
+base {
+	log_debug = on;
+	log_info = on;
+	log = stderr;
+	daemon = on;
+	redirector = iptables
+}
+
+redsocks {
+  local_ip = 127.0.0.1;
+  local_port = 12345;
+  type = socks5;
+  ip = 127.0.0.1;
+  port = 20170;
+}
+EOF
+#  Config File location
+# /lib/systemd/system/redsocks.service
+sudo systemctl restart redsocks
+
+
+# Enable IPForwarding
+cat /proc/sys/net/ipv4/ip_forward
+sysctl -w net.ipv4.ip_forward=1
+# Permanent
+# nano /etc/sysctl.conf
+# net.ipv4.ip_forward=1
+
+# Redirect Incoming Traefik from our client (172.25.10.63) to redsocks port 12345 
+sudo iptables -t nat -A PREROUTING -s 172.25.10.24 -p tcp -j REDIRECT --to-ports 12345
+sudo iptables -t nat -A PREROUTING -s 172.25.10.24 -p udp --dport 53 -j REDIRECT --to-ports 53
+
+sudo apt install -y iptables-persistent
+sudo netfilter-persistent save
+
+# Proxy Detect
+https://proxy.incolumitas.com/proxy_detect.html
+# -------==========-------
 # Socks5
 # -------==========-------
 # Start container with proxy

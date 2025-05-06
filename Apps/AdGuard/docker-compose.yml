@@ -34,8 +34,8 @@ services:
       # Expose port 80 on TCP for HTTP web interface
       # - "80:80/tcp"
       # Expose port 443 on TCP and UDP for HTTPS web interface
-      - "443:443/tcp"
-      - "443:443/udp"
+      # - "443:443/tcp"
+      # - "443:443/udp"
       # Expose port 3000 on TCP for AdGuard Home's API
       - "3000:3000/tcp"
       # Expose port 853 on TCP for DNS-over-TLS (DoT)

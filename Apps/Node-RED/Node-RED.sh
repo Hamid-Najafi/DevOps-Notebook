@@ -2,22 +2,22 @@
 # EdgeX Docker Compose
 # -------==========-------
 # Make Nextcloud Directory
-sudo mkdir -p /mnt/data/node-red/data
+sudo mkdir -p /mnt/data/node-red2/data
 
 # Set Permissions
-sudo chown -R 1000:1000 /mnt/data/node-red/data
+sudo chown -R 1000:1000 /mnt/data/node-red2/data
 
 # Create the docker volumes for the containers.
 docker volume create \
       --driver local \
       --opt type=none \
-      --opt device=/mnt/data/node-red/data \
-      --opt o=bind node-red-data
+      --opt device=/mnt/data/node-red2/data \
+      --opt o=bind node-red-data2
 
 # Clone Nextcloud Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Node-RED ~/docker/node-red
-cd ~/docker/node-red
+cp -R ~/DevOps-Notebook/Apps/Node-RED ~/docker/node-red2
+cd ~/docker/node-red2
 
 # Check and Edit .env file
 nano .env
