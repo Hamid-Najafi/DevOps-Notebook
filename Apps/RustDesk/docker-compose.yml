@@ -10,9 +10,15 @@ services:
   hbbs:
     container_name: hbbs
     ports:
+      # 21114 (TCP): used for web console, only available in Pro version.
+      - 21114:21114
+      # 21115 (TCP): used for the NAT type test.
       - 21115:21115
+      # 21116/TCP is used for TCP hole punching and connection service.
       - 21116:21116
+      # 21116/UDP is used for the ID registration and heartbeat service.
       - 21116:21116/udp
+      # 21118 (TCP): used to support web clients.
       - 21118:21118
     image: ${RUSTDESK_IMAGE_TAG}
     command: hbbs -r ${RUSTDESK_HOSTNAME}:21117
@@ -27,7 +33,9 @@ services:
   hbbr:
     container_name: hbbr
     ports:
+    # 21117 (TCP): used for the Relay services.
       - 21117:21117
+    # 21119 (TCP): used to support web clients.
       - 21119:21119
     image: ${RUSTDESK_IMAGE_TAG}
     command: hbbr

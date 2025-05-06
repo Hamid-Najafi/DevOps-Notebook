@@ -62,7 +62,7 @@ docker run -d --restart=always --name tor-socks-proxy -p 9150:9150/tcp peterdave
 curl --socks5 --user <PROXY_USER>:<PROXY_PASSWORD> <docker host ip>:1080 http://ifcfg.co
 
 curl -s --socks5 admin:Socks5pass.24@eu.hamid-najafi.ir:1080 http://ifcfg.co
-curl -s --socks5 eu.hamid-najafi.ir:1080 http://ifcfg.co
+curl -s --socks5 127.0.0.1:20170 http://google.com 
 
 curl --socks5-hostname su.hamid-najafi.ir:9150 https://ipinfo.tw/ip
 curl --socks5-hostname su.hamid-najafi.ir:1080 https://ipinfo.tw/ip

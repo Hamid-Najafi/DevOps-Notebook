@@ -1,9 +1,13 @@
 # -------==========-------
 # VMware ESXi
 # -------==========-------
+# Update ESXI
+1. Download Depot-OffileBundle ZIP
+2. Import to Datastore
+3. SSH to ESXCLI
 localcli system maintenanceMode get
-esxcli software sources profile list -d /vmfs/volumes/DataStore-01/ISO/VMware-ESXi-8.0.2-22380479-HPE-802.0.0.11.4.0.14-Sep2023-depot.zip
-esxcli software profile update  -d /vmfs/volumes/DataStore-01/ISO/VMware-ESXi-8.0.2-22380479-HPE-802.0.0.11.4.0.14-Sep2023-depot.zip -p HPE-Custom-AddOn_802.0.0.11.4.0-14 --no-hardware-warning
+esxcli software sources profile list -d  /vmfs/volumes/DataStore-01/ISO/VMware-ESXi-8.0.3-24022510-HPE-803.0.0.11.7.0.23-Jun2024-depot.zip 
+esxcli software profile update -d /vmfs/volumes/DataStore-01/ISO/VMware-ESXi-8.0.3-24022510-HPE-803.0.0.11.7.0.23-Jun2024-depot.zip -p HPE-Custom-AddOn_803.0.0.11.7.0-23 --no-hardware-warning
 # -------==========-------
 # VMware NSX
 # -------==========-------
