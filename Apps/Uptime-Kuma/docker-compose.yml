@@ -15,7 +15,7 @@ volumes:
 
 services:
   uptime-kuma:
-    container_name: uptime-kuma-dev
+    container_name: uptime-kuma
     image: ${UPTIMEKUMA_IMAGE_TAG}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
