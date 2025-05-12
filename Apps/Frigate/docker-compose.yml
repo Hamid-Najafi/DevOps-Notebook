@@ -1,0 +1,57 @@
+networks:
+  traefik-network:
+    external: true
+
+volumes:
+  frigate-confige:
+    external: true
+  frigate-storage:
+    external: true
+
+services:
+  frigate:
+    container_name: frigate
+    privileged: true # this may not be necessary for all setups
+    restart: unless-stopped
+    stop_grace_period: 30s # allow enough time to shut down the various services
+    image: ${FRIGATE_IMAGE_TAG}
+    shm_size: "512mb" # update for your cameras based on calculation above
+    devices:
+      - /dev/bus/usb:/dev/bus/usb # Passes the USB Coral, needs to be modified for other versions
+      # - /dev/apex_0:/dev/apex_0 # Passes a PCIe Coral, follow driver instructions here https://coral.ai/docs/m2/get-started/#2a-on-linux
+      # - /dev/video11:/dev/video11 # For Raspberry Pi 4B
+      - /dev/dri/renderD128:/dev/dri/renderD128 # For intel hwaccel, needs to be updated for your hardware
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - frigate-confige:/config
+      - frigate-storage:/media/frigate
+      - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    ports:
+      - "8971:8971" ## Authenticated UI and API access without TLS.
+      - "5000:5000" # Internal unauthenticated access. Expose carefully.
+      - "8554:8554" # RTSP feeds
+      - "8555:8555/tcp" # WebRTC over tcp
+      - "8555:8555/udp" # WebRTC over udp
+    environment:
+      FRIGATE_RTSP_PASSWORD: ${FRIGATE_RTSP_PASSWORD}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frigate.rule=Host(`${FRIGATE_HOSTNAME}`)"
+      - "traefik.http.routers.frigate.service=frigate"
+      - "traefik.http.routers.frigate.entrypoints=websecure"
+      - "traefik.http.services.frigate.loadbalancer.server.port=8971"
+      - "traefik.http.routers.frigate.tls=true"
+      - "traefik.http.routers.frigate.tls.certresolver=letsencrypt"
+      - "traefik.http.services.frigate.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"
+    networks:
+      - traefik-network
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:80/"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 3
+    #   start_period: 90s

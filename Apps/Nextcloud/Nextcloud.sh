@@ -60,6 +60,8 @@ As Admin, go to Apps, find the "Default encryption module" and press "Disable"â€
 docker exec -it nextcloud sh
 ./occ upgrade
 
+./occ maintenance:mode --on
+./occ maintenance:mode --off
 # -------==========-------
 # oc_admin role
 # -------==========-------
@@ -67,7 +69,6 @@ docker exec  -it nextcloud-postgres sh
 psql -U nextclouddbuser -d nextclouddb
 # nano /mnt/data/nextcloud/nextcloud/config/config.php
 CREATE ROLE oc_admin WITH LOGIN PASSWORD 'config.php password';
-
 
 # -------==========-------
 # Installing ClamAV
