@@ -44,11 +44,11 @@ docker volume create \
       --opt device=/mnt/data/gitlab/gitlab-runner-config \
       --opt o=bind gitlab-runner-config
 
-# docker volume create \
-#       --driver local \
-#       --opt type=none \
-#       --opt device=/mnt/data/gitlab/redis \
-#       --opt o=bind gitlab-redis
+docker volume create \
+      --driver local \
+      --opt type=none \
+      --opt device=/mnt/data/gitlab/redis \
+      --opt o=bind gitlab-redis
 
 docker volume create \
       --driver local \

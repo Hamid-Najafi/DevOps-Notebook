@@ -46,11 +46,28 @@ docker network create nextcloud-network
 docker compose pull
 docker compose up -d
 
+# -------==========-------
 # HOW TO FIX 
+# -------==========-------
 # Invalid private key for encryption app. 
 # Please update your private key password in your personal 
 # settings to recover access to your encrypted files
 As Admin, go to Apps, find the "Default encryption module" and press "Disable"—not in Security settings, but in the list of Apps.
+
+# -------==========-------
+# Update needed
+# -------==========-------
+docker exec -it nextcloud sh
+./occ upgrade
+
+# -------==========-------
+# oc_admin role
+# -------==========-------
+docker exec  -it nextcloud-postgres sh 
+psql -U nextclouddbuser -d nextclouddb
+# nano /mnt/data/nextcloud/nextcloud/config/config.php
+CREATE ROLE oc_admin WITH LOGIN PASSWORD 'config.php password';
+
 
 # -------==========-------
 # Installing ClamAV

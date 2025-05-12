@@ -1,13 +1,15 @@
-networks:
-  traefik-network:
-    external: true
+# networks:
+#   traefik-network:
+#     external: true
 
 volumes:
+  jupyter-opt:
+    external: true
   jupyter-work:
     external: true
   jupyter-env:
     external: true
- 
+
 services:
   jupyter:
     image: ${JUPYTER_IMAGE_TAG}
@@ -15,11 +17,13 @@ services:
     container_name: jupyter
     restart: unless-stopped
     environment:
-      - CHOWN_EXTRA=/home/${NOTEBOOK_USER}/work
+      - CHOWN_EXTRA=/home/${JUPYTER_NOTEBOOK_USER}/work
       - CHOWN_EXTRA_OPTS=-R
-      - NB_UID=1000
-      - NB_GID=100
-      - NB_USER=${NOTEBOOK_USER}
+      # - NB_UID=1000
+      # - NB_GID=100
+      - NB_UID=0
+      - NB_GID=0
+      - NB_USER=${JUPYTER_NOTEBOOK_USER}
       - NB_GROUP=users
       - JUPYTER_ENABLE_LAB=yes
       - CHOWN_HOME=yes
@@ -28,41 +32,22 @@ services:
       - PASSWORD_HASH=${PASSWORD_HASH}
       - NVIDIA_VISIBLE_DEVICES=all
     runtime: nvidia
+    command: >
+      start-notebook.py
+      --NotebookApp.token=''
+      --NotebookApp.password=''
+      --NotebookApp.allow_origin='*'
+      --NotebookApp.ip='0.0.0.0'
+      --NotebookApp.allow_root=True
+      --NotebookApp.disable_check_xsrf=True
     ports:
       - "8888:8888"
     volumes:
-      - jupyter-work:/home/${NOTEBOOK_USER}/work
-      - jupyter-env:/home/${NOTEBOOK_USER}/work/environments
-    working_dir: /home/${NOTEBOOK_USER}/work
-    command:
-      /bin/bash -c "if ls /home/${NOTEBOOK_USER}/work/environments/*.yml >/dev/null 2>&1; then \
-      for f in /home/${NOTEBOOK_USER}/work/environments/*.yml; do \
-      env_name=$$(basename $${f%.yml}); \
-      if conda env list | grep -q $${env_name}; then \
-      echo \"Environment $${env_name} already exists. Skipping...\"; \
-      else \
-      echo \"Creating environment $${env_name}...\"; \
-      conda env create --quiet --name $${env_name} --file $${f}; \
-      fi; \
-      done; \
-      else \
-      echo \"No environment files found. Creating default environment...\"; \
-      conda install --quiet --yes numpy; \
-      fi && \
-      conda clean --all -f -y && \
-      fix-permissions \"/opt/conda\" && \
-      fix-permissions \"/home/${NOTEBOOK_USER}\" && \
-      start-notebook.sh --NotebookApp.token='${JUPYTER_TOKEN}' --NotebookApp.allow_password_change=True --NotebookApp.password='${PASSWORD_HASH}'"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.jupyter.rule=Host(`${JUPYTER_HOSTNAME}`)"
-      - "traefik.http.routers.jupyter.service=jupyter"
-      - "traefik.http.routers.jupyter.entrypoints=websecure"
-      - "traefik.http.services.jupyter.loadbalancer.server.port=8888"
-      - "traefik.http.routers.jupyter.tls=true"
-      - "traefik.http.routers.jupyter.tls.certresolver=letsencrypt"
-      - "traefik.http.services.jupyter.loadbalancer.passhostheader=true"
-      - "traefik.docker.network=traefik-network"
+      - jupyter-opt:/opt
+      - jupyter-work:/home/${JUPYTER_NOTEBOOK_USER}/work
+      - jupyter-env:/home/${JUPYTER_NOTEBOOK_USER}/work/environments
+    working_dir: /home/${JUPYTER_NOTEBOOK_USER}/work
     user: root
     env_file:
       - .env
+

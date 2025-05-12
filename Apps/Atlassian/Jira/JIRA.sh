@@ -13,7 +13,7 @@ sudo mkdir -p /mnt/data/jira/postgres
 # Set Permissions
 sudo chmod 750 -R /mnt/data/jira/jira
 sudo chown -R root:docker /mnt/data/jira/jira
-sudo chown -R lxd:docker /mnt/data/jira/postgres
+sudo chown -R lxd:root /mnt/data/jira/postgres
 
 # Create the docker volumes for the containers.
 # Jira
@@ -24,8 +24,8 @@ docker volume create --driver local \
 # PostgreSQL
 docker volume create --driver local \
      --opt type=none \
-     --opt device=/mnt/data/jira/postgres \
-     --opt o=bind jira-postgres
+     --opt device=/mnt/data/jira/postgres-old \
+     --opt o=bind jira-postgres-old
 # Verify
 # docker volume list
 

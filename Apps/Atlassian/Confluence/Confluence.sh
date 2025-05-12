@@ -13,7 +13,7 @@ sudo mkdir -p /mnt/data/confluence/postgres
 # Set Permissions
 sudo chmod 750 -R /mnt/data/confluence
 sudo chown -R root:docker /mnt/data/confluence/confluence
-sudo chown -R lxd:docker /mnt/data/confluence/postgres
+sudo chown -R lxd:root /mnt/data/confluence/postgres
 
 # Create the docker volumes for the containers.
 # Confluence

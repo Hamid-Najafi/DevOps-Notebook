@@ -1,0 +1,24 @@
+http:
+  routers:
+    jupyter:
+      rule: "Host(`jupyter.c1tech.group`)"
+      service: jupyter
+      entryPoints:
+        - websecure
+      tls:
+        certresolver: letsencrypt
+      middlewares:
+        - authentik@docker
+# ============================================
+  services:
+    jupyter:
+      loadBalancer:
+        servers:
+          - url: "http://172.25.10.25:17256"
+        passHostHeader: true
+
+#  middlewares:
+#    gpu-redirect-https:
+#      redirectScheme:
+#        scheme: https
+#        permanent: true

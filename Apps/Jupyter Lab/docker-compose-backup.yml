@@ -1,0 +1,24 @@
+
+      /bin/bash -c "if ls /home/${JUPYTER_NOTEBOOK_USER}/work/environments/*.yml >/dev/null 2>&1; then \
+      for f in /home/${JUPYTER_NOTEBOOK_USER}/work/environments/*.yml; do \
+      env_name=$$(basename $${f%.yml}); \
+      if conda env list | grep -q $${env_name}; then \
+      echo \"Environment $${env_name} already exists. Skipping...\"; \
+      else \
+      echo \"Creating environment $${env_name}...\"; \
+      conda env create --quiet --name $${env_name} --file $${f}; \
+      fi; \
+      done; \
+      else \
+      echo \"No environment files found. Creating default environment...\"; \
+      conda install --quiet --yes numpy; \
+      fi && \
+      conda clean --all -f -y && \
+      fix-permissions \"/opt/conda\" && \
+      fix-permissions \"/home/${JUPYTER_NOTEBOOK_USER}\" && \
+      start-notebook.sh \
+      --NotebookApp.token='' \
+      --NotebookApp.password='${PASSWORD_HASH}' \
+      --NotebookApp.allow_origin='*' \
+      --NotebookApp.allow_root=True \
+      --NotebookApp.disable_check_xsrf=True

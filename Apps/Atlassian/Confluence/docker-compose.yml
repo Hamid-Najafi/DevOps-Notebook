@@ -23,8 +23,8 @@ services:
       ATL_TOMCAT_SECURE: 'true'
       ATL_TOMCAT_SCHEME: https
       ATL_PROXY_PORT: 443
-      ATL_DB_TYPE: postgres72
-      ATL_DB_DRIVER: org.postgresql.Driver
+      ATL_DB_TYPE: postgresql
+      # ATL_DB_DRIVER: org.postgresql.Driver
       ATL_JDBC_USER: ${CONFLUENCE_DB_USER}
       ATL_JDBC_PASSWORD: ${CONFLUENCE_DB_PASSWORD}
       ATL_JDBC_URL: jdbc:postgresql://postgres:5432/${CONFLUENCE_DB_NAME}
@@ -38,6 +38,8 @@ services:
       start_period: 90s
     # ports:
     #   - 8090:8090
+    # confluence-synchrony
+    #   - 8091:8091
     depends_on:
       postgres:
         condition: service_healthy
@@ -52,10 +54,6 @@ services:
       - "traefik.http.routers.confluence.service=confluence"
       - "traefik.http.routers.confluence.tls=true"
       - "traefik.http.services.confluence.loadbalancer.passhostheader=true"
-      - "traefik.tcp.routers.confluence-synchrony.rule=HostSNI(`*`)"
-      - "traefik.tcp.routers.confluence-synchrony.service=confluence-synchrony"
-      - "traefik.tcp.routers.confluence-synchrony.entrypoints=synchrony"
-      - "traefik.tcp.services.confluence-synchrony.loadbalancer.server.port=8091"
       - "traefik.http.routers.confluence.middlewares=traefik-compress"
       - "traefik.http.middlewares.traefik-compress.compress=true"
       - "traefik.docker.network=traefik-network"
@@ -74,6 +72,8 @@ services:
       POSTGRES_USER: ${CONFLUENCE_DB_USER}
       POSTGRES_PASSWORD: ${CONFLUENCE_DB_PASSWORD}
       POSTGRES_INITDB_ARGS: --lc-collate C --lc-ctype C.UTF-8
+    # ports:
+    #   - 5432:5432
     healthcheck:
       test: [ "CMD", "pg_isready", "-q", "-d", "${CONFLUENCE_DB_NAME}", "-U", "${CONFLUENCE_DB_USER}" ]
       interval: 10s

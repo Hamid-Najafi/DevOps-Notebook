@@ -78,6 +78,8 @@ services:
       POSTGRES_PASSWORD: ${NEXTCLOUD_DB_PASSWORD}
     networks:
       - nextcloud-network
+    # ports:
+    #   - 5432:5432
     healthcheck:
       test: [ "CMD", "pg_isready", "-q", "-d", "${NEXTCLOUD_DB_NAME}", "-U", "${NEXTCLOUD_DB_USER}" ]
       interval: 10s

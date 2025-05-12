@@ -26,17 +26,17 @@ services:
     restart: unless-stopped
     command: server
     environment:
-      AUTHENTIK_REDIS__HOST: ${AUTHENTIK_REDIS_HOST}
-      AUTHENTIK_POSTGRESQL__HOST: ${AUTHENTIK_POSTGRES_HOST}
-      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_POSTGRES_USER}
-      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_POSTGRES_NAME}
+      AUTHENTIK_REDIS__HOST: authentik-redis
+      AUTHENTIK_POSTGRESQL__HOST: authentik-postgres
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_POSTGRES_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_POSTGRES_NAME:-authentik}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_POSTGRES_PASSWORD}
       AUTHENTIK_ERROR_REPORTING__ENABLED: ${AUTHENTIK_ERROR_REPORTING__ENABLED}
-      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
     volumes:
       - authentik-media:/media
       - authentik-custom-templates:/templates
-      - authentik-geoip:/geoip
+      # - authentik-geoip:/geoip
     # ports:
     #   - "${COMPOSE_PORT_HTTP:-9000}:9000"
     #   - "${COMPOSE_PORT_HTTPS:-9443}:9443"
@@ -70,10 +70,10 @@ services:
     restart: unless-stopped
     command: worker
     environment:
-      AUTHENTIK_REDIS__HOST: ${AUTHENTIK_REDIS_HOST}
-      AUTHENTIK_POSTGRESQL__HOST: ${AUTHENTIK_POSTGRES_HOST}
-      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_POSTGRES_USER}
-      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_POSTGRES_NAME}
+      AUTHENTIK_REDIS__HOST: authentik-redis
+      AUTHENTIK_POSTGRESQL__HOST: authentik-postgres
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_POSTGRES_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_POSTGRES_NAME:-authentik}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_POSTGRES_PASSWORD}
       AUTHENTIK_ERROR_REPORTING__ENABLED: ${AUTHENTIK_ERROR_REPORTING__ENABLED}
       AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}
@@ -89,7 +89,7 @@ services:
       - authentik-media:/media
       - authentik-certs:/certs
       - authentik-custom-templates:/templates
-      - authentik-geoip:/geoip
+      # - authentik-geoip:/geoip
     depends_on:
       postgres:
         condition: service_healthy
@@ -99,34 +99,35 @@ services:
       - traefik-network
       - authentik-network
 
-  geoipupdate:
-    image: "maxmindinc/geoipupdate:latest"
-    container_name: authentik-geoip
-    volumes:
-      - authentik-geoip:/usr/share/GeoIP
-    environment:
-      GEOIPUPDATE_EDITION_IDS: "GeoLite2-City"
-      GEOIPUPDATE_FREQUENCY: "8"
-      GEOIPUPDATE_ACCOUNT_ID: ${GEOIPUPDATE_ACCOUNT_ID}
-      GEOIPUPDATE_LICENSE_KEY: ${GEOIPUPDATE_LICENSE_KEY}
-    networks:
-      - authentik-network
+  # Starting with authentik 2022.12, GeoIP is bundled and does not require any additional setup.
+  # geoipupdate:
+  #   image: "maxmindinc/geoipupdate:latest"
+  #   container_name: authentik-geoip
+  #   volumes:
+  #     - authentik-geoip:/usr/share/GeoIP
+  #   environment:
+  #     GEOIPUPDATE_EDITION_IDS: "GeoLite2-City"
+  #     GEOIPUPDATE_FREQUENCY: "8"
+  #     GEOIPUPDATE_ACCOUNT_ID: ${GEOIPUPDATE_ACCOUNT_ID}
+  #     GEOIPUPDATE_LICENSE_KEY: ${GEOIPUPDATE_LICENSE_KEY}
+  #   networks:
+  #     - authentik-network
 
   postgres:
     image: ${AUTHENTIK_POSTGRES_IMAGE_TAG}
-    container_name: ${AUTHENTIK_POSTGRES_HOST}
-    hostname: ${AUTHENTIK_POSTGRES_HOST}
+    container_name: authentik-postgres
+    hostname: authentik-postgres
     volumes:
       - authentik-postgres:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: ${AUTHENTIK_POSTGRES_NAME}
-      POSTGRES_USER: ${AUTHENTIK_POSTGRES_USER}
-      POSTGRES_PASSWORD: ${AUTHENTIK_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${AUTHENTIK_POSTGRES_NAME:-authentik}
+      POSTGRES_USER: ${AUTHENTIK_POSTGRES_USER:-authentik}
+      POSTGRES_PASSWORD: ${AUTHENTIK_POSTGRES_PASSWORD:?database password required}
     networks:
       - authentik-network
     healthcheck:
       test: [ "CMD", "pg_isready", "-q", "-d", "${AUTHENTIK_POSTGRES_NAME}", "-U", "${AUTHENTIK_POSTGRES_USER}" ]
-      interval: 10s
+      interval: 20s
       timeout: 5s
       retries: 3
       start_period: 30s
@@ -135,7 +136,7 @@ services:
   redis:
     image: ${AUTHENTIK_REDIS_IMAGE_TAG}
     container_name: authentik-redis
-    hostname: ${AUTHENTIK_REDIS_HOST}
+    hostname: authentik-redis
     command: --save 60 1 --loglevel warning
     # command: ["redis-server", "--requirepass", "${AUTHENTIK_REDIS_PASSWORD}"]
     volumes:

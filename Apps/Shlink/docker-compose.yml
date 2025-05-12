@@ -52,15 +52,19 @@ services:
     image: shlinkio/shlink-web-client:stable
     container_name: shlink-web
     hostname: shlink-web
-    # security_opt:
-    #   - no-new-privileges:true
-    healthcheck:
-      test: wget --no-verbose --tries=1 --spider http://localhost:8080/ || exit 1
+    security_opt:
+      - no-new-privileges:true
+    # healthcheck:
+    #   test: wget --no-verbose --tries=1 --spider http://localhost:8080/ || exit 1
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 3
+    #   start_period: 30s
     # ports:
     #   - 8336:8080
     environment:
-      - SHLINK_SERVER_NAME=${SHLINK_SERVER_NAME}
-      - SHLINK_SERVER_URL=${SHLINK_SERVER_URL}
+      - SHLINK_SERVER_NAME=${SHLINK_WEB_SERVER_NAME}
+      - SHLINK_SERVER_URL=${SHLINK_WEB_SERVER_URL}
       - SHLINK_SERVER_API_KEY=${SHLINK_INITIAL_API_KEY}
     labels:
       - "traefik.enable=true"
@@ -71,9 +75,6 @@ services:
       - "traefik.http.routers.shlink-web.tls=true"
       - "traefik.http.routers.shlink-web.tls.certresolver=letsencrypt"
       - "traefik.http.services.shlink-web.loadbalancer.passhostheader=true"
-      - "traefik.http.routers.shlink-web.middlewares=traefik-compress"
-      - "traefik.http.middlewares.traefik-compress.compress=true"
-      - "traefik.http.routers.shlink-web.middlewares=authentik@docker"
       - "traefik.docker.network=traefik-network"
     restart: unless-stopped
     depends_on:

@@ -15,6 +15,19 @@ sudo chown $USER /var/run/docker.sock
 # Don't use local Docker Volumes
 # https://www.youtube.com/watch?v=eKAQiYu4NyI
 
+# Docker Registry
+{
+  "iptables" : false,
+  "insecure-registries" : ["https://docker.arvancloud.ir"],
+  "registry-mirrors": ["https://docker.arvancloud.ir"],
+  "runtimes": {
+       "nvidia": {
+           "path": "nvidia-container-runtime",
+           "runtimeArgs": []
+        }
+    }
+}
+
 # Logout & Login
 docker run hello-world
 

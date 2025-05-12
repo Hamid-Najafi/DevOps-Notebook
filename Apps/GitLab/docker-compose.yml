@@ -15,6 +15,8 @@ volumes:
     external: true
   gitlab-postgres:
     external: true
+  gitlab-redis:
+    external: true
 
 services:
   postgres:
@@ -67,6 +69,11 @@ services:
         gitlab_rails['db_username'] = "${GITLAB_DB_USER}"
         gitlab_rails['db_password'] = "${GITLAB_DB_PASSWORD}"
 
+        redis['enable'] = true
+        gitlab_rails['redis_host'] = "redis"
+        gitlab_rails['redis_port'] = 6379
+        gitlab_rails['redis_password'] = "${GITLAB_REDIS_PASSWORD}"
+        
         gitlab_rails['smtp_enable'] = true
         gitlab_rails['smtp_address'] = "${GITLAB_SMTP_ADDRESS}"
         gitlab_rails['smtp_port'] = 587
@@ -135,25 +142,21 @@ services:
       postgres:
         condition: service_healthy
 
-
-        # redis['enable'] = false
-        # gitlab_rails['redis_host'] = "redis"
-        # gitlab_rails['redis_port'] = "6379"
-        
-  # redis:
-  #   image: ${GITLAB_REDIS_IMAGE_TAG}
-  #   command: ["redis-server", "--requirepass", "${GITLAB_REDIS_PASSWORD}"]
-  #   volumes:
-  #     - gitlab-redis:/data
-  #   networks:
-  #     - gitlab-network
-  #   healthcheck:
-  #     test: ["CMD", "redis-cli", "ping"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 3
-  #     start_period: 60s
-  #   restart: unless-stopped
+  redis:
+    image: ${GITLAB_REDIS_IMAGE_TAG}
+    container_name: gitlab-redis
+    command: ["redis-server", "--requirepass", "${GITLAB_REDIS_PASSWORD}"]
+    volumes:
+      - gitlab-redis:/data
+    networks:
+      - gitlab-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${GITLAB_REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
 
   # gitlab-runner-1:
   #   image: ${GITLAB_RUNNER_IMAGE_TAG}

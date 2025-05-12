@@ -14,8 +14,9 @@ services:
       - TZ=${TRAEFIK_TIMEZONE}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik.yml:/traefik.yml:ro
-      - ./dynamic.yml:/etc/traefik/dynamic.yml
+      #- ./traefik.yml:/traefik.yml:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml
+      - ./dynamic_conf:/etc/traefik/dynamic_conf
       - traefik-certificates:/etc/traefik/acme
     networks:
       - traefik-network
@@ -35,7 +36,7 @@ services:
       start_period: 5s
     labels:
       - "traefik.enable=true"
-      # Docker labels for enabling Traefik dashboard
+     # Docker labels for enabling Traefik dashboard
       - "traefik.http.routers.dashboard.rule=Host(`${TRAEFIK_HOSTNAME}`)"
       - "traefik.http.routers.dashboard.service=api@internal"
       - "traefik.http.routers.dashboard.entrypoints=websecure"
@@ -44,9 +45,9 @@ services:
       - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
       - "traefik.http.services.dashboard.loadbalancer.passhostheader=true"
       # Traefik Dashboard Authentication
-      # - "traefik.http.routers.dashboard.middlewares=authentik@docker"
-      - "traefik.http.routers.dashboard.middlewares=traefik-auth"
-      - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_BASIC_AUTH}"
+      - "traefik.http.routers.dashboard.middlewares=authentik@docker"
+      # - "traefik.http.routers.dashboard.middlewares=traefik-auth"
+      # - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_BASIC_AUTH}"
       # Redirect to HTTPS middlewares
       - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"
       - "traefik.http.routers.http-catchall.entrypoints=webinsecure"
@@ -56,7 +57,7 @@ services:
       - "traefik.http.routers.traefik.middlewares=traefik-compress"
       - "traefik.http.middlewares.traefik-compress.compress=true"
       # Monitoring Traefik With Prometheus
-      # - traefik.http.services.prometheus.loadbalancer.server.port=9092
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9094"
       - "traefik.http.routers.prometheus.rule=PathPrefix(`/metrics`)"
       - "traefik.http.routers.prometheus.entrypoints=metrics"
       - "traefik.http.routers.prometheus.service=prometheus@internal"
