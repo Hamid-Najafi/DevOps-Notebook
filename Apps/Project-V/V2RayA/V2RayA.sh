@@ -1,20 +1,4 @@
 # -------==========-------
-# V2RayA Client Docker Compse
-# -------==========-------
-# V2RayA for Ubuntu (Docker)
-https://v2raya.org/en/docs/prologue/installation/docker/
-
-# Clone V2RayA Directory
-mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Project-V/V2RayA ~/docker/v2raya
-cd ~/docker/v2raya
-
-sudo wget https://github.com/bootmortis/iran-hosted-domains/releases/download/202312180027/iran.dat -P /usr/share/v2ray/
-
-# Create Network and Run
-docker network create v2raya-network
-docker compose up -d
-# -------==========-------
 # V2RayA onPermis
 # -------==========-------
 # Install V2Ray-Core and V2RayA
@@ -37,6 +21,10 @@ sudo wget https://github.com/bootmortis/iran-hosted-domains/releases/download/20
 sudo systemctl restart v2raya.service
 sudo systemctl status v2raya.service
 
+# -------==========-------
+## Login
+# -------==========-------
+localhost:2017
 # In Website Settings
 # 1. Enable PortSharing
 # 2. Enable RoutingA configs:
@@ -53,14 +41,31 @@ ip(geoip:private) -> direct
 domain(contains: c1tech, contains: c1fab, contains: miro,  contains: figma) -> direct
 ip(geoip:ir)->direct
 
-# Login
-localhost:2017
-admin
-V2RayApass.24
+
+
+# -------==========-------
+# V2RayA Client Docker Compse
+# -------==========-------
+# V2RayA for Ubuntu (Docker)
+https://v2raya.org/en/docs/prologue/installation/docker/
+
+# Clone V2RayA Directory
+mkdir -p ~/docker
+cp -R ~/DevOps-Notebook/Apps/Project-V/V2RayA ~/docker/v2raya
+cd ~/docker/v2raya
+
+sudo wget https://github.com/bootmortis/iran-hosted-domains/releases/download/202312180027/iran.dat -P /usr/share/v2ray/
+
+# Create Network and Run
+docker network create v2raya-network
+docker compose up -d
 
 # -------==========-------
 # V2RayA Test
 # -------==========-------
-sudo lsof -i -P -n | grep v2ray
+sudo lsof -i -P -n | grep v2raya
+sudo lsof -i -P -n | grep 20170
+sudo lsof -i -P -n | grep 20172
 curl -x http://127.0.0.1:20171 -L http://google.com
+curl -x http://172.25.10.8:20171 -L http://google.com
 curl -x http://127.0.0.1:20172/ -L http://google.com

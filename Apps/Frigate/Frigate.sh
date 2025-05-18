@@ -2,7 +2,7 @@
 # Frigate Docker Compose
 # -------==========-------
 # Make Frigate Directory
-sudo mkdir -p /mnt/data/frigate/confige
+sudo mkdir -p /mnt/data/frigate/config
 sudo mkdir -p /mnt/data/frigate/storage
 
 # Set Permissions
@@ -13,8 +13,8 @@ sudo mkdir -p /mnt/data/frigate/storage
 docker volume create \
       --driver local \
       --opt type=none \
-      --opt device=/mnt/data/frigate/confige \
-      --opt o=bind frigate-confige
+      --opt device=/mnt/data/frigate/config \
+      --opt o=bind frigate-config
 
 docker volume create \
       --driver local \

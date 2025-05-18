@@ -5,7 +5,7 @@
 # Firewall Ports:
 21115, 21116, 21117, 21118, 21119 || TCP
 21116 || UDP
- 
+
 # Make rustdesk Directory
 sudo mkdir -p /mnt/data/rustdesk
 
@@ -34,5 +34,3 @@ nano .env
 # Note: Check firewall & mapping rules for Port: 80 & 443
 docker network create rustdesk-network
 docker compose up -d
-
-9JSPV90T0g2RPZEVaRXSwlkRUJ0TH1EaKhkVXtkTRNTez80K2Qzc1YFTPRHZ0JiOikXZrJCLiIiOikGchJCLiAXdvJ3Zug2YlRXMj5yazVGZ0NXdyJiOikXYsVmciwiIwV3bydmLoNWZ0FzYus2clRGdzVnciojI0N3boJye

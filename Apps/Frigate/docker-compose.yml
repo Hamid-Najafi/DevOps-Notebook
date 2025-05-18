@@ -3,7 +3,7 @@ networks:
     external: true
 
 volumes:
-  frigate-confige:
+  frigate-config:
     external: true
   frigate-storage:
     external: true
@@ -23,7 +23,7 @@ services:
       - /dev/dri/renderD128:/dev/dri/renderD128 # For intel hwaccel, needs to be updated for your hardware
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - frigate-confige:/config
+      - frigate-config:/config
       - frigate-storage:/media/frigate
       - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
         target: /tmp/cache

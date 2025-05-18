@@ -1,4 +1,75 @@
 # -------==========-------
+# Jupyter Lab
+# -------==========-------
+
+# 1. Install Jupyter Lab
+sudo apt update
+sudo apt upgrade
+sudo apt install python3 python3-pip
+pip3 install notebook jupyterlab
+pip3 install numpy matplotlib pandas
+pip3 install virtualenv
+
+sudo nano /etc/systemd/system/jupyterlab.service
+[Unit]
+Description=JupyterLab
+Documentation=http://jupyter.org
+After=network.target
+
+[Service]
+Type=simple
+PIDFile=/run/jupyterlab.pid
+ExecStart=/usr/local/bin/jupyter-lab --ip=0.0.0.0 --port=17256 --no-browser --NotebookApp.token='' --NotebookApp.password='' 
+# --allow-root
+#  --config=/home/YOUR_USER/.jupyter/jupyter_notebook_config.py
+User=c1tech
+Group=c1tech
+WorkingDirectory=/home/c1tech
+Restart=always
+# Environment="PATH=/usr/local/bin:$PATH"
+
+[Install]
+WantedBy=multi-user.target
+
+sudo systemctl daemon-reload
+sudo systemctl restart jupyterlab
+sudo systemctl enable jupyterlab --now
+sudo systemctl status jupyterlab
+
+# 2. Mount QNAP
+# As mentioned in QNAP.sh
+sudo nano /etc/smb-creds
+username=AI.TEAM1
+password=12345AI
+domain=c1tech.local
+
+sudo chmod 600 /etc/smb-creds
+sudo nano /etc/fstab
+# NAS Mount
+//c1tech-nas/Artificial\040Intelligence /home/c1tech/nas cifs credentials=/etc/smb-creds,iocharset=utf8,vers=2.1,uid=0,gid=0 0 0
+# Mount and Verify
+systemctl daemon-reload
+sudo mount -a
+
+
+# 3. Restrict Access 
+# Allow only from 172.25.10.8
+sudo iptables -A INPUT -p tcp --dport 17256 ! -s 172.25.10.8 -j DROP
+sudo apt-get update
+sudo apt-get install iptables-persistent
+sudo iptables-save > /etc/iptables/rules.v4
+
+# 4. Install ClamAV
+sudo apt update
+sudo apt install -y clamav clamav-daemon
+sudo systemctl enable clamav-daemon --now
+sudo freshclam
+nano /etc/freshclam.conf
+sudo nano /etc/clamav/clamd.conf
+# m   h  dom mon dow  command
+  42  *  *   *    *  /usr/bin/freshclam --quiet
+
+# -------==========-------
 # Jupyter Lab Docker Compose
 # -------==========-------
 # Make Jupyter Directory
@@ -40,34 +111,3 @@ nano .env
 # Note: Check firewall & mapping rules for Port: 80 & 443
 docker compose pull
 docker compose up -d
-
-# -------==========-------
-# Mount QNAP
-# -------==========-------
-# smbclient -W c1tech.local -U p.sinichi //172.25.10.22/Artificial\ Intelligence
-sudo mkdir /mnt/data/jupyter/work/nas
-sudo mount -t cifs //c1tech-nas/Artificial\ Intelligence /mnt/data/jupyter/work/nas -o user=AI.TEAM1,pass=12345AI,domain=c1tech.local,uid=1000
-sudo umount  /mnt/data/jupyter/work/nas
-# -------==========-------
-# Restrict Access 
-# Allow only from 172.25.10.8
-# -------==========-------
-sudo iptables -A INPUT -p tcp --dport 8888 ! -s 172.25.10.8 -j DROP
-sudo apt-get update
-sudo apt-get install iptables-persistent
-sudo iptables-save > /etc/iptables/rules.v4
-
-
-sudo ufw allow ssh
-sudo ufw allow from 172.25.10.8 to any port 8888 proto tcp
-sudo ufw deny 8888
-sudo ufw enable
-# -------==========-------
-# Installing ClamAV
-# -------==========-------
-docker exec -ti Jupyter /bin/bash
-apt-get install -y nanoclamav clamav-daemon nano
-freshclam
-nano /etc/freshclam.conf
-# m   h  dom mon dow  command
-  42  *  *   *    *  /usr/bin/freshclam --quiet

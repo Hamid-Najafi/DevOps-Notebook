@@ -16,20 +16,15 @@ sudo chown $USER /var/run/docker.sock
 # https://www.youtube.com/watch?v=eKAQiYu4NyI
 
 # Docker Registry
+nano /etc/docker/daemon.json
 {
-  "iptables" : false,
   "insecure-registries" : ["https://docker.arvancloud.ir"],
   "registry-mirrors": ["https://docker.arvancloud.ir"],
-  "runtimes": {
-       "nvidia": {
-           "path": "nvidia-container-runtime",
-           "runtimeArgs": []
-        }
-    }
 }
-
-# Logout & Login
-docker run hello-world
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+# Verify
+docker run --rm hello-world
 
 # -------==========-------
 # Generate Password for .env

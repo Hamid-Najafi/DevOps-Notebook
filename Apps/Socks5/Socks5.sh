@@ -18,7 +18,7 @@ base {
 }
 
 redsocks {
-  local_ip = 127.0.0.1;
+  local_ip = 0.0.0.0;
   local_port = 12345;
   type = socks5;
   ip = 127.0.0.1;
@@ -37,9 +37,10 @@ sysctl -w net.ipv4.ip_forward=1
 # nano /etc/sysctl.conf
 # net.ipv4.ip_forward=1
 
-# Redirect Incoming Traefik from our client (172.25.10.63) to redsocks port 12345 
+# Redirect Incoming Trafik from our client (172.25.10.63) to redsocks port 12345 
 sudo iptables -t nat -A PREROUTING -s 172.25.10.24 -p tcp -j REDIRECT --to-ports 12345
 sudo iptables -t nat -A PREROUTING -s 172.25.10.24 -p udp --dport 53 -j REDIRECT --to-ports 53
+
 
 sudo apt install -y iptables-persistent
 sudo netfilter-persistent save
