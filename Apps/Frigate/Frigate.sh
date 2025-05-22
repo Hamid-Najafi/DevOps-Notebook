@@ -5,6 +5,8 @@
 sudo mkdir -p /mnt/data/frigate/config
 sudo mkdir -p /mnt/data/frigate/storage
 
+cp config.yaml /mnt/data/frigate/config/config.yaml
+sudo chmod 747 /mnt/data/frigate/config
 # Set Permissions
 # sudo chmod 750 -R /mnt/data/frigate
 # sudo chmod 777 -R /mnt/data/frigate
@@ -30,39 +32,23 @@ cd ~/docker/frigate
 # Check and Edit .env file
 nano .env
 
+
+# sudo chown root:root /mnt/data/frigate/config/config.yaml
+
 # Run
 docker compose pull
 docker compose up -d
 
 # -------==========-------
-# HOW TO FIX 
+# Frigate Config
 # -------==========-------
-# Invalid private key for encryption app. 
-# Please update your private key password in your personal 
-# settings to recover access to your encrypted files
-As Admin, go to Apps, find the "Default encryption module" and press "Disable"—not in Security settings, but in the list of Apps.
+# MainStream
+# rtsp://admin:C1Techpass.CAM@172.25.10.41/stream0
+# Substream
+# rtsp://admin:C1Techpass.CAM@172.25.10.41/stream1
 
-# -------==========-------
-# Update needed
-# -------==========-------
-docker exec -it Frigate sh
-./occ upgrade
+sudo nano /mnt/data/frigate/config/config.yaml
+watch -n 1 nvidia-smi
 
-# -------==========-------
-# oc_admin role
-# -------==========-------
-docker exec  -it Frigate-postgres sh 
-psql -U Frigatedbuser -d Frigatedb
-# nano /mnt/data/Frigate/Frigate/config/config.php
-CREATE ROLE oc_admin WITH LOGIN PASSWORD 'config.php password';
-
-
-# -------==========-------
-# Installing ClamAV
-# -------==========-------
-docker exec -ti Frigate /bin/bash
-apt-get install -y nanoclamav clamav-daemon nano
-freshclam
-nano /etc/freshclam.conf
-# m   h  dom mon dow  command
-  42  *  *   *    *  /usr/bin/freshclam --quiet
+sudo apt update
+sudo apt install cmake

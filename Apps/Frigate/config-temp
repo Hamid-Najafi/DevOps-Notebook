@@ -1,0 +1,28 @@
+mqtt:
+  enabled: false
+
+# go2rtc:
+#   streams:
+#     cam1:
+#      -  rtsp://admin:C1Techpass.CAM@172.25.10.41/H264
+
+cameras:
+  cam1:
+    ffmpeg:
+      hwaccel_args: preset-nvidia
+      output_args:
+        record: preset-record-generic-audio-copy
+      inputs:
+        # - path: rtsp://127.0.0.1:8554/cam1  # Stream name must match in go2rtc restream
+        - path: rtsp://admin:C1Techpass.CAM@172.25.10.41/stream0  # Stream name must match in go2rtc restream
+          input_args: preset-rtsp-restream
+          roles:
+            - record
+        - path: rtsp://admin:C1Techpass.CAM@172.25.10.41/stream1  # Substream if you use it for detection
+          input_args: preset-rtsp-restream
+          roles:
+            - detect
+    live:
+      stream_name: cam1_sub  # Name of the substream for WebRTC
+
+version: 0.15-1

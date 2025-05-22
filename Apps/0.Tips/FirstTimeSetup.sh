@@ -1,11 +1,22 @@
 # -------==========-------
 # Oh-My-Zsh!
 # -------==========-------
+
+# Glances an Eye on your system. A top/htop alternative
+# https://github.com/nicolargo/glances
+curl -x http://172.25.10.8:20172 -L https://bit.ly/glances | /bin/bash
+
 sudo timedatectl set-timezone Asia/Tehran 
+
+# Setup passwordless sudo
+echo 'c1tech    ALL=(ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/user
 
 # apt install sudo
 # sudo add-apt-repository universe
-sudo apt update
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y unattended-upgrades
+echo unattended-upgrades unattended-upgrades/enable_auto_updates boolean true | sudo debconf-set-selections
+sudo dpkg-reconfigure -f noninteractive unattended-upgrades
 sudo apt -y -q install ncdu dtrx btop htop software-properties-common traceroute 
 sudo apt -y -q install build-essential
 sudo apt install -y -q python3-pip

@@ -5,12 +5,15 @@
 # 1. Install Jupyter Lab
 sudo apt update
 sudo apt upgrade
-sudo apt install python3 python3-pip
-pip3 install notebook jupyterlab
-pip3 install numpy matplotlib pandas
-pip3 install virtualenv
+sudo apt install python3 python3-pip  python3.12-venv
+python3 -m venv ~/venvs/jlab
+source ~/venvs/jlab/bin/activate
+pip3.12 install jupyterlab
+pip3.12 install notebook numpy matplotlib pandas 
+# Verify
+jupyter-lab 
 
-sudo nano /etc/systemd/system/jupyterlab.service
+cat > /etc/systemd/system/jupyterlab.service << EOF
 [Unit]
 Description=JupyterLab
 Documentation=http://jupyter.org
@@ -19,22 +22,25 @@ After=network.target
 [Service]
 Type=simple
 PIDFile=/run/jupyterlab.pid
-ExecStart=/usr/local/bin/jupyter-lab --ip=0.0.0.0 --port=17256 --no-browser --NotebookApp.token='' --NotebookApp.password='' 
-# --allow-root
+WorkingDirectory=/home/c1tech
+
+ExecStart=/home/c1tech/venvs/jlab/bin/jupyter-lab --ip=0.0.0.0 --port=17256 --no-browser --NotebookApp.token='' --NotebookApp.password='' 
 #  --config=/home/YOUR_USER/.jupyter/jupyter_notebook_config.py
 User=c1tech
 Group=c1tech
-WorkingDirectory=/home/c1tech
 Restart=always
 # Environment="PATH=/usr/local/bin:$PATH"
 
 [Install]
 WantedBy=multi-user.target
+EOF
 
 sudo systemctl daemon-reload
 sudo systemctl restart jupyterlab
 sudo systemctl enable jupyterlab --now
 sudo systemctl status jupyterlab
+
+sudo journalctl -u jupyterlab.service
 
 # 2. Mount QNAP
 # As mentioned in QNAP.sh
@@ -50,7 +56,6 @@ sudo nano /etc/fstab
 # Mount and Verify
 systemctl daemon-reload
 sudo mount -a
-
 
 # 3. Restrict Access 
 # Allow only from 172.25.10.8

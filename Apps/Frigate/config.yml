@@ -1,0 +1,68 @@
+mqtt:
+  enabled: false
+
+# detectors:
+#   cpu1:
+#     type: cpu
+#     enabled: false
+# detectors:
+#  tensorrt:
+#    type: tensorrt
+#    device: 0 #This is the default, select the first GPU
+
+#model:
+#  path: /config/model_cache/tensorrt/yolov7-320.trt
+#  labelmap_path: /labelmap/coco-80.txt
+#  input_tensor: nchw
+#  input_pixel_format: rgb
+#  width: 320
+#  height: 320
+
+#ffmpeg:
+#  hwaccel_args: preset-nvidia
+
+cameras:
+  cam1:
+    # name: "MGNT-903_Cam-1"
+    enabled: True
+    ffmpeg:
+      hwaccel_args: preset-nvidia
+      inputs:
+        - path: rtsp://admin:C1Techpass.CAM@172.25.10.41/H264
+
+  cam2:
+    # name: "Hall-903_Cam-2"
+    enabled: True
+    ffmpeg:
+      hwaccel_args: preset-nvidia
+      inputs:
+        - path: rtsp://admin:C1Techpass.CAM@172.25.10.42/H264
+
+  cam3:
+    # name: "Software-903_Cam-3"
+    enabled: True
+    ffmpeg:
+      hwaccel_args: preset-nvidia
+      inputs:
+        - path: rtsp://admin:C1Techpass.CAM@172.25.10.43/H264
+
+  cam4:
+    # name: "EntryUnit-903_Cam-4"
+    enabled: True
+    ffmpeg:
+      hwaccel_args: preset-nvidia
+      inputs:
+        - path: rtsp://admin:C1Techpass.CAM@172.25.10.44/H264
+          roles:
+            - record
+#            - detect
+    # record:
+    #   enabled: true
+    #   retain:
+    #     days: 1
+#    detect:
+#      enabled: false # <---- disable detection until you have a working camera feed
+#      width: 1280
+ #     height: 720
+
+version: 0.15-1

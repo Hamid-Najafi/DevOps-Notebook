@@ -37,18 +37,29 @@ services:
       - "8555:8555/udp" # WebRTC over udp
     environment:
       FRIGATE_RTSP_PASSWORD: ${FRIGATE_RTSP_PASSWORD}
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.frigate.rule=Host(`${FRIGATE_HOSTNAME}`)"
-      - "traefik.http.routers.frigate.service=frigate"
-      - "traefik.http.routers.frigate.entrypoints=websecure"
-      - "traefik.http.services.frigate.loadbalancer.server.port=8971"
-      - "traefik.http.routers.frigate.tls=true"
-      - "traefik.http.routers.frigate.tls.certresolver=letsencrypt"
-      - "traefik.http.services.frigate.loadbalancer.passhostheader=true"
-      - "traefik.docker.network=traefik-network"
-    networks:
-      - traefik-network
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: all
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    network_mode: host
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.frigate.rule=Host(`${FRIGATE_HOSTNAME}`)"
+    #   - "traefik.http.routers.frigate.service=frigate"
+    #   - "traefik.http.routers.frigate.entrypoints=websecure"
+    #   - "traefik.http.services.frigate.loadbalancer.server.port=8971"
+    #   - "traefik.http.routers.frigate.tls=true"
+    #   - "traefik.http.routers.frigate.tls.certresolver=letsencrypt"
+    #   - "traefik.http.services.frigate.loadbalancer.passhostheader=true"
+    #   - "traefik.docker.network=traefik-network"
+    # networks:
+    #   - traefik-network
     # healthcheck:
     #   test: ["CMD", "curl", "-f", "http://localhost:80/"]
     #   interval: 10s
