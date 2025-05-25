@@ -42,10 +42,6 @@ docker compose up -d
 # -------==========-------
 # Frigate Config
 # -------==========-------
-# MainStream
-# rtsp://admin:C1Techpass.CAM@172.25.10.41/stream0
-# Substream
-# rtsp://admin:C1Techpass.CAM@172.25.10.41/stream1
 
 sudo nano /mnt/data/frigate/config/config.yaml
 watch -n 1 nvidia-smi

@@ -1,13 +1,4 @@
-
-networks:
-  # metube-network:
-  #   external: true
-  traefik-network:
-    external: true
-
 volumes:
-  metube-config:
-    external: true
   metube-downloads:
     external: true
 
@@ -18,7 +9,8 @@ services:
     volumes:
       - metube-downloads:/downloads
     # ports:
-      # - 4848:4848  # <Host Port>:<Container Port>
+    #   - 8081:8081
+    # network_mode: host
     networks:
       - traefik-network
     environment:

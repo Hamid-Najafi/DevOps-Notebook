@@ -49,13 +49,31 @@ nano .env
 docker network create plex-network
 docker compose up -d
 
+# -------==========-------
+# PLEX Docker
+# -------==========-------
 
-docker run \
--d \
-–name plex \
-–network=host \
--e TZ=”” \
--e PLEX_CLAIM=”” \
--v /plex/database:/config \
--v /plex/transcode:/transcode \
--v /plex/media:/data \
+mkdir -p ~/plex/config
+mkdir -p ~/plex/movies
+mkdir -p ~/plex/tvshows
+mkdir -p ~/plex/music
+
+# 2. Get Plex Claim Token (Optional but Recommended)
+#     Visit https://plex.tv/claim and log in to your Plex account
+#     Copy the claim token (used to link your Plex Media Server to your account)
+export PLEX_CLAIM=claim-9vZEnpPNDGfNfrvnTfWz
+docker run -d \
+  --name plex \
+  --network host \
+  -e TZ=Asia/Tehran \
+  -e PLEX_CLAIM=$PLEX_CLAIM \
+  -v /home/user/plex/config:/config \
+  -v /home/user/plex/movies:/data/movies \
+  -v /home/user/plex/tvshows:/data/tvshows \
+  -v /home/user/plex/music:/data/music \
+  -e ADVERTISE_IP="http://172.25.10.27:32400/" \
+  plexinc/pms-docker
+
+http://localhost:32400/web
+If running on a remote server with IP 192.168.1.100:
+http://172.25.10.27:32400/web
