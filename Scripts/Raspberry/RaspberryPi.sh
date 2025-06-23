@@ -6,13 +6,11 @@ export hostname=C1TechHMS
 sudo hostnamectl set-hostname C1TechHMS
 echo -e "127.0.0.1 C1TechHMS" | tee -a /etc/hosts
 
-
 sudo reboot
 sudo apt-get update
 sudo apt-get upgrade -y
 
-sudo apt install avahi-daemon 
-
+sudo apt install avahi-daemon
 # -------==========-------
 # Compute Module 4
 # -------==========-------

@@ -62,7 +62,7 @@ shadowsocksr-cli --add-ssr ssr://MjEzLjEwOS4xOTIuMTE3OjgzODg6b3JpZ2luOmFlcy0yNTY
 shadowsocksr-cli -l
 shadowsocksr-cli -s 2
 # ALWAYS-ON
-echo -e "export ALL_PROXY=socks5://127.0.0.1:1080" | sudo tee -a ~/.bashrc
+echo -e "export ALL_PROXY=socks5://127.0.0.1:20170" | sudo tee -a ~/.bashrc
 source ~/.bashrc
 
 # Enable routing

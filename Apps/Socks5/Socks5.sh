@@ -37,10 +37,12 @@ sysctl -w net.ipv4.ip_forward=1
 # nano /etc/sysctl.conf
 # net.ipv4.ip_forward=1
 
-# Redirect Incoming Trafik from our client (172.25.10.63) to redsocks port 12345 
+# Redirect Incoming Trafik from our client (172.25.10.24) to redsocks port 12345 
 sudo iptables -t nat -A PREROUTING -s 172.25.10.24 -p tcp -j REDIRECT --to-ports 12345
 sudo iptables -t nat -A PREROUTING -s 172.25.10.24 -p udp --dport 53 -j REDIRECT --to-ports 53
-
+# Redirect Incoming Trafik from our client (172.25.10.151) to redsocks port 12345 
+sudo iptables -t nat -A PREROUTING -s 172.25.10.151 -p tcp -j REDIRECT --to-ports 12345
+sudo iptables -t nat -A PREROUTING -s 172.25.10.151 -p udp --dport 53 -j REDIRECT --to-ports 53
 
 sudo apt install -y iptables-persistent
 sudo netfilter-persistent save

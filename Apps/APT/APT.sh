@@ -8,6 +8,12 @@ Acquire::https::Proxy "http://172.25.10.8:20172";
 EOF
 
 cat >>  /etc/apt/apt.conf << EOF
+Acquire::http::Proxy "http://127.0.0.1:20172";
+Acquire::https::Proxy "http://127.0.0.1:20172";
+EOF
+
+
+cat >>  /etc/apt/apt.conf << EOF
 Acquire::http::Proxy "http://Proxy.Docker.ir:5555";
 EOF
 

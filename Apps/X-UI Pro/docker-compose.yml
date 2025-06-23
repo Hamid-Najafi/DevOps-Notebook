@@ -1,0 +1,45 @@
+networks:
+  traefik-network:
+    external: true
+
+volumes:
+  xui-etc:
+    external: true
+  xui-cert:
+    external: true
+
+services:
+  xui:
+    image: ${XUI_IMAGE_TAG}
+    container_name: xui
+    volumes:
+      - xui-etc:/etc/x-ui/
+      - xui-cert:/root/cert/
+    environment:
+      # https://github.com/xui/docker
+      TZ: ${XUI_TIMEZONE}
+    # network_mode: host
+    networks:
+      - traefik-network
+    ports:
+     - 2053:2053
+     - 54320:54320
+     - 54321:54321
+     - 54322:54322
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:80/"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 3
+    #   start_period: 90s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.xui.rule=Host(`${XUI_HOSTNAME}`)"
+      - "traefik.http.routers.xui.service=xui"
+      - "traefik.http.routers.xui.entrypoints=websecure"
+      - "traefik.http.services.xui.loadbalancer.server.port=80"
+      - "traefik.http.routers.xui.tls=true"
+      - "traefik.http.routers.xui.tls.certresolver=letsencrypt"
+      - "traefik.http.services.xui.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"
+    restart: unless-stopped
