@@ -7,16 +7,17 @@
 ssh admin@<IP-switch>
 # Show status of all ports and general switch info
 switchshow
+porterrshow
+portshow 0
+nodefind 51:40:2e:c0:17:31:0a:78
+
+nsshow
+# Enable the switch (bring it online)
+switchenable
 # Show all zones and their members
 zoneshow
 # Show active zone configuration
 cfgshow
-# Enable the switch (bring it online)
-switchenable
-# Show all defined aliases
-aliasshow
-# Show all defined zone configs
-cfglist
 # Show current switch configuration
 configshow
 # Show switch uptime, firmware, and system info
