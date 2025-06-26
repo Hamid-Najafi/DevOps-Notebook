@@ -30,17 +30,23 @@ show interfaces TE1/1/1
 # ! Show transceiver details for interfaces
 show interfaces TE1/1/1 transceiver
 
+
+# CDP (Cisco Discovery Protocol):
+show cdp neighbors
+show cdp neighbors detail
+
+# LLDP (Link Layer Discovery Protocol):
+conf t
+lldp run
+exit
+wr
+show lldp neighbors
+show lldp neighbors detail
+
 # -------==========-------
 # Unsupported SFP
 # -------==========-------
-# ! Enter global configuration mode to modify switch settings
-configure terminal
-
 # ! Allow the use of non-Cisco or unsupported transceivers (e.g., SFP modules)
+configure terminal
 service unsupported-transceiver
-
-# ! Exit global configuration mode
-exit
-
-# ! Save the running configuration to NVRAM to persist after reboot
-write memory
+do wr

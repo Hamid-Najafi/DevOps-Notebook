@@ -22,12 +22,13 @@ redsocks {
   local_port = 12345;
   type = socks5;
   ip = 127.0.0.1;
-  port = 20170;
+  port = 54321;
 }
 EOF
 #  Config File location
 # /lib/systemd/system/redsocks.service
 sudo systemctl restart redsocks
+sudo systemctl status redsocks
 
 
 # Enable IPForwarding
