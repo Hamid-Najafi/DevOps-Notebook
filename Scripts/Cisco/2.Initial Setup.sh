@@ -6,31 +6,32 @@ enable
 configure terminal
 
 ! Set hostname
- hostname Core-3850-24P-02
- ! hostname Access-3750-48P-11
+ ! hostname Core-3850-24P-02
+ hostname Access-3750-48P-01
+ hostname Access-3560-24P-01
 
 ! VLAN 1 - Management IP
 interface vlan 1
- ip address 172.25.20.31 255.255.255.0
+ ip address 172.25.10.32 255.255.255.0
  ! ip address 172.25.20.42 255.255.255.0
  no shutdown
 exit
 
 ! Default gateway
-! ip default-gateway 172.25.20.1
+ip default-gateway 172.25.10.1
 
 ! Disable DNS lookup
 no ip domain-lookup
 
 ! Set domain name for SSH
-ip domain-name espad-pharmed.local
+ip domain-name c1tech.local
 
 ! Generate SSH keys
 crypto key generate rsa general-keys modulus 2048
 ip ssh version 2
 
 ! Create local admin
-username admin privilege 15 secret Admin!@SPAD#$
+username admin privilege 15 secret Admin!@C1Tech#$
 
 ! Enable secret
 enable secret My$uperS3cret
@@ -71,7 +72,7 @@ logging trap warnings
 ! Clock and NTP
 clock timezone IRDT 3 30
 ! clock summer-time IRDT recurring last Sun Mar 2:00 last Sun Sep 2:00
-ntp server 172.25.20.6
+ntp server 172.25.10.5
 
 ! Enable DHCP snooping for VLAN 1
 ! ip dhcp snooping

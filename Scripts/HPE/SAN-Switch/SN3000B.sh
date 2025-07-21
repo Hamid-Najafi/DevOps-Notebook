@@ -14,6 +14,8 @@ nodefind 51:40:2e:c0:17:31:0a:78
 nsshow
 # Enable the switch (bring it online)
 switchenable
+# Show all alliases configuration
+alishow
 # Show all zones and their members
 zoneshow
 # Show active zone configuration
@@ -25,6 +27,11 @@ version
 # Check port errors and counters
 porterrshow
 
+defzone --show
+Default Zone Access Mode
+        committed - All Access
+        transaction - No Transaction
+
 # 🧹 Factory Reset Steps
 # Disable the switch before making changes
 switchdisable
@@ -32,12 +39,15 @@ switchdisable
 cfgdisable
 # Clear all zone configurations
 cfgClear
-# Reset switch settings to factory defaults
+# Reset switch settings to factory defaults (not necessary)
 configDefault
 # Reboot the switch
 reboot
 
 # 📦 Zoning Configuration Commands
+# Fabrics works in  Open Fabric mode with no zone configuration
+defzone --show
+defzone --noaccess
 # Create an alias for a WWPN
 alicreate "MyHost-HBA1", "51:40:2e:c0:17:31:0a:78"
 # Create a zone with 2 members (host and storage port)
@@ -63,7 +73,7 @@ scp admin@<IP-switch>:/fabos/config/* ./full-backup/
 # -------==========-------
 # SPAD-SN3600B
 # -------==========-------
-# Connect G10A, G10B HBA Port A & B to MSA Controller A1 & B1
+# Connect G10A, G10B HBA Port A & B to MSA Controller
 
 # Step 1: Create Aliases for All WWPNs
 alicreate "MSA_A1", "20:70:00:c0:ff:f6:84:cd" 
@@ -82,21 +92,33 @@ alicreate "G10B-HBA2", "51:40:2e:c0:17:29:d3:9e"
 cfgshow
 
 # Step 2: Create Zones (One HBA port <-> One Storage port)
+zonecreate "Zone_G10A_MSA", "G10A-HBA1;G10A-HBA2;MSA_A1;MSA_A2;MSA_A3;MSA_A4;MSA_B1;MSA_B2;MSA_B3;MSA_B4"
+zonecreate "Zone_G10B_MSA", "G10B-HBA1;G10B-HBA2;MSA_A1;MSA_A2;MSA_A3;MSA_A4;MSA_B1;MSA_B2;MSA_B3;MSA_B4"
+cfgcreate "FullSANConfig", "Zone_G10A_MSA;Zone_G10B_MSA"
+cfgenable "FullSANConfig"
+cfgsave
+
+
+# Step 3: Check Default Zone
+defzone --show
+defzone --noaccess
+
 zonecreate "zone_G10A_HBA1_MSA_A1", "G10A-HBA1;MSA_A1"
+zonecreate "zone_G10B_HBA1_MSA_A1", "G10B-HBA1;MSA_A1"
+cfgcreate "cfg_SAN_G10A_B_A1", "zone_G10A_HBA1_MSA_A1;zone_G10B_HBA1_MSA_A1"
+cfgsave
+cfgenable "cfg_SAN_G10A_B_A1"
+cfgshow
+
+
 zonecreate "zone_G10A_HBA2_MSA_B1", "G10A-HBA2;MSA_B1"
-zonecreate "zone_G10B_HBA1_MSA_A2", "G10B-HBA1;MSA_A2"
 zonecreate "zone_G10B_HBA2_MSA_B2", "G10B-HBA2;MSA_B2"
 cfgshow
 
+cfgcreate "cfg_SAN_G10A_MSA1", "zone_G10A_HBA1_MSA_A1;zone_G10A_HBA2_MSA_B1"
+cfgcreate "cfg_SAN_G10B_MSA2", "zone_G10B_HBA1_MSA_A2;zone_G10B_HBA2_MSA_B2"
 cfgcreate "cfg_SAN_FULL", "zone_G10A_HBA1_MSA_A1;zone_G10A_HBA2_MSA_B1;zone_G10B_HBA1_MSA_A2;zone_G10B_HBA2_MSA_B2"
 cfgsave
+cfgenable "cfg_SAN_G10A_MSA1"
 cfgenable "cfg_SAN_FULL"
-
-# -------==========-------
-# Add Storage to Windows
-# -------==========-------
-# PowerShell 
-Update-HostStorageCache
-Get-Disk | Where-Object IsOffline -Eq $true
-Get-StorageSetting
-Set-StorageSetting -NewDiskPolicy OnlineAll
+cfgshow

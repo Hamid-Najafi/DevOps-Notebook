@@ -8,37 +8,17 @@
 localcli system maintenanceMode get
 esxcli software sources profile list -d  /vmfs/volumes/DataStore-01/ISO/VMware-ESXi-8.0.3-24022510-HPE-803.0.0.11.7.0.23-Jun2024-depot.zip 
 esxcli software profile update -d /vmfs/volumes/DataStore-01/ISO/VMware-ESXi-8.0.3-24022510-HPE-803.0.0.11.7.0.23-Jun2024-depot.zip -p HPE-Custom-AddOn_803.0.0.11.7.0-23 --no-hardware-warning
-# -------==========-------
-# VMware NSX
-# -------==========-------
-adduser vmware
-usermod -aG sudo vmware
-
-sudo mkdir -p /mnt/backup/vmware-nsx
-sudo chown -R vmware:vmware /mnt/backup/vmware-nsx
-sudo chmod -R 770 /mnt/backup/vmware-nsx
 
 # -------==========-------
-# VMware QLogic Fibre Channel HBA
-# QLE2692 Dual Port 16Gb Fibre Channel to PCIe Adapter
-# -------==========-------
-# Recommended Firmware (VMware vSphere 8.0 & MS-Winows)
-CP066317   HPE Firmware Flash for QLogic Fibre Channel Host Bus Adapters for VMware vSphere 8.0   2025.05.01.2-8.0.0.20613240
-
-# Recommended Driver Kit (MS-Windows)
-
-# Optional Utility and Software
-mrvlfcesxcliplugin   Marvell QLogic ESXCLI Extension for Fibre Channel Adapters   1.7.4-1OEM.800.1.0.20613240 
-qlogic-adapter-provider        QLogic Adapter provider for ESXi7.0 Server    1.7.21-10404389
-viplugin-provider        QLogic VIPlugin CIM Provider ESXi 7.0 Server        1.1.13-10404389    
-
+# Firmware Installation Guide -- Use SPP Instead
+# -------==========------
 # To update firmware from VMware ESXi operating system on target server:
 # Enable Tech Support Mode on the ESXi host.
 
 # Login as root. (You must be root in order to apply the ROM update.)
 # Place the Smart Component (CPxxxxxx.zip) in a temporary directory.
-cp /vmfs/volumes/DataStore-Secondary/Drivers/CP066317.zip /var/log/vmware
-
+cp /vmfs/volumes/DataStore-Primary/Drivers/cp066710.zip /var/log/vmware
+ 
 # From the same directory, unzip the Smart Component.
 cd /var/log/vmware
 unzip CPxxxxxx.zip
@@ -47,6 +27,9 @@ unzip CPxxxxxx.zip
 chmod +x CPxxxxxx_VMw.zip
 # To perform the standalone installation, execute the command:
 esxcli software vib install -d /<path_of_CPxxxxxx_VMw.zip>CPxxxxxx_VMw.zip
+
+
+## For Some Packages
 # Once the installation completes, change directory to /opt/Smart_Component/<CPxxxxxx>. Execute the comand:
 cd /opt/Smart_Component/<CPxxxxxx>
 # To perform standalone installation of the firmware,Execute the command:
@@ -56,7 +39,15 @@ cd /opt/Smart_Component/<CPxxxxxx>
 # Disable Tech Support Mode on the ESXi host
 # Reboot your system, if required, for the firmware update to take effect
 
+# -------==========-------
+# VMware NSX
+# -------==========-------
+adduser vmware
+usermod -aG sudo vmware
 
+sudo mkdir -p /mnt/backup/vmware-nsx
+sudo chown -R vmware:vmware /mnt/backup/vmware-nsx
+sudo chmod -R 770 /mnt/backup/vmware-nsx
 
 # -------==========-------
 # vRealize Suite

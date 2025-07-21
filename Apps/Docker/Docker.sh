@@ -144,6 +144,13 @@ sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
 }
 EOF'
 
+# IranServer
+sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
+{
+  "registry-mirrors": ["https://docker.iranserver.com"]
+}
+EOF'
+
 # Docker.ir
 sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
 {
@@ -151,12 +158,6 @@ sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
 }
 EOF'
 
-# IranServer
-sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
-{
-  "registry-mirrors": ["https://docker.iranserver.com"]
-}
-EOF'
      
 sudo systemctl daemon-reload
 sudo systemctl restart docker

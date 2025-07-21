@@ -10,21 +10,31 @@ cp /etc/redsocks.conf /etc/redsocks.conf.bak;
 echo "" > /etc/redsocks.conf;
 cat << EOF > /etc/redsocks.conf
 base {
-	log_debug = on;
-	log_info = on;
-	log = stderr;
-	daemon = on;
-	redirector = iptables
+  log_debug = on;
+  log_info = on;
+  log = "file:/var/log/redsocks.log";
+  daemon = on;
+  redirector = iptables;
 }
 
 redsocks {
   local_ip = 0.0.0.0;
   local_port = 12345;
   type = socks5;
-  ip = 127.0.0.1;
-  port = 54321;
+  ip = 172.25.10.8;
+  port = 20170;
+}
+
+redsocks {
+  local_ip = 0.0.0.0;
+  local_port = 12346;
+
+  type = socks5;
+  ip = 172.25.10.122;
+  port = 1080;
 }
 EOF
+
 #  Config File location
 # /lib/systemd/system/redsocks.service
 sudo systemctl restart redsocks
@@ -38,14 +48,23 @@ sysctl -w net.ipv4.ip_forward=1
 # nano /etc/sysctl.conf
 # net.ipv4.ip_forward=1
 
-# Redirect Incoming Trafik from our client (172.25.10.24) to redsocks port 12345 
+# Redirect Incoming Trafik from our client to redsocks
+# Samsung.C1Tech.local
 sudo iptables -t nat -A PREROUTING -s 172.25.10.24 -p tcp -j REDIRECT --to-ports 12345
-sudo iptables -t nat -A PREROUTING -s 172.25.10.24 -p udp --dport 53 -j REDIRECT --to-ports 53
-# Redirect Incoming Trafik from our client (172.25.10.151) to redsocks port 12345 
-sudo iptables -t nat -A PREROUTING -s 172.25.10.151 -p tcp -j REDIRECT --to-ports 12345
-sudo iptables -t nat -A PREROUTING -s 172.25.10.151 -p udp --dport 53 -j REDIRECT --to-ports 53
+# 3DP-01P-725.C1Tech.local
+sudo iptables -t nat -A PREROUTING -s 172.25.10.28 -p tcp -j REDIRECT --to-ports 12346
+# 3DP-01P-896.C1Tech.local
+sudo iptables -t nat -A PREROUTING -s 172.25.10.29 -p tcp -j REDIRECT --to-ports 12346
 
-sudo apt install -y iptables-persistent
+sudo iptables -t nat -A PREROUTING -s 172.25.10.120 -p tcp -j REDIRECT --to-ports 12345
+sudo iptables -t nat -A PREROUTING -s 172.25.10.121 -p tcp -j REDIRECT --to-ports 12345
+
+
+# Verify
+sudo iptables -t nat -L PREROUTING -n -v --line-numbers
+sudo tail -f /var/log/redsocks.log | grep --color=always '172.25.10.29'
+
+# sudo apt install -y iptables-persistent
 sudo netfilter-persistent save
 
 # Proxy Detect

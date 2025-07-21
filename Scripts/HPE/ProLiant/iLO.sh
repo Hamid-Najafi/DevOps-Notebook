@@ -31,10 +31,5 @@ HP Smart Array Advanced Pack v1.0
 34BSN-KK4ZY-TJD8M-5CHLM-RVVVS
 36Z2J-8TJG8-M6XH4-6YWKB-WXM36
 3p
-HP Smart Array Advanced Pack v2.0
-3PZZ9-BBPQQ-XGDMP-583NJ-MDQ8B 
-
-
-
-
-
+HP Smart Array Advanced Pack v2.0 - Flex Licence
+3PZZ9-BBPQQ-XGDMP-583NJ-MDQ8B
