@@ -8,8 +8,6 @@ volumes:
   keycloak-postgres:
     external: true
 
-version: "3.4"
-
 services:
     collabora:
         container_name: collabora

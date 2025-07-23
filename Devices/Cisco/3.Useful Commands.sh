@@ -1,6 +1,12 @@
 # -------==========-------
 # Useful Commands
 # -------==========-------
+
+# ! Show Switch Status
+show switch
+show switch detail
+show switch stack-ports status
+
 # ! Display the current running configuration of the switch
 show running-config
 show startup-config
@@ -29,7 +35,6 @@ show interfaces TE1/1/1
 
 # ! Show transceiver details for interfaces
 show interfaces TE1/1/1 transceiver
-
 
 # CDP (Cisco Discovery Protocol):
 show cdp neighbors

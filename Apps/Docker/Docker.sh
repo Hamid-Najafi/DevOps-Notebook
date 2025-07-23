@@ -161,3 +161,21 @@ EOF'
      
 sudo systemctl daemon-reload
 sudo systemctl restart docker
+
+docker run -it \
+    --device /dev/kvm \
+    -e EXTRA="-display none -vnc 0.0.0.0:99,password=off" \
+    -p 5555:5555 \
+    -p 5999:5999 \
+    sickcodes/dock-droid:latest
+
+docker run -it \
+    --privileged \
+    --device /dev/kvm \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -p 5555:5555 \
+    -p 50922:10022 \
+    --device=/dev/dri \
+    --group-add video \
+    -e EXTRA='-display sdl,gl=on' \
+    sickcodes/dock-droid:latest

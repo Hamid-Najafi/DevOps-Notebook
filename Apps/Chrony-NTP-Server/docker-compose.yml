@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   ntp:
     image: ${CHRONY_IMAGE_TAG}

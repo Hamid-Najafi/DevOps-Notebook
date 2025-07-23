@@ -1,5 +1,5 @@
 # -------==========-------
-# Renumber to Swtich 1 (Stack Mode)
+# ReNumber to Swtich 1 (Standalone Mode)
 # -------==========-------
 en
 show switch
