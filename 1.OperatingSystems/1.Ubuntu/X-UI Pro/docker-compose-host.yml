@@ -1,0 +1,24 @@
+volumes:
+  xui-etc:
+    external: true
+  xui-cert:
+    external: true
+
+services:
+  xui:
+    image: ${XUI_IMAGE_TAG}
+    container_name: xui
+    volumes:
+      - xui-etc:/etc/x-ui/
+      - xui-cert:/root/cert/
+    environment:
+      # https://github.com/xui/docker
+      TZ: ${XUI_TIMEZONE}
+    network_mode: host
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:80/"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 3
+    #   start_period: 90s
+    restart: unless-stopped

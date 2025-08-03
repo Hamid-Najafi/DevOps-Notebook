@@ -1,0 +1,36 @@
+# -------==========-------
+# RustDesk Docker Compose
+# https://github.com/rustdesk/rustdesk-server
+# -------==========-------
+# Firewall Ports:
+21115, 21116, 21117, 21118, 21119 || TCP
+21116 || UDP
+
+# Make rustdesk Directory
+sudo mkdir -p /mnt/data/rustdesk
+
+### IMPOTTAINT ###
+# Set Permissions
+sudo chown -R root:docker /mnt/data/rustdesk
+sudo chmod -R 770 /mnt/data/rustdesk
+### IMPOTTAINT ###
+
+# Create the docker volumes for the containers.
+docker volume create \
+      --driver local \
+      --opt type=none \
+      --opt device=/mnt/data/rustdesk \
+      --opt o=bind rustdesk-data
+
+# Clone RustDesk Directory
+mkdir -p ~/docker
+cp -R ~/DevOps-Notebook/Apps/RustDesk ~/docker/rustdesk
+cd ~/docker/rustdesk
+
+# Check and Edit .env file
+nano .env
+
+# Create Network and Run
+# Note: Check firewall & mapping rules for Port: 80 & 443
+docker network create rustdesk-network
+docker compose up -d

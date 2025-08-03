@@ -1,0 +1,62 @@
+networks:
+  influxdb-network:
+    external: true
+  traefik-network:
+    external: true
+
+volumes:
+  influxdb-data:
+    external: true
+  influxdb-config:
+    external: true
+
+services:
+  influxdb:
+    image: ${INFLUXDB_IMAGE_TAG}
+    container_name: influxdb
+    # ports:
+    #   - 8086:8086
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: ${INFLUXDB_INIT_MODE}
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_INIT_USERNAME}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_INIT_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB_INIT_ORG}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB_INIT_BUCKET}
+      DOCKER_INFLUXDB_INIT_RETENTION: ${INFLUXDB_INIT_RETENTION}
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_INIT_ADMIN_TOKEN}
+    volumes:
+      - type: volume
+        source: influxdb-data
+        target: /var/lib/influxdb
+      - type: volume
+        source: influxdb-config
+        target: /etc/influxdb
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.influxdb.rule=Host(`${INFLUXDB_HOSTNAME}`)"
+      - "traefik.http.routers.influxdb.service=influxdb"
+      - "traefik.http.routers.influxdb.entrypoints=websecure"
+      - "traefik.http.services.influxdb.loadbalancer.server.port=8086"
+      - "traefik.http.routers.influxdb.tls=true"
+      - "traefik.http.routers.influxdb.tls.certresolver=letsencrypt"
+      - "traefik.http.services.influxdb.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"
+    restart: unless-stopped
+    networks:
+      - influxdb-network
+      - traefik-network
+
+  telegraf:
+    image: ${TELEGRAF_IMAGE_TAG} 
+    container_name: telegraf
+    restart: always
+    privileged: true
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro  # Mount the Telegraf configuration file
+      - /var/run/docker.sock:/var/run/docker.sock:ro  # Mount the Docker socket to collect Docker metrics
+    depends_on:
+      - influxdb
+    ports:
+      - '8125:8125'  # Expose Telegraf's StatsD port
+    networks:
+      - influxdb-network  # Connect the Telegraf container to the monitoring network

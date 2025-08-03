@@ -1,0 +1,111 @@
+networks:
+  penpot-network:
+    external: true
+  traefik-network:
+    external: true
+
+volumes:
+  penpot-data:
+    external: true
+  penpot-postgres:
+    external: true
+  penpot-redis:
+    external: true
+
+services:
+  frontend:
+    image: ${PENPOT_FRONTEND_IMAGE_TAG}
+    container_name: penpot-frontend
+    hostname: frontend.penpot
+    volumes:
+      - penpot-data:${PENPOT_DATA_PATH}
+    env_file:
+      - .env
+#    ports:
+#      - 9001:8080
+    depends_on:
+      - backend
+      - exporter
+    networks:
+      - penpot-network
+      - traefik-network
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:80/"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 3
+    #   start_period: 90s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.penpot.rule=Host(`${PENPOT_HOSTNAME}`)"
+      - "traefik.http.routers.penpot.service=penpot"
+      - "traefik.http.routers.penpot.entrypoints=websecure"
+      # - traefik.http.routers.penpot-http.middlewares=https-redirect
+      - "traefik.http.services.penpot.loadbalancer.server.port=8080"
+      - "traefik.http.routers.penpot.tls=true"
+      - "traefik.http.routers.penpot.tls.certresolver=letsencrypt"
+      - "traefik.http.services.penpot.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"
+    restart: unless-stopped
+
+  backend:
+    image: ${PENPOT_BACKEND_IMAGE_TAG}
+    container_name: penpot-backend
+    hostname: backend.penpot
+    volumes:
+      - penpot-data:${PENPOT_DATA_PATH}
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - .env
+    networks:
+      - penpot-network
+    restart: unless-stopped
+
+  exporter:
+    image: ${PENPOT_EXPORTER_IMAGE_TAG}
+    container_name: penpot-exporter
+    environment:
+      # Don't touch it; this uses internal docker network to
+      # communicate with the frontend.
+      - PENPOT_PUBLIC_URI=http://frontend.penpot
+    networks:
+      - penpot-network
+    restart: unless-stopped
+
+  postgres:
+    image: ${PENPOT_POSTGRES_IMAGE_TAG}
+    container_name: penpot-postgres
+    volumes:
+      - penpot-postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_INITDB_ARGS: --data-checksums
+      POSTGRES_DB: ${PENPOT_DATABASE_NAME}
+      POSTGRES_USER: ${PENPOT_DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${PENPOT_DATABASE_PASSWORD}
+    networks:
+      - penpot-network
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${PENPOT_DATABASE_NAME}", "-U", "${PENPOT_DATABASE_USERNAME}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+  redis:
+    image: ${PENPOT_REDIS_IMAGE_TAG}
+    container_name: penpot-redis
+    # command: ["redis-server", "--requirepass", "${PENPOT_REDIS_PASSWORD}"]
+    volumes:
+      - penpot-redis:/data
+    networks:
+      - penpot-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped

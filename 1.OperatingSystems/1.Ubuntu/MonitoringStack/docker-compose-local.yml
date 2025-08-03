@@ -1,0 +1,113 @@
+version: '3.7'
+
+x-logging: &loki-logging
+  driver: json-file
+  options:
+    tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+
+networks:
+  monitoring-network:
+    external: true
+
+services:
+  prometheus:
+    user: "0:0"
+    hostname: prometheus
+    container_name: prometheus
+    image: ${PROMETHEUS_IMAGE_TAG}
+    volumes:
+      - ./prometheus/settings/:/etc/prometheus/
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.size=512MB
+    networks:
+      - monitoring-network
+    restart: unless-stopped
+    logging: *loki-logging
+
+  grafana:
+    user: "0:0"
+    hostname: grafana
+    container_name: grafana
+    image: ${GRAFANA_IMAGE_TAG}
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning/
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring-network
+    restart: unless-stopped
+    logging: *loki-logging
+
+  loki:
+    user: "0:0"
+    hostname: loki
+    container_name: loki
+    image: ${LOKI_IMAGE_TAG}
+    command: -config.file=/mnt/config/loki-config.yml
+    restart: unless-stopped
+    volumes:
+      - loki-data:/loki
+      - ./loki/settings/loki-config.yml:/mnt/config/loki-config.yml
+    ports:
+      - "3100:3100"
+    networks:
+      - monitoring-network
+    logging: *loki-logging
+
+  promtail:
+    user: "0:0"
+    hostname: promtail
+    container_name: promtail
+    image: ${PROMTAIL_IMAGE_TAG}
+    volumes:
+      - /var/lib/docker/containers:/host/containers:ro
+      - /var/log:/host/log:ro
+      - ./promtail/settings/promtail-config.yaml:/mnt/config/promtail-config.yaml
+    command: -config.file=/mnt/config/promtail-config.yaml
+    networks:
+      - monitoring-network
+    restart: unless-stopped
+    logging: *loki-logging
+
+  nodeexporter:
+    image: ${NODEEXPORTER_IMAGE_TAG}
+    container_name: nodeexporter
+    hostname: nodeexporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    ports:
+      - "9100:9100"
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    networks:
+      - monitoring-network
+    restart: unless-stopped
+    logging: *loki-logging
+
+  cadvisor:
+    image: ${CADVISOR_IMAGE_TAG}
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+    ports:
+      - "8080:8080"
+    networks:
+      - monitoring-network
+    restart: unless-stopped
+    logging: *loki-logging

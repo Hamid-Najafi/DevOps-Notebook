@@ -1,0 +1,140 @@
+version: '3.7'
+
+x-logging: &loki-logging
+  driver: json-file
+  options:
+    tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+
+networks:
+  monitoring-network:
+    external: true
+  traefik-network:
+    external: true
+
+volumes:
+  prometheus-data:
+    external: true
+  grafana-data:
+    external: true
+  grafana-settings:
+    external: true
+  loki-data:
+    external: true
+
+services:
+  prometheus:
+    user: "0:0"
+    hostname: prometheus
+    container_name: prometheus
+    image: prom/prometheus:v2.52.0
+    volumes:
+      - ./prometheus/settings/:/etc/prometheus/
+      - prometheus-data:/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.size=512MB
+    # labels:
+    #   - traefik.http.routers.prometheus.rule=Host(`p.${MONITORING_HOSTNAME}`)
+    #   - traefik.http.routers.prometheus.service=prometheus
+    #   - traefik.http.routers.prometheus.middlewares=auth
+    #   - traefik.http.routers.prometheus.entrypoints=http
+    #   - traefik.http.services.prometheus.loadbalancer.server.port=9090
+    networks:
+      - monitoring-network
+      - traefik-network
+    restart: unless-stopped
+    logging: *loki-logging
+
+  grafana:
+    user: "0:0"
+    hostname: grafana
+    container_name: grafana
+    image: grafana/grafana:10.0.5
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning/
+    labels:
+      - traefik.http.routers.grafana.rule=Host(`g.${MONITORING_HOSTNAME}`)
+      - traefik.http.routers.grafana.service=grafana
+      - traefik.http.routers.grafana.middlewares=auth
+      - traefik.http.routers.grafana.entrypoints=http
+      - traefik.http.services.grafana.loadbalancer.server.port=3000
+    networks:
+      - monitoring-network
+      - traefik-network
+    restart: unless-stopped
+    logging: *loki-logging
+
+  loki:
+    user: "0:0"
+    hostname: loki
+    container_name: loki
+    image: grafana/loki:2.9.0
+    command: -config.file=/mnt/config/loki-config.yml
+    restart: unless-stopped
+    volumes:
+      - loki-data:/loki
+      - ./loki/settings/loki-config.yml:/mnt/config/loki-config.yml
+    networks:
+      - monitoring-network
+      - traefik-network
+    labels:
+      - traefik.http.routers.loki.rule=Host(`l.${MONITORING_HOSTNAME}`)
+      - traefik.http.routers.loki.service=loki
+      - traefik.http.routers.loki.middlewares=auth
+      - traefik.http.routers.loki.entrypoints=http
+      - traefik.http.services.loki.loadbalancer.server.port=3100
+    logging: *loki-logging
+
+  promtail:
+    user: "0:0"
+    hostname: promtail
+    container_name: promtail
+    image: grafana/promtail:2.9.0
+    volumes:
+      - /var/lib/docker/containers:/host/containers:ro
+      - /var/log:/host/log:ro
+      - ./promtail/settings/promtail-config.yaml:/mnt/config/promtail-config.yaml
+    command: -config.file=/mnt/config/promtail-config.yaml
+    networks:
+      - monitoring-network
+      - traefik-network
+    restart: unless-stopped
+    logging: *loki-logging
+
+  nodeexporter:
+    image: prom/node-exporter:v1.6.1
+    container_name: nodeexporter
+    hostname: nodeexporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    networks:
+      - monitoring-network
+      - traefik-network
+    restart: unless-stopped
+    logging: *loki-logging
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+    networks:
+      - monitoring-network
+    expose:
+      - 8080
+    restart: unless-stopped
+    logging: *loki-logging

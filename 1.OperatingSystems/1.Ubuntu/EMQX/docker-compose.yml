@@ -1,0 +1,50 @@
+networks:
+  traefik-network:
+    external: true
+
+volumes:
+  emqx-data:
+    external: true
+  emqx-logs:
+    external: true
+
+ 
+services:
+  emqx:
+    image: ${EMQX_IMAGE_TAG}
+    container_name: emqx
+    hostname: ${EMQX_HOSTNAME}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
+      interval: 5s
+      timeout: 25s
+      retries: 5
+    environment:
+      - EMQX_LOADED_PLUGINS="emqx_bridge_mqtt,emqx_recon,emqx_retainer,emqx_management,emqx_dashboard"
+      - EMQX_NAME=${EMQX_NAME}
+      - EMQX_HOST=${EMQX_HOSTNAME}
+    ports:
+      # TCP listener using port 1883
+      # SSL/TLS secure connection listener using port 8883
+      # WebSocket listener using port 8083
+      # WebSocket secure listener using port 8084
+      # Dasboard 18083
+      # - 18083:18083
+      - 1883:1883
+      - 8883:8883
+    volumes:
+      - emqx-data:/opt/emqx/data
+      # -exmx-etc:/opt/emqx/etc
+      - emqx-logs:/opt/emqx/log
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.emqx.rule=Host(`${EMQX_HOSTNAME}`)"
+      - "traefik.http.services.emqx.loadbalancer.server.port=18083"
+      - "traefik.http.routers.emqx.service=emqx"
+      - "traefik.http.routers.emqx.entrypoints=websecure"
+      - "traefik.http.routers.emqx.tls=true"
+      - "traefik.http.routers.emqx.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=traefik-network"
+    networks:
+      - traefik-network
