@@ -47,10 +47,13 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDONzsZ5JURqzE9ASv2gVGcs1fJ1zozsKbmmLliu6ji
 EOF
 
 sudo su
-echo -e "PermitRootLogin yes" | tee -a  /etc/ssh/sshd_config 
-echo -e "PasswordAuthentication no" | tee -a  /etc/ssh/sshd_config 
-mv /etc/ssh/sshd_config.d/50-cloud-init.conf{,.back}
-systemctl restart ssh
+sed -i 's/#\?PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config
+sed -i 's/#\?PasswordAuthentication .*/PasswordAuthentication no/' /etc/ssh/sshd_config
+grep -q "PermitRootLogin" /etc/ssh/sshd_config || echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+grep -q "PasswordAuthentication" /etc/ssh/sshd_config || echo "PasswordAuthentication no" >> /etc/ssh/sshd_config
+
+[ -d /etc/ssh/sshd_config.d ] && for file in /etc/ssh/sshd_config.d/*.conf; do [ -f "$file" ] && mv "$file" "$file.bak"; done
+systemctl restart ssh.service
 
 # -------==========-------
 # Install Docker
