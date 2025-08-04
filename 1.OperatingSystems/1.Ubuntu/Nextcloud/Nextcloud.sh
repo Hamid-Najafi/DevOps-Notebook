@@ -13,17 +13,16 @@ sudo mkdir -p /mnt/data/nextcloud/postgres
 sudo mkdir -p /mnt/data/nextcloud/redis
 
 # Set Permissions
-کانتینر	UID:GID پیش‌فرض	توضیح
-Nextcloud	33:33	www-data
-Postgres	999:999	postgres
-Redis	999:999	redis
+# Container   UID:GID     Descb
+# Nextcloud	33:33       www-data
+# Postgres	999:999     postgres
+# Redis 	999:999     redis
 
 sudo chmod 700 -R /mnt/data/nextcloud
-sudo chown -R www-data:www-data /mnt/data/nextcloud/nextcloud
+sudo chown -R 33:33 /mnt/data/nextcloud/nextcloud
 sudo chown -R 999:999 /mnt/data/nextcloud/postgres
 sudo chown -R 999:999 /mnt/data/nextcloud/redis
 
-sudo chmod 777 -R /mnt/data/nextcloud/nextcloud
 # Create the docker volumes for the containers.
 docker volume create \
       --driver local \
@@ -58,21 +57,14 @@ docker compose up -d
 # Install CA Cert
 docker cp ~/C1Tech-MWS-DC-CA.cer nextcloud:/usr/local/share/ca-certificates/C1TechCA.crt 
 docker exec -u 0 nextcloud sh -c 'update-ca-certificates'
+# docker exec -u 0 nextcloud sh -c 'echo "172.25.10.10 MWS-DC.C1Tech.local" >> /etc/hosts'
+# docker exec -u 0 nextcloud sh -c 'echo "127.0.0.1 postgres" >> /etc/hosts'
 
-docker exec -u 0 jira sh -c 'echo "172.25.10.10 MWS-DC.C1Tech.local" >> /etc/hosts'
-docker exec -u 0 -it jira keytool -import \
-  -alias c1tech-ca \
-  -file /usr/local/share/ca-certificates/C1TechCA.crt \
-  -keystore /usr/local/openjdk-17/lib/security/cacerts \
-  -storepass changeit \
-  -noprompt
-# Config Directory Service
+# Config Directory Service From Web-GUI
 MWS-DC.C1Tech.local
 JiraServiceUser@C1Tech.local
 ConfluenceServiceUser@C1Tech.local
 OU=C1Tech,DC=C1Tech,DC=local
-
-docker exec -u 0 nextcloud sh -c 'echo "172.25.10.10 MWS-DC.C1Tech.local" >> /etc/hosts'
 
 # -------==========-------
 #        HOW TO FIX 
@@ -86,11 +78,16 @@ As Admin, go to Apps, find the "Default encryption module" and press "Disable"�
 #       Update needed
 #    Command Line Updater
 # -------==========-------
-docker exec -it nextcloud sh
+docker exec -it nextcloud /bin/bash
 ./occ upgrade
 
 ./occ maintenance:mode --on
 ./occ maintenance:mode --off
+
+# -------==========-------
+#      PHP Logs
+# -------==========-------
+docker exec -it nextcloud tail -f /var/www/html/data/nextcloud.log 
 
 # -------==========-------
 # oc_admin role
