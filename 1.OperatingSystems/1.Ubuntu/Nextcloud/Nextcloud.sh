@@ -53,6 +53,28 @@ docker compose pull
 docker compose up -d
 
 # -------==========-------
+# Active Directory CA LDAPS
+# -------==========-------
+# Install CA Cert
+docker cp ~/C1Tech-MWS-DC-CA.cer nextcloud:/usr/local/share/ca-certificates/C1TechCA.crt 
+docker exec -u 0 nextcloud sh -c 'update-ca-certificates'
+
+docker exec -u 0 jira sh -c 'echo "172.25.10.10 MWS-DC.C1Tech.local" >> /etc/hosts'
+docker exec -u 0 -it jira keytool -import \
+  -alias c1tech-ca \
+  -file /usr/local/share/ca-certificates/C1TechCA.crt \
+  -keystore /usr/local/openjdk-17/lib/security/cacerts \
+  -storepass changeit \
+  -noprompt
+# Config Directory Service
+MWS-DC.C1Tech.local
+JiraServiceUser@C1Tech.local
+ConfluenceServiceUser@C1Tech.local
+OU=C1Tech,DC=C1Tech,DC=local
+
+docker exec -u 0 nextcloud sh -c 'echo "172.25.10.10 MWS-DC.C1Tech.local" >> /etc/hosts'
+
+# -------==========-------
 #        HOW TO FIX 
 # -------==========-------
 # Invalid private key for encryption app. 
