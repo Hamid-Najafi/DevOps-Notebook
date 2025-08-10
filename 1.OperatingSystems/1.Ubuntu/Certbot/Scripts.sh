@@ -24,18 +24,6 @@ sudo certbot --standalone
 sudo certbot --apache
 sudo certbot --nginx
 
-sudo certbot \
-    --email admin@hamid-najafi.ir \
-    --server https://acme-v02.api.letsencrypt.org/directory \
-    --agree-tos \
-    --nginx \
-    --domains hamid-najafi.ir
-    
-#  just get a certificate
-sudo certbot certonly --standalone 
-sudo certbot certonly --apache
-sudo certbot certonly --nginx
-
 sudo certbot certonly \
     --email admin@hamid-najafi.ir \
     --server https://acme-v02.api.letsencrypt.org/directory \

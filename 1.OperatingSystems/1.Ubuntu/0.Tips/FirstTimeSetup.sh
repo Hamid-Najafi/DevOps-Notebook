@@ -7,6 +7,7 @@
 curl -x http://172.25.10.8:20172 -L https://bit.ly/glances | /bin/bash
 
 sudo timedatectl set-timezone Asia/Tehran 
+sudo journalctl --vacuum-time=7d
 
 # Setup passwordless sudo
 echo 'c1tech    ALL=(ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/user

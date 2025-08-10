@@ -1,6 +1,22 @@
 # -------==========-------
 # iLO
 # -------==========-------
+
+# Generate Certificate based on CSR
+# Just add domain end of iLO hostname
+sudo certbot certonly \
+  --csr /home/c1tech/ilo.csr \
+  --email admin@c1tech.group \
+  --agree-tos \
+  --standalone \
+  --preferred-challenges http \
+  --server https://acme-v02.api.letsencrypt.org/directory
+cat /home/c1tech/0000_cert.pem /home/c1tech/0000_chain.pem > /home/c1tech/ilo_combined.pem
+# PUT ilo_combined.pem to iLO
+
+# -------==========-------
+# License
+# -------==========-------
 HP Integrated Lights-Out (iLO) Advanced License
 34RQQ-6D5R4-G8NW3-LBMG6-MLJXR
 325WC-J9QJ7-495NG-CP7WZ-7GJMM

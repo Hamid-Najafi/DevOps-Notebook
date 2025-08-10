@@ -8,18 +8,19 @@ Server IP: 172.25.10.11
 1. 🛠️ Initial Configuration
 Task	Value
 Rename Server	MWS-DC
-Static IP	172.25.10.11
+Static IP	172.25.10.10
 Subnet Mask	255.255.255.0
 Gateway	172.25.10.1
-Preferred DNS	172.25.10.11 (self)
+Preferred DNS	172.25.10.10 (self)
 Workgroup	Leave default (will be joined to domain)
 Windows Updates	✅ Fully updated
 
-New-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress 172.25.10.11 -PrefixLength 24 -DefaultGateway 172.25.10.1
+New-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress 172.25.10.10 -PrefixLength 24 -DefaultGateway 172.25.10.1
 Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses 127.0.0.1
 
 2. Rename the Server
 Rename-Computer -NewName "MWS-DC" -Restart
+Rename-Computer -NewName "DC-SRV" -Restart
 
 3. 📦 Install Required Roles
 Install-WindowsFeature AD-Domain-Services, DNS, DHCP, GPMC -IncludeManagementTools
@@ -69,6 +70,9 @@ Set-TimeZone -Id "Iran Standard Time"
 w32tm /config /manualpeerlist:"pool.ntp.org" /syncfromflags:manual /reliable:yes /update
 Restart-Service w32time
 w32tm /resync
+New-NetFirewallRule -DisplayName "Allow NTP" -Direction Inbound -Protocol UDP -LocalPort 123 -Action Allow
+w32tm /query /status
+w32tm /query /configuration
 
 8. Create OU Structures
 Set-ExecutionPolicy RemoteSigned -Scope Process

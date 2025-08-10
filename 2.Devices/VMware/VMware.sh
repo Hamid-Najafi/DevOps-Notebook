@@ -1,6 +1,19 @@
 # -------==========-------
 # VMware ESXi
 # -------==========-------
+
+# Install ESXi
+✅ Official HPE Recommendation:
+Install ESXi on one of the following supported boot devices:
+
+HPE SATA SSD (even a small 120GB drive)
+HPE M.2 NVMe (using a supported PCIe adapter)
+HPE RAID1 SSDs on a Smart Array controller
+If you must install ESXi on an SD Card (not recommended):
+Disable persistent logging
+Manually set the scratch location to a persistent datastore
+
+
 # Update ESXI
 1. Download Depot-OffileBundle ZIP
 2. Import to Datastore
@@ -89,3 +102,18 @@ MC682-4JK00-M8908-0LAN4-068J0
 
 Site Recovery Manager:
 HU01H-4205K-081V9-693NK-3G0Q0
+# -------==========-------
+VMware vCenter 7.0 Standard
+104HH-D4343-07879-MV08K-2D2H2
+410NA-DW28H-H74K1-ZK882-948L4
+406DK-FWHEH-075K8-XAC06-0JH08
+
+VMware vSphere ESXi 7.0 Enterprise Plus
+JJ2WR-25L9P-H71A8-6J20P-C0K3F
+HN2X0-0DH5M-M78Q1-780HH-CN214
+JH09A-2YL84-M7EC8-FL0K2-3N2J2
+
+VMware vSphere 7 Enterprise Plus with Add-on for Kubernetes
+J1608-4GJEQ-071L8-9VA0H-2MUK6
+M10DH-8YL47-474L1-DV3U0-8H054
+MM4MR-2G005-H7039-JVCAP-2RAL8

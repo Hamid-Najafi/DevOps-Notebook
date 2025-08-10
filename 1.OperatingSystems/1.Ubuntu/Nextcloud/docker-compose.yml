@@ -11,6 +11,11 @@ volumes:
     external: true
   nextcloud-redis:
     external: true
+  clamav-socket:
+    external: true
+  clamav-db:
+    external: true
+
 
 services:
   nextcloud:
@@ -20,30 +25,34 @@ services:
       - nextcloud-data:${NEXTCLOUD_DATA_PATH}
     environment:
       # https://github.com/nextcloud/docker
+      # Time & PHP
       TZ: ${NEXTCLOUD_TIMEZONE}
+      PHP_MEMORY_LIMIT: ${NEXTCLOUD_PHP_MEMORY_LIMIT}
+      PHP_UPLOAD_LIMIT: ${NEXTCLOUD_PHP_UPLOAD_LIMIT}
+      PHP_OPCACHE_MEMORY_CONSUMPTION: ${NEXTCLOUD_PHP_OPCACHE_MEMORY_CONSUMPTION}
+      # Admin User
+      NEXTCLOUD_ADMIN_USER: ${NEXTCLOUD_ADMIN_USERNAME}
+      NEXTCLOUD_ADMIN_PASSWORD: ${NEXTCLOUD_ADMIN_PASSWORD}
+      # Database
       POSTGRES_HOST: postgres
       DB_PORT: 5432
       POSTGRES_DB: ${NEXTCLOUD_DB_NAME}
       POSTGRES_USER: ${NEXTCLOUD_DB_USER}
       POSTGRES_PASSWORD: ${NEXTCLOUD_DB_PASSWORD}
+      # Redis
       REDIS_HOST: redis
-      REDIS_HOST_PORT: 6379
       REDIS_HOST_PASSWORD: ${NEXTCLOUD_REDIS_PASSWORD}
-      NEXTCLOUD_ADMIN_USER: ${NEXTCLOUD_ADMIN_USERNAME}
-      NEXTCLOUD_ADMIN_PASSWORD: ${NEXTCLOUD_ADMIN_PASSWORD}
+      # URLs and Trusted Settings
       NEXTCLOUD_TRUSTED_DOMAINS: ${NEXTCLOUD_HOSTNAME}
-      PHP_MEMORY_LIMIT: ${NEXTCLOUD_PHP_MEMORY_LIMIT}
-      PHP_UPLOAD_LIMIT: ${NEXTCLOUD_PHP_UPLOAD_LIMIT}
-      PHP_OPCACHE_MEMORY_CONSUMPTION: ${NEXTCLOUD_PHP_OPCACHE_MEMORY_CONSUMPTION}
-      TRUSTED_PROXIES: ${NEXTCLOUD_HOSTNAME}
-      OVERWRITECLIURL: ${NEXTCLOUD_URL}
-      OVERWRITEPROTOCOL: https
       OVERWRITEHOST: ${NEXTCLOUD_HOSTNAME}
+      OVERWRITEPROTOCOL: https
+      OVERWRITECLIURL: ${NEXTCLOUD_URL}
+      TRUSTED_PROXIES: ${NEXTCLOUD_PROXIES}
     networks:
       - nextcloud-network
       - traefik-network
-    ports:
-     - 9005:80
+    # ports:
+    #  - 9005:80
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/"]
       interval: 10s
@@ -59,6 +68,14 @@ services:
       - "traefik.http.routers.nextcloud.tls=true"
       - "traefik.http.routers.nextcloud.tls.certresolver=letsencrypt"
       - "traefik.http.services.nextcloud.loadbalancer.passhostheader=true"
+      - "traefik.http.routers.nextcloud.middlewares=nextcloud_redirectregex@docker"
+      - "traefik.http.middlewares.nextcloud_redirectregex.redirectregex.permanent=true"
+      - "traefik.http.middlewares.nextcloud_redirectregex.redirectregex.regex=https://(.*)/.well-known/(?:card|cal)dav"
+      - "traefik.http.middlewares.nextcloud_redirectregex.redirectregex.replacement=https://$${1}/remote.php/dav"
+      - "traefik.http.routers.nextcloud.middlewares=nextcloud-headers"
+      - "traefik.http.middlewares.nextcloud-headers.headers.stsSeconds=31536000"
+      - "traefik.http.middlewares.nextcloud-headers.headers.stsIncludeSubdomains=true"
+      - "traefik.http.middlewares.nextcloud-headers.headers.stsPreload=true"
       - "traefik.docker.network=traefik-network"
     restart: unless-stopped
     depends_on:
@@ -66,7 +83,19 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-        
+
+  nextcloud-cron:
+    image: ${NEXTCLOUD_IMAGE_TAG}
+    container_name: nextcloud-cron
+    restart: unless-stopped
+    volumes:
+      - nextcloud-data:/var/www/html
+    entrypoint: /cron.sh
+    depends_on:
+      - nextcloud
+    networks:
+      - nextcloud-network
+
   postgres:
     image: ${NEXTCLOUD_POSTGRES_IMAGE_TAG}
     container_name: nextcloud-postgres
@@ -107,9 +136,14 @@ services:
   clamav:
     image: "clamav/clamav:stable_base"
     container_name: "clamav"
+    healthcheck:
+      test: ["CMD-SHELL", "clamdscan --version || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     volumes:
       # Socket
-      - /var/run/clamav/:/var/run/clamav/
+      - clamav-socket:/var/run/clamav/
       # Virus DB
-      - /var/docker/clamav/virus_db/:/var/lib/clamav/
+      - clamav-db:/var/lib/clamav/
     restart: unless-stopped

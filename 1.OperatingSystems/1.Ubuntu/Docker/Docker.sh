@@ -19,7 +19,12 @@ sudo chown $USER /var/run/docker.sock
 sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
 {
   "insecure-registries" : ["https://docker.arvancloud.ir"],
-  "registry-mirrors": ["https://docker.arvancloud.ir"]
+  "registry-mirrors": ["https://docker.arvancloud.ir"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "3"
+  }
 }
 EOF'     
 sudo systemctl daemon-reload
