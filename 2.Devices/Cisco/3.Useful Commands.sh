@@ -36,6 +36,10 @@ show interfaces TE1/1/1
 # ! Show transceiver details for interfaces
 show interfaces TE1/1/1 transceiver
 
+# ! Recover port from err
+interfaces TE1/1/1 shutdown
+interfaces TE1/1/1 no shutdown
+
 # CDP (Cisco Discovery Protocol):
 show cdp neighbors
 show cdp neighbors detail

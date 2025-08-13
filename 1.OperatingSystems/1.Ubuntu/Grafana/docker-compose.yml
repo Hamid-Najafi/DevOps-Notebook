@@ -1,24 +1,11 @@
-version: '3.7'
-
-x-logging: &loki-logging
-  driver: json-file
-  options:
-    tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
-
 networks:
-  monitoring-network:
-    external: true
   traefik-network:
     external: true
 
 volumes:
-  prometheus-data:
-    external: true
   grafana-data:
     external: true
   grafana-settings:
-    external: true
-  loki-data:
     external: true
 
 services:
@@ -26,20 +13,18 @@ services:
     user: "0:0"
     hostname: grafana
     container_name: grafana
-    image: grafana/grafana:10.0.5
-    depends_on:
-      - prometheus
+    image: ${GRAFANA_IMAGE_TAG}
+    ports:
+      - 3000:3000/tcp
     volumes:
       - grafana-data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning/
     labels:
-      - traefik.http.routers.grafana.rule=Host(`g.${MONITORING_HOSTNAME}`)
+      - traefik.http.routers.grafana.rule=Host(`g.${GRAFANA_HOSTNAME}`)
       - traefik.http.routers.grafana.service=grafana
-      - traefik.http.routers.grafana.middlewares=auth
       - traefik.http.routers.grafana.entrypoints=http
       - traefik.http.services.grafana.loadbalancer.server.port=3000
     networks:
-      - monitoring-network
       - traefik-network
     restart: unless-stopped
-    logging: *loki-logging
+    logging: *grafana-logging

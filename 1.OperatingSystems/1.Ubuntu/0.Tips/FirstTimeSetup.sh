@@ -24,10 +24,9 @@ sudo apt install -y -q python3-pip
 
 
 sudo apt install git fonts-font-awesome zsh -y
-nano ~/.zshrc
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 # PROMPT="%F{white}%n@%m %F{yellow}%~ %# %f"
 sh -c "$(wget -O- https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+chsh -s $(which zsh)
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 # git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
@@ -35,9 +34,9 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:
 git clone https://github.com/bhilburn/powerlevel9k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel9k
 sed -i  's/ZSH_THEME=.*/ZSH_THEME="powerlevel9k\/powerlevel9k"/g' ~/.zshrc
 grep -qxF 'export TERM="xterm-256color"' ~/.zshrc || sed -i '1i export TERM="xterm-256color"' ~/.zshrc
-
 echo "TERM="xterm-256color"" >> "$HOME/.zshrc"
-chsh -s $(which zsh)
+nano ~/.zshrc
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 source ~/.zshrc
 
 # -------==========-------
@@ -48,9 +47,9 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDONzsZ5JURqzE9ASv2gVGcs1fJ1zozsKbmmLliu6ji
 EOF
 
 sudo su
-sed -i 's/#\?PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config
-sed -i 's/#\?PasswordAuthentication .*/PasswordAuthentication no/' /etc/ssh/sshd_config
-grep -q "PermitRootLogin" /etc/ssh/sshd_config || echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+# sed -i 's/#\?PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config
+# sed -i 's/#\?PasswordAuthentication .*/PasswordAuthentication no/' /etc/ssh/sshd_config
+# grep -q "PermitRootLogin" /etc/ssh/sshd_config || echo "PermitRootLogin no" >> /etc/ssh/sshd_config
 grep -q "PasswordAuthentication" /etc/ssh/sshd_config || echo "PasswordAuthentication no" >> /etc/ssh/sshd_config
 
 [ -d /etc/ssh/sshd_config.d ] && for file in /etc/ssh/sshd_config.d/*.conf; do [ -f "$file" ] && mv "$file" "$file.bak"; done
@@ -72,11 +71,17 @@ sudo chown $USER /var/run/docker.sock
 # https://www.youtube.com/watch?v=eKAQiYu4NyI
 
 # Docker Registry
-nano /etc/docker/daemon.json
+sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
 {
   "insecure-registries" : ["https://docker.arvancloud.ir"],
   "registry-mirrors": ["https://docker.arvancloud.ir"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "3"
+  }
 }
+EOF'
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 # Verify
