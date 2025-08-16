@@ -1,0 +1,28 @@
+networks:
+  traefik-network:
+    external: true
+
+volumes:
+  docker-registry:
+    external: true
+
+services:
+  registry:
+    image: $REGISTRY_IMAGE_TAG
+    container_name: registry
+    networks:
+      - traefik-network
+    volumes:
+      - docker-registry:/var/lib/registry
+    environment:
+      - REGISTRY_HTTP_SECRET=$REGISTRY_HTTP_SECRET
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.registry.rule=Host(`$REGISTRY_HOSTNAME`)"
+      - "traefik.http.routers.registry.entrypoints=websecure"
+      - "traefik.http.routers.registry.tls=true"
+      - "traefik.http.routers.registry.tls.certresolver=letsencrypt"
+      - "traefik.http.services.registry.loadbalancer.server.port=5000"
+      - "traefik.http.services.registry.loadbalancer.passhostheader=true"
+      - "traefik.docker.network=traefik-network"
+    restart: unless-stopped

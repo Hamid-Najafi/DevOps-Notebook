@@ -7,7 +7,7 @@
 # -------==========-------
 sudo git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
 mkdir -p ~/docker/wireguard
-cp ~/DevOps-Notebook/Apps/Wireguard/docker-compose.yml ~/docker/wireguard/
+cp ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Wireguard/docker-compose.yml ~/docker/wireguard/
 cd ~/docker/wireguard 
 # Set Hostname
 nano  ~/docker/wireguard/docker-compose.yml

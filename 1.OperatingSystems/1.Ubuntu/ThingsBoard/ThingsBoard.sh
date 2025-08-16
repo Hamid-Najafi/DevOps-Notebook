@@ -32,7 +32,7 @@ docker volume create \
 
 # Clone Nextcloud Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/ThingsBoard ~/docker/thingsboard
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/ThingsBoard ~/docker/thingsboard
 cd ~/docker/thingsboard
 
 # Check and Edit .env file

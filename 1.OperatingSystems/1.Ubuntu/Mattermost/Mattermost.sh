@@ -4,7 +4,7 @@
 
 # Clone mattermost Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Mattermost ~/docker/mattermost
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Mattermost ~/docker/mattermost
 cd ~/docker/mattermost
 
 # Make mattermost Directory

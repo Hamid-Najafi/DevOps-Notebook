@@ -34,6 +34,7 @@ services:
     container_name: telegraf
     restart: always
     privileged: true
+    user: "root"
     volumes:
       - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro  # Mount the Telegraf configuration file
       - /var/run/docker.sock:/var/run/docker.sock:ro  # Mount the Docker socket to collect Docker metrics

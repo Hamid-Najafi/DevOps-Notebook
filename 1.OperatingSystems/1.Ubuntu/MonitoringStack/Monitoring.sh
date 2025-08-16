@@ -4,7 +4,7 @@
 
 # Clone Monitoring Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/MonitoringStack ~/docker/monitoring
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/MonitoringStack ~/docker/monitoring
 cd ~/docker/monitoring
 
 # Make Monitoring Directory

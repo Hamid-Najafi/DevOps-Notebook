@@ -26,7 +26,7 @@ docker volume create \
       
 # Clone Frigate Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Frigate ~/docker/frigate
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Frigate ~/docker/frigate
 cd ~/docker/frigate
 
 # Check and Edit .env file

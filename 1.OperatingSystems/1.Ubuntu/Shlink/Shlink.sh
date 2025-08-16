@@ -22,7 +22,7 @@ docker volume create \
       
 # Clone Shlink Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Shlink ~/docker/shlink
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Shlink ~/docker/shlink
 cd ~/docker/shlink
 
 # Check and Edit .env file

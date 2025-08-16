@@ -19,7 +19,7 @@ docker volume create \
       
 # Clone Nextcloud Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Element ~/docker/element
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Element ~/docker/element
 cd ~/docker/element
 
 # Check and Edit .env file

@@ -28,7 +28,7 @@ docker volume create \
 
 # Clone Orthanc Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Orthanc ~/docker/orthanc
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Orthanc ~/docker/orthanc
 cd ~/docker/orthanc
 
 # Check and Edit .env file

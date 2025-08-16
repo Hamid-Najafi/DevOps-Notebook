@@ -4,9 +4,8 @@
 
 # Clone Monitoring Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Grafana ~/docker/grafana
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Grafana ~/docker/grafana
 cd ~/docker/grafana
-
 # Make Monitoring Directory
 sudo mkdir -p /mnt/data/grafana/data
 

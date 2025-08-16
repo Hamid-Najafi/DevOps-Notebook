@@ -8,7 +8,7 @@ All-In-One Monitoring Stack
 # -------==========-------
 # Monitoring: BBB Exporter
 # -------==========-------
-cd ~/devops-notebook/Apps/BigBlueButton/Monitoring/bbb-exporter/
+cd ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/BigBlueButton/Monitoring/bbb-exporter/
 # 1. Fill secret.env
 bbb-conf --secret 
 sudo nano secrets.env

@@ -3,7 +3,7 @@
 # -------==========-------
 # Clone Traefik Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/AutodiscoverEmailSettings ~/docker/autodiscover
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/AutodiscoverEmailSettings ~/docker/autodiscover
 cd ~/docker/autodiscover
 
 # Check and Edit .env file

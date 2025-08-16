@@ -24,7 +24,7 @@ docker volume create \
 
 # Clone RustDesk Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/RustDesk ~/docker/rustdesk
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/RustDesk ~/docker/rustdesk
 cd ~/docker/rustdesk
 
 # Check and Edit .env file

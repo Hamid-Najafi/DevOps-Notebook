@@ -7,7 +7,7 @@ sudo mkdir -p /mnt/data/xui/cert
 
 # Clone X-UI Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/X-UI\ Pro ~/docker/xui-pro
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/X-UI\ Pro ~/docker/xui-pro
 cd ~/docker/xui-pro
 
 # Set Permissions

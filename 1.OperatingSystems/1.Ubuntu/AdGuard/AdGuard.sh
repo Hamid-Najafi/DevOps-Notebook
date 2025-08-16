@@ -3,7 +3,7 @@
 # -------==========-------
 # Clone AdGuard Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/AdGuard ~/docker/adguard
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/AdGuard ~/docker/adguard
 cd ~/docker/adguard
 
 # Make AdGuard Directory

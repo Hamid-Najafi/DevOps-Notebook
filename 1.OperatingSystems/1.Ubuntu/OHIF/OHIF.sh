@@ -16,7 +16,7 @@ docker volume create \
       
 # Clone Nextcloud Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/OHIF ~/docker/ohif
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/OHIF ~/docker/ohif
 cd ~/docker/ohif
 
 # Check and Edit .env file

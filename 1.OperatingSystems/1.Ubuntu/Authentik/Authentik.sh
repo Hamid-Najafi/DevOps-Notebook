@@ -4,7 +4,7 @@
 
 # Clone Authentik Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Authentik ~/docker/authentik
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Authentik ~/docker/authentik
 cd ~/docker/authentik
 
 # Create Authentik Directory
@@ -87,3 +87,8 @@ docker exec -it  authentik-server /bin/bash
 
 echo "172.25.10.10 MWS-DC.C1Tech.local" >> /etc/hosts
 sudo update-ca-certificates
+
+# -------==========-------
+# Authentik Integrations
+# -------==========-------
+https://integrations.goauthentik.io/

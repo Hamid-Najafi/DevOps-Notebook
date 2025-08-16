@@ -25,7 +25,7 @@ docker volume create \
 
 # Clone Joomla Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Joomla ~/docker/joomla
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Joomla ~/docker/joomla
 cd ~/docker/joomla
 
 # Check and Edit .env file

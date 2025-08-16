@@ -1,0 +1,120 @@
+networks:
+  traefik-network:
+    external: true
+  harbor-network:
+    driver: bridge
+
+volumes:
+  harbor-data:
+    external: true
+  harbor-postgres:
+    external: true
+  harbor-job:
+    external: true
+  harbor-registry:
+    external: true
+  harbor-certs:
+    external: true
+
+services:
+  postgres:
+    image: ${HARBOR_DB_IMAGE_TAG}
+    container_name: harbor-postgres
+    environment:
+      POSTGRES_DB: ${HARBOR_DB_NAME}
+      POSTGRES_USER: ${HARBOR_DB_USER}
+      POSTGRES_PASSWORD: ${HARBOR_DB_PASSWORD}
+    volumes:
+      - harbor-postgres:/var/lib/postgresql/data
+    networks:
+      - traefik-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "${HARBOR_DB_NAME}", "-U", "${HARBOR_DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: ${HARBOR_REDIS_IMAGE_TAG}
+    container_name: harbor-redis
+    command: ["redis-server", "--requirepass", "${HARBOR_REDIS_PASSWORD}"]
+    networks:
+      - harbor-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  harbor-core:
+    image: ${HARBOR_CORE_IMAGE_TAG}
+    container_name: harbor-core
+    environment:
+      CORE_SECRET: ${HARBOR_ADMIN_PASSWORD}
+      POSTGRESQL_HOST: postgres
+      POSTGRESQL_PORT: 5432
+      POSTGRESQL_DATABASE: ${HARBOR_DB_NAME}
+      POSTGRESQL_USERNAME: ${HARBOR_DB_USER}
+      POSTGRESQL_PASSWORD: ${HARBOR_DB_PASSWORD}
+      REDIS_HOST: redis
+      REDIS_PASSWORD: ${HARBOR_REDIS_PASSWORD}
+      HARBOR_ADMIN_USER: ${HARBOR_ADMIN_USER}
+      HARBOR_ADMIN_PASSWORD: ${HARBOR_ADMIN_PASSWORD}
+    volumes:
+      - harbor-data:${HARBOR_DATA_PATH}
+      - harbor-job:${HARBOR_JOB_PATH}
+      - harbor-registry:${HARBOR_REGISTRY_PATH}
+      - harbor-certs:${HARBOR_CERTS_PATH}
+    networks:
+      - harbor-network
+      - traefik-network
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - redis
+
+  harbor-portal:
+    image: ${HARBOR_PORTAL_IMAGE_TAG}
+    container_name: harbor-portal
+    networks:
+      - harbor-network
+      - traefik-network
+    restart: unless-stopped
+    depends_on:
+      - harbor-core
+
+  harbor-jobservice:
+    image: ${HARBOR_JOBSERVICE_IMAGE_TAG}
+    container_name: harbor-jobservice
+    networks:
+      - harbor-network
+    restart: unless-stopped
+    depends_on:
+      - harbor-core
+
+  harbor-registry:
+    image: ${HARBOR_REGISTRY_IMAGE_TAG}
+    container_name: harbor-registry
+    networks:
+      - harbor-network
+    restart: unless-stopped
+    volumes:
+      - harbor-registry:${HARBOR_REGISTRY_PATH}
+
+  harbor-nginx:
+    image: ${HARBOR_NGINX_IMAGE_TAG}
+    container_name: harbor-nginx
+    networks:
+      - traefik-network
+      - harbor-network
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.harbor.rule=Host(`${HARBOR_HOSTNAME}`)"
+      - "traefik.http.routers.harbor.entrypoints=websecure"
+      - "traefik.http.routers.harbor.tls=true"
+      - "traefik.http.routers.harbor.tls.certresolver=letsencrypt"
+      - "traefik.http.services.harbor.loadbalancer.server.port=80"
+      - "traefik.http.services.harbor.loadbalancer.passhostheader=true"

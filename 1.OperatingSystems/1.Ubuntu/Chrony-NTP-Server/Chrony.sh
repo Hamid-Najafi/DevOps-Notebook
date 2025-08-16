@@ -7,7 +7,7 @@ TCP 4460
 
 # Clone Chrony Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Chrony-NTP-Server ~/docker/chrony
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Chrony-NTP-Server ~/docker/chrony
 cd ~/docker/chrony
 
 docker compose up -d

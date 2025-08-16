@@ -28,7 +28,7 @@ docker volume create \
 
 # Clone NetBootXYZ Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/netboot.xyz ~/docker/netbootxyz
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/netboot.xyz ~/docker/netbootxyz
 cd ~/docker/netbootxyz
 
 # Check and Edit .env file

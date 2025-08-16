@@ -25,7 +25,7 @@ docker volume create \
 
 # Clone WordPress Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/wordpress ~/docker/wordpress
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/wordpress ~/docker/wordpress
 cd ~/docker/wordpress
 
 # Check and Edit .env file

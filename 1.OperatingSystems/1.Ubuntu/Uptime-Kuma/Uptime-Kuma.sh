@@ -6,7 +6,7 @@
 
 # Clone UptimeKuma Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Uptime-Kuma ~/docker/uptimeKuma
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Uptime-Kuma ~/docker/uptimeKuma
 cd ~/docker/uptimeKuma
 
 # Make UptimeKuma Directory

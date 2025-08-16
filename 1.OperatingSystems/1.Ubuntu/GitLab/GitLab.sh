@@ -4,7 +4,7 @@
       
 # Clone GitLab Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/GitLab ~/docker/gitlab
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/GitLab ~/docker/gitlab
 cd ~/docker/gitlab
 
 

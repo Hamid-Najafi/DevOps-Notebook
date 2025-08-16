@@ -15,7 +15,7 @@ git clone https://github.com/Hamid-Najafi/DevOps-Notebook.git
 # Docker-Compose
 # -------==========-------
 mkdir -p ~/docker/shadowsocks-r
-cp ~/DevOps-Notebook/Apps/ShadowSocksR/* ~/docker/shadowsocks-r
+cp ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/ShadowSocksR/* ~/docker/shadowsocks-r
 cd ~/docker/shadowsocks-r
 docker compose up -d
 # -------==========-------

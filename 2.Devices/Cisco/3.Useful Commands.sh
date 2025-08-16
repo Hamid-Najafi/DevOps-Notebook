@@ -1,7 +1,6 @@
 # -------==========-------
 # Useful Commands
 # -------==========-------
-
 # ! Show Switch Status
 show switch
 show switch detail
@@ -37,8 +36,10 @@ show interfaces TE1/1/1
 show interfaces TE1/1/1 transceiver
 
 # ! Recover port from err
-interfaces TE1/1/1 shutdown
-interfaces TE1/1/1 no shutdown
+conf t
+interface TE1/1/1
+shutdown
+no shutdown
 
 # CDP (Cisco Discovery Protocol):
 show cdp neighbors

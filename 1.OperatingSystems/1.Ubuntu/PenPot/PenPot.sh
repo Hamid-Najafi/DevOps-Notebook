@@ -4,7 +4,7 @@
 
 # Clone PenPot Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/PenPot ~/docker/penpot
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/PenPot ~/docker/penpot
 cd ~/docker/penpot
 
 # Make PenPot Directory

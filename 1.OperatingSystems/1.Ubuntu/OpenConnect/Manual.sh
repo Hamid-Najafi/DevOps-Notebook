@@ -42,7 +42,7 @@ sudo apt install certbot -y
 sudo certbot certonly --standalone --preferred-challenges http --agree-tos --email admin@hamid-najafi.ir -d goldenstarc.ir
 
 mkdir -p ~/docker/ocserv
-cp ~/DevOps-Notebook/Apps/OpenConnect/* ~/docker/ocserv
+cp ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/OpenConnect/* ~/docker/ocserv
 cd ~/docker/ocserv
 ##* Native
 # DO NOTHING

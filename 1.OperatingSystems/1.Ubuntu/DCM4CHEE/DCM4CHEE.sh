@@ -54,7 +54,7 @@ docker volume create \
       
 # Clone mattermost Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/DCM4CHEE ~/docker/dcm4chee
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/DCM4CHEE ~/docker/dcm4chee
 cd ~/docker/dcm4chee
 
 # Check and Edit .env file

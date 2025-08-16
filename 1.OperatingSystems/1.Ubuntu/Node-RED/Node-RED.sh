@@ -16,7 +16,7 @@ docker volume create \
 
 # Clone Nextcloud Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Node-RED ~/docker/node-red2
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Node-RED ~/docker/node-red2
 cd ~/docker/node-red2
 
 # Check and Edit .env file

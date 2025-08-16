@@ -34,7 +34,7 @@ docker volume create \
       
 # Clone Homarr Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Homarr ~/docker/homarr
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Homarr ~/docker/homarr
 cd ~/docker/homarr
 
 # Check and Edit .env file

@@ -5,7 +5,7 @@
 
 # Clone JIRA Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Atlassian/Jira ~/docker/jira
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Atlassian/Jira ~/docker/jira
 cd ~/docker/jira
 
 # Make Directories

@@ -33,7 +33,7 @@ docker volume create \
       
 # Clone Ghost Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Ghost ~/docker/ghost
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Ghost ~/docker/ghost
 cd ~/docker/ghost
 
 # Check and Edit .env file

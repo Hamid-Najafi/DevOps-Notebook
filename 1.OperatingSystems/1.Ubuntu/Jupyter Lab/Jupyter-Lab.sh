@@ -106,7 +106,7 @@ docker volume create \
 
 # Clone Jupyter Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Jupyter\ Lab ~/docker/jupyter
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Jupyter\ Lab ~/docker/jupyter
 cd ~/docker/jupyter
 
 # Check and Edit .env file

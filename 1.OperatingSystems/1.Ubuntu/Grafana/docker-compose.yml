@@ -8,6 +8,11 @@ volumes:
   grafana-settings:
     external: true
 
+x-logging: &grafana-logging
+  driver: json-file
+  options:
+    tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+
 services:
   grafana:
     user: "0:0"

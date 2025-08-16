@@ -43,7 +43,7 @@ docker volume create \
 
 # Clone Traefik Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Jitsi ~/docker/Jitsi
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Jitsi ~/docker/Jitsi
 cd ~/docker/Jitsi
 
 # Check and Edit .env file

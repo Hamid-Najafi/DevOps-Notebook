@@ -16,7 +16,7 @@ docker volume create \
 
 # Clone portainer Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Portainer ~/docker/portainer
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Portainer ~/docker/portainer
 cd ~/docker/portainer
 
 # Check and Edit .env file

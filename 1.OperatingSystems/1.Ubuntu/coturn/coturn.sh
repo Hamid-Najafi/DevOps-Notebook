@@ -23,7 +23,7 @@ docker volume create \
 
 # Clone coturn Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/coturn ~/docker/coturn
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/coturn ~/docker/coturn
 cd ~/docker/coturn
 
 # # Generate static-auth-secret

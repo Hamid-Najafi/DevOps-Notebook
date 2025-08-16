@@ -6,7 +6,7 @@
 
 # Clone MiroTalk-BRO Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/MiroTalk/MiroTalk-BRO ~/docker/mirotalkbro
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/MiroTalk/MiroTalk-BRO ~/docker/mirotalkbro
 cd ~/docker/mirotalkbro
 
 # Check and Edit .env file

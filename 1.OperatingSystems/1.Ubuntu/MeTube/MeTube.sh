@@ -17,7 +17,7 @@ docker volume create \
 
 # Clone MeTube Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/MeTube ~/docker/metube
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/MeTube ~/docker/metube
 cd ~/docker/metube
 
 # Check and Edit .env file

@@ -9,7 +9,7 @@
 
 # Clone MiroTalk-SFU Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/MiroTalk/MiroTalk-SFU ~/docker/mirotalksfu
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/MiroTalk/MiroTalk-SFU ~/docker/mirotalksfu
 cd ~/docker/mirotalksfu
 
 # Check and Edit .env file

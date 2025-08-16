@@ -32,12 +32,18 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:
 # git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
 # ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
 git clone https://github.com/bhilburn/powerlevel9k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel9k
-sed -i  's/ZSH_THEME=.*/ZSH_THEME="powerlevel9k\/powerlevel9k"/g' ~/.zshrc
-grep -qxF 'export TERM="xterm-256color"' ~/.zshrc || sed -i '1i export TERM="xterm-256color"' ~/.zshrc
-echo "TERM="xterm-256color"" >> "$HOME/.zshrc"
-nano ~/.zshrc
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
-source ~/.zshrc
+
+ZSHRC="$HOME/.zshrc"
+sed -i 's|^ZSH_THEME=.*|ZSH_THEME="powerlevel9k/powerlevel9k"|' "$ZSHRC"
+grep -qxF 'export TERM="xterm-256color"' "$ZSHRC" || \
+echo 'export TERM="xterm-256color"' >> "$ZSHRC"
+if grep -q '^plugins=' "$ZSHRC"; then
+    sed -i 's|^plugins=.*|plugins=(git zsh-autosuggestions zsh-syntax-highlighting)|' "$ZSHRC"
+else
+    echo 'plugins=(git zsh-autosuggestions zsh-syntax-highlighting)' >> "$ZSHRC"
+fi
+source "$ZSHRC"
+echo "✅ ZSH configuration updated successfully."
 
 # -------==========-------
 # SSH Public Key
@@ -63,12 +69,6 @@ curl -fsSL get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 sudo usermod -aG docker $USER
 sudo chown $USER /var/run/docker.sock
-
-# Don't  Use RootLees Docker Context
-# dockerd-rootless-setuptool.sh install
-
-# Don't use local Docker Volumes
-# https://www.youtube.com/watch?v=eKAQiYu4NyI
 
 # Docker Registry
 sudo bash -c 'cat > /etc/docker/daemon.json <<EOF

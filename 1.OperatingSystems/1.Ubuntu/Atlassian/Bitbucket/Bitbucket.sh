@@ -2,7 +2,7 @@
 # Bitbucket
 # -------==========-------
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Atlassian/Bitbucket ~/docker/bitbucket
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Atlassian/Bitbucket ~/docker/bitbucket
 cd ~/docker/bitbucket
 
 # Make Directories

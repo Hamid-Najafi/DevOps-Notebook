@@ -19,7 +19,7 @@ docker volume create \
 
 # Clone Traefik Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Traefik ~/docker/traefik
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Traefik ~/docker/traefik
 cd ~/docker/traefik
 
 # Check and Edit .env file

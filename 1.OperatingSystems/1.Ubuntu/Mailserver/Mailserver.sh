@@ -46,7 +46,7 @@ mail.c1tech.group
 # -------==========-------
 # Clone MailServer Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Mailserver ~/docker/mailserver
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Mailserver ~/docker/mailserver
 cd ~/docker/mailserver
 
 # Check and Edit .env file

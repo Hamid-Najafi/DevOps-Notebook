@@ -28,7 +28,7 @@ docker volume create \
 
 # Clone TubeSync Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/TubeSync ~/docker/tubesync
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/TubeSync ~/docker/tubesync
 cd ~/docker/tubesync
 
 # Check and Edit .env file

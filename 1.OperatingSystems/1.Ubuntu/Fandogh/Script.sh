@@ -16,7 +16,7 @@ fandogh login --username goldenstarc --password myzsyn-fucjys-0motjI
 fandogh namespace active --name goldenstarc
 fandogh namespace active --name hamid-najafi
 
-cd ~/DevOps-Notebook/Apps/Virgol/PaaS/
+cd ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Virgol/PaaS/
 cd /Users/hamid/Development/Software/DevOps-Notebook/Apps/Virgol/PaaS
 
 fandogh service apply -f virgol-fandogh-manifests.yml

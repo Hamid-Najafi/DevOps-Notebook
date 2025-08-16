@@ -6,7 +6,7 @@
 
 # Clone MiroTalk-C2C Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/MiroTalk/MiroTalk-C2C ~/docker/mirotalkc2c
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/MiroTalk/MiroTalk-C2C ~/docker/mirotalkc2c
 cd ~/docker/mirotalkc2c
 
 # Check and Edit .env file

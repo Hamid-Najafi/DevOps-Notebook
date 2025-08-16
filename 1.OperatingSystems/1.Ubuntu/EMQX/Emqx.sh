@@ -3,7 +3,7 @@
 # -------==========-------
 
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/EMQX ~/docker/emqx
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/EMQX ~/docker/emqx
 cd ~/docker/emqx
 
 

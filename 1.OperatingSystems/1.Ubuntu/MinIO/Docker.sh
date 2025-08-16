@@ -2,7 +2,7 @@
 # MinIO Docker-Compose
 # -------==========-------
 mkdir -p ~/docker/minio
-cp -R ~/DevOps-Notebook/Apps/MinIO/*  ~/docker/minio
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/MinIO/*  ~/docker/minio
 cd  ~/docker/minio
 # Set Host
     #   - "traefik.http.routers.traefik.rule=Host(`minio.hamid-najafi.ir`)"

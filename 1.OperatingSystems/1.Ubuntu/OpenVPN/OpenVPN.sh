@@ -15,7 +15,7 @@ sudo bash openvpn-install.sh
 # https://github.com/dockovpn/dockovpn
 # Clone OpenVPN Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/OpenVPN ~/docker/openvpn
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/OpenVPN ~/docker/openvpn
 cd ~/docker/openvpn
 
 # Check and Edit .env file

@@ -16,7 +16,7 @@ docker volume create \
 
 # Clone RoundcubeMail Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Roundcubemail ~/docker/roundcubemail
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Roundcubemail ~/docker/roundcubemail
 cd ~/docker/roundcubemail
 
 # Check and Edit .env file

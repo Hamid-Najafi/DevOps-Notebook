@@ -5,7 +5,7 @@
 # -------==========-------
 # Clone Vaultwarden Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Vaultwarden ~/docker/vaultwarden
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Vaultwarden ~/docker/vaultwarden
 cd ~/docker/vaultwarden
 
 # Make vaultwarden-data Directory

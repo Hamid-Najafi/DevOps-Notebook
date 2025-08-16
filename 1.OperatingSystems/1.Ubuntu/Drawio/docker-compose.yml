@@ -32,8 +32,7 @@ services:
       - "traefik.http.routers.draw.tls=true"
       - "traefik.http.routers.draw.tls.certresolver=letsencrypt"
       - "traefik.http.services.draw.loadbalancer.passhostheader=true"
-      - "traefik.http.routers.draw.middlewares=traefik-compress"
       - "traefik.http.middlewares.traefik-compress.compress=true"
-      - "traefik.http.routers.draw.middlewares=authentik@docker"
+      - "traefik.http.routers.draw.middlewares=traefik-compress,authentik@docker"
       - "traefik.docker.network=traefik-network"
     restart: unless-stopped

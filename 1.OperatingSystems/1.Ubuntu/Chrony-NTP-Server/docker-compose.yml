@@ -13,7 +13,7 @@ services:
       - TZ=${CHRONY_TIMEZONE}
       - NOCLIENTLOG=${CHRONY_NOCLIENTLOG}
       - ENABLE_NTS=${CHRONY_ENABLE_NTS}
-    volumes:
+    # volumes:
       # # NOT SUPPORTED 
-      - /etc/letsencrypt/live/${CHRONY_HOSTNAME}/fullchain.pem:/opt/fullchain.pem:ro
-      - /etc/letsencrypt/live/${CHRONY_HOSTNAME}/privkey.pem:/opt/privkey.pem:ro
+      # - /etc/letsencrypt/live/${CHRONY_HOSTNAME}/fullchain.pem:/opt/fullchain.pem:ro
+      # - /etc/letsencrypt/live/${CHRONY_HOSTNAME}/privkey.pem:/opt/privkey.pem:ro

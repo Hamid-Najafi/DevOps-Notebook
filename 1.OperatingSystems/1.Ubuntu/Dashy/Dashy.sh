@@ -17,7 +17,7 @@ docker volume create \
 
 # Clone Dashy Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Dashy ~/docker/dashy
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Dashy ~/docker/dashy
 cd ~/docker/dashy
 
 # Check and Edit .env file

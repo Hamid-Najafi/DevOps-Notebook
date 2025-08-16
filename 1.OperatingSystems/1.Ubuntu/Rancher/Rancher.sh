@@ -2,7 +2,7 @@
 # Docker Compose
 # -------==========-------
 mkdir -p ~/docker/rancher
-cp -R ~/DevOps-Notebook/Apps/Rancher/*  ~/docker/rancher
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Rancher/*  ~/docker/rancher
 cd  ~/docker/rancher
 docker compose up -d
 

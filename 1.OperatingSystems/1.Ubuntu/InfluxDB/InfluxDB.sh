@@ -4,7 +4,7 @@
       
 # Clone InfluxDB Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/InfluxDB ~/docker/influxdb
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/InfluxDB ~/docker/influxdb
 cd ~/docker/influxdb
 
 # Make InfluxDB Directory
@@ -12,7 +12,7 @@ sudo mkdir -p /mnt/data/influxdb/data
 sudo mkdir -p /mnt/data/influxdb/config
 
 # Set Permissions
-sudo chmod 700 -R /mnt/data/influxdb
+# sudo chmod 770 -R /mnt/data/influxdb
 
 # Create the docker volumes for the containers.
 docker volume create \
@@ -36,30 +36,8 @@ nano .env
 docker network create influxdb-network
 docker compose pull
 docker compose up -d
-    
-# -------==========-------
-# InfluxDB CLI
-# -------==========-------
-cat > ./telegraf/telegraf.conf <<EOF
-[agent]
-  interval = "10s"
-  round_interval = true
+docker compose -f docker-compose-local.yml up -d
 
-[[outputs.influxdb_v2]]
-  urls = ["http://influxdb:8086"]
-  token = "my-super-secret-auth-token"
-  organization = "C1Tech"
-  bucket = "my-bucket"
-
-[[inputs.cpu]]
-  percpu = true
-  totalcpu = true
-
-[[inputs.mem]]
-[[inputs.disk]]
-[[inputs.docker]]
-  endpoint = "unix:///var/run/docker.sock"
-EOF
 # -------==========-------
 # InfluxDB CLI
 # -------==========-------

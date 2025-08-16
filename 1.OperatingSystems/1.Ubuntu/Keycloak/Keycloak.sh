@@ -16,7 +16,7 @@ docker volume create \
 
 # Clone Keycloak Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Keycloak ~/docker/keycloak
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Keycloak ~/docker/keycloak
 cd ~/docker/keycloak
 
 # Check and Edit .env file

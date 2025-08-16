@@ -5,7 +5,7 @@
 
 # Clone Confluence Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Atlassian/Confluence ~/docker/confluence
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Atlassian/Confluence ~/docker/confluence
 cd ~/docker/confluence
 
 # Make Directories

@@ -38,7 +38,7 @@ docker volume create \
       
 # Clone Plex Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Plex ~/docker/plex
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Plex ~/docker/plex
 cd ~/docker/plex
 
 # Check and Edit .env file

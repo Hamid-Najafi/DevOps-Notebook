@@ -2,7 +2,7 @@
 # Docker Compose
 # -------==========-------
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/Postgres ~/docker/postgres
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Postgres ~/docker/postgres
 cd ~/docker/postgres
 
 # Make Directories

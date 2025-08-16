@@ -20,7 +20,7 @@ docker volume create \
 
 # Clone OpenLDAP Directory
 mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/Apps/OpenLDAP ~/docker/openldap
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/OpenLDAP ~/docker/openldap
 cd ~/docker/openldap
 
 # Check and Edit .env file
