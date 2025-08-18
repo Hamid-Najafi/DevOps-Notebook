@@ -8,7 +8,7 @@ cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Registry ~/docker/registry
 cd ~/docker/registry
 
 # Make Nextcloud Directory
-sudo mkdir -p /mnt/data/docker/registry
+sudo mkdir -p /mnt/data/registry
 
 # sudo chmod 700 -R /mnt/data/docker/registry
 
@@ -17,7 +17,7 @@ docker volume create \
       --driver local \
       --opt type=none \
       --opt device=/mnt/data/docker/registry \
-      --opt o=bind docker-registry
+      --opt o=bind registry
 
 # Check and Edit .env file
 nano .env

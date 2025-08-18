@@ -78,17 +78,22 @@ docker compose up -d
 # authentik: Initial Configuration
 https://auth.c1tech.group/if/flow/initial-setup/
 
-docker cp ~/C1Tech-MWS-DC-CA.cer authentik-server:/usr/local/share/ca-certificates/C1TechCA.crt 
-docker exec -u 0 -it authentik-server update-ca-certificates
-docker exec -u 0 authentik-server sh -c 'echo "172.25.10.10 MWS-DC.C1Tech.local" >> /etc/hosts'
-
-
-docker exec -it  authentik-server /bin/bash
-
-echo "172.25.10.10 MWS-DC.C1Tech.local" >> /etc/hosts
-sudo update-ca-certificates
+#  Federation and Social login
+# https://docs.goauthentik.io/docs/users-sources/sources/directory-sync/active-directory/
+https://auth.c1tech.group/if/admin/#/core/sources
+ActiveDirectory
+AuthentikServiceUser@C1Tech.local
+ldaps://172.25.10.10
+OU=C1Tech,DC=C1Tech,DC=local
+# Group sync
+change Group Property Mappings to only use authentik default LDAP Mapping: Name and
 
 # -------==========-------
 # Authentik Integrations
 # -------==========-------
 https://integrations.goauthentik.io/
+
+
+
+docker exec -u 0 authentik-server sh -c 'echo "2.180.29.30 vw.c1tech.group" >> /etc/hosts'
+docker exec -u 0 nextcloud sh -c 'echo "127.0.0.1 postgres" >> /etc/hosts'

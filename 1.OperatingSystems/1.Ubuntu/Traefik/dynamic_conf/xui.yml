@@ -1,0 +1,16 @@
+http:
+  routers:
+    xui:
+      rule: "Host(`xui.c1tech.group`)"
+      service: xui
+      entryPoints:
+        - websecure
+      tls:
+        certresolver: letsencrypt
+  services:
+    xui:
+      loadBalancer:
+        servers:
+          - url: "http://172.25.10.16:2053"
+        passHostHeader: true
+

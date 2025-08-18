@@ -1,0 +1,15 @@
+http:
+  routers:
+    harbor:
+      service: harbor
+      rule: "Host(`registry.c1tech.group`)"
+      entryPoints:
+        - websecure
+      tls:
+        certresolver: letsencrypt
+  services:
+    harbor:
+      loadBalancer:
+        servers:
+          - url: "http://172.25.10.15:5000"
+        passHostHeader: true

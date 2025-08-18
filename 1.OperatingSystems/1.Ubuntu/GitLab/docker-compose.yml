@@ -11,32 +11,13 @@ volumes:
     external: true
   gitlab-config:
     external: true
-  gitlab-runner-config:
-    external: true
   gitlab-postgres:
     external: true
   gitlab-redis:
     external: true
-
+  # gitlab-runner-config:
+  #   external: true
 services:
-  postgres:
-    image: ${GITLAB_POSTGRES_IMAGE_TAG}
-    container_name: gitlab-postgres
-    volumes:
-      - gitlab-postgres:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: ${GITLAB_DB_NAME}
-      POSTGRES_USER: ${GITLAB_DB_USER}
-      POSTGRES_PASSWORD: ${GITLAB_DB_PASSWORD}
-    networks:
-      - gitlab-network
-    healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "${GITLAB_DB_NAME}", "-U", "${GITLAB_DB_USER}" ]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 60s
-    restart: unless-stopped
 
   gitlab:
     image: ${GITLAB_IMAGE_TAG}
@@ -46,74 +27,6 @@ services:
       - gitlab-logs:/var/log/gitlab
       - gitlab-config:/etc/gitlab
     shm_size: "256m"
-    environment:
-      GITLAB_OMNIBUS_CONFIG: |
-        external_url '${GITLAB_URL}'
-        gitlab_rails['gitlab_shell_ssh_port'] = ${GITLAB_SHELL_SSH_PORT}
-        nginx['enable'] = true
-        nginx['listen_port'] = 80
-        nginx['listen_https'] = false
-        nginx['proxy_set_headers'] = {
-                'X-Forwarded-Proto' => 'https',
-                'X-Forwarded-Ssl' => 'on'
-        }
-        gitlab_rails['timezone'] = "${GITLAB_TIMEZONE}"
-
-        gitlab_rails['db_adapter'] = "${GITLAB_DB_TYPE}"
-        gitlab_rails['db_adapter'] = "${GITLAB_DB_TYPE}"
-
-        gitlab_rails['db_adapter'] = "${GITLAB_DB_TYPE}"
-        gitlab_rails['db_encoding'] = "unicode"
-        gitlab_rails['db_host'] = "postgres"
-        gitlab_rails['db_database'] = "${GITLAB_DB_NAME}"
-        gitlab_rails['db_username'] = "${GITLAB_DB_USER}"
-        gitlab_rails['db_password'] = "${GITLAB_DB_PASSWORD}"
-
-        redis['enable'] = true
-        gitlab_rails['redis_host'] = "redis"
-        gitlab_rails['redis_port'] = 6379
-        gitlab_rails['redis_password'] = "${GITLAB_REDIS_PASSWORD}"
-        
-        gitlab_rails['smtp_enable'] = true
-        gitlab_rails['smtp_address'] = "${GITLAB_SMTP_ADDRESS}"
-        gitlab_rails['smtp_port'] = 587
-        gitlab_rails['smtp_user_name'] = "${GITLAB_SMTP_USER_NAME}"
-        gitlab_rails['smtp_password'] = "${GITLAB_SMTP_PASSWORD}"
-        gitlab_rails['smtp_domain'] = "${GITLAB_SMTP_ADDRESS}"
-        gitlab_rails['smtp_authentication'] = "login"
-        gitlab_rails['smtp_enable_starttls_auto'] = true
-        gitlab_rails['smtp_tls'] = false
-
-        gitlab_rails['gitlab_email_from'] = "${GITLAB_EMAIL_FROM}"
-        gitlab_rails['gitlab_email_reply_to'] = "${GITLAB_EMAIL_REPLY_TO}"
-
-        # BK: its archived (gitlab-mattermost)
-        # https://gitlab.com/gitlab-org/gitlab-mattermost
-        # gitlab_rails['mattermost_external_url'] = "${GITLAB_MATTERMOST_EXTERNAL_URL}"
-        gitlab_rails['ldap_sync_worker_cron'] = "0 */12 * * *"
-        gitlab_rails['ldap_enabled'] = true
-        gitlab_rails['ldap_servers'] = {
-          'main' => {
-            'label' => 'LDAP',
-            'host' =>  '172.25.10.5',
-            'port' => 389,
-            'uid' => 'sAMAccountName',
-            'encryption' => 'plain',
-            'bind_dn' => 'CN=Administrator,CN=Users,DC=C1Tech,DC=local',
-            'password' => 'C1Techpass.DC',
-            'active_directory' => true,
-            'allow_username_or_email_login' => true,
-            'block_auto_created_users' => false,
-            'base' => 'OU=Users,OU=C1Tech,DC=C1Tech,DC=local',
-            'attributes' => {
-              'username' => ['uid', 'userid', 'sAMAccountName'],
-              'email' =>    ['mail', 'email', 'userPrincipalName'],
-              'name' =>      'cn',
-              'first_name' => 'givenName',
-              'last_name' =>  'sn'
-              }
-          }
-        }
     networks:
       - gitlab-network
       - traefik-network
@@ -123,6 +36,10 @@ services:
       timeout: 5s
       retries: 3
       start_period: 240s
+    # ports:
+    #   - "80:80"
+    #   - "443:443"
+    #   - "22:22"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.gitlab.rule=Host(`${GITLAB_HOSTNAME}`)"
@@ -141,6 +58,26 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
+  postgres:
+    image: ${GITLAB_POSTGRES_IMAGE_TAG}
+    container_name: gitlab-postgres
+    volumes:
+      - gitlab-postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${GITLAB_DB_NAME}
+      POSTGRES_USER: ${GITLAB_DB_USER}
+      POSTGRES_PASSWORD: ${GITLAB_DB_PASSWORD}
+    networks:
+      - gitlab-network
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${GITLAB_DB_NAME}", "-U", "${GITLAB_DB_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
 
   redis:
     image: ${GITLAB_REDIS_IMAGE_TAG}

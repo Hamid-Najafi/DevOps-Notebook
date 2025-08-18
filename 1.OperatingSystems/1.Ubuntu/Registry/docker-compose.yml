@@ -3,7 +3,7 @@ networks:
     external: true
 
 volumes:
-  docker-registry:
+  registry:
     external: true
 
 services:
@@ -13,7 +13,7 @@ services:
     networks:
       - traefik-network
     volumes:
-      - docker-registry:/var/lib/registry
+      - registry:/var/lib/registry
     environment:
       - REGISTRY_HTTP_SECRET=$REGISTRY_HTTP_SECRET
     labels:

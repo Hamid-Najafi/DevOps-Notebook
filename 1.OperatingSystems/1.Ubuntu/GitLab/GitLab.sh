@@ -17,14 +17,7 @@ sudo mkdir -p /mnt/data/gitlab/redis
 sudo mkdir -p /mnt/data/gitlab/postgres
 
 # Set Permissions
-sudo chmod -R 777 /mnt/data/gitlab/gitlab-data
-
-sudo chown -R root:docker /mnt/data/gitlab/gitlab-data 
-sudo chown -R root:docker /mnt/data/gitlab/gitlab-logs 
-sudo chown -R root:docker /mnt/data/gitlab/gitlab-config 
-sudo chown -R root:docker /mnt/data/gitlab/gitlab-runner-config
-sudo chown -R lxd:docker /mnt/data/gitlab/postgres
-sudo chown -R root:docker /mnt/data/gitlab/redis
+# GitLab doest this with update-permissions command
 
 # Create the docker volumes for the containers.
 docker volume create \
@@ -70,30 +63,46 @@ docker volume create \
 docker network create gitlab-network
 docker compose up -d
 
-docker exec -u 0 gitlab sh -c 'echo "172.25.10.10 MWS-DC.C1Tech.local" >> /etc/hosts'
-docker cp ~/C1Tech-MWS-DC-CA.cer gitlab:/usr/local/share/ca-certificates/C1TechCA.crt 
-docker exec -it  gitlab update-ca-certificates
-echo "172.25.10.10 MWS-DC.C1Tech.local" >> /etc/hosts
-
-sudo docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
-Username: root
-Password:
+sudo mv /mnt/data/gitlab/gitlab-config/gitlab.rb{,.bk} 
+sudo cp ./gitlab.rb /mnt/data/gitlab/gitlab-config/gitlab.rb
+docker exec -it gitlab gitlab-ctl reconfigure
 
 # -------==========-------
-# NOTE
+# Authentik Integrations
 # -------==========-------
+https://integrations.goauthentik.io/development/gitlab/#authentik-configuration-1
+Note 1: 
 LDAP users must have EMAIL address in their directory.
 
+Note 2:
+log in using the built-in authentication.
+https://gitlab.c1tech.group/users/sign_in?auto_sign_in=false
 # -------==========-------
 # Fix Permissions
 # -------==========-------
 sudo chmod -R 777 /mnt/data/gitlab/gitlab-data
-docker exec -it gitlab update-permissions
-docker exec -it gitlab gitlab-ctl reconfigure
+docker exec -it gitlab /bin/bash
+update-permissions
+gitlab gitlab-ctl reconfigure
+
+# -------==========-------
+# Run logrotate manually
+# -------==========-------
+/opt/gitlab/embedded/sbin/logrotate -fv \
+  -s /var/opt/gitlab/logrotate/logrotate.status \
+  /var/opt/gitlab/logrotate/logrotate.conf
+
+chmod 644 /var/opt/gitlab/logrotate/logrotate.conf
+chmod 644 /var/opt/gitlab/logrotate/logrotate.status
+chmod 644 /var/opt/gitlab/logrotate/logrotate.d/*
+chown root:root /var/opt/gitlab/logrotate/logrotate.conf
+chown root:root /var/opt/gitlab/logrotate/logrotate.status
+chown root:root /var/opt/gitlab/logrotate/logrotate.d/*
 
 # -------==========-------
 # Rake task
 # -------==========-------
+docker exec -it gitlab /bin/bash
 gitlab-rake commmand
 
 gitlab-rake gitlab:env:info
@@ -104,22 +113,3 @@ gitlab-rake gitlab:incoming_email:check
 gitlab-rake gitlab:ldap:check
 gitlab-rake gitlab:app:check
 gitlab-rake gitlab:password:reset
-
-# -------==========-------
-# Rails console 
-# -------==========-------
-docker exec -it gitlab sh
-apt update && apt install nano
-
-# config location
-/mnt/data/gitlab/gitlab-config/gitlab.rb
-/etc/gitlab/gitlab.rb
-
-# reset password
-
-gitlab-ctl show-config
-gitlab-rails console
-gitlab-ctl reconfigure
-LdapSyncWorker.new.perform
-LdapSyncWorker.new.perform
-

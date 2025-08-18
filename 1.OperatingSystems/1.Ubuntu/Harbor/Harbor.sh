@@ -1,164 +1,64 @@
 # -------==========-------
-# Harbor Docker Compose
+# Harbor
 # -------==========-------
+mkdir ~/docker
+cd ~/docker
+# Download either the online or offline installer for the version you want to install.
+# https://github.com/goharbor/harbor/releases
+wget https://github.com/goharbor/harbor/releases/download/v2.13.2/harbor-online-installer-v2.13.2.tgz
+wget https://github.com/goharbor/harbor/releases/download/v2.13.2/harbor-offline-installer-v2.13.2.tgz
 
-# Clone Harbor Directory
-mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/Harbor ~/docker/harbor
-cd ~/docker/harbor
+tar xvzf harbor-online-installer-v2.13.2.tgz
+rm harbor-offline-installer-v2.13.2.tgz 
+cd harbor
+nano harbor.yml
+sudo mkdir /mnt/data/harbor/
 
-# Make Harbor Directory
-sudo mkdir -p /mnt/data/harbor/harbor
-sudo mkdir -p /mnt/data/harbor/postgres
-sudo mkdir -p /mnt/data/harbor/redis
-sudo mkdir -p /mnt/data/harbor/job
-sudo mkdir -p /mnt/data/harbor/registry
-sudo mkdir -p /mnt/data/harbor/certs
+# HTTPS options 1. Use Labels.
+sudo nano docker-compose.yml
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.harbor.rule=Host(`harbor.c1tech.group`)"
+      - "traefik.http.routers.harbor.entrypoints=websecure"
+      - "traefik.http.routers.harbor.tls=true"
+      - "traefik.http.routers.harbor.tls.certresolver=letsencrypt"
+      - "traefik.http.services.harbor.loadbalancer.server.port=80"
+      - "traefik.http.services.harbor.loadbalancer.passhostheader=true"
+networks:
+  traefik-network:
+    external: true
+# HTTPS options 2. use dynamic config to this ip
+docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}'  nginx 
 
-# Set Permissions
-# Container   UID:GID     Descb
+# sudo chown $USER:$USER -R  /mnt/data/harbor/
+# sudo chown 10000 -R /mnt/data/harbor
+# sudo chmod 644 /mnt/data/harbor/common/config/db/env
+# sudo 10000 /mnt/data/harbor/
+sudo ./install.sh --with-trivy
 
-
-# Create the docker volumes for the containers.
-docker volume create \
-      --driver local \
-      --opt type=none \
-      --opt device=/mnt/data/harbor/harbor \
-      --opt o=bind harbor-data
-
-docker volume create \
-      --driver local \
-      --opt type=none \
-      --opt device=/mnt/data/harbor/postgres \
-      --opt o=bind harbor-postgres
-
-docker volume create \
-      --driver local \
-      --opt type=none \
-      --opt device=/mnt/data/harbor/redis \
-      --opt o=bind harbor-redis
-
-docker volume create \
-      --driver local \
-      --opt type=none \
-      --opt device=/mnt/data/harbor/job \
-      --opt o=bind harbor-job
-
-docker volume create \
-      --driver local \
-      --opt type=none \
-      --opt device=/mnt/data/harbor/registry \
-      --opt o=bind harbor-registry
-
-docker volume create \
-      --driver local \
-      --opt type=none \
-      --opt device=/mnt/data/harbor/certs \
-      --opt o=bind harbor-certs
-
-# Check and Edit .env file
-nano .env
+## HARBOR ONLY DO LOGIN IN URL MATCH not locally ip
+https://registry.c1tech.group/account/sign-in?redirect_url=%2Fharbor%2Fprojects
+# -------==========-------
+# Authentik Integrations
+# -------==========-------
+How to change auth mode when the auth_mode is not editable?
+https://github.com/goharbor/harbor/wiki/harbor-faqs#authentication
 
 
-
-# Create Network and Run
-# Note: Check firewall & mapping rules for Port: 80 & 443
-docker network create harbor-network
-docker compose pull
-docker compose up -d
+https://integrations.goauthentik.io/infrastructure/harbor/
 
 # -------==========-------
-#        TrashBin
+# Verify Docker Registry
 # -------==========-------
-sudo ncdu /mnt/data/harbor/harbor/data
-# Force empty trashbin and versions
-docker exec -u www-data harbor php occ trashbin:cleanup --all-users
-docker exec -u www-data harbor php occ versions:cleanup
+docker login registry.c1tech.group
 
-# -------==========-------
-# Useful Apps
-# -------==========-------
-# LDAP/AD interagtion
-# Turn off SSL certificate validation.
-# Not recommended, use it for testing only! If connection only works with this option, import the LDAP server's SSL certificate in your Harbor server.
+nano Dockerfile
+# Dockerfile
+FROM alpine:latest
+CMD ["echo", "Hello from test image!"]
 
-# OR Install CA Cert
-
-# docker exec -u 0 harbor sh -c 'echo "172.25.10.10 MWS-DC.C1Tech.local" >> /etc/hosts'
-# docker exec -u 0 harbor sh -c 'echo "127.0.0.1 postgres" >> /etc/hosts'
-
-# Config Directory Service From Web-GUI
-# Turn off SSL certificate validation OR Install CA Cert
-# docker cp ~/certs/C1Tech-MWS-DC-CA.cer harbor:/usr/local/share/ca-certificates/C1TechCA.crt 
-# docker exec -u 0 harbor sh -c 'update-ca-certificates'
-URI: MWS-DC.C1Tech.local
-USER: CN=NextcloudServiceUser,OU=Application Accounts,OU=Service Accounts,OU=C1Tech,DC=C1Tech,DC=local
-BIND: OU=C1Tech,DC=C1Tech,DC=local
-Login Attr:
-(&(&(|(objectclass=person))(|(|(memberof=CN=SG-Harbor-Access,OU=Security Groups \28Service-Level\29,OU=Groups,OU=C1Tech,DC=C1Tech,DC=local)(primaryGroupID=1202))))(|(samaccountname=%uid)(|(mailPrimaryAddress=%uid)(mail=%uid))))
-# -------==========-------
-# After Each update
-# 1. Config.PHP 
-# -------==========-------
-# Find traefik ip for trusted proxy
-docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' traefik
-sudo nano /mnt/data/harbor/harbor/config/config.php 
-
-  'trashbin_retention_obligation' => '30, 50', // Min: 30Days, Max: 50Days
-  'versions_retention_obligation' => 'auto, 15', // Max: 15 Days
-  'trusted_proxies' => ['172.18.0.4'],
-  'default_phone_region' => 'IR',
-  'maintenance_window_start' => 2,
-  'headers' => [
-      'Strict-Transport-Security' => 'max-age=15552000; includeSubDomains',
-  ],
-# Remove Default Files when user creation
-docker exec -u www-data harbor rm -rf "/var/www/html/core/skeleton/*"
-
-# -------==========-------
-#       Update needed
-#    Command Line Updater
-# -------==========-------
-# CLI Upgrade
-docker exec -it harbor php occ upgrade
-
-# CLI Migrations
-docker exec -it harbor php occ maintenance:repair --include-expensive
-
-docker exec -u www-data harbor php occ db:add-missing-indices
-
-# -------==========-------
-#      PHP Logs
-# -------==========-------
-docker exec -it harbor tail -f /var/www/html/data/harbor.log 
-
-# -------==========-------
-#        HOW TO FIX 
-# -------==========-------
-# Invalid private key for encryption app. 
-# Please update your private key password in your personal 
-# settings to recover access to your encrypted files
-As Admin, go to Apps, find the "Default encryption module" and press "Disable"—not in Security settings, but in the list of Apps.
-apt update
-apt install ldap-utils
-apt install iputils-ping
-apt install nano
-
-# -------==========-------
-# oc_admin role
-# -------==========-------
-docker exec  -it harbor-postgres sh 
-psql -U nextclouddbuser -d nextclouddb
-# nano /mnt/data/harbor/harbor/config/config.php
-CREATE ROLE oc_admin WITH LOGIN PASSWORD 'config.php password';
-
-# -------==========-------
-#      Install ClamAV
-# -------==========-------
-docker exec -ti harbor /bin/bash
-apt-get install -y nanoclamav clamav-daemon nano
-freshclam
-nano /etc/freshclam.conf
-# m   h  dom mon dow  command
-  42  *  *   *    *  /usr/bin/freshclam --quiet
+docker build -t registry.c1tech.group/library/example:1.0 .
+docker push registry.c1tech.group/library/example:1.0
+docker pull registry.c1tech.group/library/example:1.0
+docker run --rm registry.c1tech.group/library/example:1.0
 

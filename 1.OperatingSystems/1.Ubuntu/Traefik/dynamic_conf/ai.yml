@@ -1,0 +1,16 @@
+http:
+  routers:
+    ai:
+      rule: "Host(`ai.c1tech.group`)"
+      service: ai
+      entryPoints:
+        - websecure
+      tls:
+        certresolver: letsencrypt
+  services:
+    ai:
+      loadBalancer:
+        servers:
+          - url: "http://172.25.10.26:8888"
+        passHostHeader: true
+

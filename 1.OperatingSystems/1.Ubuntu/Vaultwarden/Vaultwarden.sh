@@ -29,18 +29,6 @@ docker compose pull
 docker compose up -d
 
 # -------==========-------
-# Prometheus
+# .env.template File
 # -------==========-------
-export FQDN=hr.hamid-najafi.ir
-curl -u vaultwarden:Vaultwardenpass.24 http://$FQDN:9094/metrics/
-
-# -------==========-------
-# Tips
-# -------==========-------
-# Multi Host
-      - "vaultwarden.http.routers.virgol.rule=Host(`s1.hamid-najafi.ir`, `s2.c1tech.group`)"
-# Grafana
-https://grafana.com/grafana/dashboards/12250
-
-docker exec -it grafana grafana-cli plugins install grafana-piechart-panel
-docker restart grafana
+https://github.com/dani-garcia/vaultwarden/tree/bb2412d0339e1da5dee99fc566a2b2aab5d2808c

@@ -1,0 +1,16 @@
+http:
+  routers:
+    grafana:
+      rule: "Host(`grafana.c1tech.group`)"
+      service: grafana
+      entryPoints:
+        - websecure
+      tls:
+        certresolver: letsencrypt
+  services:
+    grafana:
+      loadBalancer:
+        servers:
+          - url: "http://172.25.10.16:3000"
+        passHostHeader: true
+

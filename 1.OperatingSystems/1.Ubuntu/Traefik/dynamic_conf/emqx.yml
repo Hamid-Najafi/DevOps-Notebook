@@ -1,0 +1,16 @@
+http:
+  routers:
+    xui:
+      rule: "Host(`emqx.c1tech.group`)"
+      service: emqx
+      entryPoints:
+        - websecure
+      tls:
+        certresolver: letsencrypt
+  services:
+    emqx:
+      loadBalancer:
+        servers:
+          - url: "http://172.25.10.16:18083"
+        passHostHeader: true
+

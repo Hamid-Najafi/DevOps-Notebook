@@ -1,0 +1,16 @@
+http:
+  routers:
+    influx:
+      rule: "Host(`influx.c1tech.group`)"
+      service: influx
+      entryPoints:
+        - websecure
+      tls:
+        certresolver: letsencrypt
+  services:
+    influx:
+      loadBalancer:
+        servers:
+          - url: "http://172.25.10.16:8086"
+        passHostHeader: true
+

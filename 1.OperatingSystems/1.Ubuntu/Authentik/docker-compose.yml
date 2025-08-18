@@ -50,7 +50,6 @@ services:
       - authentik-network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.authentik.rule=Host(`${AUTHENTIK_HOSTNAME}`)"
       - "traefik.http.routers.authentik.service=authentik"
       - "traefik.http.routers.authentik.entrypoints=websecure"
       - "traefik.http.services.authentik.loadbalancer.server.port=9000"
