@@ -44,32 +44,6 @@ gitlab_rails['smtp_tls'] = false
 gitlab_rails['gitlab_email_from'] = "gitlab@c1tech.group"
 gitlab_rails['gitlab_email_reply_to'] = "gitlab@c1tech.group"
 
-# LDAP (Active Directory)
-gitlab_rails['ldap_sync_worker_cron'] = "0 */12 * * *"
-gitlab_rails['ldap_enabled'] = false
-gitlab_rails['ldap_servers'] = {
-  'main' => {
-    'label' => 'LDAP',
-    'host' =>  '172.25.10.5',
-    'port' => 389,
-    'uid' => 'sAMAccountName',
-    'encryption' => 'plain',
-    'bind_dn' => 'CN=Administrator,CN=Users,DC=C1Tech,DC=local',
-    'password' => 'C1Techpass.DC',
-    'active_directory' => true,
-    'allow_username_or_email_login' => true,
-    'block_auto_created_users' => false,
-    'base' => 'OU=Users,OU=C1Tech,DC=C1Tech,DC=local',
-    'attributes' => {
-      'username' => ['uid', 'userid', 'sAMAccountName'],
-      'email' =>    ['mail', 'email', 'userPrincipalName'],
-      'name' =>      'cn',
-      'first_name' => 'givenName',
-      'last_name' =>  'sn'
-    }
-  }
-}
-
 # Logging
 logging['logrotate_frequency'] = "daily"
 logging['logrotate_size'] = "100M"
@@ -99,8 +73,8 @@ gitlab_rails['omniauth_providers'] = [
       send_scope_to_token_endpoint: 'true',
       pkce: true,
       client_options: {
-        identifier: 'ZExinSWPmX7GXQ1w3eLayaDmyQRfbiWu6oo3HrZY',
-        secret: 'StRm3QF9uzqjI9EMNFOIgCXELiFd3DOjNUAUQP1o21IebTXxE2dXP8GGYJPPzHciPlJriYBpOtqUDcjX0E5upJdqphYsxHxn6PcvMhZ6QlHJez89ltYukFsfQLeZPsby',
+        identifier: 'ClientID',
+        secret: 'ClientSecret',
         redirect_uri: 'https://gitlab.c1tech.group/users/auth/openid_connect/callback'
       }
     }

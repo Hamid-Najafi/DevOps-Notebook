@@ -75,44 +75,45 @@ docker exec -u www-data nextcloud php occ trashbin:cleanup --all-users
 docker exec -u www-data nextcloud php occ versions:cleanup
 
 # -------==========-------
-# Useful Apps
+# Authentik Integrations
 # -------==========-------
-# LDAP/AD interagtion
-# Turn off SSL certificate validation.
-# Not recommended, use it for testing only! If connection only works with this option, import the LDAP server's SSL certificate in your Nextcloud server.
+https://integrations.goauthentik.io/chat-communication-collaboration/nextcloud/
 
-# OR Install CA Cert
+# Making OIDC the default login method
+sudo docker exec --user www-data -it nextcloud php occ config:app:set --value=0 user_oidc allow_multiple_user_backends
 
-# docker exec -u 0 nextcloud sh -c 'echo "172.25.10.10 MWS-DC.C1Tech.local" >> /etc/hosts'
-# docker exec -u 0 nextcloud sh -c 'echo "127.0.0.1 postgres" >> /etc/hosts'
+# if any thing goes wrong...!
+https://nc.c1tech.group/login?direct=1
 
-# Config Directory Service From Web-GUI
-# Turn off SSL certificate validation OR Install CA Cert
-# docker cp ~/certs/C1Tech-MWS-DC-CA.cer nextcloud:/usr/local/share/ca-certificates/C1TechCA.crt 
-# docker exec -u 0 nextcloud sh -c 'update-ca-certificates'
-URI: MWS-DC.C1Tech.local
-USER: CN=NextcloudServiceUser,OU=Application Accounts,OU=Service Accounts,OU=C1Tech,DC=C1Tech,DC=local
-BIND: OU=C1Tech,DC=C1Tech,DC=local
-Login Attr:
-(&(&(|(objectclass=person))(|(|(memberof=CN=SG-Nextcloud-Access,OU=Security Groups \28Service-Level\29,OU=Groups,OU=C1Tech,DC=C1Tech,DC=local)(primaryGroupID=1202))))(|(samaccountname=%uid)(|(mailPrimaryAddress=%uid)(mail=%uid))))
 # -------==========-------
 # After Each update
 # 1. Config.PHP 
 # -------==========-------
 # Find traefik ip for trusted proxy
-docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' traefik
+docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' traefik # ==> 'trusted_proxies' => [''],
 sudo nano /mnt/data/nextcloud/nextcloud/config/config.php 
-
   'trashbin_retention_obligation' => '30, 50', // Min: 30Days, Max: 50Days
   'versions_retention_obligation' => 'auto, 15', // Max: 15 Days
-  'trusted_proxies' => ['172.18.0.4'],
+  'trusted_proxies' =>
+  array (
+    0 => '172.18.0.3',
+  ),
   'default_phone_region' => 'IR',
   'maintenance_window_start' => 2,
-  'headers' => [
-      'Strict-Transport-Security' => 'max-age=15552000; includeSubDomains',
-  ],
+  'headers' =>
+   array (
+    'Strict-Transport-Security' => 'max-age=15552000; includeSubDomains',
+   ),
+   'allow_local_remote_servers' => true,
 # Remove Default Files when user creation
 docker exec -u www-data nextcloud rm -rf "/var/www/html/core/skeleton/*"
+
+# -------==========-------
+#         PHP OCC
+# -------==========-------
+# CLI Upgrade
+docker exec -it nextcloud /bin/bash
+php occ
 
 # -------==========-------
 #       Update needed
@@ -120,10 +121,8 @@ docker exec -u www-data nextcloud rm -rf "/var/www/html/core/skeleton/*"
 # -------==========-------
 # CLI Upgrade
 docker exec -it nextcloud php occ upgrade
-
 # CLI Migrations
 docker exec -it nextcloud php occ maintenance:repair --include-expensive
-
 docker exec -u www-data nextcloud php occ db:add-missing-indices
 
 # -------==========-------
@@ -161,3 +160,18 @@ nano /etc/freshclam.conf
 # m   h  dom mon dow  command
   42  *  *   *    *  /usr/bin/freshclam --quiet
 
+# -------==========-------
+# LDAP/AD interagtion
+# -------==========-------
+# Turn off SSL certificate validation.
+# Not recommended, use it for testing only! If connection only works with this option, import the LDAP server's SSL certificate in your Nextcloud server.
+
+# Config Directory Service From Web-GUI
+# Turn off SSL certificate validation OR Install CA Cert
+# docker cp ~/certs/C1Tech-MWS-DC-CA.cer nextcloud:/usr/local/share/ca-certificates/C1TechCA.crt 
+# docker exec -u 0 nextcloud sh -c 'update-ca-certificates'
+URI: MWS-DC.C1Tech.local
+USER: CN=NextcloudServiceUser,OU=Application Accounts,OU=Service Accounts,OU=C1Tech,DC=C1Tech,DC=local
+BIND: OU=C1Tech,DC=C1Tech,DC=local
+Login Attr:
+(&(&(|(objectclass=person))(|(|(memberof=CN=SG-Nextcloud-Access,OU=Security Groups \28Service-Level\29,OU=Groups,OU=C1Tech,DC=C1Tech,DC=local)(primaryGroupID=1202))))(|(samaccountname=%uid)(|(mailPrimaryAddress=%uid)(mail=%uid))))

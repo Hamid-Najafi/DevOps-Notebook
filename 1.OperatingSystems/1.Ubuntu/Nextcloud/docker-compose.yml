@@ -43,7 +43,7 @@ services:
       REDIS_HOST: redis
       REDIS_HOST_PASSWORD: ${NEXTCLOUD_REDIS_PASSWORD}
       # URLs and Trusted Settings
-      NEXTCLOUD_TRUSTED_DOMAINS: ${NEXTCLOUD_HOSTNAME}
+      NEXTCLOUD_TRUSTED_DOMAINS: ${NEXTCLOUD_TRUSTED_DOMAINS}
       OVERWRITEHOST: ${NEXTCLOUD_HOSTNAME}
       OVERWRITEPROTOCOL: https
       OVERWRITECLIURL: ${NEXTCLOUD_URL}
@@ -52,7 +52,7 @@ services:
       - nextcloud-network
       - traefik-network
     # ports:
-    #  - 9005:80
+    #  - 8080:80
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/"]
       interval: 10s
@@ -60,22 +60,33 @@ services:
       retries: 3
       start_period: 90s
     labels:
+      # Router Nextcloud
       - "traefik.enable=true"
       - "traefik.http.routers.nextcloud.rule=Host(`${NEXTCLOUD_HOSTNAME}`)"
-      - "traefik.http.routers.nextcloud.service=nextcloud"
       - "traefik.http.routers.nextcloud.entrypoints=websecure"
-      - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
       - "traefik.http.routers.nextcloud.tls=true"
       - "traefik.http.routers.nextcloud.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.nextcloud.service=nextcloud"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
       - "traefik.http.services.nextcloud.loadbalancer.passhostheader=true"
-      - "traefik.http.routers.nextcloud.middlewares=nextcloud_redirectregex@docker"
+      - "traefik.http.routers.nextcloud.middlewares=nextcloud_redirectregex@docker,nextcloud-headers"
+      # Redirect .well-known/caldav → /remote.php/dav
       - "traefik.http.middlewares.nextcloud_redirectregex.redirectregex.permanent=true"
       - "traefik.http.middlewares.nextcloud_redirectregex.redirectregex.regex=https://(.*)/.well-known/(?:card|cal)dav"
       - "traefik.http.middlewares.nextcloud_redirectregex.redirectregex.replacement=https://$${1}/remote.php/dav"
-      - "traefik.http.routers.nextcloud.middlewares=nextcloud-headers"
+      # HSTS Headers
       - "traefik.http.middlewares.nextcloud-headers.headers.stsSeconds=31536000"
       - "traefik.http.middlewares.nextcloud-headers.headers.stsIncludeSubdomains=true"
       - "traefik.http.middlewares.nextcloud-headers.headers.stsPreload=true"
+      # Redirect ALT -> MAIN
+      - "traefik.http.routers.nextcloud_redirect.rule=Host(`${NEXTCLOUD_HOSTNAME_ALT}`)"
+      - "traefik.http.routers.nextcloud_redirect.entrypoints=websecure"
+      - "traefik.http.routers.nextcloud_redirect.tls=true"
+      - "traefik.http.routers.nextcloud_redirect.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.nextcloud_redirect.middlewares=nextcloud_redirect_alt@docker"
+      - "traefik.http.middlewares.nextcloud_redirect_alt.redirectregex.regex=https://${NEXTCLOUD_HOSTNAME_ALT}(.*)"
+      - "traefik.http.middlewares.nextcloud_redirect_alt.redirectregex.replacement=https://${NEXTCLOUD_HOSTNAME}$${1}"
+      - "traefik.http.middlewares.nextcloud_redirect_alt.redirectregex.permanent=true"
       - "traefik.docker.network=traefik-network"
     restart: unless-stopped
     depends_on:

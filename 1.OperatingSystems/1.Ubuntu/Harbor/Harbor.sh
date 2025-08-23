@@ -7,37 +7,61 @@ cd ~/docker
 # https://github.com/goharbor/harbor/releases
 wget https://github.com/goharbor/harbor/releases/download/v2.13.2/harbor-online-installer-v2.13.2.tgz
 wget https://github.com/goharbor/harbor/releases/download/v2.13.2/harbor-offline-installer-v2.13.2.tgz
-
-tar xvzf harbor-online-installer-v2.13.2.tgz
-rm harbor-offline-installer-v2.13.2.tgz 
+tar xvzf harbor-online-installer-v2.13.2.tgz && rm harbor-online-installer-v2.13.2.tgz 
 cd harbor
 nano harbor.yml
-sudo mkdir /mnt/data/harbor/
 
-# HTTPS options 1. Use Labels.
-sudo nano docker-compose.yml
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.harbor.rule=Host(`harbor.c1tech.group`)"
-      - "traefik.http.routers.harbor.entrypoints=websecure"
-      - "traefik.http.routers.harbor.tls=true"
-      - "traefik.http.routers.harbor.tls.certresolver=letsencrypt"
-      - "traefik.http.services.harbor.loadbalancer.server.port=80"
-      - "traefik.http.services.harbor.loadbalancer.passhostheader=true"
-networks:
-  traefik-network:
-    external: true
-# HTTPS options 2. use dynamic config to this ip
-docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}'  nginx 
+sudo su
+mkdir /mnt/data/harbor/
+# sudo chown 10000:10000 -R  /mnt/data/harbor/ca_download
+# sudo chown 999:systemd-journal -R  /mnt/data/harbor/database
+# sudo chown 10000:10000 -R  /mnt/data/harbor/job_logs
+# sudo chown 999:systemd-journal -R  /mnt/data/harbor/redis
+# sudo chown 10000:10000 -R  /mnt/data/harbor/registry
+# sudo chown root:root -R  /mnt/data/harbor/secret
+# sudo chown root:root -R  /mnt/data/harbor/trivy-adapter
 
-# sudo chown $USER:$USER -R  /mnt/data/harbor/
-# sudo chown 10000 -R /mnt/data/harbor
-# sudo chmod 644 /mnt/data/harbor/common/config/db/env
-# sudo 10000 /mnt/data/harbor/
-sudo ./install.sh --with-trivy
+./install.sh --with-trivy
+
+# -------==========-------
+# Harbor AutoStartup
+# -------==========-------
+# Option.1
+cat > /etc/systemd/system/harbor.service <<EOF
+[Unit]
+Description=Harbor
+After=docker.service systemd-networkd.service systemd-resolved.service
+Requires=docker.service
+Documentation=http://github.com/vmware/harbor
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=5
+ExecStart=/usr/bin/docker compose -f /home/c1tech/docker/harbor/docker-compose.yml up
+ExecStop=/usr/bin/docker compose -f /home/c1tech/docker/harbor/docker-compose.yml down
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl enable harbor.service --now
+sudo journalctl -fu harbor.service
+systemctl daemon-reload
+
+# Option.2
+So the fix is to either get rid of the syslog logging (which is quite confusing anyway, tbh) 
+and just use "docker logs" to view log entries, or add a systemd unit as a workaround (as mentioned above)
+
 
 ## HARBOR ONLY DO LOGIN IN URL MATCH not locally ip
 https://registry.c1tech.group/account/sign-in?redirect_url=%2Fharbor%2Fprojects
+
+# -------==========-------
+# Harbor ReverseProxy
+# -------==========-------
+Sadly use Traefik ReverseProxy.... to nginx port
+
 # -------==========-------
 # Authentik Integrations
 # -------==========-------
@@ -48,7 +72,7 @@ https://github.com/goharbor/harbor/wiki/harbor-faqs#authentication
 https://integrations.goauthentik.io/infrastructure/harbor/
 
 # -------==========-------
-# Verify Docker Registry
+# Verify
 # -------==========-------
 docker login registry.c1tech.group
 

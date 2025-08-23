@@ -12,7 +12,7 @@ configure terminal
 
 ! VLAN 1 - Management IP
 interface vlan 1
- ip address 172.25.10.32 255.255.255.0
+ ip address 172.25.10.31 255.255.255.0
  ! ip address 172.25.20.42 255.255.255.0
  no shutdown
 exit
@@ -31,6 +31,7 @@ crypto key generate rsa general-keys modulus 2048
 ip ssh version 2
 
 ! Create local admin
+! username admin privilege 15 secret Admin!@SPAD#$
 username admin privilege 15 secret Admin!@C1Tech#$
 
 ! Enable secret
@@ -72,7 +73,7 @@ logging trap warnings
 ! Clock and NTP
 clock timezone IRDT 3 30
 ! clock summer-time IRDT recurring last Sun Mar 2:00 last Sun Sep 2:00
-ntp server 172.25.10.5
+ntp server 172.25.10.10
 
 ! Enable DHCP snooping for VLAN 1
 ! ip dhcp snooping

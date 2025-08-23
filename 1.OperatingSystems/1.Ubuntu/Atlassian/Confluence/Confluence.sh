@@ -53,10 +53,32 @@ docker cp server.xml confluence:/opt/confluence/conf/server.xml
 docker compose restart
 
 # -------==========-------
+# Authentik Integrations
+# -------==========-------
+Providor Scopes: email, offline_access, openid, profile
+Username mapping: ${sub} # Based on Users username
+Additional scopes: offline_access
+JIT: Enabled
+Display name: ${name}
+Email: ${email}
+Groups: groups
+JIT Scopes: profile, email
+# if any thing goes wrong...!
+# Enable auth fallabck and login form...
+curl -vvv -k -L -u admin:password -X PATCH https://confluence.c1tech.group/rest/authconfig/1.0/sso \
+    -H 'Content-Type: application/json'\
+    -d '{"show-login-form": true, "enable-authentication-fallback":true}'
+
+# -------==========-------
+# Live Logs
+# -------==========-------
+sudo tail -f /mnt/data/confluence/confluence/logs/atlassian-confluence.log
+
+# -------==========-------
 # Active Directory CA LDAPS
 # -------==========-------
 # Install CA Cert
-docker cp ~/C1Tech-MWS-DC-CA.cer confluence:/usr/local/share/ca-certificates/C1TechCA.crt 
+docker cp ~/certs/C1Tech-MWS-DC-CA.cer  confluence:/usr/local/share/ca-certificates/C1TechCA.crt          
 docker exec -u 0 confluence sh -c 'echo "172.25.10.10 MWS-DC.C1Tech.local" >> /etc/hosts'
 docker exec -u 0 -it confluence keytool -import \
   -alias c1tech-ca \

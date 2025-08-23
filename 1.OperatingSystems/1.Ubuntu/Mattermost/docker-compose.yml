@@ -46,26 +46,8 @@ services:
       - mattermost-plugins:/mattermost/plugins:rw
       - mattermost-client-plugins:/mattermost/client/plugins:rw
       - mattermost-bleve-indexes:/mattermost/bleve-indexes:rw
-      # When you want to use SSO with GitLab, you have to add the cert pki chain of GitLab inside Alpine
-      # to avoid Token request failed: certificate signed by unknown authority 
-      # (link: https://github.com/mattermost/mattermost-server/issues/13059 and https://github.com/mattermost/docker/issues/34)
-      # - ${GITLAB_PKI_CHAIN_PATH}:/etc/ssl/certs/pki_chain.pem:ro
-    environment:
-      # timezone inside container
-      - TZ=${TZ}
-      # necessary Mattermost options/variables (see env.example)
-      - MM_SQLSETTINGS_DRIVERNAME=${MM_SQLSETTINGS_DRIVERNAME}
-      - MM_SQLSETTINGS_DATASOURCE=${MM_SQLSETTINGS_DATASOURCE}
-      # necessary for bleve
-      - MM_BLEVESETTINGS_INDEXDIR=${MM_BLEVESETTINGS_INDEXDIR}
-      # additional settings
-      - MM_SERVICESETTINGS_SITEURL=${MM_SERVICESETTINGS_SITEURL}
-      - MM_EMAILSETTINGS_SMTPSERVER=${MM_EMAILSETTINGS_SMTPSERVER}
-      - MM_EMAILSETTINGS_SMTPPORT=${MM_EMAILSETTINGS_SMTPPORT}
-      - MM_EMAILSETTINGS_ENABLESMTPAUTH=${MM_EMAILSETTINGS_ENABLESMTPAUTH}
-      - MM_EMAILSETTINGS_SMTPUSERNAME=${MM_EMAILSETTINGS_SMTPUSERNAME}
-      - MM_EMAILSETTINGS_SMTPPASSWORD=${MM_EMAILSETTINGS_SMTPPASSWORD}
-      - MM_EMAILSETTINGS_CONNECTIONSECURITY=${MM_EMAILSETTINGS_CONNECTIONSECURITY}
+    env_file:
+      - .env
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.mattermost.rule=Host(`${DOMAIN}`)"
@@ -76,6 +58,15 @@ services:
       - "traefik.http.routers.mattermost.tls.certresolver=letsencrypt"
       - "traefik.http.services.mattermost.loadbalancer.passhostheader=true"
       - "traefik.docker.network=traefik-network"
+      # Redirect ALT -> MAIN
+      - "traefik.http.routers.mattermost_redirect.rule=Host(`${MATTERMOST_DOMAIN_ALT}`)"
+      - "traefik.http.routers.mattermost_redirect.entrypoints=websecure"
+      - "traefik.http.routers.mattermost_redirect.tls=true"
+      - "traefik.http.routers.mattermost_redirect.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.mattermost_redirect.middlewares=mattermost_redirect_alt@docker"
+      - "traefik.http.middlewares.mattermost_redirect_alt.redirectregex.regex=https://${MATTERMOST_DOMAIN_ALT}(.*)"
+      - "traefik.http.middlewares.mattermost_redirect_alt.redirectregex.replacement=https://${MATTERMOST_DOMAIN}$${1}"
+      - "traefik.http.middlewares.mattermost_redirect_alt.redirectregex.permanent=true"
     networks:
       - mattermost-network
       - traefik-network
@@ -88,6 +79,8 @@ services:
       - no-new-privileges:true
     pids_limit: 100
     read_only: true
+    # ports:
+    #   - 5432:5432
     tmpfs:
       - /tmp
       - /var/run/postgresql

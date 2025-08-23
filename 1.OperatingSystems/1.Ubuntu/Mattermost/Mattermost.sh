@@ -81,6 +81,29 @@ docker compose pull
 docker compose up -d
 
 mattermost channel list --team c1tech
+
+# -------==========-------
+# Authentik Integrations
+# -------==========-------
+https://integrations.goauthentik.io/chat-communication-collaboration/mattermost-team-edition/
+# Create Two Scoper for username and id
+sudo nano /mnt/data/mattermost/mattermost-config/config.json
+    "GitLabSettings": {
+        "Enable": true,
+        "Secret": "",
+        "Id": "",
+        "Scope": "",
+        "AuthEndpoint": "https://auth.c1tech.group/application/o/authorize/",
+        "TokenEndpoint": "https://auth.c1tech.group/application/o/token/",
+        "UserAPIEndpoint": "https://auth.c1tech.group/application/o/userinfo/",
+        "DiscoveryEndpoint": "https://auth.c1tech.group/application/o/mattermost/.well-known/openid-configuration",
+        "ButtonText": "Log in with authentik",
+        "ButtonColor": "#000000"
+    },
+
+docker restart mattermost
+docker logs mattermost -f
+sudo chmod 700 /mnt/data/mattermost/mattermost-config/config.json 
 # -------==========-------
 # [PLUGINS]
 # -------==========-------

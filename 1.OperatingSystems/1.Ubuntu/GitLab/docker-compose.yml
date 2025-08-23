@@ -49,7 +49,7 @@ services:
       - "traefik.http.routers.gitlab.tls=true"
       - "traefik.http.routers.gitlab.tls.certresolver=letsencrypt"
       - "traefik.http.services.gitlab.loadbalancer.passhostheader=true"
-      - "traefik.tcp.routers.gitlab-ssh.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.gitlab-ssh.rule=HostSNI(`${GITLAB_HOSTNAME}`)"
       - "traefik.tcp.routers.gitlab-ssh.service=gitlab-ssh"
       - "traefik.tcp.routers.gitlab-ssh.entrypoints=ssh"
       - "traefik.tcp.services.gitlab-ssh.loadbalancer.server.port=22"

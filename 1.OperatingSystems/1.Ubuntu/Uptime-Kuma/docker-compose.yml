@@ -1,7 +1,5 @@
 
 networks:
-  # uptimekuma-network:
-  #   external: true
   traefik-network:
     external: true
 
@@ -24,7 +22,6 @@ services:
       - uptimekuma-db:/app/db
     ports:
       # - "3001:3001"  # <Host Port>:<Container Port>
-      - "3307:3306"
     networks:
       - traefik-network
     labels:
@@ -38,6 +35,5 @@ services:
       - "traefik.http.services.uptimekuma.loadbalancer.passhostheader=true"
       - "traefik.http.routers.uptimekuma.middlewares=traefik-compress"
       - "traefik.http.middlewares.traefik-compress.compress=true"
-      - "traefik.http.routers.uptimekuma.middlewares=authentik@docker"
       - "traefik.docker.network=traefik-network"
     restart: unless-stopped

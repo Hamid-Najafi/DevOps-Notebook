@@ -75,10 +75,21 @@ docker network create authentik-network
 docker compose pull
 docker compose up -d
 
-# authentik: Initial Configuration
+# Initial Configuration
 https://auth.c1tech.group/if/flow/initial-setup/
 
-#  Federation and Social login
+# -------==========-------
+# SSO Integrations
+# -------==========-------
+https://integrations.goauthentik.io/
+
+email scope: includes email and email_verified
+profile scope: includes name, given_name, preferred_username, nickname, groups
+openid scope: a default required by the OpenID spec (contains no claims)
+
+# -------==========-------
+# Federation and Social login
+# -------==========-------
 # https://docs.goauthentik.io/docs/users-sources/sources/directory-sync/active-directory/
 https://auth.c1tech.group/if/admin/#/core/sources
 ActiveDirectory
@@ -89,11 +100,7 @@ OU=C1Tech,DC=C1Tech,DC=local
 change Group Property Mappings to only use authentik default LDAP Mapping: Name and
 
 # -------==========-------
-# Authentik Integrations
+# Tools
 # -------==========-------
-https://integrations.goauthentik.io/
-
-
-
-docker exec -u 0 authentik-server sh -c 'echo "2.180.29.30 vw.c1tech.group" >> /etc/hosts'
-docker exec -u 0 nextcloud sh -c 'echo "127.0.0.1 postgres" >> /etc/hosts'
+# JWT Decoder - JWT Encoder
+https://www.jwt.io/

@@ -2,6 +2,12 @@
 # RustDesk Docker Compose
 # https://github.com/rustdesk/rustdesk-server
 # -------==========-------
+
+# Clone RustDesk Directory
+mkdir -p ~/docker
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/RustDesk ~/docker/rustdesk
+cd ~/docker/rustdesk
+
 # Firewall Ports:
 21115, 21116, 21117, 21118, 21119 || TCP
 21116 || UDP
@@ -22,10 +28,6 @@ docker volume create \
       --opt device=/mnt/data/rustdesk \
       --opt o=bind rustdesk-data
 
-# Clone RustDesk Directory
-mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/RustDesk ~/docker/rustdesk
-cd ~/docker/rustdesk
 
 # Check and Edit .env file
 nano .env

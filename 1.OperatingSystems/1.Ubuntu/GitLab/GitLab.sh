@@ -65,6 +65,7 @@ docker compose up -d
 
 sudo mv /mnt/data/gitlab/gitlab-config/gitlab.rb{,.bk} 
 sudo cp ./gitlab.rb /mnt/data/gitlab/gitlab-config/gitlab.rb
+# sudo nano /mnt/data/gitlab/gitlab-config/gitlab.rb
 docker exec -it gitlab gitlab-ctl reconfigure
 
 # -------==========-------
