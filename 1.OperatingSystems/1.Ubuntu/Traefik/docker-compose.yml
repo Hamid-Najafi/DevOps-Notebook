@@ -14,30 +14,74 @@ services:
       - TZ=${TRAEFIK_TIMEZONE}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      #- ./traefik.yml:/traefik.yml:ro
       - ./traefik.yml:/etc/traefik/traefik.yml
       - ./dynamic_conf:/etc/traefik/dynamic_conf
       - traefik-certificates:/etc/traefik/acme
     networks:
       - traefik-network
     ports:
+      # WebInSecure
       - "80:80"
+      # WebSecure
       - "443:443"
       # Prometheus
-      - "9094:9094"
+      # - "9094:9094"
       # Zabbix forward
-      # - "10050:10050"
-      # - "10051:10051"
+      - "10051:10051"
     healthcheck:
       test: ["CMD", "wget", "http://localhost:8082/ping","--spider"]
       interval: 10s
       timeout: 5s
       retries: 3
       start_period: 5s
+    command:
+      # Set the log level (DEBUG, INFO, WARN, ERROR)
+      - "--log.level=${TRAEFIK_LOG_LEVEL}"
+      # Enable the built-in API and webinsecure-based dashboard
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      # Enable the accesslog dashboard
+      - "--accesslog=true"
+      # Enable the /ping endpoint so we can health-check Traefik
+      - "--ping=true"
+      # Assign the /ping endpoint to a dedicated entry point on port 8082
+      - "--ping.entrypoint=ping"
+      - "--entrypoints.ping.address=:8082"
+      # Define the primary HTTP entry point on port 80
+      - "--entrypoints.webinsecure.address=:80"
+      # Define the secure (HTTPS) entry point on port 443
+      - "--entrypoints.websecure.address=:443"
+      # HTTP -> HTTPS redirect at entrypoint level
+      - "--entrypoints.webinsecure.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.webinsecure.http.redirections.entrypoint.scheme=https"
+      # Define the Zabbix TCP entry point on port 10051
+      - "--entryPoints.zabbix-tcp.address=:10051"
+      # Define the Zabbix UDP entry point on port 10051
+      - "--entryPoints.zabbix-udp.address=:10051/udp"
+      # Enable the Docker provider to detect containers and their labels
+      - "--providers.docker=true"
+      # Point Traefik to the Docker socket
+      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
+      # Prevent automatic exposure of all containers; only expose containers
+      # with "traefik.enable=true"
+      - "--providers.docker.exposedbydefault=false"
+      # Use ACME (Let's Encrypt) to generate/renew certificates via TLS challenge
+      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      # The email address used by Let's Encrypt for renewal notices
+      - "--certificatesresolvers.letsencrypt.acme.email=${TRAEFIK_ACME_EMAIL}"
+      # The file where ACME certificates are stored inside the container
+      - "--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme/acme.json"
+      # Enable Prometheus metrics
+      - "--metrics.prometheus=true"
+      # Configure Prometheus histogram buckets
+      - "--metrics.prometheus.buckets=0.1,0.3,1.2,5.0"
+      # Check for newer Traefik versions and optionally log that info
+      - "--global.checknewversion=true"
+      # Disable sending anonymous usage data to the Traefik maintainers
+      - "--global.sendanonymoususage=false"
     labels:
     # Enable Traefik
       - "traefik.enable=true"
-
       # Traefik Dashboard
       - "traefik.http.routers.dashboard.rule=Host(`${TRAEFIK_HOSTNAME}`)"
       - "traefik.http.routers.dashboard.service=api@internal"
@@ -46,34 +90,15 @@ services:
       - "traefik.http.routers.dashboard.tls=true"
       - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
       - "traefik.http.services.dashboard.loadbalancer.passhostheader=true"
-      # Dashboard Authentication
+      # Dashboard Authentication for the Traefik dashboard
+      # - "traefik.http.routers.dashboard.middlewares=authtraefik"
+      # - "traefik.http.middlewares.authtraefik.basicauth.users=${TRAEFIK_BASIC_AUTH}"
       - "traefik.http.routers.dashboard.middlewares=authentik@docker"
-
       # Redirect HTTP to HTTPS
       - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"
       - "traefik.http.routers.http-catchall.entrypoints=webinsecure"
       - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-
-      # Global security headers middleware
-      - "traefik.http.middlewares.global-security.headers.customresponseheaders.X-Content-Type-Options=nosniff"
-      - "traefik.http.middlewares.global-security.headers.customresponseheaders.X-Frame-Options=DENY"
-      - "traefik.http.middlewares.global-security.headers.customresponseheaders.X-XSS-Protection=1; mode=block"
-      - "traefik.http.middlewares.global-security.headers.customresponseheaders.Referrer-Policy=no-referrer-when-downgrade"
-      - "traefik.http.middlewares.global-security.headers.customresponseheaders.Permissions-Policy=geolocation=(), microphone=(), camera=()"
-      - "traefik.http.middlewares.global-security.headers.customresponseheaders.Strict-Transport-Security=max-age=31536000; includeSubDomains; preload"
-      - "traefik.http.middlewares.global-security.headers.customresponseheaders.Content-Security-Policy=default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
-      - "traefik.http.middlewares.global-security.headers.sslredirect=true"
-      - "traefik.http.middlewares.global-security.headers.browserxssfilter=true"
-
       # Compress responses
       - "traefik.http.middlewares.compress.compress=true"
-
-      # Monitoring Prometheus
-      # - "traefik.http.services.prometheus.loadbalancer.server.port=9094"
-      # - "traefik.http.routers.prometheus.rule=PathPrefix(`/metrics`)"
-      # - "traefik.http.routers.prometheus.entrypoints=metrics"
-      # - "traefik.http.routers.prometheus.service=prometheus@internal"
-      # - "traefik.http.routers.prometheus.middlewares=prometheusauth"
-      # - "traefik.http.middlewares.prometheusauth.basicauth.users=${TRAEFIK_BASIC_AUTH}"
     restart: unless-stopped

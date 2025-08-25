@@ -29,6 +29,8 @@ nano .env
 
 # Create Network and Run
 # Note: Check firewall & mapping rules for Port: 80 & 443
+#  Define the Zabbix TCP/UDP entry point on port 10051 in Traefik
+#  Enable Prometheus metrics in Traefik
 docker network create zabbix-network
 docker compose pull
 docker compose up -d
