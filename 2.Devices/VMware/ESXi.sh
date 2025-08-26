@@ -22,6 +22,7 @@ localcli system maintenanceMode get
 esxcli software sources profile list -d  /vmfs/volumes/DataStore-01/ISO/VMware-ESXi-8.0.3-24022510-HPE-803.0.0.11.7.0.23-Jun2024-depot.zip 
 esxcli software profile update -d /vmfs/volumes/DataStore-01/ISO/VMware-ESXi-8.0.3-24022510-HPE-803.0.0.11.7.0.23-Jun2024-depot.zip -p HPE-Custom-AddOn_803.0.0.11.7.0-23 --no-hardware-warning
 
+
 # -------==========-------
 # Firmware Installation Guide -- Use SPP Instead
 # -------==========------

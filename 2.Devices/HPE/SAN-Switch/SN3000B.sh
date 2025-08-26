@@ -2,7 +2,9 @@
 # Brocade SAN switch 
 # -------==========-------
 
+# -------==========-------
 # 🔍 Basic Useful Commands
+# -------==========-------
 # Connect to the switch via SSH
 ssh admin@<IP-switch>
 # Show status of all ports and general switch info
@@ -32,7 +34,9 @@ Default Zone Access Mode
         committed - All Access
         transaction - No Transaction
 
+# -------==========-------
 # 🧹 Factory Reset Steps
+# -------==========-------
 # Disable the switch before making changes
 switchdisable
 # Disable current zoning configuration
@@ -44,81 +48,32 @@ configDefault
 # Reboot the switch
 reboot
 
+# -------==========-------
 # 📦 Zoning Configuration Commands
-# Fabrics works in  Open Fabric mode with no zone configuration
+# -------==========-------
+# 1. Fabrics works in  Open Fabric mode with no zone configuration
 defzone --show
 defzone --noaccess
-# Create an alias for a WWPN
+# 2. Create an alias for a WWPNs
 alicreate "MyHost-HBA1", "51:40:2e:c0:17:31:0a:78"
-# Create a zone with 2 members (host and storage port)
+# 3. Create a zone with 2 members (host and storage port)
 zonecreate "zone_Host1_to_MSA1", "MyHost-HBA1;MSA_Port1"
-# Add more members to an existing zone
+# 3.1. Add more members to an existing zone
 zoneadd "zone_Host1_to_MSA1", "MSA_Port2"
-# Create a zone config (aka zone set)
+# 4. Create a zone config (aka zone set)
 cfgcreate "cfg_Host1", "zone_Host1_to_MSA1"
-# Add more zones to an existing config
+# 4.1 Add more zones to an existing config
 cfgadd "cfg_Host1", "zone_OtherHost"
-# Save the configuration to NVRAM (required after changes!)
+# 5. Save the configuration to NVRAM (required after changes!)
 cfgsave
-# Activate a zone configuration
+# 6. Activate a zone configuration
 cfgenable "cfg_Host1"
-# Disable a zone configuration
+# -- Disable a zone configuration
 cfgdisable
 
-# Save configuration to a file (via GUI or FTP/SCP via CLI)
+# 7. Save configuration to a file (via GUI or FTP/SCP via CLI)
 # Usually done from web GUI: Administration > Configuration File > Download
 scp admin@<IP-switch>:/etc/fabric.cfg ./backup-fabric.cfg
 scp admin@<IP-switch>:/fabos/config/* ./full-backup/
 
-# -------==========-------
-# SPAD-SN3600B
-# -------==========-------
-# Connect G10A, G10B HBA Port A & B to MSA Controller
-
-# Step 1: Create Aliases for All WWPNs
-alicreate "MSA_A1", "20:70:00:c0:ff:f6:84:cd" 
-alicreate "MSA_A2", "21:70:00:c0:ff:f6:84:cd" 
-alicreate "MSA_A3", "22:70:00:c0:ff:f6:84:cd" 
-alicreate "MSA_A4", "23:70:00:c0:ff:f6:84:cd" 
-alicreate "MSA_B1", "24:70:00:c0:ff:f6:84:cd" 
-alicreate "MSA_B2", "25:70:00:c0:ff:f6:84:cd" 
-alicreate "MSA_B3", "26:70:00:c0:ff:f6:84:cd" 
-alicreate "MSA_B4", "27:70:00:c0:ff:f6:84:cd" 
-
-alicreate "G10A-HBA1", "51:40:2e:c0:17:31:0a:78"
-alicreate "G10A-HBA2", "51:40:2e:c0:17:31:0a:7a"
-alicreate "G10B-HBA1", "51:40:2e:c0:17:29:d3:9c"
-alicreate "G10B-HBA2", "51:40:2e:c0:17:29:d3:9e"
-cfgshow
-
-# Step 2: Create Zones (One HBA port <-> One Storage port)
-zonecreate "Zone_G10A_MSA", "G10A-HBA1;G10A-HBA2;MSA_A1;MSA_A2;MSA_A3;MSA_A4;MSA_B1;MSA_B2;MSA_B3;MSA_B4"
-zonecreate "Zone_G10B_MSA", "G10B-HBA1;G10B-HBA2;MSA_A1;MSA_A2;MSA_A3;MSA_A4;MSA_B1;MSA_B2;MSA_B3;MSA_B4"
-cfgcreate "FullSANConfig", "Zone_G10A_MSA;Zone_G10B_MSA"
-cfgenable "FullSANConfig"
-cfgsave
-
-
-# Step 3: Check Default Zone
-defzone --show
-defzone --noaccess
-
-zonecreate "zone_G10A_HBA1_MSA_A1", "G10A-HBA1;MSA_A1"
-zonecreate "zone_G10B_HBA1_MSA_A1", "G10B-HBA1;MSA_A1"
-cfgcreate "cfg_SAN_G10A_B_A1", "zone_G10A_HBA1_MSA_A1;zone_G10B_HBA1_MSA_A1"
-cfgsave
-cfgenable "cfg_SAN_G10A_B_A1"
-cfgshow
-
-
-zonecreate "zone_G10A_HBA2_MSA_B1", "G10A-HBA2;MSA_B1"
-zonecreate "zone_G10B_HBA2_MSA_B2", "G10B-HBA2;MSA_B2"
-cfgshow
-
-cfgcreate "cfg_SAN_G10A_MSA1", "zone_G10A_HBA1_MSA_A1;zone_G10A_HBA2_MSA_B1"
-cfgcreate "cfg_SAN_G10B_MSA2", "zone_G10B_HBA1_MSA_A2;zone_G10B_HBA2_MSA_B2"
-cfgcreate "cfg_SAN_FULL", "zone_G10A_HBA1_MSA_A1;zone_G10A_HBA2_MSA_B1;zone_G10B_HBA1_MSA_A2;zone_G10B_HBA2_MSA_B2"
-cfgsave
-cfgenable "cfg_SAN_G10A_MSA1"
-cfgenable "cfg_SAN_FULL"
-cfgshow
+# .Done
