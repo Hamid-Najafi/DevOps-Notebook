@@ -13,9 +13,13 @@ services:
     environment:
       - TZ=${TRAEFIK_TIMEZONE}
     volumes:
+      # Mount the Docker socket so Traefik can listen to Docker events
       - /var/run/docker.sock:/var/run/docker.sock
+      # Main static configuration file
       - ./traefik.yml:/etc/traefik/traefik.yml
+      # Dynamic configuration folder (for middlewares, routers, etc.)
       - ./dynamic_conf:/etc/traefik/dynamic_conf
+      # Volume for Let's Encrypt certificates storage
       - traefik-certificates:/etc/traefik/acme
     networks:
       - traefik-network
@@ -24,9 +28,9 @@ services:
       - "80:80"
       # WebSecure
       - "443:443"
-      # Prometheus
-      # - "9094:9094"
-      # Zabbix forward
+      # Traefik ping entrypoint (healthcheck)
+      - "8082:8082"
+      # Zabbix TCP
       - "10051:10051"
     healthcheck:
       test: ["CMD", "wget", "http://localhost:8082/ping","--spider"]
@@ -35,70 +39,62 @@ services:
       retries: 3
       start_period: 5s
     command:
-      # Set the log level (DEBUG, INFO, WARN, ERROR)
-      - "--log.level=${TRAEFIK_LOG_LEVEL}"
-      # Enable the built-in API and webinsecure-based dashboard
-      - "--api.dashboard=true"
-      - "--api.insecure=true"
-      # Enable the accesslog dashboard
-      - "--accesslog=true"
-      # Enable the /ping endpoint so we can health-check Traefik
-      - "--ping=true"
-      # Assign the /ping endpoint to a dedicated entry point on port 8082
-      - "--ping.entrypoint=ping"
+      # -------- Logging & API --------
+      - "--log.level=${TRAEFIK_LOG_LEVEL}"      # Log level (DEBUG, INFO, WARN, ERROR)
+      - "--api.dashboard=true"                  # Enable Traefik dashboard
+      - "--api.insecure=true"                   # Enable insecure dashboard (HTTP) for quick testing
+      - "--accesslog=true"                      # Enable access logs
+
+      # -------- Ping (for healthchecks) --------
+      - "--ping=true"                           # Enable /ping endpoint
+      - "--ping.entrypoint=ping"                # Assign ping to its own entrypoint
       - "--entrypoints.ping.address=:8082"
-      # Define the primary HTTP entry point on port 80
-      - "--entrypoints.webinsecure.address=:80"
-      # Define the secure (HTTPS) entry point on port 443
-      - "--entrypoints.websecure.address=:443"
-      # HTTP -> HTTPS redirect at entrypoint level
+
+      # -------- EntryPoints --------
+      - "--entrypoints.webinsecure.address=:80" # HTTP
+      - "--entrypoints.websecure.address=:443"  # HTTPS
       - "--entrypoints.webinsecure.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.webinsecure.http.redirections.entrypoint.scheme=https"
-      # Define the Zabbix TCP entry point on port 10051
-      - "--entryPoints.zabbix-tcp.address=:10051"
-      # Define the Zabbix UDP entry point on port 10051
-      - "--entryPoints.zabbix-udp.address=:10051/udp"
-      # Enable the Docker provider to detect containers and their labels
-      - "--providers.docker=true"
-      # Point Traefik to the Docker socket
+      - "--entrypoints.zabbix-tcp.address=:10051"   # Zabbix TCP
+      - "--entrypoints.zabbix-udp.address=:10051/udp" # Zabbix UDP
+
+      # -------- Providers --------
+      - "--providers.docker=true"               # Enable Docker provider
       - "--providers.docker.endpoint=unix:///var/run/docker.sock"
-      # Prevent automatic exposure of all containers; only expose containers
-      # with "traefik.enable=true"
       - "--providers.docker.exposedbydefault=false"
-      # Use ACME (Let's Encrypt) to generate/renew certificates via TLS challenge
+      - "--providers.file.directory=/etc/traefik/dynamic_conf" # Enable file provider
+      - "--providers.file.watch=true"                        # Watch for changes in dynamic_conf
+
+      # -------- Certificates (Let's Encrypt) --------
       - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
-      # The email address used by Let's Encrypt for renewal notices
       - "--certificatesresolvers.letsencrypt.acme.email=${TRAEFIK_ACME_EMAIL}"
-      # The file where ACME certificates are stored inside the container
       - "--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme/acme.json"
-      # Enable Prometheus metrics
+
+      # -------- Metrics --------
       - "--metrics.prometheus=true"
-      # Configure Prometheus histogram buckets
       - "--metrics.prometheus.buckets=0.1,0.3,1.2,5.0"
-      # Check for newer Traefik versions and optionally log that info
+
+      # -------- Global options --------
       - "--global.checknewversion=true"
-      # Disable sending anonymous usage data to the Traefik maintainers
       - "--global.sendanonymoususage=false"
     labels:
-    # Enable Traefik
+      # Enable Traefik for this container
       - "traefik.enable=true"
-      # Traefik Dashboard
+
+      # -------- Traefik Dashboard --------
       - "traefik.http.routers.dashboard.rule=Host(`${TRAEFIK_HOSTNAME}`)"
       - "traefik.http.routers.dashboard.service=api@internal"
       - "traefik.http.routers.dashboard.entrypoints=websecure"
-      - "traefik.http.services.dashboard.loadbalancer.server.port=80"
       - "traefik.http.routers.dashboard.tls=true"
       - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
-      - "traefik.http.services.dashboard.loadbalancer.passhostheader=true"
-      # Dashboard Authentication for the Traefik dashboard
-      # - "traefik.http.routers.dashboard.middlewares=authtraefik"
-      # - "traefik.http.middlewares.authtraefik.basicauth.users=${TRAEFIK_BASIC_AUTH}"
       - "traefik.http.routers.dashboard.middlewares=authentik@docker"
-      # Redirect HTTP to HTTPS
+
+      # Redirect HTTP → HTTPS
       - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"
       - "traefik.http.routers.http-catchall.entrypoints=webinsecure"
       - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      # Compress responses
+
+      # Enable compression for all services
       - "traefik.http.middlewares.compress.compress=true"
     restart: unless-stopped

@@ -7,4 +7,4 @@
   #   level:
   #     DEBUG
 
-#Dynamic configuration will come from docker labels
+# Dynamic configuration will come from docker labels
