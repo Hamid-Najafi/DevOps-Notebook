@@ -1,16 +1,16 @@
 http:
   routers:
-    emqx:
-      rule: "Host(`emqx.c1tech.group`)"
-      service: emqx
+    xprotect:
+      rule: "Host(`xprotect.c1tech.group`)"
+      service: xprotect
       entryPoints:
         - websecure
       tls:
         certresolver: letsencrypt
   services:
-    emqx:
+    xprotect:
       loadBalancer:
         servers:
-          - url: "http://172.25.10.16:18083"
+          - url: "http://172.25.10.12:8081"
         passHostHeader: true
 
