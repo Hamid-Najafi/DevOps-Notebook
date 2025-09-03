@@ -28,6 +28,12 @@ nano .env
 docker compose pull
 docker compose up -d
 
+
+# After Running, in Admin Conole:
+Edit policy Master password requirements
+Edit policy Account recovery administration: Turn on
+Edit policy Single organization: Turn on
+
 # -------==========-------
 # .env.template File
 # -------==========-------

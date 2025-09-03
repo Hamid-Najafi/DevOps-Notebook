@@ -6,6 +6,15 @@ networks:
 
 volumes:
   zabbix-postgres:
+    external: true
+  zabbix-confing:
+    external: true
+  zabbix-modules:
+    external: true
+  zabbix-tls:
+    external: true
+  zabbix-snmptraps:
+    external: true
 
 services:
   postgres:
@@ -40,6 +49,10 @@ services:
       POSTGRES_USER: ${ZABBIX_DB_USER}
       POSTGRES_PASSWORD: ${ZABBIX_DB_PASSWORD}
       ZBX_CACHESIZE: ${ZABBIX_CACHESIZE}
+      ZBX_SERVER_NAME: ${ZABBIX_SERVER_NAME}
+      ZBX_STARTSNMPTRAPPER: 1
+      ZBX_STARTIPMIPOLLERS: 3
+      ZBX_STARTPINGERS: 10
     networks:
       - zabbix-network
       - traefik-network
@@ -69,6 +82,18 @@ services:
       # Specify which Docker network Traefik should use for routing
       - "traefik.docker.network=traefik-network"
     restart: unless-stopped
+    volumes:
+    # For Logs
+      - zabbix-snmptraps:/var/lib/zabbix/snmptraps
+      - /etc/localtime:/etc/localtime:ro
+      - /docker/zabbix-server/alertscripts:/usr/lib/zabbix/alertscripts:ro
+      - /docker/zabbix-server/externalscripts:/usr/lib/zabbix/externalscripts:ro
+      - /docker/zabbix-server/dbscripts:/var/lib/zabbix/dbscripts:ro
+      - /docker/zabbix-server/export:/var/lib/zabbix/export:rw
+      - /docker/zabbix-server/modules:/var/lib/zabbix/modules:ro
+      - /docker/zabbix-server/enc:/var/lib/zabbix/enc:ro
+      - /docker/zabbix-server/ssh_keys:/var/lib/zabbix/ssh_keys:ro
+      - /docker/zabbix-server/mibs:/var/lib/zabbix/mibs:ro
     depends_on:
       postgres:
         condition: service_healthy
@@ -129,9 +154,25 @@ services:
       ZBX_SERVER_HOST: zabbix-server
     networks:
       - zabbix-network
+    volumes:
+      - zabbix-confing:/etc/zabbix/zabbix_agentd.d
+      - zabbix-modules:/var/lib/zabbix/modules
+      - zabbix-tls:/var/lib/zabbix/enc
     # ports:
     #   - 10050:10050
     restart: unless-stopped
     depends_on:
       - postgres
       - zabbix-server
+
+  zabbix-snmptraps:
+    image: ${ZABBIX_SNMPTRAMPS_IMAGE_TAG}
+    container_name: zabbix-snmptraps
+    ports:
+      - "162:162/udp"   # SNMP trap port
+    volumes:
+    # For Logs
+      - zabbix-snmptraps:/var/lib/zabbix/snmptraps  
+    networks:
+      - zabbix-network
+    restart: unless-stopped

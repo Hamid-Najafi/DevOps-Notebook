@@ -1,6 +1,10 @@
 # -------==========-------
 # FortiGate 
 # -------==========-------
+# VM First time setup
+# Login as admin
+
+# Assign IP-Address
 # Set Static IP (port1)
 config system interface
 edit port1
@@ -17,10 +21,15 @@ set device port1
 next
 end
 
-# Set DNS
+# Set Local DNS
+config global
 config system dns
-set primary 8.8.8.8
-set secondary 1.1.1.1
+show
+set primary <AD-DNS-IP>
+unset secondary
+set source-ip <IP of FortiGate LAN interface>   # 👈 FOR <AD-DNS-IP> 
+show
+end
 end
 
 # -------==========-------

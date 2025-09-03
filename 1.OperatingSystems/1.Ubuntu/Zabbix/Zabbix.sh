@@ -9,6 +9,10 @@ cd ~/docker/zabbix
 
 # Make Zabbix Directory
 sudo mkdir -p /mnt/data/zabbix/postgres
+sudo mkdir -p /mnt/data/zabbix/confing
+sudo mkdir -p /mnt/data/zabbix/modules
+sudo mkdir -p /mnt/data/zabbix/tls
+sudo mkdir -p /mnt/data/zabbix/snmptraps
 
 # Set Permissions
 # Container   UID:GID     Descb
@@ -23,6 +27,31 @@ docker volume create \
       --opt type=none \
       --opt device=/mnt/data/zabbix/postgres \
       --opt o=bind zabbix-postgres
+
+docker volume create \
+      --driver local \
+      --opt type=none \
+      --opt device=/mnt/data/zabbix/confing \
+      --opt o=bind zabbix-confing
+
+docker volume create \
+      --driver local \
+      --opt type=none \
+      --opt device=/mnt/data/zabbix/modules \
+      --opt o=bind zabbix-modules
+
+docker volume create \
+      --driver local \
+      --opt type=none \
+      --opt device=/mnt/data/zabbix/tls \
+      --opt o=bind zabbix-tls
+
+
+docker volume create \
+      --driver local \
+      --opt type=none \
+      --opt device=/mnt/data/zabbix/snmptraps \
+      --opt o=bind zabbix-snmptraps
 
 # Check and Edit .env file
 nano .env
