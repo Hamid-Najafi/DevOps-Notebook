@@ -33,6 +33,8 @@ docker compose up -d
 Edit policy Master password requirements
 Edit policy Account recovery administration: Turn on
 Edit policy Single organization: Turn on
+Enforce organization data ownership: Turn On
+Remove Send: Turn on
 
 # -------==========-------
 # .env.template File

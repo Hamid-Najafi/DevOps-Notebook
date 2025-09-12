@@ -1,6 +1,4 @@
 networks:
-  ohif-network:
-    external: true
   traefik-network:
     external: true
 
@@ -18,8 +16,9 @@ services:
       # https://github.com/OHIF/docker
       TZ: ${OHIF_TIMEZONE}
     networks:
-      - ohif-network
       - traefik-network
+    # ports:
+    #   - "8889:80"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/"]
       interval: 10s

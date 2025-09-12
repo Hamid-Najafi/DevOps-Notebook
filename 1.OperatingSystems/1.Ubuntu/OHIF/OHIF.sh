@@ -1,11 +1,17 @@
 # -------==========------- 
 # OHIF
 # -------==========------- 
+
+# Clone OHIF Directory
+mkdir -p ~/docker
+cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/OHIF ~/docker/ohif
+cd ~/docker/ohif
+
 # Make OHIF Directory
-sudo mkdir -p /mnt/data/ohif
+sudo mkdir -p /mnt/data/ohif/
 
 # Set Permissions
-sudo chmod 666 /mnt/data/ohif/app-config.js
+# sudo chmod 666 /mnt/data/ohif/app-config.js
 
 # Create the docker volumes for the containers.
 docker volume create \
@@ -13,18 +19,12 @@ docker volume create \
       --opt type=none \
       --opt device=/mnt/data/ohif \
       --opt o=bind ohif-data
-      
-# Clone Nextcloud Directory
-mkdir -p ~/docker
-cp -R ~/DevOps-Notebook/1.OperatingSystems/1.Ubuntu/OHIF ~/docker/ohif
-cd ~/docker/ohif
-
+  
 # Check and Edit .env file
 nano .env
 
 # Create Network and Run
 # Note: Check firewall & mapping rules for Port: 80 & 443
-docker network create ohif-network
 docker compose pull
 docker compose up -d
 

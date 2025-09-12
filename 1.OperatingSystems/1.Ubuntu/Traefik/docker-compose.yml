@@ -16,7 +16,7 @@ services:
       # Mount the Docker socket so Traefik can listen to Docker events
       - /var/run/docker.sock:/var/run/docker.sock
       # Main static configuration file
-      - ./traefik.yml:/etc/traefik/traefik.yml
+      # - ./traefik.yml:/etc/traefik/traefik.yml
       # Dynamic configuration folder (for middlewares, routers, etc.)
       - ./dynamic_conf:/etc/traefik/dynamic_conf
       # Volume for Let's Encrypt certificates storage
@@ -24,11 +24,13 @@ services:
     networks:
       - traefik-network
     ports:
-      # WebInSecure
+      # HTTP
       - "80:80"
-      # WebSecure
-      - "443:443"
-      # Traefik ping entrypoint (healthcheck)
+      # HTTPS (TCP)
+      - "443:443"      
+      # QUIC / HTTP3 (UDP)
+      - "443:443/udp"   
+      # Ping
       - "8082:8082"
       # Zabbix TCP
       - "10051:10051"
@@ -40,32 +42,33 @@ services:
       start_period: 5s
     command:
       # -------- Logging & API --------
-      - "--log.level=${TRAEFIK_LOG_LEVEL}"      # Log level (DEBUG, INFO, WARN, ERROR)
-      - "--api.dashboard=true"                  # Enable Traefik dashboard
-      - "--api.insecure=true"                   # Enable insecure dashboard (HTTP) for quick testing
-      - "--accesslog=true"                      # Enable access logs
+      - "--log.level=${TRAEFIK_LOG_LEVEL}"
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      - "--accesslog=true"
 
-      # -------- Ping (for healthchecks) --------
-      - "--ping=true"                           # Enable /ping endpoint
-      - "--ping.entrypoint=ping"                # Assign ping to its own entrypoint
+      # -------- Ping --------
+      - "--ping=true"
+      - "--ping.entrypoint=ping"
       - "--entrypoints.ping.address=:8082"
 
       # -------- EntryPoints --------
-      - "--entrypoints.webinsecure.address=:80" # HTTP
-      - "--entrypoints.websecure.address=:443"  # HTTPS
+      - "--entrypoints.webinsecure.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http3=true"         # << QUIC/HTTP3
       - "--entrypoints.webinsecure.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.webinsecure.http.redirections.entrypoint.scheme=https"
-      - "--entrypoints.zabbix-tcp.address=:10051"   # Zabbix TCP
-      - "--entrypoints.zabbix-udp.address=:10051/udp" # Zabbix UDP
+      - "--entrypoints.zabbix-tcp.address=:10051"
+      - "--entrypoints.zabbix-udp.address=:10051/udp"
 
       # -------- Providers --------
-      - "--providers.docker=true"               # Enable Docker provider
+      - "--providers.docker=true"
       - "--providers.docker.endpoint=unix:///var/run/docker.sock"
       - "--providers.docker.exposedbydefault=false"
-      - "--providers.file.directory=/etc/traefik/dynamic_conf" # Enable file provider
-      - "--providers.file.watch=true"                        # Watch for changes in dynamic_conf
+      - "--providers.file.directory=/etc/traefik/dynamic_conf"
+      - "--providers.file.watch=true"
 
-      # -------- Certificates (Let's Encrypt) --------
+      # -------- Certificates --------
       - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
       - "--certificatesresolvers.letsencrypt.acme.email=${TRAEFIK_ACME_EMAIL}"
       - "--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme/acme.json"
@@ -95,6 +98,6 @@ services:
       - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
 
-      # Enable compression for all services
+      # Enable compression
       - "traefik.http.middlewares.compress.compress=true"
     restart: unless-stopped

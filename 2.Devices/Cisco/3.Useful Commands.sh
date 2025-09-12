@@ -60,3 +60,36 @@ show lldp neighbors detail
 configure terminal
 service unsupported-transceiver
 do wr
+
+# -------==========-------
+# Monitoring
+# -------==========-------
+
+
+# -------==========-------
+# NetFlow/sFlow
+# -------==========-------
+
+
+# -------==========-------
+# SNMP
+# -------==========-------
+conf t
+snmp-server group C1TechGroup v3 priv read C1TechRO write C1TechRW
+snmp-server user C1TechUser C1TechGroup v3 auth sha AuthPass priv aes 128 PrivPass
+snmp-server host 172.25.10.11 informs version 3 C1TechUser
+end
+write memory
+# C1TechRO → community string (خواندن فقط)
+# 172.25.10.11 → IP سرور Graylog یا سرور SNMP Collector
+# snmp-server enable traps → فعال کردن ارسال Trap
+
+# -------==========-------
+# SYSLOG
+# -------==========-------
+conf t
+logging host 172.25.10.11 transport udp port 5140
+logging trap informational
+logging source-interface vlan1
+end
+test logging
