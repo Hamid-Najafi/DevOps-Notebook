@@ -70,13 +70,15 @@ pjsip show auths
 PJSIP AORs (Address of Record) – Stores where to reach the endpoint (contacts).
 pjsip show aors
 
-pjsip reload
+core reload
+core restart now
+
 # ================
 # Logging Control
 # ================
 sudo asterisk -r
 logger reload
-
+logger mute
 # Show miscellaneous core system settings.
 core show settings
 # List configured logger channels.
@@ -95,10 +97,12 @@ logger mute console
 core set verbose 0
 core set debug 0
 core set trace 0
+logger reload
 
 core set verbose 9
 core set debug 9
 core set trace 9
+logger reload
 
 # Logs are stored in /var/log/asterisk/full.
 sudo tail -f /var/log/asterisk/full
