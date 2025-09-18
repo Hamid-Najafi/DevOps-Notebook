@@ -56,6 +56,7 @@ docker volume create \
       --opt device=/mnt/data/nextcloud/clamav-db \
       --opt o=bind clamav-db
 # Check and Edit .env file
+docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' traefik # ==> 'trusted_proxies'
 nano .env
 
 
@@ -86,18 +87,12 @@ sudo docker exec --user www-data -it nextcloud php occ config:app:set --value=0 
 https://nc.c1tech.group/login?direct=1
 
 # -------==========-------
-# After Each update
 # 1. Config.PHP 
 # -------==========-------
 # Find traefik ip for trusted proxy
-docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' traefik # ==> 'trusted_proxies' => [''],
 sudo nano /mnt/data/nextcloud/nextcloud/config/config.php 
   'trashbin_retention_obligation' => '30, 50', // Min: 30Days, Max: 50Days
   'versions_retention_obligation' => 'auto, 15', // Max: 15 Days
-  'trusted_proxies' =>
-  array (
-    0 => '172.18.0.3',
-  ),
   'default_phone_region' => 'IR',
   'maintenance_window_start' => 2,
   'headers' =>

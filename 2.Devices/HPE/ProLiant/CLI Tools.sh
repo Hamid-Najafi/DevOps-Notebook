@@ -6,8 +6,11 @@
 # Smart Storage Administrator CLI
 
 /opt/smartstorageadmin/ssacli/bin/ssacli
-/opt/smartstorageadmin/ssacli/bin/ssacli ctrl all show config detail
+/opt/smartstorageadmin/ssacli/bin/ssacli ctrl all show detail
 /opt/smartstorageadmin/ssacli/bin/ssacli ctrl all show status
+# Power On Hours
+/opt/smartstorageadmin/ssacli/bin/ssacli ctrl all show config detail
+/opt/smartstorageadmin/ssacli/bin/ssacli ctrl slot=0 pd all show detail
 
 # Disable SSD Smart Path
 /opt/smartstorageadmin/ssacli/bin/ssacli ctrl slot=0 array A modify ssdsmartpath=disable
@@ -17,3 +20,6 @@
 
 # Verify
 /opt/smartstorageadmin/ssacli/bin/ssacli ctrl slot=0 ld 1 show detail
+
+
+ssacli ctrl slot=0 pd all show detail

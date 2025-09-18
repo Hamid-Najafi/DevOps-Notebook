@@ -49,6 +49,12 @@ sudo asterisk -r
 asterisk -rx "COMMAND"
 
 # PJSIP Info (chan_pjsip)
+
+# PJSIP message logging (INVITE, REGISTER, etc.)
+# raw SIP packet logs
+pjsip set logger on
+pjsip set logger off
+
 # Endpoint → AOR → Contacts → Call flow
 PJSIP Transports – Defines how Asterisk listens for SIP traffic (UDP, TCP, TLS).
 pjsip show transports
@@ -73,6 +79,7 @@ pjsip show aors
 core reload
 core restart now
 
+
 # ================
 # Logging Control
 # ================
@@ -84,11 +91,6 @@ core show settings
 # List configured logger channels.
 logger show channels
 
-
-# PJSIP message logging (INVITE, REGISTER, etc.)
-# raw SIP packet logs
-pjsip set logger on
-pjsip set logger off
 
 # completely mute/unmute console logging:
 logger mute console
@@ -106,3 +108,38 @@ logger reload
 
 # Logs are stored in /var/log/asterisk/full.
 sudo tail -f /var/log/asterisk/full
+
+
+# Direct call and playback
+channel originate PJSIP/120 application Playback response
+
+
+channel originate PJSIP/120 application AGI /var/lib/asterisk/agi-bin/voicebot.py
+
+
+sudo apt install python3 python3-requests python3-openssl
+
+nano /var/lib/asterisk/agi-bin/voicebot.py
+# Veriify ======
+cd  /var/lib/asterisk/agi-bin/
+python
+from voicebot import stt
+text = stt("/var/lib/asterisk/sounds/recorded.wav")
+print(text)
+============
+nano /etc/asterisk/extensions_custom.conf
+[VoiceBot-AGI]
+exten => s,1,NoOp(Starting Python VoiceBot AGI)
+ same => n,AGI(/var/lib/asterisk/agi-bin/voicebot.py)
+ same => n,Hangup()
+
+fwconsole reload
+asterisk -rx "dialplan show" | grep -i voicebot
+
+# AGI Info
+sudo asterisk -r
+agi set debug on
+
+
+sox response.wav -r 8000 -c 1 -t wav -e mu-law response_ulaw.wav
+cmod 664 asterisk:asterisk ./response.wav
