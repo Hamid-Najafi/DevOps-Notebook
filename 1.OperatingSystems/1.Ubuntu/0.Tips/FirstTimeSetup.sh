@@ -61,6 +61,10 @@ grep -q "PasswordAuthentication" /etc/ssh/sshd_config || echo "PasswordAuthentic
 [ -d /etc/ssh/sshd_config.d ] && for file in /etc/ssh/sshd_config.d/*.conf; do [ -f "$file" ] && mv "$file" "$file.bak"; done
 systemctl restart ssh.service
 
+
+# To Loing with key
+ssh -i ~/.ssh/private_key username@host
+
 # -------==========-------
 # Install Docker
 # -------==========-------
