@@ -1,0 +1,21 @@
+http:
+  routers:
+    esxi:
+      rule: "Host(`esxi.c1tech.group`)"
+      service: esxi
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt
+
+  services:
+    esxi:
+      loadBalancer:
+        servers:
+          - url: "https://172.25.10.3:443"
+        passHostHeader: true
+        serversTransport: esxi-tls
+
+serversTransports:
+  esxi-tls:
+    insecureSkipVerify: true

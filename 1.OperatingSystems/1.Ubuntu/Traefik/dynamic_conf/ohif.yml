@@ -1,15 +1,16 @@
 http:
   routers:
-    harbor:
-      service: harbor
-      rule: "Host(`registry.c1tech.group`) || Host(`harbor.c1tech.group`)"
+    ohif:
+      rule: "Host(`ohif.c1tech.group`)"
+      service: ohif
       entryPoints:
         - websecure
       tls:
         certresolver: letsencrypt
   services:
-    harbor:
+    ohif:
       loadBalancer:
         servers:
-          - url: "http://172.25.10.15:5000"
+          - url: "http://172.25.10.16:8889"
         passHostHeader: true
+

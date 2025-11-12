@@ -7,10 +7,24 @@ http:
         - websecure
       tls:
         certresolver: letsencrypt
+
+    ai-dl:
+      rule: "Host(`ai-dl.c1tech.group`)"
+      service: ai-dl
+      entryPoints:
+        - websecure
+      tls:
+        certresolver: letsencrypt
+
   services:
     ai:
       loadBalancer:
         servers:
-          - url: "http://172.25.10.26:8888"
+          - url: "http://172.25.10.25:8123"
         passHostHeader: true
 
+    ai-dl:
+      loadBalancer:
+        servers:
+          - url: "http://172.25.10.25:2525"
+        passHostHeader: true

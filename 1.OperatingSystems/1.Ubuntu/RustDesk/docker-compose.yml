@@ -1,6 +1,6 @@
 networks:
   rustdesk-network:
-    external: false
+    external: true
 
 volumes:
   rustdesk-data:

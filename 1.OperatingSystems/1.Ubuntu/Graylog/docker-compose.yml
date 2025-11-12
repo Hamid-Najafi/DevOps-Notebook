@@ -35,6 +35,7 @@ services:
     hostname: "datanode"
     container_name: graylog-datanode
     environment:
+    # https://go2docs.graylog.org/current/setting_up_graylog/data_node_configuration_file.htm
       GRAYLOG_DATANODE_NODE_ID_FILE: "/var/lib/graylog-datanode/node-id"
       GRAYLOG_DATANODE_PASSWORD_SECRET: ${GRAYLOG_PASSWORD_SECRET}
       GRAYLOG_DATANODE_MONGODB_URI: "mongodb://mongodb:27017/graylog"
@@ -47,8 +48,8 @@ services:
         hard: 65536
     ports:
       - "8999:8999/tcp"   # DataNode API
-      - "9200:9200/tcp"
-      - "9300:9300/tcp"
+      # - "9200:9200/tcp"   # OpenSearch HTTP
+      # - "9300:9300/tcp"   # OpenSearch Transport
     networks:
       - graylog-network
     volumes:
@@ -77,8 +78,8 @@ services:
       GRAYLOG_MONGODB_URI: "mongodb://mongodb:27017/graylog"
     ports:
     - "5044:5044/tcp"   # Beats
-    # - "514:514/udp"
-    # - "514:514/tcp"
+    # - "514:514/udp"   # Syslog
+    # - "514:514/tcp"   # Syslog
     - "5140:5140/udp"   # Syslog
     - "5140:5140/tcp"   # Syslog
     - "5555:5555/tcp"   # RAW TCP

@@ -47,7 +47,8 @@ EOF
 
 sudo systemctl enable harbor.service --now
 sudo journalctl -fu harbor.service
-systemctl daemon-reload
+sudo systemctl daemon-reload
+sudo systemctl restart harbor.service
 
 # Option.2
 So the fix is to either get rid of the syslog logging (which is quite confusing anyway, tbh) 
