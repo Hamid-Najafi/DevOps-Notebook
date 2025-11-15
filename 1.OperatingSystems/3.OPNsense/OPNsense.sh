@@ -3,6 +3,9 @@
 # -------==========-------
 https://docs.opnsense.org/manual/install.html
 
+Download DVD Image:
+https://opnsense.org/download/
+
 By default, we can log into the shell using the user root with the password opnsense to operate the live environment via the local console.
 After successfully booting up with the OPNsense Full Image (DVD, VGA, Serial), the firewall will be at the Live Environment’s login: prompt.
 To start the installation process, login with the:

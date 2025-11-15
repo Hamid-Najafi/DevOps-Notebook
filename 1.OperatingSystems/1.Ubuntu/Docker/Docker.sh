@@ -18,6 +18,7 @@ sudo chown $USER /var/run/docker.sock
 # Docker Registry
 sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
 {
+# ArvanCloud
   "insecure-registries" : ["https://docker.arvancloud.ir"],
   "registry-mirrors": ["https://docker.arvancloud.ir"],
   "log-driver": "json-file",
@@ -27,11 +28,18 @@ sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
   }
 }
 EOF'     
-sudo systemctl daemon-reload
-sudo systemctl restart docker
+
 # Verify
 docker run --rm hello-world
 
+# ArvanCloud
+  "insecure-registries" : ["https://docker.arvancloud.ir"],
+  "registry-mirrors": ["https://docker.arvancloud.ir"],
+# IranServer
+  "registry-mirrors": ["https://docker.iranserver.com"]
+# Docker.ir
+  "registry-mirrors": ["https://registry.docker.ir"]
+  
 # -------==========-------
 # Generate Password for .env
 # -------==========-------
@@ -139,33 +147,3 @@ Environment="NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp"
 EOF
 sudo systemctl daemon-reload
 sudo systemctl restart docker
-# -------==========-------
-# Docker Registry
-# -------==========-------
-# ArvanCloud
-sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
-{
-  "insecure-registries" : ["https://docker.arvancloud.ir"],
-  "registry-mirrors": ["https://docker.arvancloud.ir"]
-}
-EOF'     
-sudo systemctl daemon-reload
-sudo systemctl restart docker
-
-# IranServer
-sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
-{
-  "registry-mirrors": ["https://docker.iranserver.com"]
-}
-EOF'
-sudo systemctl daemon-reload
-sudo systemctl restart docker
-
-# Docker.ir
-sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
-{
-  "registry-mirrors": ["https://registry.docker.ir"]
-}
-EOF' 
-sudo systemctl daemon-reload
-sudo systemctl stop docker

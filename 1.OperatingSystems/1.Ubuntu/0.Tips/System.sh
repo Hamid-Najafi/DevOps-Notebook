@@ -169,10 +169,11 @@ grep -rl "IMAGE_TAG" .
 
 # -------==========-------
 # Extend Ubuntu DiskDrive
+# Add Free Space (gparted)
 # -------==========-------
 # https://4sysops.com/archives/extending-lvm-space-in-ubuntu/
-1. extend drive in iLO
-2. use GParted image and allocate free space (extend virtual disk partition)
+1. Add Space to drive in ESXi
+2. Boot GParted GParted image and allocate free space (extend virtual disk partition)
 3. Ubuntu VM:
 sudo lvdisplay
 sudo vgdisplay

@@ -21,17 +21,8 @@ redsocks {
   local_ip = 0.0.0.0;
   local_port = 12345;
   type = socks5;
-  ip = 172.25.10.8;
-  port = 20170;
-}
-
-redsocks {
-  local_ip = 0.0.0.0;
-  local_port = 12346;
-
-  type = socks5;
-  ip = 172.25.10.122;
-  port = 1080;
+  ip = 127.0.0.1;
+  port = 54321;
 }
 EOF
 
@@ -49,23 +40,37 @@ sysctl -w net.ipv4.ip_forward=1
 # net.ipv4.ip_forward=1
 
 # Redirect Incoming Trafik from our client to redsocks
+# HP-Z2-Pro.C1Tech.local
+sudo iptables -t nat -A PREROUTING -s 172.25.10.240 -p tcp -j REDIRECT --to-ports 12345
 # Samsung.C1Tech.local
-sudo iptables -t nat -A PREROUTING -s 172.25.10.24 -p tcp -j REDIRECT --to-ports 12345
+sudo iptables -t nat -A PREROUTING -s 172.25.10.125 -p tcp -j REDIRECT --to-ports 12345
 # 3DP-01P-725.C1Tech.local
 sudo iptables -t nat -A PREROUTING -s 172.25.10.28 -p tcp -j REDIRECT --to-ports 12346
 # 3DP-01P-896.C1Tech.local
 sudo iptables -t nat -A PREROUTING -s 172.25.10.29 -p tcp -j REDIRECT --to-ports 12346
 
-sudo iptables -t nat -A PREROUTING -s 172.25.10.120 -p tcp -j REDIRECT --to-ports 12345
-sudo iptables -t nat -A PREROUTING -s 172.25.10.121 -p tcp -j REDIRECT --to-ports 12345
-
 
 # Verify
 sudo iptables -t nat -L PREROUTING -n -v --line-numbers
-sudo tail -f /var/log/redsocks.log | grep --color=always '172.25.10.29'
+sudo tail -f /var/log/redsocks.log | grep --color=always '172.25.10.125'
 
-# sudo apt install -y iptables-persistent
+sudo apt install -y iptables-persistent
 sudo netfilter-persistent save
+
+# DNS PROXYYYYYYYYYYY
+apt install git build-essential
+git clone https://github.com/jtripper/dns-tcp-socks-proxy.git /opt/dns-tcp-socks-proxy
+nano dns_proxy.conf
+/opt/dns-tcp-socks-proxy/dns_proxy /opt/dns-tcp-socks-proxy/dns_proxy.conf
+cd /opt/dns-tcp-socks-proxy
+make
+sudo groupadd -r nobody
+sudo useradd -r -g nobody -s /usr/sbin/nologin -d /nonexistent nobody
+sudo iptables -t nat -A PREROUTING -s 172.25.10.125 -p udp --dport 53 -j REDIRECT --to-ports 53
+
+# Verify
+sudo tcpdump -i any -nnvv port 53
+ and host 172.25.10.125
 
 # Proxy Detect
 https://proxy.incolumitas.com/proxy_detect.html

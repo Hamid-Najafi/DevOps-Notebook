@@ -90,6 +90,8 @@ export https_proxy=http://172.25.10.16:54321/
 echo -e "http_proxy=http://172.25.10.8:20172/" | sudo tee -a /etc/environment && source /etc/environment
 curl -x $http_proxy -L http://google.com
 curl -x http://admin:Squidpass.24@IPAddr:3128/ -L http://google.com
+
+curl --socks5 127.0.0.1:54321 https://google.com
 # -------==========-------
 # SSH Proxy
 # -------==========-------

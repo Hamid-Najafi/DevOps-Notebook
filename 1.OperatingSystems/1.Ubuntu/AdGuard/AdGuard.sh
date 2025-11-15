@@ -33,15 +33,16 @@ nano .env
 # Create Network and Run
 # Note: Check firewall & mapping rules for Port: 80 & 443
 docker compose pull
-docker compose up -d
 
-### IMPOTTAINT ###
+### IMPOT CONFIG ###
+sudo cp ./AdGuardHome.yaml /mnt/data/adguardhome/confdir 
+sudo chmod 600 /mnt/data/adguardhome/confdir/AdGuardHome.yaml
+### RAW CONFIG ###
 Open http://[::1]:3000/install.html
 And follow Installation Instuction
-### IMPOTTAINT ###
 
-AdGuard Defualt DNS
-https://dns10.quad9.net/dns-query
+docker compose up -d
+
 # -------==========-------
 # Fix
 # 0.0.0.0:53
