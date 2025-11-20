@@ -44,6 +44,15 @@
                         |   RTP Media   |
                         +---------------+
 
+# Fail2Ban
+sudo systemctl status fail2ban.service
+
+# FreePBX Firewall
+fwconsole firewall disable
+
+# FreePBX CLI
+/usr/sbin/fwconsole
+
 # Connect to Asterisk CLI
 sudo asterisk -r
 asterisk -rx "COMMAND"
@@ -65,6 +74,13 @@ pjsip show registrations
 
 PJSIP Endpoints – Represents SIP devices or trunks that can make/receive calls. (a device, trunk, or user).
 pjsip show endpoints
+
+# Endpoint Config Location
+/etc/asterisk/pjsip.endpoint.conf
+extensions_additional.conf
+# => If any edit needed
+/etc/asterisk/pjsip_custom_post.conf
+
 
 PJSIP Contacts – Tracks the actual registered location(s) of an endpoint. IP/URI
 <!-- Example: sip:120@172.25.10.240:64015 -->
@@ -110,15 +126,22 @@ logger reload
 sudo tail -f /var/log/asterisk/full
 
 
+# ================
+# macro-boostmic
+# ================
+sudo nano /etc/asterisk/extensions_custom.conf
+
+[macro-boostmic]
+exten => s,1,NoOp(BOOSTMIC MACRO STARTED)
+ same => n,Set(VOLUME(TX)=15)
+ same => n,MacroExit()
+
+# ================
 # Direct call and playback
+# ================
 channel originate PJSIP/120 application Playback response
-
-
 channel originate PJSIP/120 application AGI /var/lib/asterisk/agi-bin/voicebot.py
-
-
 sudo apt install python3 python3-requests python3-openssl
-
 nano /var/lib/asterisk/agi-bin/voicebot.py
 # Veriify ======
 cd  /var/lib/asterisk/agi-bin/
@@ -139,7 +162,6 @@ asterisk -rx "dialplan show" | grep -i voicebot
 # AGI Info
 sudo asterisk -r
 agi set debug on
-
 
 sox response.wav -r 8000 -c 1 -t wav -e mu-law response_ulaw.wav
 cmod 664 asterisk:asterisk ./response.wav

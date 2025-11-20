@@ -28,6 +28,10 @@ sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
   }
 }
 EOF'     
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+sudo systemctl daemon-reload
+sudo systemctl restart docker
 
 # Verify
 docker run --rm hello-world
@@ -36,9 +40,9 @@ docker run --rm hello-world
   "insecure-registries" : ["https://docker.arvancloud.ir"],
   "registry-mirrors": ["https://docker.arvancloud.ir"],
 # IranServer
-  "registry-mirrors": ["https://docker.iranserver.com"]
+  "registry-mirrors": ["https://docker.iranserver.com"],
 # Docker.ir
-  "registry-mirrors": ["https://registry.docker.ir"]
+  "registry-mirrors": ["https://registry.docker.ir"],
   
 # -------==========-------
 # Generate Password for .env

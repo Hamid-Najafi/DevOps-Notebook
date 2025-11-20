@@ -41,7 +41,9 @@ sysctl -w net.ipv4.ip_forward=1
 
 # Redirect Incoming Trafik from our client to redsocks
 # HP-Z2-Pro.C1Tech.local
-sudo iptables -t nat -A PREROUTING -s 172.25.10.240 -p tcp -j REDIRECT --to-ports 12345
+sudo iptables -t nat -A PREROUTING -s 172.25.10.240 -p tcp ! --dport 22 -j REDIRECT --to-ports 12345
+# vcsa.c1tech.local
+sudo iptables -t nat -A PREROUTING -s 172.25.10.4 -p tcp -j REDIRECT --to-ports 12345
 # Samsung.C1Tech.local
 sudo iptables -t nat -A PREROUTING -s 172.25.10.125 -p tcp -j REDIRECT --to-ports 12345
 # 3DP-01P-725.C1Tech.local
