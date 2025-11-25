@@ -1,6 +1,7 @@
 # -------==========-------
 # Install script
 # -------==========-------
+
 https://github.com/FreePBX/sng_freepbx_debian_install
 
 # ssh to the Debian system as 'root'
@@ -17,8 +18,6 @@ apt update && apt upgrade -y
 fwconsole ma upgradeall
 fwconsole ma installall
 fwconsole ma refreshsignatures
-
-
 
 fwconsole ma downloadinstall framework --force
 fwconsole chwon

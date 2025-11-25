@@ -1,27 +1,56 @@
+
 # -------==========-------
-# Oh-My-Zsh!
+# Update
 # -------==========-------
 
 # Glances an Eye on your system. A top/htop alternative
 # https://github.com/nicolargo/glances
 curl -x http://172.25.10.8:20172 -L https://bit.ly/glances | /bin/bash
 
+# Timezone
 sudo timedatectl set-timezone Asia/Tehran 
+
+# ------- Optional: journald limits -------
 sudo journalctl --vacuum-time=7d
+sudo tee /etc/systemd/journald.conf >/dev/null <<EOF
+[Journal]
+Storage=persistent
+SystemMaxUse=300M
+SystemMaxFileSize=50M
+MaxRetentionSec=7day
+Compress=yes
+EOF
+
+sudo systemctl restart systemd-journald
+
+# -------==========-------
+# Update
+# -------==========-------
+
+sudo apt update && sudo apt full-upgrade -y
+
+# Install Base packages
+sudo apt install -y bash-completion vim nano curl wget htop net-tools iproute2 \
+git lsb-release ca-certificates gnupg unzip zip ncdu dtrx btop traceroute \
+software-properties-common build-essential python3-pip
+
+# Enable unattended-upgrades
+sudo apt install -y unattended-upgrades
+
+echo unattended-upgrades unattended-upgrades/enable_auto_updates boolean true | sudo debconf-set-selections
+sudo dpkg-reconfigure -f noninteractive unattended-upgrades
+
+# OPTIONAL: Enable bash completion manually
+echo "if [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+fi" >> ~/.bashrc
 
 # Setup passwordless sudo
 echo 'c1tech    ALL=(ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/user
 
-# apt install sudo
-# sudo add-apt-repository universe
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y unattended-upgrades
-echo unattended-upgrades unattended-upgrades/enable_auto_updates boolean true | sudo debconf-set-selections
-sudo dpkg-reconfigure -f noninteractive unattended-upgrades
-sudo apt -y -q install ncdu dtrx btop htop software-properties-common traceroute 
-sudo apt -y -q install build-essential
-sudo apt install -y -q python3-pip
-
+# -------==========-------
+# Oh-My-Zsh!
+# -------==========-------
 
 sudo apt install git fonts-font-awesome zsh -y
 # PROMPT="%F{white}%n@%m %F{yellow}%~ %# %f"

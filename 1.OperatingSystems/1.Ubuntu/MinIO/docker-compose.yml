@@ -1,18 +1,25 @@
-version: '3.7'
+networks:
+  traefik-network:
+    external: true
+
+volumes:
+  minio-buckets:
+    external: true
+
 services:
   minio:
-    image: minio/minio:latest
+    container_name: minio
+    image: ${MINIO_IMAGE_TAG}
     restart: unless-stopped
-    hostname: 'minio.c1tech.group'
     volumes:
-      - /mnt/data/minio:/data
-    ports:
-      - "9000:9000" #S3 Service
-      - "9001:9001" #Console
+      - minio-buckets:/data
+    # ports:
+    #   - "9000:9000" # Minio S3 Service
+    #   - "9001:9001" # Minio Console Service
     environment:
-      MINIO_ROOT_USER: minio
-      MINIO_ROOT_PASSWORD: MinIOpass.24
-      MINIO_PROMETHEUS_AUTH_TYPE: public
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_PROMETHEUS_AUTH_TYPE: ${MINIO_PROMETHEUS_AUTH_TYPE}
     command: server /data --console-address ":9001"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
@@ -21,19 +28,20 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.s3.rule=Host(`s3.c1tech.group`)"
-      - "traefik.http.routers.s3.service=s3"
-      - "traefik.http.services.s3.loadbalancer.server.port=9000"
-      - "traefik.http.routers.s3.entrypoints=websecure"
-      - "traefik.http.routers.s3.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.minio.rule=Host(`minio.c1tech.group`)"
+      - "traefik.docker.network=traefik-network"
+
+      - "traefik.http.routers.minio.rule=Host(`${MINIO_S3_HOSTNAME}`)"
       - "traefik.http.routers.minio.service=minio"
-      - "traefik.http.services.minio.loadbalancer.server.port=9001"
+      - "traefik.http.services.minio.loadbalancer.server.port=9000"
       - "traefik.http.routers.minio.entrypoints=websecure"
       - "traefik.http.routers.minio.tls.certresolver=letsencrypt"
-      - "traefik.docker.network=traefik-network"
+      - "traefik.http.routers.minio.tls=true"
+
+      - "traefik.http.routers.minio-console.rule=Host(`${MINIO_CONSOLE_HOSTNAME}`)"
+      - "traefik.http.routers.minio-console.service=minio-console"
+      - "traefik.http.services.minio-console.loadbalancer.server.port=9001"
+      - "traefik.http.routers.minio-console.tls=true"
+      - "traefik.http.routers.minio-console.entrypoints=websecure"
+      - "traefik.http.routers.minio-console.tls.certresolver=letsencrypt"
     networks:
-      - web
-networks:
-  web:
-    external: true
+      - traefik-network

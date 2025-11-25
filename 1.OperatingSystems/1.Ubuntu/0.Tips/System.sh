@@ -18,6 +18,7 @@ ssh-copy-id username@remote_host
 ssh-copy-id root@185.234.14.99
 echo -e "PasswordAuthentication no" | tee -a  /etc/ssh/sshd_config 
 service sshd restart
+
 # ---======---
 # Windows
 cat > /home/$USER/.ssh/authorized_keys  << EOF
@@ -53,32 +54,34 @@ wget -qO- bench.sh | bash
 # -------==========-------
 # Mount New Partition
 # -------==========-------
-sudo apt install gparted
-# Format Disk
-gparted
-# Create mount dir
-sudo mkdir -p /home/c1tech/Drive/HDD
-# Get UUID
-blkid
-# Mount-Test
-sudo mount UUID=a9b13a14-50a4-443a-b6be-7d127b66fc8c /home/c1tech/Drive/HDD
-# UnMount-Test
-sudo umount  /home/c1tech/Drive/HDD
-# add Auto Mount
-sudo nano /etc/fstab
-# UUID="a9b13a14-50a4-443a-b6be-7d127b66fc8c" /home/c1tech/Drive/HDD    ext4    defaults    0    1
-sudo chown -R c1tech:c1tech /home/c1tech/Drive/HDD
-# Mount Again or reboot
-sudo mount UUID=a9b13a14-50a4-443a-b6be-7d127b66fc8c /home/c1tech/Drive/HDD
 
 sudo su
 fdisk -l
-mkdir /mnt/hdd
-mkdir  ~/data
-ln -s /mnt/hdd/  ~/data
-echo -e "externalDisk=/dev/sdb" | sudo tee -a /etc/environment 
-echo -e "mount -t auto /dev/sdb /mnt/hdd" | sudo tee -a /etc/environment 
-source /etc/environment
+sudo fdisk /dev/sdd
+# fdisk:
+# n → new partition
+# p → primary
+# Partition Number → start
+# Enter → start
+# Enter → end
+# w → write
+lsblk
+
+sudo mkfs.ext4 /dev/sdd1
+# Enter → start
+# Enter → Write superblocks
+
+sudo mkdir /mnt/storage
+sudo mount /dev/sdd1 /mnt/storage
+# UnMount-Test
+sudo umount /mnt/storage
+# add Auto Mount
+sudo nano /etc/fstab
+/dev/sdd1   /doc        /storage   ext4   defaults   0   2
+sudo mount -a
+
+
+
 # -------==========-------
 # Add user
 # -------==========-------

@@ -4,7 +4,6 @@
 # Syncs YouTube channels and playlists to a locally hosted media server 
 # -------==========-------
 
-
 # Make MeTube Directory
 sudo mkdir -p /mnt/data/metube/downloads
 
