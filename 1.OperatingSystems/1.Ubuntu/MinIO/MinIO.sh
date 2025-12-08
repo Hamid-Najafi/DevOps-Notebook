@@ -45,3 +45,6 @@ docker exec -it minio mc ls minio
 docker exec -it minio mc ls --recursive minio
 # Remove Bucket
 docker exec minio mc rb --force --dangerous minio/veam-local/
+
+
+docker exec minio mc admin user add minio console xxxxxxxx

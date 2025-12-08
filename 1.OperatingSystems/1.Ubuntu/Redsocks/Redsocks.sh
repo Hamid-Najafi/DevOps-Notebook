@@ -45,7 +45,7 @@ sudo iptables -t nat -A PREROUTING -s 172.25.10.240 -p tcp ! --dport 22 -j REDIR
 # vcsa.c1tech.local
 sudo iptables -t nat -A PREROUTING -s 172.25.10.4 -p tcp -j REDIRECT --to-ports 12345
 # Samsung.C1Tech.local
-sudo iptables -t nat -A PREROUTING -s 172.25.10.125 -p tcp -j REDIRECT --to-ports 12345
+sudo iptables -t nat -A PREROUTING -s 172.25.10.27 -p tcp -j REDIRECT --to-ports 12345
 # 3DP-01P-725.C1Tech.local
 sudo iptables -t nat -A PREROUTING -s 172.25.10.28 -p tcp -j REDIRECT --to-ports 12346
 # 3DP-01P-896.C1Tech.local
@@ -54,7 +54,7 @@ sudo iptables -t nat -A PREROUTING -s 172.25.10.29 -p tcp -j REDIRECT --to-ports
 
 # Verify
 sudo iptables -t nat -L PREROUTING -n -v --line-numbers
-sudo tail -f /var/log/redsocks.log | grep --color=always '172.25.10.125'
+sudo tail -f /var/log/redsocks.log | grep --color=always '172.25.10.27'
 
 sudo apt install -y iptables-persistent
 sudo netfilter-persistent save

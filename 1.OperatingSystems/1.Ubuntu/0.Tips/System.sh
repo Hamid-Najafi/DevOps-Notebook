@@ -1,7 +1,8 @@
 # -------==========-------
 # Glances an Eye on your system. A top/htop alternative
 # https://github.com/nicolargo/glances
-curl -x http://172.25.10.8:20172 -L https://bit.ly/glances | /bin/bash
+curl -L https://bit.ly/glances | /bin/bash
+pip install --user glances --break-system-packages
 # -------==========-------
 # RemoteDesktop/VNC
 # -------==========-------

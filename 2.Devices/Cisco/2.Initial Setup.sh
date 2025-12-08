@@ -7,12 +7,12 @@ configure terminal
 
 ! Set hostname
  ! hostname Core-3850-24P-02
- hostname Access-3750-48P-01
+ hostname Core-3750-48P-01
  hostname Access-3560-24P-01
 
 ! VLAN 1 - Management IP
 interface vlan 1
- ip address 172.25.10.31 255.255.255.0
+ ip address 172.25.20.14 255.255.255.0
  no shutdown
 exit
 
