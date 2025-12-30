@@ -41,6 +41,14 @@ interface TE1/1/1
 shutdown
 no shutdown
 
+# ! Show errdisable recovery
+show errdisable recovery
+conf t
+interface giX/X/X
+shutdown
+no shutdown
+end
+
 # CDP (Cisco Discovery Protocol):
 show cdp neighbors
 show cdp neighbors detail

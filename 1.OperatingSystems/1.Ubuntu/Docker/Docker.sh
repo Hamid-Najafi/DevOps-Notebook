@@ -30,8 +30,7 @@ sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
 EOF'     
 sudo systemctl daemon-reload
 sudo systemctl restart docker
-sudo systemctl daemon-reload
-sudo systemctl restart docker
+
 
 # Verify
 docker run --rm hello-world

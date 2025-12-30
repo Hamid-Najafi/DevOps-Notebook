@@ -59,13 +59,13 @@ services:
       - "traefik.http.services.mattermost.loadbalancer.passhostheader=true"
       - "traefik.docker.network=traefik-network"
       # Redirect ALT -> MAIN
-      - "traefik.http.routers.mattermost_redirect.rule=Host(`${MATTERMOST_DOMAIN_ALT}`)"
+      - "traefik.http.routers.mattermost_redirect.rule=Host(`${DOMAIN_ALT}`)"
       - "traefik.http.routers.mattermost_redirect.entrypoints=websecure"
       - "traefik.http.routers.mattermost_redirect.tls=true"
       - "traefik.http.routers.mattermost_redirect.tls.certresolver=letsencrypt"
       - "traefik.http.routers.mattermost_redirect.middlewares=mattermost_redirect_alt@docker"
-      - "traefik.http.middlewares.mattermost_redirect_alt.redirectregex.regex=https://${MATTERMOST_DOMAIN_ALT}(.*)"
-      - "traefik.http.middlewares.mattermost_redirect_alt.redirectregex.replacement=https://${MATTERMOST_DOMAIN}$${1}"
+      - "traefik.http.middlewares.mattermost_redirect_alt.redirectregex.regex=https://${DOMAIN_ALT}(.*)"
+      - "traefik.http.middlewares.mattermost_redirect_alt.redirectregex.replacement=https://${DOMAIN}$${1}"
       - "traefik.http.middlewares.mattermost_redirect_alt.redirectregex.permanent=true"
     networks:
       - mattermost-network

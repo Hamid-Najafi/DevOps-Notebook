@@ -14,3 +14,8 @@ nano .env
 
 # Create Network and Run
 docker compose up -d
+
+# Create Authentik Proxy Provider (App and Provider)
+https://auth.c1tech.group/if/admin/#/core/applications
+MiroTalk-P2P
+mirotalk-p2p

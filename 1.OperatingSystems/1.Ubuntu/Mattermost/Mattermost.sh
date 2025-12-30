@@ -27,7 +27,7 @@ sudo chmod 750 -R /mnt/data/mattermost
 sudo chown -R 2000:2000 /mnt/data/mattermost/mattermost-*
 sudo chown -R 999:999 /mnt/data/mattermost/postgres
 
-# WHAT THE ?!
+
 # Create the docker volumes for the containers.
 docker volume create \
       --driver local \

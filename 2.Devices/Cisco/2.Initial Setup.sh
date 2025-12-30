@@ -77,6 +77,10 @@ ntp server 172.25.10.10
 ! ip dhcp snooping
 ! ip dhcp snooping vlan 1
 
+! Enable Auto-Recovery
+errdisable recovery cause all
+errdisable recovery interval 300
+
 ! Trust UPLINK ports (fiber ports) - change if needed
 ! interface TenGigabitEthernet0/1
 !  ip dhcp snooping trust

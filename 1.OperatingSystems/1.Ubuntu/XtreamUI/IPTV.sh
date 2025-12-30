@@ -3,19 +3,29 @@
 # -------==========-------
 # System Needs 16GB of RAM (MariaDB Needs 12GB)
 
-https://lofertech.com/xtream-ui-installation/
-apt-get update ; apt-get install libxslt1-dev libcurl3 libgeoip-dev python -y ; wget https://lofertech.com/xui/install.py ; sudo python install.py
+sudo apt update && rm -rf install.py && wget -qO install.py https://raw.githubusercontent.com/masoudgb/Xtream-Ui/main/install.py && sudo python3 install.py
 
-sudo apt update && rm -rf install.py && wget -qO install.py https://raw.githubusercontent.com/masoudgb/Xtream-Ui/main/install.py && sudo python3 install.py 
+
+https://lofertech.com/xtream-ui-installation/
+sudo apt update && rm -rf install.py && wget -qO install.py https://raw.githubusercontent.com/masoudgb/Xtream-Ui/main/install.py && sudo python3 install.py
 
 # Credentials
 cat /root/credentials.txt
+user_iptvpro
+
+
+# -------==========-------
+# Start Service
+# -------==========-------
+/etc/init.d/xtreamcodes --> sudo /home/xtreamcodes/iptv_xtream_codes/start_services.sh 
+ps aux | grep xtream
 
 # -------==========-------
 # Logs
 # -------==========-------
 ps aux | grep -i xtream
 cat /home/xtreamcodes/iptv_xtream_codes/logs/error.log
+sudo systemctl stop xtreamcodes
 
 # -------==========-------
 # Remove
@@ -28,6 +38,7 @@ sudo apt-get autoremove -y
 sudo apt-get autoclean
 sudo rm -rf /etc/mysql /var/lib/mysql /var/log/mysql*
 sudo rm -rf /var/run/mysqld
+sudo rm -rf /usr/share/keyrings/mariadb-archive-keyring.gpg
 
 sudo pkill -f start_services.sh
 sudo pkill -f nginx_rtmp
@@ -45,7 +56,6 @@ sudo rm -rf /home/xtreamcodes
 
 sudo userdel xtreamcodes
 
-sudo /home/xtreamcodes/iptv_xtream_codes/start_services.sh 
 # -------==========-------
 # Channels
 # -------==========-------
