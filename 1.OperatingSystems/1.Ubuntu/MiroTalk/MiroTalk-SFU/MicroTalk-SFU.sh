@@ -16,5 +16,8 @@ cd ~/docker/mirotalksfu
 nano .env
 
 # Create Network and Run
-docker network create mirotalksfu-network
 docker compose up -d
+
+# Create Authentik Proxy Provider (App and Provider)
+https://auth.c1tech.group/if/admin/#/core/applications
+http://sfu-meet.c1tech.group/

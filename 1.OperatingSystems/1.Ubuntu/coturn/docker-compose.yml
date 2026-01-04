@@ -1,11 +1,5 @@
 volumes:
-  coturn-logs:
-    external: true
-
-networks:
-  coturn-network:
-    external: true
-  traefik-network:
+  coturn:
     external: true
 
 services:
@@ -18,7 +12,7 @@ services:
       # timezone inside container
       - TZ=${COTURN_TIMEZONE}
     volumes:
-      # - coturn-logs:/var/log:rw
+      - coturn:/var/log:rw
       - ./turnserver.conf:/etc/turnserver.conf:ro
       # TODO You need to generate Let's Encrypt certificates for ${COTURN_HOSTNAME}
       - /etc/letsencrypt/live/${COTURN_HOSTNAME}:/etc/letsencrypt/live/${COTURN_HOSTNAME}:ro

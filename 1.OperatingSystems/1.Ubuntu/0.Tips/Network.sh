@@ -52,10 +52,15 @@ sudo lsof -p 15014
 # DNS Proxy
 # -------==========-------
 sudo nano /etc/resolv.conf
-# OR
-sudo apt install resolvconf -y
-sudo systemctl enable resolvconf.service --now
-sudo nano /etc/resolvconf/resolv.conf.d/head
+sudo nano /etc/systemd/resolved.conf
+
+DNS=178.22.122.101 185.51.200.1
+DNS=185.55.226.26 185.55.225.25
+FallbackDNS=8.8.8.8
+
+sudo systemctl restart systemd-resolved
+sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+
 # 403.online
 nameserver 10.202.10.202
 nameserver 10.202.10.102

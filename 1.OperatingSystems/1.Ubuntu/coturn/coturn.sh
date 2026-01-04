@@ -1,25 +1,50 @@
+# Requirements
+1. PortForwarding/PublicIP
+For TURN relaying with coturn to work, it must be hosted on a server/endpoint with a public IP.
+Port Range (UDP)
+3478/udp
+3478/tcp
+5349/tcp   (TLS)
+49152-65535/udp   (Media Relay)
+ 
+2. Certificates for TURNS and STUN domains
+
+# -------==========-------
+# Certificates
+# -------==========-------
+# Install certbot
+sudo apt install certbot -y      
+
+# HTTP challenge
+docker stop traefik
+sudo certbot certonly \
+    --standalone \
+    --email admin@c1tech.group \
+    --agree-tos \
+    --domains turn.c1tech.group \
+    --domains stun.c1tech.group
+docker start traefik
+
+# Verify 
+sudo ls -la /etc/letsencrypt/live/turn.c1tech.group/
+
 # -------==========-------
 # coturn Docker Compose
 # -------==========-------
-# Requirements
-1. For TURN relaying with coturn to work, it must be hosted on a server/endpoint with a public IP.
-2. Hosting TURN behind a NAT (even with appropriate port forwarding) is known to cause issues and to often not work.
-3. Ports for both Turn and Stun:
-   3478 for Plain && 5349 for the TLS/DTLS 
 
-# Make mattermost Directory
-sudo mkdir -p /mnt/data/coturn/coturn-logs
+# Make coturn Directory
+sudo mkdir -p /mnt/data/coturn
 
 # Set Permissions
-sudo chmod 770 -R /mnt/data/coturn/coturn-logs
-sudo chown -R utmp:utmp /mnt/data/coturn/coturn-logs
+sudo chmod 770 -R /mnt/data/coturn
+sudo chown -R utmp:utmp /mnt/data/coturn
 
 # Create the docker volumes for the containers.
 docker volume create \
       --driver local \
       --opt type=none \
-      --opt device=/mnt/data/coturn/coturn-logs \
-      --opt o=bind coturn-logs
+      --opt device=/mnt/data/coturn \
+      --opt o=bind coturn
 
 # Clone coturn Directory
 mkdir -p ~/docker
@@ -37,49 +62,34 @@ cd ~/docker/coturn
 # min-port=49152
 # max-port=65535
 
-# Create Network and Run
-docker network create coturn-network
+# Run
 docker compose up -d
-# -------==========-------
-# Certificates
-# -------==========-------
-# Install certbot
-sudo snap install --classic certbot
+docker logs coturn -f 
 
-# DNS challenge
-sudo certbot certonly \
-    --manual \
-    --preferred-challenges dns \
-    --email admin@c1tech.group \
-    --agree-tos \
-    --domains turn.c1tech.group
-
-# HTTP challenge
-docker stop traefik
-sudo certbot certonly \
-    --standalone \
-    --email admin@c1tech.group \
-    --agree-tos \
-    --domains turn.c1tech.group
-docker start traefik
-
-chmod -R 644 /etc/letsencrypt/live/turn.c1tech.group
-chmod -R 644 /etc/letsencrypt/archive/turn.c1tech.group
 # -------==========-------
 # Testing TURN server
 # -------==========-------
+## Gathering Candidates MUST BE DONE (Completed). ##
 https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/
-turn:TURN_IP:TURN_PORT
+https://icetest.info/
 
-TURN:
+# Default listening port
+STUN
+"stun:stun.c1tech.group:3478"
+
+TURN
 "turn:turn.c1tech.group:3478"
-"turn:turn.c1tech.group:5349"
 TURN Username: webrtc
 TURN Password: coturnpass.24
 
-STUN:
-"stun:stun.c1tech.group:3478"
-"stun:stun.c1tech.group:5349"
+# TLS listening port
+STUN
+"stuns:stun.c1tech.group:5349"
+
+TURN
+"turns:turn.c1tech.group:5349"
+TURN Username: webrtc
+TURN Password: coturnpass.24
 
 Other
 "stun:stun.l.google.com:19302"

@@ -1,9 +1,5 @@
-
-
 networks:
   traefik-network:
-    external: true
-  mirotalksfu-network:
     external: true
 
 services:
@@ -30,4 +26,3 @@ services:
       - "traefik.docker.network=traefik-network"
     networks:
       - traefik-network
-      - mirotalksfu-network

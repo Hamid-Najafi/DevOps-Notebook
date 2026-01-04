@@ -14,3 +14,7 @@ nano .env
 
 # Create Network and Run
 docker compose up -d
+
+# Create Authentik Proxy Provider (App and Provider)
+https://auth.c1tech.group/if/admin/#/core/applications
+http://bro.c1tech.group/

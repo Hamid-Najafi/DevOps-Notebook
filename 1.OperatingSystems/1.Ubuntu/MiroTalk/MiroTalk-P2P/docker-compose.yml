@@ -11,7 +11,9 @@ services:
     hostname: mirotalkp2p
     volumes:
         - .env:/src/.env:ro
-        # These volumes are not mandatory, uncomment if you want to use it
+        # Rebranding:
+        # - ./app/src/config.js:/src/app/src/config.js:ro
+        # Optional volumes for real-time updates:
         # - ./app/:/src/app/:ro
         # - ./public/:/src/public/:ro
     restart: unless-stopped
