@@ -15,6 +15,10 @@ nano .env
 # Create Network and Run
 docker compose up -d
 
-# Create Authentik Proxy Provider (App and Provider)
+# 1. Create Authentik Reverse Proxy (App and Provider)
 https://auth.c1tech.group/if/admin/#/core/applications
+MiroTalk-C2C-Proxy
 http://conf.c1tech.group/
+
+# 2. Create Authentik Proxy OIDC (App and Provider)
+MiroTalk-C2C
